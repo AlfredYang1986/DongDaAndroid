@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00D1C1</color>
+    <color name="colorPrimaryDark">#00D1C1</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="landing_activity_background">#00D1C1</color>
+    <color name="landing_activity_action_btn_text_color">#46bdca</color>
+</resources>

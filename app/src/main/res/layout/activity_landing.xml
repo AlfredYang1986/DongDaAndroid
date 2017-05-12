@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/activity_landing"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:background="@color/landing_activity_background"
+        tools:context="com.blackmirror.dongda.Landing.LandingActivity">
+
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical" android:id="@+id/title_layout">
+
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/landing_activity_horizontal_margin"
+                android:layout_marginTop="@dimen/landing_activity_image_vertical_margin"
+                app:srcCompat="@drawable/landing_dongda_logo"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/landing_welcome_title"
+                android:textSize="24sp"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:layout_marginTop="@dimen/landing_activity_image_logo_margin"
+                android:layout_marginLeft="@dimen/landing_activity_horizontal_margin"
+                android:textStyle="normal|bold"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:layout_marginTop="@dimen/landing_activity_image_logo_margin"
+                android:layout_marginLeft="@dimen/landing_activity_horizontal_margin"
+                android:text="@string/landing_sub_title_up" android:textSize="24sp"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?android:attr/textColorPrimaryInverse"
+                android:layout_marginLeft="@dimen/landing_activity_horizontal_margin"
+                android:text="@string/landing_sub_title_down" android:textSize="24sp"/>
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/action_layout"
+            android:layout_marginTop="@dimen/landing_activity_action_title_margin"
+            android:layout_below="@+id/title_layout" android:gravity="center">
+
+        <Button
+                android:id="@+id/phone_login_btn"
+                android:layout_width="match_parent"
+                android:background="@drawable/landing_action_button"
+                android:layout_height="60dp"
+                android:textSize="18sp"
+                android:text="手机号登录"
+                android:drawableLeft="@drawable/landing_phone_login_btn_icon"
+                android:textColor="@color/landing_activity_action_btn_text_color"
+                android:layout_marginLeft="@dimen/landing_activity_action_button_margin_left_right"
+                android:layout_marginRight="@dimen/landing_activity_action_button_margin_left_right"
+                android:paddingLeft="@dimen/landing_activity_action_button_horizontal_padding"
+                android:paddingRight="@dimen/landing_activity_action_button_horizontal_padding"/>
+
+        <Button
+                android:id="@+id/wechat_login_btn"
+                android:layout_marginTop="@dimen/landing_activity_button_margin"
+                android:layout_width="match_parent"
+                android:background="@drawable/landing_wechat_button"
+                android:layout_height="60dp"
+                android:textSize="18sp"
+                android:text="微信账号登陆"
+                android:drawableLeft="@drawable/landing_wechat_login_btn_icon"
+                android:textColor="@android:color/white"
+                android:layout_marginLeft="@dimen/landing_activity_action_button_margin_left_right"
+                android:layout_marginRight="@dimen/landing_activity_action_button_margin_left_right"
+                android:paddingLeft="@dimen/landing_activity_action_button_horizontal_padding"
+                android:paddingRight="@dimen/landing_activity_action_button_horizontal_padding"/>
+
+    </LinearLayout>
+
+    <TextView
+            android:text="@string/landing_below_instruction"
+            android:textAlignment="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true" android:textSize="11sp" android:textColor="@android:color/white"/>
+
+</RelativeLayout>

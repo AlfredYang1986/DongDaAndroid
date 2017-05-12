@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">咚哒</string>
+
+    <string name="landing_welcome_title">欢迎来到咚哒</string>
+    <string name="landing_sub_title_up">为孩子预定贴心服务，</string>
+    <string name="landing_sub_title_down">体验与众不同的轻松时刻。</string>
+    <string name="landing_below_instruction">进入即同意咚哒用户协议和隐私条款</string>
+
+    <string name="phone_input_country_code">+86</string>
+    <string name="phone_input_hint_phone_number">输入手机号码</string>
+    <string name="phone_input_hint_validate_code">输入动态密码</string>
+    <string name="phone_input_btn_action_query_code">获取动态密码</string>
+
+    <string name="name_input_hint_nickname">输入您的姓名</string>
+</resources>

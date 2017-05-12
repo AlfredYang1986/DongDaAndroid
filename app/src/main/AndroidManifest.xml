@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.blackmirror.dongda">
+
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/dongda_logo"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+        <activity android:name=".Landing.LandingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".Landing.PhoneInputActivity">
+        </activity>
+        <activity android:name=".Landing.NameInputActivity">
+        </activity>
+        <activity android:name=".Landing.PhotoChangeActivity">
+        </activity>
+    </application>
+
+</manifest>
