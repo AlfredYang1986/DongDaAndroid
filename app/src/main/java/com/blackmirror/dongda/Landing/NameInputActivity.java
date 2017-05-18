@@ -1,12 +1,12 @@
 package com.blackmirror.dongda.Landing;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.controllers.AYActivity;
 
-public class NameInputActivity extends AppCompatActivity {
+public class NameInputActivity extends AYActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

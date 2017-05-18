@@ -1,15 +1,15 @@
 package com.blackmirror.dongda.Landing;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.controllers.AYActivity;
 
-public class PhoneInputActivity extends AppCompatActivity {
+public class PhoneInputActivity extends AYActivity {
 
     final static String TAG = "phone input activity";
 

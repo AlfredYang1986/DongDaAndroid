@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<commands>
+    <command
+            short="test"
+            name="com.blackmirror.dongda.command.AYCommandTest"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+</commands>

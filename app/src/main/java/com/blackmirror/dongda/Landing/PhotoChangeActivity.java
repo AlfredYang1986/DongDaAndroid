@@ -1,10 +1,10 @@
 package com.blackmirror.dongda.Landing;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.controllers.AYActivity;
 
-public class PhotoChangeActivity extends AppCompatActivity {
+public class PhotoChangeActivity extends AYActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

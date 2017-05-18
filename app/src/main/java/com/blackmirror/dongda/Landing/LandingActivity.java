@@ -1,14 +1,16 @@
 package com.blackmirror.dongda.Landing;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.factory.AYFactoryManager;
 
-public class LandingActivity extends AppCompatActivity {
+public class LandingActivity extends AYActivity {
 
     final static String TAG = "Landing Activity";
 
@@ -39,5 +41,8 @@ public class LandingActivity extends AppCompatActivity {
                 }
             });
         }
+        AYCommand cmd = (AYCommand) AYFactoryManager.getInstance(this).
+                            queryInstance("command", "test");
+        cmd.excute();
     }
 }

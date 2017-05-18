@@ -19,7 +19,7 @@ public class AYSysHelperFunc {
     }
 
     public String md5(String seed) {
-        byte[] hash;
+        byte[] hash = null;
 
         try {
             hash = MessageDigest.getInstance("MD5").digest(seed.getBytes("UTF-8"));
