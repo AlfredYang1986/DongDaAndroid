@@ -17,6 +17,17 @@ public class AYFacadeFactory extends AYFactory {
 
     final private String TAG = "AYFacadeFactory";
 
+    private AYFacade facade_instance = null;
+
+    @Override
+    public AYSysObject creation() {
+        if (facade_instance == null) {
+            facade_instance = (AYFacade) super.creation();
+            initCmdsLst(facade_instance);
+        }
+        return facade_instance;
+    }
+
     @Override
     public void postCreation(AYSysObject f) {
         super.postCreation(f);

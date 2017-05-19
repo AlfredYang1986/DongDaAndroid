@@ -53,5 +53,16 @@ public class LandingActivity extends AYActivity {
             AYCommand cmd = facade.cmds.get("test");
             cmd.excute();
         }
+
+        {
+            AYFacade facade = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "LoginFacade");
+            AYCommand cmd = facade.cmds.get("test");
+            cmd.excute();
+        }
+    }
+
+    @Override
+    public String getClassTag() {
+        return TAG;
     }
 }

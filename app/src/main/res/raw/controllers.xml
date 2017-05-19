@@ -1,5 +1,5 @@
 <controllers>
-    <controller short="Landing"
+    <controller short="Landing Activity"
                 name="com.blackmirror.dongda.Landing.LandingActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 

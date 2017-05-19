@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.factory;
 
 import android.content.Context;
-import android.util.Log;
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.R;
@@ -184,15 +183,9 @@ public class AYFactoryManager {
 
             result = createNewFactory(md5_code, name, f_name);
 
-            /**
-             * sub Commands
-             */
             List<String> cmds = querySubElement("command", elem);
             result.putSubInstanceName("command", cmds);
 
-            /**
-             * sub facade
-             */
             List<String> facades = querySubElement("facade", elem);
             result.putSubInstanceName("facade", facades);
         }

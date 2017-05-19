@@ -26,7 +26,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysObjec
          * 从工厂中，查询Activitiy中需要的facade，Command，Fregment 并依次创建
          * 将关联在Activitiy的commands 和 facade 关联起来
          */
-        AYFactory fac = (AYFactory) AYFactoryManager.getInstance(this).queryFactoryInstance("controller", "Landing");
+        AYFactory fac = AYFactoryManager.getInstance(this).queryFactoryInstance("controller", getClassTag());
         fac.postCreation(this);
     }
 
