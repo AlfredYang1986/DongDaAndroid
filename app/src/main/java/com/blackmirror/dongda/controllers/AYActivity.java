@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
+import com.blackmirror.dongda.factory.AYFactoryManager;
+import com.blackmirror.dongda.factory.common.AYFactory;
 
 import java.util.Map;
 
@@ -18,16 +20,14 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysObjec
     public Map<String, AYFacade> facades;
 
     @Override
-    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         /**
          * 从工厂中，查询Activitiy中需要的facade，Command，Fregment 并依次创建
          * 将关联在Activitiy的commands 和 facade 关联起来
          */
-//        AYFactory<AYActivity> fac = (AYFactory<AYActivity>) AYFactoryManager.getInstance().queryFactoryByName(getClassTag());
-//        fac.preCreation(getMetaType(), getMetaName());
-////        fac.createInstance();
-//        fac.postCreation(this);
+        AYFactory fac = (AYFactory) AYFactoryManager.getInstance(this).queryFactoryInstance("controller", "Landing");
+        fac.postCreation(this);
     }
 
     @Override

@@ -1,6 +1,9 @@
 <controllers>
-    <controller name="" >
-        <facade name="" />
-        <command name="" />
+    <controller short="Landing"
+                name="com.blackmirror.dongda.Landing.LandingActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <command short="test" />
+        <facade short="LoginFacade" />
     </controller>
 </controllers>

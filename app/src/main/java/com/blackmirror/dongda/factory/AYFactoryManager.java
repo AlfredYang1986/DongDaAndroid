@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -114,75 +116,103 @@ public class AYFactoryManager {
 //        return result;
 //    }
 
-    protected Map<String, String> queryXmlImpl(Document doc,
-                                                String tag_name,
-                                                String base_attr,
-                                                String base_var,
-                                                String ... target_attr) {
-
-        Map<String, String> result = new HashMap<>();
+    protected Element queryXmlElement(Document doc,
+                                      String tag_name,
+                                      String base_attr,
+                                      String base_var) {
+        Element result = null;
         Element rt = doc.getDocumentElement();
         NodeList nst = rt.getElementsByTagName(tag_name);
         for (int index = 0; index < nst.getLength(); ++index) {
             Element elem = (Element) nst.item(index);
             String n = elem.getAttribute(base_attr);
             if (n.equals(base_var)) {
-                for (String iter : target_attr) {
-                    String tmp = elem.getAttribute(iter);
-                    result.put(iter, tmp);
-                }
+                result = elem;
                 break;
             }
         }
         return result;
     }
 
+    protected Map<String, String> queryAttrInElement(Element elem,
+                                                     String ... target_attr) {
+
+        Map<String, String> result = new HashMap<>();
+        for (String iter : target_attr) {
+            String tmp = elem.getAttribute(iter);
+            result.put(iter, tmp);
+        }
+        return result;
+    }
+
+    protected List<String> querySubElement(String field, Element elem) {
+        NodeList nst = elem.getElementsByTagName(field);
+        List<String> result = new ArrayList<>();
+        for (int index = 0; index < nst.getLength(); ++index) {
+            Element tmp = (Element) nst.item(index);
+            result.add(tmp.getAttribute("short"));
+        }
+        return result;
+    }
+
     public AYSysObject queryInstance(String t, String short_name) {
-        AYSysObject result = null;
+        AYFactory f = queryFactoryInstance(t, short_name);
+        return f.createInstance(t);
+    }
+
+    public AYFactory queryFactoryInstance(String t, String short_name) {
+        AYFactory result;
+
+        Document doc = null;
         if (t.equals("command")) {
-            Map<String, String> tmp = queryXmlImpl(cmd_doc, "command", "short", short_name, "factory", "name");
-            String f_name = tmp.get("factory");
-            String name = tmp.get("name");
-            result = queryCmdInstance(name, f_name);
+            doc = cmd_doc;
+        } else if (t.equals("controller")) {
+            doc = activity_doc;
+        } else if (t.equals("facade")) {
+            doc = facade_doc;
         }
-        return result;
-    }
 
-    protected String queryFactoryNameByName(String t, String name) {
-        String result = null;
-        if (t.equals("command")) {
-            result = queryXmlImpl(cmd_doc, "command", "name", name, "factory").get("factory");
-        }
-        return result;
-    }
+        Element elem = queryXmlElement(doc, t, "short", short_name);
+        Map<String, String> tmp = queryAttrInElement(elem, "factory", "name");
+        String f_name = tmp.get("factory");
+        String name = tmp.get("name");
 
-    protected AYSysObject queryCmdInstance(String name, String f_name) {
-        AYFactory f = queryFactoryByName("command", name, f_name);
-        return f.createInstance("command");
-    }
+        String md5_code = AYSysHelperFunc.getInstance().md5(name);
+        result = queryFactoryInManager(md5_code);
 
-    protected AYSysObject queryCmdInstance(String name) {
-        String f_name = queryFactoryNameByName("command", name);
-        AYFactory f = queryFactoryByName("command", name, f_name);
-        return f.createInstance("command");
-    }
+        if (result == null) {
 
-    protected AYFactory queryFactoryByName(String t, String i, String name) {
-        String n = AYSysHelperFunc.getInstance().md5(name);
-        AYFactory result = null;
-        if (manager.containsKey(n)) {
-            result = manager.get(n);
-        } else {
-            AYFactory f = createFactory(name);
-            f.setInstanceName(i);
-            manager.put(n, f);
-            result = f;
+            result = createNewFactory(md5_code, name, f_name);
+
+            /**
+             * sub Commands
+             */
+            List<String> cmds = querySubElement("command", elem);
+            result.putSubInstanceName("command", cmds);
+
+            /**
+             * sub facade
+             */
+            List<String> facades = querySubElement("facade", elem);
+            result.putSubInstanceName("facade", facades);
         }
 
         return result;
     }
 
-    protected AYFactory createFactory(String factory_name) {
+    protected AYFactory queryFactoryInManager(String md5_code) {
+        if (manager.containsKey(md5_code)) return manager.get(md5_code);
+        else return null;
+    }
+
+    protected AYFactory createNewFactory(String md5_code, String name, String f_name) {
+        AYFactory f = createFactoryImpl(f_name);
+        f.setInstanceName(name);
+        manager.put(md5_code, f);
+        return f;
+    }
+
+    protected AYFactory createFactoryImpl(String factory_name) {
         AYFactory result = null;
         try {
             Class clazz1 = Class.forName(factory_name);

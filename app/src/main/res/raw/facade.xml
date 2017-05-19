@@ -1,5 +1,9 @@
 <facades>
-    <facades type="" name="" factory="" >
-        <command name="" />
-    </facades>
+    <facade
+            short="LoginFacade"
+            name="com.blackmirror.dongda.facade.AYFacadeTest"
+            factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+        <command short="test" />
+    </facade>
 </facades>

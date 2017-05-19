@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 
 public class LandingActivity extends AYActivity {
@@ -41,8 +42,16 @@ public class LandingActivity extends AYActivity {
                 }
             });
         }
-        AYCommand cmd = (AYCommand) AYFactoryManager.getInstance(this).
-                            queryInstance("command", "test");
-        cmd.excute();
+
+        {
+            AYCommand cmd = this.cmds.get("test");
+            cmd.excute();
+        }
+
+        {
+            AYFacade facade = this.facades.get("LoginFacade");
+            AYCommand cmd = facade.cmds.get("test");
+            cmd.excute();
+        }
     }
 }
