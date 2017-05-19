@@ -5,6 +5,7 @@ import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.command.AYNotification;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
@@ -33,5 +34,15 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysObjec
     @Override
     public String getClassTag() {
         return "AYActivity";
+    }
+
+    protected <Arg> void facadeCallback(String short_cmd_name, Arg ... args) {
+        AYCommand cmd = this.cmds.get(short_cmd_name);
+        if (cmd != null) {
+            if (cmd instanceof AYNotification)
+                ((AYNotification) cmd).setContext(this);
+
+            cmd.excute(args);
+        }
     }
 }
