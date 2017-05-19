@@ -32,6 +32,18 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysObjec
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        unRegisterCallback();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerCallback();
+    }
+
+    @Override
     public String getClassTag() {
         return "AYActivity";
     }
@@ -43,6 +55,18 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysObjec
                 ((AYNotification) cmd).setContext(this);
 
             cmd.excute(args);
+        }
+    }
+
+    protected void registerCallback() {
+        for (AYFacade f : this.facades.values()) {
+            f.registerActivity(this);
+        }
+    }
+
+    protected void unRegisterCallback() {
+        for (AYFacade f : this.facades.values()) {
+            f.unRegisterActivity(this);
         }
     }
 }
