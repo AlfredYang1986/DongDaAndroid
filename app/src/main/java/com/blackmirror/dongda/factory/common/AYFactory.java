@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.factory.common;
 
+import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysObject;
 
 import java.lang.reflect.Constructor;
@@ -27,24 +28,7 @@ public abstract class AYFactory implements AYSysObject {
     public void preCreation(String t) {}
 
     public AYSysObject creation() {
-        AYSysObject result = null;
-        try {
-            Class clazz1 = Class.forName(getInstanceName());
-            Constructor c = clazz1.getConstructor(null);
-            result = (AYSysObject)c.newInstance(null);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return AYSysHelperFunc.getInstance().createInstanceByName(getInstanceName());
     }
 
     public void postCreation(AYSysObject _) {}

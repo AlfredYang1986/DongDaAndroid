@@ -206,23 +206,6 @@ public class AYFactoryManager {
     }
 
     protected AYFactory createFactoryImpl(String factory_name) {
-        AYFactory result = null;
-        try {
-            Class clazz1 = Class.forName(factory_name);
-            Constructor c = clazz1.getConstructor(null);
-            result = (AYFactory) c.newInstance(null);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return (AYFactory) AYSysHelperFunc.getInstance().createInstanceByName(factory_name);
     }
 }

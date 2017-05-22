@@ -1,6 +1,8 @@
 package com.blackmirror.dongda.AY;
 
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -37,5 +39,26 @@ public class AYSysHelperFunc {
         }
 
         return hex.toString();
+    }
+
+    public AYSysObject createInstanceByName(String name) {
+        AYSysObject result = null;
+        try {
+            Class clazz1 = Class.forName(name);
+            Constructor c = clazz1.getConstructor(null);
+            result = (AYSysObject)c.newInstance(null);
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
