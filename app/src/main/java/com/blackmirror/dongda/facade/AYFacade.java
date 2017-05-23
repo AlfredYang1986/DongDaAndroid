@@ -3,6 +3,7 @@ package com.blackmirror.dongda.facade;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -33,5 +34,11 @@ public abstract class AYFacade implements AYSysObject {
         }
 
         return result;
+    }
+    
+    public void broadcastingNotification(String cmd_name, JSONObject args) {
+        for (AYActivity a : handlers) {
+            a.facadeCallback(cmd_name, args);
+        }
     }
 }

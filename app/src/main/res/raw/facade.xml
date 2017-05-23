@@ -1,9 +1,16 @@
 <facades>
     <facade
+            short="RemoteCommonFacade"
+            name="com.blackmirror.dongda.facade.AYRemoteCommonFacade"
+            factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+    </facade>
+
+    <facade
             short="LoginFacade"
             name="com.blackmirror.dongda.facade.AYFacadeTest"
             factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
 
-        <command short="test" />
+        <command short="LoginWithPhone" />
     </facade>
 </facades>

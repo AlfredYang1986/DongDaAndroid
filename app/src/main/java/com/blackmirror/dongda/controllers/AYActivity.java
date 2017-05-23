@@ -8,7 +8,10 @@ import com.blackmirror.dongda.command.AYNotification;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
+import org.json.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -47,13 +50,24 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysObjec
         return "AYActivity";
     }
 
-    protected <Arg> void facadeCallback(String short_cmd_name, Arg ... args) {
-        AYCommand cmd = this.cmds.get(short_cmd_name);
-        if (cmd != null) {
-            if (cmd instanceof AYNotification)
-                ((AYNotification) cmd).setContext(this);
+    public void facadeCallback(String short_cmd_name, JSONObject args) {
+//        AYCommand cmd = this.cmds.get(short_cmd_name);
+//        if (cmd != null) {
+//            if (cmd instanceof AYNotification)
+//                ((AYNotification) cmd).setContext(this);
+//
+//            cmd.excute(args);
+//        }
 
-            cmd.excute(args);
+        try {
+            Method method = this.getClass().getMethod(short_cmd_name, JSONObject.class);
+            method.invoke(this, args);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
         }
     }
 
