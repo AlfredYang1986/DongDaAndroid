@@ -31,7 +31,7 @@ public abstract class AYFactory implements AYSysObject {
         return AYSysHelperFunc.getInstance().createInstanceByName(getInstanceName());
     }
 
-    public void postCreation(AYSysObject _) {}
+    public void postCreation(AYSysObject defaultArgs) {}
 
     protected String instance_name;
     public String getInstanceName() {

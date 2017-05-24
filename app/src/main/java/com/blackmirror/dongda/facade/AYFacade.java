@@ -14,7 +14,7 @@ import java.util.Map;
 public abstract class AYFacade implements AYSysObject {
     public Map<String, AYCommand> cmds;
 
-    private ArrayList<AYActivity> handlers;
+    private ArrayList<AYActivity> handlers = new ArrayList<>();
 
     public Boolean registerActivity(AYActivity ref) {
         Boolean result = false;
