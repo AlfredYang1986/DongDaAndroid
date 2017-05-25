@@ -47,14 +47,14 @@ public class LandingActivity extends AYActivity {
             });
         }
 
-        {
-            AYFacade facade = this.facades.get("LoginFacade");
-            AYCommand cmd = facade.cmds.get("SendSMSCode");
-            Map<String, Object> m = new HashMap<>();
-            m.put("phoneNo", "13720200856");
-            JSONObject args = new JSONObject(m);
-            cmd.excute(args);
-        }
+//        {
+//            AYFacade facade = this.facades.get("LoginFacade");
+//            AYCommand cmd = facade.cmds.get("SendSMSCode");
+//            Map<String, Object> m = new HashMap<>();
+//            m.put("phoneNo", "13720200856");
+//            JSONObject args = new JSONObject(m);
+//            cmd.excute(args);
+//        }
     }
 
     @Override

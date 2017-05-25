@@ -8,6 +8,8 @@ import com.blackmirror.dongda.controllers.AYActivity;
 
 public class NameInputActivity extends AYActivity {
 
+    final static String TAG = "Name Input Activity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,5 +24,10 @@ public class NameInputActivity extends AYActivity {
         MenuInflater inflater = this.getMenuInflater();
         inflater.inflate(R.menu.landing_next_menu, menu);
         return result;
+    }
+
+    @Override
+    public String getClassTag() {
+        return TAG;
     }
 }

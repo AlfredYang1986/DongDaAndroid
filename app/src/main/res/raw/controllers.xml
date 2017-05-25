@@ -5,4 +5,25 @@
 
         <facade short="LoginFacade" />
     </controller>
+
+    <controller short="Name Input Activity"
+                name="com.blackmirror.dongda.Landing.NameInputActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="LoginFacade" />
+    </controller>
+
+    <controller short="Phone Input Activity"
+                name="com.blackmirror.dongda.Landing.PhoneInputActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="LoginFacade" />
+    </controller>
+
+    <controller short="Photo Change Activity"
+                name="com.blackmirror.dongda.Landing.PhotoChangeActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="LoginFacade" />
+    </controller>
 </controllers>

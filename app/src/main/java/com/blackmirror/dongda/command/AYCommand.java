@@ -5,7 +5,7 @@ import com.blackmirror.dongda.AY.AYSysNotifier;
 /**
  * Created by alfredyang on 12/05/2017.
  */
-public abstract class AYCommand implements AYSysObject {
+public abstract class AYCommand extends AYSysNotifier {
     public abstract <Args, Result> Result excute(Args ... defaultArgs);
 
     protected String cmd_name;

@@ -11,7 +11,7 @@ import com.blackmirror.dongda.controllers.AYActivity;
 
 public class PhoneInputActivity extends AYActivity {
 
-    final static String TAG = "phone input activity";
+    final static String TAG = "Phone Input Activity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,5 +42,10 @@ public class PhoneInputActivity extends AYActivity {
                 result = super.onOptionsItemSelected(item);
         }
         return result;
+    }
+
+    @Override
+    public String getClassTag() {
+        return TAG;
     }
 }
