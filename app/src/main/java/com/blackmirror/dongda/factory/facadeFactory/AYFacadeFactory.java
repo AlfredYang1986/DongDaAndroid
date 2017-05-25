@@ -1,7 +1,9 @@
 package com.blackmirror.dongda.factory.facadeFactory;
 
+import com.blackmirror.dongda.AY.AYSysNotifier;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.command.AYNotification;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
@@ -41,6 +43,8 @@ public class AYFacadeFactory extends AYFactory {
         for (String iter : lst) {
             AYCommand tmp = (AYCommand) AYFactoryManager.getInstance(null)
                                 .queryInstance("command", iter);
+
+            tmp.setTarget(facade);
             result.put(iter, tmp);
         }
         facade.cmds = result;

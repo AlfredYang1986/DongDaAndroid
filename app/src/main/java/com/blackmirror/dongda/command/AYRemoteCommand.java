@@ -1,16 +1,20 @@
 package com.blackmirror.dongda.command;
 
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.util.Log;
+import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
 
 /**
  * Created by alfredyang on 23/05/2017.
@@ -24,21 +28,38 @@ public abstract class AYRemoteCommand extends AYCommand {
 
         @Override
         protected JSONObject doInBackground(JSONObject ... params) {
-
             String result = "";
+            HttpURLConnection conn = null;
             try {
-                URL urls = new URL(getUrl());
-                HttpURLConnection conn = (HttpURLConnection) urls.openConnection();
+                URL urls = new URL(Uri.parse(getUrl()).buildUpon().build().toString());
+                conn = (HttpURLConnection) urls.openConnection();
+                conn.setDoOutput(true);
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setChunkedStreamingMode(0);
+
                 conn.setReadTimeout(50000); //milliseconds
                 conn.setConnectTimeout(20000); // milliseconds
-                conn.setRequestMethod("POST");
 
                 conn.connect();
 
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                JSONObject p = null;
+                if (params.length > 0) {
+                    p = params[0];
+                }
 
+                Log.i("remote task", p.toString());
+                byte[] outputBytes = p.toString().getBytes("UTF-8");
+                OutputStream os = conn.getOutputStream();
+                os.write(outputBytes);
+                os.flush();
+                os.close();
+
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(
-                            conn.getInputStream(), "iso-8859-1"), 8);
+                            conn.getInputStream(), "UTF-8"), 8);
+//                            conn.getInputStream(), "iso-8859-1"), 8);
                     StringBuilder sb = new StringBuilder();
                     String line = null;
                     while ((line = reader.readLine()) != null) {
@@ -48,31 +69,53 @@ public abstract class AYRemoteCommand extends AYCommand {
                     result = sb.toString();
 
                 } else {
-                    return null;
+                    result = "";
                 }
-
-                return new JSONObject(result);
 
             } catch (Exception e) {
                 // System.out.println("exception in jsonparser class ........");
                 e.printStackTrace();
-                return null;
+            } finally {
+                if (conn != null)
+                    conn.disconnect();
             }
+
+            JSONObject js_result = null;
+            try {
+                js_result = new JSONObject(result);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return js_result;
         }
 
         @Override
         protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
-            AYFacade facade = (AYFacade) AYFactoryManager.getInstance(null)
-                                    .queryInstance("facade", "RemoteCommonFacade");
-            if (result != null)
-                facade.broadcastingNotification(getSuccessCallBackName(), result);
-            else
-                facade.broadcastingNotification(getFailedCallBackName(), result);
+            AYSysNotificationHandler t = getTarget();
+//            AYFacade facade = (AYFacade) AYFactoryManager.getInstance(null)
+//                                    .queryInstance("facade", "RemoteCommonFacade");
+            try {
+                if (result == null || !result.getString("status").equals("ok"))
+                    t.handleNotifications(getFailedCallBackName(), result);
+                else
+                    t.handleNotifications(getSuccessCallBackName(), result);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                t.handleNotifications(getSuccessCallBackName(), result);
+            }
         }
     }
 
-    public void excute(JSONObject ... args) {
+    @Override
+    public <Args, Result> Result excute(Args[] args) {
+        excuteImpl((JSONObject[])args);
+        return null;
+    }
+
+    public void excuteImpl(JSONObject ... args) {
         AYAsyncTask tk = new AYAsyncTask();
         tk.execute(args);
     }

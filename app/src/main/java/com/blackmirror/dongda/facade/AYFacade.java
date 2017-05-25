@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.facade;
 
-import com.blackmirror.dongda.AY.AYSysObject;
+import com.blackmirror.dongda.AY.AYSysHelperFunc;
+import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import org.json.JSONObject;
@@ -11,10 +12,10 @@ import java.util.Map;
 /**
  * Created by alfredyang on 12/05/2017.
  */
-public abstract class AYFacade implements AYSysObject {
+public abstract class AYFacade implements AYSysNotificationHandler {
     public Map<String, AYCommand> cmds;
 
-    private ArrayList<AYActivity> handlers;
+    private ArrayList<AYActivity> handlers = new ArrayList<>();
 
     public Boolean registerActivity(AYActivity ref) {
         Boolean result = false;
@@ -38,7 +39,13 @@ public abstract class AYFacade implements AYSysObject {
     
     public void broadcastingNotification(String cmd_name, JSONObject args) {
         for (AYActivity a : handlers) {
-            a.facadeCallback(cmd_name, args);
+//            a.facadeCallback(cmd_name, args);
+            AYSysHelperFunc.getInstance().handleNotifications(cmd_name, args, a);
         }
+    }
+
+    @Override
+    public Boolean handleNotifications(String name, JSONObject args) {
+        return AYSysHelperFunc.getInstance().handleNotifications(name, args, this);
     }
 }

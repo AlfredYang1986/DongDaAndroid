@@ -1,8 +1,12 @@
 package com.blackmirror.dongda.AY;
 
+import android.util.Log;
+import org.json.JSONObject;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -57,6 +61,33 @@ public class AYSysHelperFunc {
             e.printStackTrace();
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    public Boolean handleNotifications(String name, JSONObject args, AYSysObject context) {
+        return methodInvoke(name, args, context);
+    }
+
+    protected Boolean methodInvoke(String name, JSONObject args, AYSysObject context) {
+        Boolean result = true;
+        try {
+            Method method = context.getClass().getMethod(name, JSONObject.class);
+            method.invoke(context, args);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            result = false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            result = false;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            result = false;
+        }
+
+        if (!result) {
+            Log.i("method Invoke", "method invoke error");
         }
 
         return result;

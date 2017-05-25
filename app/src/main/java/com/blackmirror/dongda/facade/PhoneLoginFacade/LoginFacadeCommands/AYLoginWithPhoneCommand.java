@@ -1,6 +1,5 @@
-package com.blackmirror.dongda.command.LoginCommand;
+package com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands;
 
-import android.util.Log;
 import com.blackmirror.dongda.command.AYRemoteCommand;
 
 /**
@@ -11,19 +10,13 @@ public class AYLoginWithPhoneCommand extends AYRemoteCommand {
     final private String TAG = "AYLoginWithPhoneCommand";
 
     @Override
-    public <Args, Result> Result excute(Args[] _) {
-        Log.i(TAG, "AYLoginWithPhoneCommand");
-        return null;
-    }
-
-    @Override
     public String getClassTag() {
         return TAG;
     }
 
     @Override
     protected String getUrl() {
-        return "altlys.com:9000/";
+        return "http://www.altlys.com:9000/v2/auth/code";
     }
 
     @Override

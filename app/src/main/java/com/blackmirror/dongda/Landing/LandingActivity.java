@@ -10,6 +10,10 @@ import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LandingActivity extends AYActivity {
 
@@ -44,20 +48,12 @@ public class LandingActivity extends AYActivity {
         }
 
         {
-            AYCommand cmd = this.cmds.get("test");
-            cmd.excute();
-        }
-
-        {
             AYFacade facade = this.facades.get("LoginFacade");
-            AYCommand cmd = facade.cmds.get("test");
-            cmd.excute();
-        }
-
-        {
-            AYFacade facade = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "LoginFacade");
-            AYCommand cmd = facade.cmds.get("test");
-            cmd.excute();
+            AYCommand cmd = facade.cmds.get("SendSMSCode");
+            Map<String, Object> m = new HashMap<>();
+            m.put("phoneNo", "13720200856");
+            JSONObject args = new JSONObject(m);
+            cmd.excute(args);
         }
     }
 

@@ -7,7 +7,12 @@
 
     <command
             short="LoginWithPhone"
-            name="com.blackmirror.dongda.command.LoginCommand.AYLoginWithPhoneCommand"
+            name="com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYLoginWithPhoneCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+            short="SendSMSCode"
+            name="com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYSendSMSCodeCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
 </commands>

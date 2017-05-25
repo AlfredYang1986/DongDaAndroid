@@ -3,8 +3,6 @@
                 name="com.blackmirror.dongda.Landing.LandingActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
-        <command short="test" />
         <facade short="LoginFacade" />
-        <facade short="RemoteCommonFacade" />
     </controller>
 </controllers>
