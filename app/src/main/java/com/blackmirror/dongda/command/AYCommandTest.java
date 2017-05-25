@@ -10,7 +10,7 @@ public class AYCommandTest extends AYCommand {
     final private String TAG = "AYCommandTest";
 
     @Override
-    public <Args, Result> Result excute(Args[] _) {
+    public <Args, Result> Result excute(Args[] defaultArgs) {
         Log.i(TAG, "command test");
         return null;
     }
