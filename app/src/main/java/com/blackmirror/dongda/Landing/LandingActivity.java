@@ -6,14 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.factory.AYFactoryManager;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class LandingActivity extends AYActivity {
 

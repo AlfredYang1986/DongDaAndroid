@@ -11,5 +11,7 @@
     <string name="phone_input_hint_validate_code">输入动态密码</string>
     <string name="phone_input_btn_action_query_code">获取动态密码</string>
 
+    <string name="phone_input_next_step_error">请输入正确的手机号与动态验证密码</string>
+
     <string name="name_input_hint_nickname">输入您的姓名</string>
 </resources>

@@ -15,18 +15,22 @@ public class AYPhoneLoginFacade extends AYFacade {
     }
 
     Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
+        broadcastingNotification("AYLoginWithPhoneCommandSuccess", args);
         return true;
     }
 
     Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
+        broadcastingNotification("AYLoginWithPhoneCommandFailed", args);
         return true;
     }
 
     Boolean AYSendSMSCodeCommandSuccess(JSONObject args) {
+        broadcastingNotification("AYSendSMSCodeCommandSuccess", args);
         return true;
     }
 
     Boolean AYSendSMSCodeCommandFailed(JSONObject args) {
+        broadcastingNotification("AYSendSMSCodeCommandFailed", args);
         return true;
     }
 }
