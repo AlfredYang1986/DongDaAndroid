@@ -34,6 +34,10 @@ public class AYFactoryManager {
     private Context context = null;
     private Document cmd_doc, facade_doc, activity_doc;
 
+    public Context getContext() {
+        return context;
+    }
+
     public static AYFactoryManager getInstance(Context c) {
         //TODO: 修改成线程安全的
         if (instance == null) {
@@ -72,48 +76,6 @@ public class AYFactoryManager {
             return doc;
         }
     }
-
-    //    public AYSysObject queryInstance(String t, String name) {
-//        AYSysObject result;
-//        if (t.equalsIgnoreCase("command")) {
-//            result = queryCmdInstance(name);
-//        } else {
-//            result = null;
-//        }
-//
-//        return result;
-//    }
-
-//    protected interface result_func<T> {
-//        T queryResult(Element elem, String ... args);
-//    }
-//    protected class string_result_func implements result_func<String> {
-//        @Override
-//        public String queryResult(Element elem, String... args) {
-//            String result = null;
-//            for (String iter : args) {
-//                result = elem.getAttribute(iter);
-//                if (result != null && !result.isEmpty())
-//                    break;
-//            }
-//            return result;
-//        }
-//    }
-//    protected class map_result_func implements result_func<Map<String, String> > {
-//        @Override
-//        public Map<String, String> queryResult(Element elem, String... args) {
-//            Map<String, String> result = null;
-//
-//            return result;
-//        }
-//    }
-//
-//    protected result_func createResultFunc(String ... attr) {
-//        result_func result;
-//        if (attr.length == 1) result = new string_result_func();
-//        else result = new map_result_func();
-//        return result;
-//    }
 
     protected Element queryXmlElement(Document doc,
                                       String tag_name,
