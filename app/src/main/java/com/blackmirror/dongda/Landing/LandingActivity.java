@@ -6,7 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
+import com.blackmirror.dongda.factory.AYFactoryManager;
+import com.blackmirror.dongda.factory.common.AYFactory;
 
 public class LandingActivity extends AYActivity {
 
@@ -40,14 +44,18 @@ public class LandingActivity extends AYActivity {
             });
         }
 
-//        {
-//            AYFacade facade = this.facades.get("LoginFacade");
-//            AYCommand cmd = facade.cmds.get("SendSMSCode");
-//            Map<String, Object> m = new HashMap<>();
-//            m.put("phoneNo", "13720200856");
-//            JSONObject args = new JSONObject(m);
-//            cmd.excute(args);
-//        }
+        {
+            AYFacade facade = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "DongdaCommanFacade");
+            AYCommand cmd = facade.cmds.get("QueryCurrentLoginUser");
+            Object o = cmd.excute();
+            if (o != null) {
+
+                /**
+                 * 打印已登陆用户
+                 */
+                Log.i(TAG, o.toString());
+            }
+        }
     }
 
     @Override

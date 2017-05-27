@@ -1,5 +1,15 @@
 <facades>
     <facade
+            short="DongdaCommanFacade"
+            name="com.blackmirror.dongda.facade.DongdaCommonFacade.AYDongdaCommonFacade"
+            factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+        <command short="QueryDAOProxy" />
+        <command short="LoginSuccess" />
+        <command short="QueryCurrentLoginUser" />
+    </facade>
+
+    <facade
             short="LoginFacade"
             name="com.blackmirror.dongda.facade.PhoneLoginFacade.AYPhoneLoginFacade"
             factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >

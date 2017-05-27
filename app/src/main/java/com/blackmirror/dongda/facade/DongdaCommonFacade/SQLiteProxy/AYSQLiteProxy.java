@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by alfredyang on 27/05/2017.
  */
@@ -30,7 +33,7 @@ public class AYSQLiteProxy extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Create the "user_profile" table
         db.execSQL("create table user_profile (" +
-                    "index integer primary key autoincrement, " +
+                    "id integer primary key autoincrement, " +
                     "is_current integer, " +
                     "user_id varchar(50), " +
                     "auth_token varchar(50), " +
@@ -55,8 +58,25 @@ public class AYSQLiteProxy extends SQLiteOpenHelper {
 
     public AYDaoUserProfile queryProfile(String user_id) {
         //execSQL("select * from user_profile where user_id=" + user_id);
-        Cursor c = getReadableDatabase().query(TABLE_USER_PROFILE, null, null, null, null, null, null);
+        Cursor c = getReadableDatabase().query(TABLE_USER_PROFILE, null,
+                COLUM_USER_PROFILE_USER_ID + "=?", new String[] {user_id}, null, null, null);
+        c.moveToFirst();
+        return cursor2Profile(c);
+    }
 
+    public AYDaoUserProfile currentProfile() {
+        Cursor c = getReadableDatabase().query(TABLE_USER_PROFILE, null,
+                COLUM_USER_PROFILE_IS_CURRENT + "=?", new String[] {"1"}, null, null, null);
+        c.moveToFirst();
+        return cursor2Profile(c);
+    }
+
+    public long resetCurrentUser(AYDaoUserProfile p) {
+        getWritableDatabase().delete(TABLE_USER_PROFILE, COLUM_USER_PROFILE_IS_CURRENT + "=?", new String[] {"1"});
+        return insertProfile(p);
+    }
+
+    protected AYDaoUserProfile cursor2Profile(Cursor c) {
         AYDaoUserProfile result = null;
         if (!(c.isBeforeFirst() || c.isAfterLast())) {
             AYDaoUserProfile tmp = new AYDaoUserProfile();
@@ -65,8 +85,8 @@ public class AYSQLiteProxy extends SQLiteOpenHelper {
             tmp.setAuth_token(c.getString(c.getColumnIndex(COLUM_USER_PROFILE_AUTH_TOKEN)));
             tmp.setScreen_name(c.getString(c.getColumnIndex(COLUM_USER_PROFILE_SCREEN_NAME)));
             tmp.setScreen_photo(c.getString(c.getColumnIndex(COLUM_USER_PROFILE_SCREEN_PHOTO)));
+            result = tmp;
         }
-
         return result;
     }
 }

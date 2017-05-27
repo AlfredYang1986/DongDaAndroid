@@ -15,4 +15,18 @@
             name="com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYSendSMSCodeCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
+    <command
+            short="QueryDAOProxy"
+            name="com.blackmirror.dongda.facade.DongdaCommonFacade.LoginSuccessCommand.AYQueryDAOProxyCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+            short="LoginSuccess"
+            name="com.blackmirror.dongda.facade.DongdaCommonFacade.LoginSuccessCommand.AYLoginSuccessCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+            short="QueryCurrentLoginUser"
+            name="com.blackmirror.dongda.facade.DongdaCommonFacade.LoginSuccessCommand.AYQueryCurrentLoginUserCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>
