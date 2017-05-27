@@ -94,8 +94,7 @@ public abstract class AYRemoteCommand extends AYCommand {
         protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
             AYSysNotificationHandler t = getTarget();
-//            AYFacade facade = (AYFacade) AYFactoryManager.getInstance(null)
-//                                    .queryInstance("facade", "RemoteCommonFacade");
+
             try {
                 if (result == null || !result.getString("status").equals("ok"))
                     t.handleNotifications(getFailedCallBackName(), result);

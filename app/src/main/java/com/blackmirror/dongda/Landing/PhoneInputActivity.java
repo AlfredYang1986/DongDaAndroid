@@ -14,6 +14,7 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYSendSMSCodeCommand;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -166,8 +167,34 @@ public class PhoneInputActivity extends AYActivity {
 
     Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
         Toast.makeText(this, "登陆成功", LENGTH_LONG).show();
-        Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
-        startActivity(intent);
+
+        String screen_name = null;
+        try {
+            screen_name = args.getJSONObject("result").getString("screen_name");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (screen_name == null || screen_name.isEmpty()) {
+            try {
+                Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
+                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
+                intent.putExtra("current_user", p);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
+                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
+                intent.putExtra("current_user", p);
+                startActivity(intent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
         return true;
     }
 

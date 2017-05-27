@@ -24,13 +24,8 @@ public class AYPhoneLoginFacade extends AYFacade {
         /**
          * 将当前的登陆的用的存入数据库中
          */
-
-        AYDaoUserProfile p = new AYDaoUserProfile();
         try {
-            p.setUser_id(args.getJSONObject("result").getString("user_id"));
-            p.setAuth_token(args.getJSONObject("result").getString("auth_token"));
-            p.setScreen_name(args.getJSONObject("result").getString("screen_name"));
-            p.setScreen_photo(args.getJSONObject("result").getString("screen_photo"));
+            AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
             p.setIs_current(1);
 
             AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");

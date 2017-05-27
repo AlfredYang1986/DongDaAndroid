@@ -1,22 +1,35 @@
 package com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
+
 /**
  * Created by alfredyang on 27/05/2017.
  */
-public class AYDaoUserProfile {
-    private long index;
+public class AYDaoUserProfile implements Serializable {
     private String user_id;
     private String auth_token;
-    private int is_current;
+    private int is_current = 0;
     private String screen_name;
     private String screen_photo;
 
-    public long getIndex() {
-        return index;
+    public AYDaoUserProfile() {
+        super();
     }
 
-    public void setIndex(long index) {
-        this.index = index;
+    public AYDaoUserProfile(JSONObject o) {
+        super();
+        try {
+            this.user_id = o.getString("user_id");
+            this.auth_token = o.getString("auth_token");
+            this.screen_name = o.getString("screen_name");
+            this.screen_photo = o.getString("screen_photo");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public String getUser_id() {
