@@ -5,4 +5,5 @@ package com.blackmirror.dongda.AY;
  */
 public class AYIntentRequestCode {
     public static final int AY_INTENT_PICK_IMAGE_FROM_ALBUM = 100;
+    public static final int AY_INTENT_IMAGE_FROM_CAMERA = 101;
 }

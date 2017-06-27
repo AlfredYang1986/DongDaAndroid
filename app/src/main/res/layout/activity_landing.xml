@@ -88,16 +88,6 @@
 
     </LinearLayout>
 
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/colorAccent"
-            android:id="@+id/fragment_test"
-            android:orientation="vertical">
-
-    </LinearLayout>
-
     <TextView
             android:text="@string/landing_below_instruction"
             android:textAlignment="center"
