@@ -202,4 +202,9 @@ public class PhoneInputActivity extends AYActivity {
         Toast.makeText(this, "登陆失败", LENGTH_LONG);
         return true;
     }
+
+    @Override
+    protected void bindingFragments() {
+
+    }
 }
