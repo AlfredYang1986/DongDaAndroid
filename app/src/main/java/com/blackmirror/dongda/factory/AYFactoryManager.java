@@ -32,7 +32,7 @@ public class AYFactoryManager {
     private static AYFactoryManager instance;
 
     private Context context = null;
-    private Document cmd_doc, facade_doc, activity_doc;
+    private Document cmd_doc, facade_doc, fragment_doc, activity_doc;
 
     public Context getContext() {
         return context;
@@ -53,6 +53,7 @@ public class AYFactoryManager {
 
         cmd_doc = loadCmdConfig(R.raw.commands);
         facade_doc = loadCmdConfig(R.raw.facade);
+        fragment_doc = loadCmdConfig(R.raw.fragments);
         activity_doc = loadCmdConfig(R.raw.controllers);
     }
 
@@ -131,6 +132,8 @@ public class AYFactoryManager {
             doc = activity_doc;
         } else if (t.equals("facade")) {
             doc = facade_doc;
+        } else if (t.equals("fragment")) {
+            doc = fragment_doc;
         }
 
         Element elem = queryXmlElement(doc, t, "short", short_name);
@@ -150,6 +153,9 @@ public class AYFactoryManager {
 
             List<String> facades = querySubElement("facade", elem);
             result.putSubInstanceName("facade", facades);
+
+            List<String> fragments = querySubElement("fragment", elem);
+            result.putSubInstanceName("fragment", fragments);
         }
 
         return result;

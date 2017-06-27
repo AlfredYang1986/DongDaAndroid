@@ -23,7 +23,7 @@ public class AYFacadeFactory extends AYFactory {
     public AYSysObject creation() {
         if (facade_instance == null) {
             facade_instance = (AYFacade) super.creation();
-            initCmdsLst(facade_instance);
+//            initCmdsLst(facade_instance);
         }
         return facade_instance;
     }

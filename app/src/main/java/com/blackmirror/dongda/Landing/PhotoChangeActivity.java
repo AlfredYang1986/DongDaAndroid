@@ -90,4 +90,9 @@ public class PhotoChangeActivity extends AYActivity {
     public String getClassTag() {
         return TAG;
     }
+
+    @Override
+    protected void bindingFragments() {
+
+    }
 }

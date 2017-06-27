@@ -7,6 +7,7 @@ import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
+import com.blackmirror.dongda.fragment.AYFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class AYDefaultActivityFactory extends AYFactory {
         AYActivity controller = (AYActivity)f;
         initCmdsLst(controller);
         initFacadeLst(controller);
+        initFragmentLst(controller);
     }
 
     @Override
@@ -57,5 +59,16 @@ public class AYDefaultActivityFactory extends AYFactory {
             result.put(iter, tmp);
         }
         controller.facades = result;
+    }
+
+    protected void initFragmentLst(AYActivity controller) {
+        List<String> lst = this.getSubInstanceName("fragment");
+        Map<String, AYFragment> result = new HashMap<>();
+        for (String iter : lst) {
+            AYFragment tmp = (AYFragment) AYFactoryManager.getInstance(controller.getApplicationContext())
+                    .queryInstance("fragment", iter);
+            result.put(iter, tmp);
+        }
+        controller.fragments = result;
     }
 }

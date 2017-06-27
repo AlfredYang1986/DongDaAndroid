@@ -15,9 +15,9 @@ import java.util.Map;
 public abstract class AYFacade implements AYSysNotificationHandler {
     public Map<String, AYCommand> cmds;
 
-    private ArrayList<AYActivity> handlers = new ArrayList<>();
+    private ArrayList<AYSysNotificationHandler> handlers = new ArrayList<>();
 
-    public Boolean registerActivity(AYActivity ref) {
+    public Boolean registerActivity(AYSysNotificationHandler ref) {
         Boolean result = false;
         if (!handlers.contains(ref)) {
             handlers.add(ref);
@@ -27,7 +27,7 @@ public abstract class AYFacade implements AYSysNotificationHandler {
         return result;
     }
 
-    public Boolean unRegisterActivity(AYActivity ref) {
+    public Boolean unRegisterActivity(AYSysNotificationHandler ref) {
         Boolean result = false;
         if (handlers.contains(ref)) {
             handlers.remove(ref);
@@ -38,7 +38,7 @@ public abstract class AYFacade implements AYSysNotificationHandler {
     }
     
     public void broadcastingNotification(String cmd_name, JSONObject args) {
-        for (AYActivity a : handlers) {
+        for (AYSysNotificationHandler a : handlers) {
 //            a.facadeCallback(cmd_name, args);
             AYSysHelperFunc.getInstance().handleNotifications(cmd_name, args, a);
         }
@@ -48,4 +48,5 @@ public abstract class AYFacade implements AYSysNotificationHandler {
     public Boolean handleNotifications(String name, JSONObject args) {
         return AYSysHelperFunc.getInstance().handleNotifications(name, args, this);
     }
+
 }

@@ -30,4 +30,9 @@ public class NameInputActivity extends AYActivity {
     public String getClassTag() {
         return TAG;
     }
+
+    @Override
+    protected void bindingFragments() {
+
+    }
 }
