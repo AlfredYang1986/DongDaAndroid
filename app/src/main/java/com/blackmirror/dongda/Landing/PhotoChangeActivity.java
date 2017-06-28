@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,13 +12,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 import com.blackmirror.dongda.AY.AYIntentRequestCode;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import static android.widget.Toast.LENGTH_LONG;
 
 public class PhotoChangeActivity extends AYActivity {
 
@@ -34,6 +45,16 @@ public class PhotoChangeActivity extends AYActivity {
         setContentView(R.layout.activity_photo_change);
 
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
+
+        String screen_photo = p.getScreen_photo();
+        AYFacade facade = facades.get("FileFacade");
+        AYCommand cmd = facade.cmds.get("DownloadFile");
+        Map<String, Object> m = new HashMap<>();
+        m.put("file", screen_photo);
+        m.put("resource_id", R.id.landing_screen_photo_imgview);
+        m.put("resource_index", 0);
+        JSONObject args = new JSONObject(m);
+        cmd.excute(args, this);
 
         Button btn = (Button) findViewById(R.id.landing_enter_btn);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -127,5 +148,39 @@ public class PhotoChangeActivity extends AYActivity {
     @Override
     protected void bindingFragments() {
 
+    }
+
+    protected void resetImageChoose() {
+        path = null;
+        bm = null;
+    }
+
+    protected Boolean downloadSuccess(JSONObject arg) {
+
+        Log.i(TAG, "send sms code result is " + arg.toString());
+
+        try {
+            int rid = arg.getInt("resource_id");
+            ImageView tmp= (ImageView) findViewById(rid);
+            String file_path = arg.getString("path");
+            Uri originalUri = Uri.fromFile(new File(file_path));
+            ContentResolver resolver = getContentResolver();
+            bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);        //显得到bitmap图片
+            tmp.setImageBitmap(bm);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    protected Boolean downloadFailed(JSONObject arg) {
+        Log.i(TAG, "send sms code error is " + arg.toString());
+         return true;
     }
 }

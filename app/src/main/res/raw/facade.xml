@@ -17,4 +17,12 @@
         <command short="LoginWithPhone" />
         <command short="SendSMSCode" />
     </facade>
+
+    <facade
+            short="FileFacade"
+            name="com.blackmirror.dongda.facade.FileOptFacade.AYFileOptFacade"
+            factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+        <command short="DownloadFile" />
+    </facade>
 </facades>

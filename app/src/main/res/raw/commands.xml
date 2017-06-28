@@ -29,4 +29,10 @@
             short="QueryCurrentLoginUser"
             name="com.blackmirror.dongda.facade.DongdaCommonFacade.LoginSuccessCommand.AYQueryCurrentLoginUserCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+            short="DownloadFile"
+            name="com.blackmirror.dongda.facade.FileOptFacade.DownloadFile.AYDongloadFileCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
 </commands>
