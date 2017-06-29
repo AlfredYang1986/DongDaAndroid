@@ -68,8 +68,8 @@ public class LandingActivity extends AYActivity {
 
     @Override
     protected void bindingFragments()  {
-        FragmentManager fm = getSupportFragmentManager();
-        AYFragment f = this.fragments.get("frag_test");
-        fm.beginTransaction().add(R.id.fragment_test, f).commit();
+//        FragmentManager fm = getSupportFragmentManager();
+//        AYFragment f = this.fragments.get("frag_test");
+//        fm.beginTransaction().add(R.id.fragment_test, f).commit();
     }
 }

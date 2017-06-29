@@ -1,6 +1,11 @@
 package com.blackmirror.dongda.fragment;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.command.AYCommand;
@@ -16,6 +21,7 @@ public abstract class AYFragment extends Fragment implements AYSysNotificationHa
 
     public Map<String, AYCommand> cmds;
     public Map<String, AYFacade> facades;
+    public Map<String, AYFragment> fragments;
 
     @Override
     public void onPause() {
@@ -54,4 +60,13 @@ public abstract class AYFragment extends Fragment implements AYSysNotificationHa
     public Boolean handleNotifications(String name, JSONObject args) {
         return AYSysHelperFunc.getInstance().handleNotifications(name, args, this);
     }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        bindingSubFragments();
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    protected abstract void bindingSubFragments();
 }

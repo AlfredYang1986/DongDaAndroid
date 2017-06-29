@@ -23,32 +23,46 @@ public class AYFragmentFactory extends AYFactory {
     public void postCreation(AYSysObject f) {
         super.postCreation(f);
         AYFragment fragment = (AYFragment) f;
-//        initCmdsLst(facade);
+        initCmdsLst(fragment);
+        initFacadeLst(fragment);
+        initSubFragmentLst(fragment);
     }
 
-//    protected void initCmdsLst(AYSysObject facade) {
-//        List<String> lst = this.getSubInstanceName("command");
-//        Map<String, AYCommand> result = new HashMap<>();
-//        for (String iter : lst) {
-//            AYCommand tmp = (AYCommand) AYFactoryManager.getInstance(null)
-//                    .queryInstance("command", iter);
-//
-//            tmp.setTarget(facade);
-//            result.put(iter, tmp);
-//        }
-//        facade.cmds = result;
-//    }
-//
-//    protected void initFacadeLst( controller) {
-//        List<String> lst = this.getSubInstanceName("facade");
-//        Map<String, AYFacade> result = new HashMap<>();
-//        for (String iter : lst) {
-//            AYFacade tmp = (AYFacade) AYFactoryManager.getInstance(controller.getApplicationContext())
-//                    .queryInstance("facade", iter);
-//            result.put(iter, tmp);
-//        }
-//        controller.facades = result;
-//    }
+    protected void initCmdsLst(AYFragment fragment) {
+        List<String> lst = this.getSubInstanceName("command");
+        Map<String, AYCommand> result = new HashMap<>();
+        for (String iter : lst) {
+            AYCommand tmp = (AYCommand) AYFactoryManager.getInstance(null)
+                    .queryInstance("command", iter);
+
+            tmp.setTarget(fragment);
+            result.put(iter, tmp);
+        }
+        fragment.cmds = result;
+    }
+
+    protected void initFacadeLst(AYFragment fragment) {
+        List<String> lst = this.getSubInstanceName("facade");
+        Map<String, AYFacade> result = new HashMap<>();
+        for (String iter : lst) {
+            AYFacade tmp = (AYFacade) AYFactoryManager.getInstance(null)
+                    .queryInstance("facade", iter);
+            result.put(iter, tmp);
+        }
+        fragment.facades = result;
+    }
+
+    protected void initSubFragmentLst(AYFragment fragment) {
+        List<String> lst = this.getSubInstanceName("fragment");
+        Map<String, AYFragment> result = new HashMap<>();
+        for (String iter : lst) {
+            AYFragment tmp = (AYFragment) AYFactoryManager.getInstance(null)
+                    .queryInstance("fragment", iter);
+
+            result.put(iter, tmp);
+        }
+        fragment.fragments = result;
+    }
 
     @Override
     public String getClassTag() {
