@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
@@ -55,6 +56,12 @@ public class AYFactoryManager {
         facade_doc = loadCmdConfig(R.raw.facade);
         fragment_doc = loadCmdConfig(R.raw.fragments);
         activity_doc = loadCmdConfig(R.raw.controllers);
+
+        /**
+         * 必须要有文件夹
+         */
+        File f = new File("/mnt/sdcard/dongda/");
+        f.mkdirs();
     }
 
     private Map<String, AYFactory> manager = new HashMap<>();

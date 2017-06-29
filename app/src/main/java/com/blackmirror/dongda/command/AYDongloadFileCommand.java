@@ -19,7 +19,7 @@ import java.net.URL;
 public class AYDongloadFileCommand extends AYCommand {
 
     final String TAG = "download file";
-    final String path = "/mnt/sdcard/download/";
+    final String path = "/mnt/sdcard/dongda/";
     final String endpoint = "http://www.altlys.com:9000/query/downloadFile/";
 
     final String failed_notify_func_name = "downloadFailed";
