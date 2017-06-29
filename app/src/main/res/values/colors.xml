@@ -6,4 +6,23 @@
 
     <color name="landing_activity_background">#00D1C1</color>
     <color name="landing_activity_action_btn_text_color">#46bdca</color>
+
+    <!--Common-->
+    <color name="colorTheme">#FF59D5C7</color>
+    <color name="colorAlpha">#00000000</color>
+
+    <!--Font-->
+    <color name="colorBlack">#FF595959</color>
+    <!--Font GaryList-->
+    <color name="colorGary227">#FF595959</color>
+
+
+    <!--Backgroung-->
+    <color name="colorGaryBackground">#FFFFFFFF</color>
+    <color name="colorDarkBackground">#FFD3F5F2</color>
+    <color name="colorWhiteBackground">#FFFFFFFF</color>
+
+    <!--Line-->
+    <color name="colorDarkLine">#FF999999</color>
+
 </resources>
