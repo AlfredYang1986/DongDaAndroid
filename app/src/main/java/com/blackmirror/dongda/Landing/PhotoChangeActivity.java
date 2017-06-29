@@ -2,6 +2,7 @@ package com.blackmirror.dongda.Landing;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -68,7 +69,7 @@ public class PhotoChangeActivity extends AYActivity {
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadUserScreenPhoto();
+                uploadUserScreenPhoto(path);
             }
         });
     }
@@ -93,12 +94,12 @@ public class PhotoChangeActivity extends AYActivity {
                 /**
                  * 这里开始的第二部分，获取图片的路径
                  */
-//                String[] proj = {MediaStore.Images.Media.DATA};
-//                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
-//                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//                cursor.moveToFirst();
-//                String path = cursor.getString(column_index);
-//                Log.i(TAG, "select photo is " + path);
+                Log.i(TAG, "select photo is " + path);
+                String[] proj = {MediaStore.Images.Media.DATA};
+                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                path = cursor.getString(column_index);
 
             }catch (IOException e) {
                 Log.e(TAG, e.toString());
@@ -201,7 +202,7 @@ public class PhotoChangeActivity extends AYActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "start camera");
-                path  = "/mnt/sdcard/dongda/dongda_" + System.currentTimeMillis() + ".jpg";
+                path  = "/mnt/sdcard/DICM/dongda_" + System.currentTimeMillis() + ".jpg";
                 Uri uri = Uri.fromFile(new File(path));
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //调用照相机
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
@@ -210,7 +211,36 @@ public class PhotoChangeActivity extends AYActivity {
         };
     }
 
-    protected void uploadUserScreenPhoto() {
-//        AYCommand cmd =
+    protected void uploadUserScreenPhoto(String file_name) {
+        AYCommand cmd = (AYCommand) AYFactoryManager.
+                getInstance(null).
+                queryInstance("command", "uploadFile");
+
+        Map<String, Object> m = new HashMap<>();
+        m.put("file", file_name);
+        m.put("resource_id", R.id.landing_screen_photo_imgview);
+        m.put("resource_index", 0);
+        JSONObject args = new JSONObject(m);
+        cmd.excute(args, this);
+    }
+
+    protected Boolean uploadSuccess(JSONObject arg) {
+
+        Log.i(TAG, "send sms code result is " + arg.toString());
+
+        try {
+            String uuid = arg.getString("uuid");
+            Log.i(TAG, "uuid is " + uuid);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    protected Boolean uploadFailed(JSONObject arg) {
+        Log.i(TAG, "send sms code error is " + arg.toString());
+        return true;
     }
 }

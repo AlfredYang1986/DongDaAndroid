@@ -96,9 +96,15 @@ public class AYSysHelperFunc {
     public Boolean copyFile(String origin, String destination) {
         InputStream in = null;
         OutputStream out = null;
+        Boolean result = true;
         try {
             in = new FileInputStream(new File(origin));
-            out = new FileOutputStream(new File(destination));
+            File of = new File(destination);
+
+            if (!of.exists())
+                of.createNewFile();
+
+            out = new FileOutputStream(of);
                 // Transfer bytes from in to out
                 byte[] buf = new byte[1024];
                 int len;
@@ -107,8 +113,10 @@ public class AYSysHelperFunc {
                 }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            result = false;
         } catch (IOException e) {
             e.printStackTrace();
+            result = false;
         } finally {
             try {
                 if (in != null)
@@ -119,9 +127,10 @@ public class AYSysHelperFunc {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                result = false;
             }
         }
 
-        return true;
+        return result;
     }
 }
