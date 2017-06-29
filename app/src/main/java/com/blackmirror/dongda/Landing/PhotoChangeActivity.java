@@ -19,6 +19,7 @@ import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.factory.AYFactoryManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -47,8 +48,13 @@ public class PhotoChangeActivity extends AYActivity {
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
 
         String screen_photo = p.getScreen_photo();
-        AYFacade facade = facades.get("FileFacade");
-        AYCommand cmd = facade.cmds.get("DownloadFile");
+//        AYFacade facade = facades.get("FileFacade");
+//        AYCommand cmd = facade.cmds.get("DownloadFile");
+
+        AYCommand cmd = (AYCommand) AYFactoryManager.
+                getInstance(this.getApplicationContext()).
+                queryInstance("command", "DownloadFile");
+
         Map<String, Object> m = new HashMap<>();
         m.put("file", screen_photo);
         m.put("resource_id", R.id.landing_screen_photo_imgview);
@@ -181,6 +187,6 @@ public class PhotoChangeActivity extends AYActivity {
 
     protected Boolean downloadFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
-         return true;
+        return true;
     }
 }

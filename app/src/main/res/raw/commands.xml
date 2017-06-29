@@ -32,7 +32,7 @@
 
     <command
             short="DownloadFile"
-            name="com.blackmirror.dongda.facade.FileOptFacade.DownloadFile.AYDongloadFileCommand"
+            name="com.blackmirror.dongda.command.AYDongloadFileCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
 </commands>

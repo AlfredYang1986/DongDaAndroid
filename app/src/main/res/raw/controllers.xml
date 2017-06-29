@@ -25,6 +25,5 @@
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="LoginFacade" />
-        <facade short="FileFacade" />
     </controller>
 </controllers>

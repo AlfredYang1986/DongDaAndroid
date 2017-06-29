@@ -3,6 +3,7 @@ package com.blackmirror.dongda.fragment;
 import android.support.v4.app.Fragment;
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ public abstract class AYFragment extends Fragment implements AYSysNotificationHa
 
     public Map<String, AYCommand> cmds;
     public Map<String, AYFacade> facades;
+    public Map<String, AYFragment> fragments;
 
     @Override
     public void onPause() {
