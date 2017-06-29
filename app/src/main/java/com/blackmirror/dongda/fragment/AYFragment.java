@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
-import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
 import org.json.JSONObject;

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.blackmirror.dongda.AY.AYIntentRequestCode;
 import com.blackmirror.dongda.R;
@@ -37,8 +38,10 @@ public class PhotoChangeActivity extends AYActivity {
 
     private AYDaoUserProfile p = null;
     private ImageView iv = null;
+
     private String path = null;
     private Bitmap bm = null;
+    private Boolean isChangeScreenPhoto = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,20 +50,8 @@ public class PhotoChangeActivity extends AYActivity {
 
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
 
-        String screen_photo = p.getScreen_photo();
-//        AYFacade facade = facades.get("FileFacade");
-//        AYCommand cmd = facade.cmds.get("DownloadFile");
-
-        AYCommand cmd = (AYCommand) AYFactoryManager.
-                getInstance(this.getApplicationContext()).
-                queryInstance("command", "DownloadFile");
-
-        Map<String, Object> m = new HashMap<>();
-        m.put("file", screen_photo);
-        m.put("resource_id", R.id.landing_screen_photo_imgview);
-        m.put("resource_index", 0);
-        JSONObject args = new JSONObject(m);
-        cmd.excute(args, this);
+        setOriginScreenPhoto();
+        setOriginScreenName();
 
         Button btn = (Button) findViewById(R.id.landing_enter_btn);
         btn.setOnClickListener(new View.OnClickListener() {
@@ -71,39 +62,13 @@ public class PhotoChangeActivity extends AYActivity {
         });
 
         iv = (ImageView) findViewById(R.id.landing_screen_photo_imgview);
-        iv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "start album");
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");//相片类型
-                startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_PICK_IMAGE_FROM_ALBUM);
-            }
-        });
+        iv.setOnClickListener(openAlbum());
 
         Button album_btn = (Button) findViewById(R.id.landing_enter_album);
-        album_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "start album");
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType("image/*");//相片类型
-                startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_PICK_IMAGE_FROM_ALBUM);
-            }
-        });
+        album_btn.setOnClickListener(openAlbum());
 
         Button camera_btn = (Button) findViewById(R.id.landing_enter_camera);
-        camera_btn.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                Log.i(TAG, "start camera");
-                path  = "/mnt/sdcard/DCIM/dongda_" + System.currentTimeMillis() + ".jpg";
-                Uri uri = Uri.fromFile(new File(path));
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //调用照相机
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_IMAGE_FROM_CAMERA);
-            }
-        });
+        camera_btn.setOnClickListener(openCamera());
     }
 
     @Override
@@ -122,6 +87,7 @@ public class PhotoChangeActivity extends AYActivity {
                 Uri originalUri = data.getData();        //获得图片的uri
                 bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);        //显得到bitmap图片
                 iv.setImageBitmap(bm);
+                isChangeScreenPhoto = true;
                 /**
                  * 这里开始的第二部分，获取图片的路径
                  */
@@ -140,6 +106,8 @@ public class PhotoChangeActivity extends AYActivity {
                 Uri originalUri = Uri.fromFile(new File(path));
                 bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);        //显得到bitmap图片
                 iv.setImageBitmap(bm);
+                isChangeScreenPhoto = true;
+
             } catch (IOException e) {
                 Log.e(TAG, e.toString());
             }
@@ -188,5 +156,55 @@ public class PhotoChangeActivity extends AYActivity {
     protected Boolean downloadFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
         return true;
+    }
+
+    protected void setOriginScreenPhoto() {
+        String screen_photo = p.getScreen_photo();
+
+        AYCommand cmd = (AYCommand) AYFactoryManager.
+                getInstance(this.getApplicationContext()).
+                queryInstance("command", "DownloadFile");
+
+        Map<String, Object> m = new HashMap<>();
+        m.put("file", screen_photo);
+        m.put("resource_id", R.id.landing_screen_photo_imgview);
+        m.put("resource_index", 0);
+        JSONObject args = new JSONObject(m);
+        cmd.excute(args, this);
+    }
+
+    protected void setOriginScreenName() {
+        String screen_name = p.getScreen_name();
+
+        TextView tv = (TextView) findViewById(R.id.landing_screen_name_textview);
+        tv.setText(screen_name);
+    }
+
+    public View.OnClickListener openAlbum() {
+        return
+        new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "start album");
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType("image/*");//相片类型
+                startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_PICK_IMAGE_FROM_ALBUM);
+            }
+        };
+    }
+
+    public View.OnClickListener openCamera() {
+        return
+        new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i(TAG, "start camera");
+                path  = "/mnt/sdcard/DCIM/dongda_" + System.currentTimeMillis() + ".jpg";
+                Uri uri = Uri.fromFile(new File(path));
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //调用照相机
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_IMAGE_FROM_CAMERA);
+            }
+        };
     }
 }
