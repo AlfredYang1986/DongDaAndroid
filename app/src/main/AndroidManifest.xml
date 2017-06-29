@@ -13,7 +13,7 @@
             android:icon="@mipmap/dongda_logo"
             android:supportsRtl="true"
             android:theme="@style/AppThemeNoTitle">
-        <activity android:name=".Landing.LandingActivity">
+        <activity android:name=".Home.AYHomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -24,6 +24,8 @@
         <activity android:name=".Landing.NameInputActivity">
         </activity>
         <activity android:name=".Landing.PhotoChangeActivity">
+        </activity>
+        <activity android:name=".Landing.LandingActivity">
         </activity>
     </application>
 
