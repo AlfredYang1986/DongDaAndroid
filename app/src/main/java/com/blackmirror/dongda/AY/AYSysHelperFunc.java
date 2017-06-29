@@ -3,7 +3,7 @@ package com.blackmirror.dongda.AY;
 import android.util.Log;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -91,5 +91,37 @@ public class AYSysHelperFunc {
         }
 
         return result;
+    }
+
+    public Boolean copyFile(String origin, String destination) {
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = new FileInputStream(new File(origin));
+            out = new FileOutputStream(new File(destination));
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null)
+                    in.close();
+
+                if (out != null)
+                    out.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return true;
     }
 }

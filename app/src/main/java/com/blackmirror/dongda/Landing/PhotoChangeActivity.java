@@ -2,9 +2,7 @@ package com.blackmirror.dongda.Landing;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,12 +11,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.blackmirror.dongda.AY.AYIntentRequestCode;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import org.json.JSONException;
@@ -29,8 +25,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 public class PhotoChangeActivity extends AYActivity {
 
@@ -69,6 +63,14 @@ public class PhotoChangeActivity extends AYActivity {
 
         Button camera_btn = (Button) findViewById(R.id.landing_enter_camera);
         camera_btn.setOnClickListener(openCamera());
+
+        Button cancel_btn = (Button) findViewById(R.id.landing_enter_cancel);
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadUserScreenPhoto();
+            }
+        });
     }
 
     @Override
@@ -199,12 +201,16 @@ public class PhotoChangeActivity extends AYActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "start camera");
-                path  = "/mnt/sdcard/DCIM/dongda_" + System.currentTimeMillis() + ".jpg";
+                path  = "/mnt/sdcard/dongda/dongda_" + System.currentTimeMillis() + ".jpg";
                 Uri uri = Uri.fromFile(new File(path));
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //调用照相机
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_IMAGE_FROM_CAMERA);
             }
         };
+    }
+
+    protected void uploadUserScreenPhoto() {
+//        AYCommand cmd =
     }
 }
