@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -13,12 +12,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.blackmirror.dongda.AY.AYIntentRequestCode;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import org.json.JSONException;
@@ -29,8 +26,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 public class PhotoChangeActivity extends AYActivity {
 
@@ -69,6 +64,14 @@ public class PhotoChangeActivity extends AYActivity {
 
         Button camera_btn = (Button) findViewById(R.id.landing_enter_camera);
         camera_btn.setOnClickListener(openCamera());
+
+        Button cancel_btn = (Button) findViewById(R.id.landing_enter_cancel);
+        cancel_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadUserScreenPhoto(path);
+            }
+        });
     }
 
     @Override
@@ -91,12 +94,12 @@ public class PhotoChangeActivity extends AYActivity {
                 /**
                  * 这里开始的第二部分，获取图片的路径
                  */
-//                String[] proj = {MediaStore.Images.Media.DATA};
-//                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
-//                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//                cursor.moveToFirst();
-//                String path = cursor.getString(column_index);
-//                Log.i(TAG, "select photo is " + path);
+                Log.i(TAG, "select photo is " + path);
+                String[] proj = {MediaStore.Images.Media.DATA};
+                Cursor cursor = managedQuery(originalUri, proj, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                path = cursor.getString(column_index);
 
             }catch (IOException e) {
                 Log.e(TAG, e.toString());
@@ -199,12 +202,45 @@ public class PhotoChangeActivity extends AYActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "start camera");
-                path  = "/mnt/sdcard/DCIM/dongda_" + System.currentTimeMillis() + ".jpg";
+                path  = "/mnt/sdcard/DICM/dongda_" + System.currentTimeMillis() + ".jpg";
                 Uri uri = Uri.fromFile(new File(path));
                 Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE); //调用照相机
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(intent, AYIntentRequestCode.AY_INTENT_IMAGE_FROM_CAMERA);
             }
         };
+    }
+
+    protected void uploadUserScreenPhoto(String file_name) {
+        AYCommand cmd = (AYCommand) AYFactoryManager.
+                getInstance(null).
+                queryInstance("command", "uploadFile");
+
+        Map<String, Object> m = new HashMap<>();
+        m.put("file", file_name);
+        m.put("resource_id", R.id.landing_screen_photo_imgview);
+        m.put("resource_index", 0);
+        JSONObject args = new JSONObject(m);
+        cmd.excute(args, this);
+    }
+
+    protected Boolean uploadSuccess(JSONObject arg) {
+
+        Log.i(TAG, "send sms code result is " + arg.toString());
+
+        try {
+            String uuid = arg.getString("uuid");
+            Log.i(TAG, "uuid is " + uuid);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+
+    protected Boolean uploadFailed(JSONObject arg) {
+        Log.i(TAG, "send sms code error is " + arg.toString());
+        return true;
     }
 }

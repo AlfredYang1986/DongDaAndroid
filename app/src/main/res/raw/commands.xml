@@ -35,4 +35,8 @@
             name="com.blackmirror.dongda.command.AYDongloadFileCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
+    <command
+            short="uploadFile"
+            name="com.blackmirror.dongda.command.AYUploadFileCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>
