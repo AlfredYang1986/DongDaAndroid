@@ -26,4 +26,12 @@
 
         <facade short="LoginFacade" />
     </controller>
+
+    <controller short="Login Success Tmp Activity"
+                name="com.blackmirror.dongda.Landing.LoginSuccessTmpActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="LoginFacade" />
+        <fragment short="frag_test" />
+    </controller>
 </controllers>

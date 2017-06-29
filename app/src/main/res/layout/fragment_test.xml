@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:id="@+id/inner_fragment_container">
 
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我是一个测试"
+            android:text="登陆成功"
             android:textColor="@android:color/black"
             android:textSize="24sp"
             android:layout_marginTop="@dimen/landing_activity_image_logo_margin"
