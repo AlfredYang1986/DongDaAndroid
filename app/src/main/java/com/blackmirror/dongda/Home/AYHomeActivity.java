@@ -20,6 +20,8 @@ public class AYHomeActivity extends AYActivity {
     private FragmentManager mFragmentManage;
     private FragmentTransaction mTransaction;
 
+    private AYNavBarFragment fragment_navbar;
+
     @Override
     public String getClassTag() {
         return TAG;
@@ -34,11 +36,18 @@ public class AYHomeActivity extends AYActivity {
         mTransaction = mFragmentManage.beginTransaction();
 
         AYTabBarFragment fragment_tabbar = new AYTabBarFragment();
-        AYNavBarFragment fragment_navbar = new AYNavBarFragment();
+        fragment_navbar = new AYNavBarFragment();
         mTransaction.add(R.id.activity_home, fragment_navbar, "fragment_navbar");
         mTransaction.add(R.id.activity_home, fragment_tabbar, "fragment_tabbar");
         mTransaction.commit();
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        fragment_navbar.setTitleTextWithString("123");
+        fragment_navbar.setLeftBtnImageWithImageId(R.drawable.nav_icon_back_black);
     }
 
     @Override

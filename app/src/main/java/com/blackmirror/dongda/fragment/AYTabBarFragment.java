@@ -97,7 +97,7 @@ public class AYTabBarFragment extends AYFragment {
             }
         });
 
-//        setTabFocusOptionWithIndex(0);
+        setTabFocusOptionWithIndex(0);
         return view;
     }
 

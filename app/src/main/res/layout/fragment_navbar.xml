@@ -17,21 +17,53 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
-        android:id="@+id/nav_left_btn"
+        android:id="@+id/nav_left_btn_text"
         android:layout_width="44dp"
         android:layout_height="44dp"
         android:text="Left"
         android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
         android:background="@color/colorAlpha"
         android:layout_centerVertical="true"
         android:gravity="center_vertical"/>
 
-    <!--<ImageButton-->
-    <!--android:src="@mipmap/nav_icon_back_black"-->
-    <!--android:layout_width="44dp"-->
-    <!--android:layout_height="44dp"-->
-    <!--android:layout_marginLeft="20dp"-->
-    <!--android:layout_centerVertical="true"/>-->
+    <ImageButton
+        android:id="@+id/nav_left_btn_img"
+        android:src="@drawable/nav_icon_back_black"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_centerVertical="true"
+        android:background="@color/colorAlpha"
+        android:scaleType="fitCenter"
+        android:padding="2dp"/>
+
+    <Button
+        android:id="@+id/nav_right_btn_text"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="Right"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_centerVertical="true"
+        android:background="@color/colorAlpha"/>
+
+    <ImageButton
+        android:id="@+id/nav_right_btn_img"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/tab_icon_user_select"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_centerVertical="true"
+        android:background="@color/colorAlpha"
+        android:scaleType="fitCenter"
+        android:padding="2dp"/>
 
     <View
         android:id="@+id/view_line_bottom"
