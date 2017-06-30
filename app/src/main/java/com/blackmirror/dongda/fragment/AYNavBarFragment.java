@@ -15,6 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.controllers.AYActivity;
+
+import org.json.JSONObject;
 
 import static android.content.ContentValues.TAG;
 
@@ -155,8 +158,15 @@ public class AYNavBarFragment extends AYFragment {
 
     public void didLeftBtnClick(){
         Log.d(TAG, "didLeftBtnClick: ");
+
+        AYActivity act = (AYActivity) this.getActivity();
+        act.handleNotifications("didNavLeftBtnClickNotify", new JSONObject());
+
     }
     public void didRightBtnClick(){
         Log.d(TAG, "didRightBtnClick: ");
+
+        AYActivity act = (AYActivity) this.getActivity();
+        act.handleNotifications("didNavRightBtnClickNotify", new JSONObject());
     }
 }

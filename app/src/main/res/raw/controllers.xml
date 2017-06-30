@@ -40,6 +40,8 @@
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="LoginFacade" />
+        <fragment short="frag_navbar"/>
+        <fragment short="frag_tabbar"/>
     </controller>
 
 </controllers>
