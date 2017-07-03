@@ -152,7 +152,11 @@ public class AYNavBarFragment extends AYFragment {
     }
 
     public void setTitleTextWithString(String string) {
+        text_center.setVisibility(text_center.VISIBLE);
         text_center.setText(string);
+    }
+    public void setTitleTextInvisible () {
+        text_center.setVisibility(text_center.INVISIBLE);
     }
 
 

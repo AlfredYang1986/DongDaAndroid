@@ -8,6 +8,7 @@ import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
 import com.blackmirror.dongda.fragment.AYFragment;
+import com.blackmirror.dongda.fragment.AYListFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,13 +63,22 @@ public class AYDefaultActivityFactory extends AYFactory {
     }
 
     protected void initFragmentLst(AYActivity controller) {
+        Map<String, Object> result = new HashMap<>();
+
         List<String> lst = this.getSubInstanceName("fragment");
-        Map<String, AYFragment> result = new HashMap<>();
         for (String iter : lst) {
             AYFragment tmp = (AYFragment) AYFactoryManager.getInstance(controller.getApplicationContext())
                     .queryInstance("fragment", iter);
             result.put(iter, tmp);
         }
+
+        List<String> listfrag = this.getSubInstanceName("listfragment");
+        for (String iter : listfrag) {
+            AYListFragment tmp = (AYListFragment) AYFactoryManager.getInstance(controller.getApplicationContext())
+                    .queryInstance("listfragment", iter);
+            result.put(iter, tmp);
+        }
+
         controller.fragments = result;
     }
 }

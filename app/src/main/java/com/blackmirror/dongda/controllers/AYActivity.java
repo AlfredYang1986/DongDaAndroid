@@ -28,7 +28,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
 
     public Map<String, AYCommand> cmds;
     public Map<String, AYFacade> facades;
-    public Map<String, AYFragment> fragments;
+    public Map<String, Object> fragments;
     protected FragmentManager mFragmentManage;
 
     @Override

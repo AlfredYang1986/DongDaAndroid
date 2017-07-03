@@ -3,12 +3,8 @@
     <fragment
         short="frag_test"
         name="com.blackmirror.dongda.fragment.FragmentTest.AYFragmentTest"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory"
-        >
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
 
-        <comma>
-
-        </comma>
     </fragment>
 
     <fragment
@@ -19,4 +15,14 @@
         short="frag_tabbar"
         name="com.blackmirror.dongda.fragment.AYTabBarFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
+
+
+    <listfragment
+        short="frag_homelist_serv"
+        name="com.blackmirror.dongda.Home.AYHomeListServFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYListFragmentFactory">
+
+    </listfragment>
+
+
 </fragments>

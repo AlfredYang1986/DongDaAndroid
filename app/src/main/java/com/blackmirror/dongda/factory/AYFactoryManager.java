@@ -139,7 +139,7 @@ public class AYFactoryManager {
             doc = activity_doc;
         } else if (t.equals("facade")) {
             doc = facade_doc;
-        } else if (t.equals("fragment")) {
+        } else if (t.equals("fragment") || t.equals("listfragment")) {
             doc = fragment_doc;
         }
 
@@ -163,6 +163,9 @@ public class AYFactoryManager {
 
             List<String> fragments = querySubElement("fragment", elem);
             result.putSubInstanceName("fragment", fragments);
+
+            List<String> listfragments = querySubElement("listfragment", elem);
+            result.putSubInstanceName("listfragment", listfragments);
         }
 
         return result;
