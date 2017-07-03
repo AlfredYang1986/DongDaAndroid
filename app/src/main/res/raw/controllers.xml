@@ -42,6 +42,7 @@
         <facade short="LoginFacade" />
         <fragment short="frag_navbar"/>
         <fragment short="frag_tabbar"/>
+        <listfragment short="frag_homelist_serv"/>
     </controller>
 
 </controllers>
