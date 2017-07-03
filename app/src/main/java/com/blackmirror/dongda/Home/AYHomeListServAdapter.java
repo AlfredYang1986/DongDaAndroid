@@ -29,6 +29,7 @@ public class AYHomeListServAdapter extends BaseAdapter {
 
     @Override
     public int getCount (){
+
         serviceData = ServiceData.getDataInstance().getServDataWithArgs();
         return serviceData.size();
     }

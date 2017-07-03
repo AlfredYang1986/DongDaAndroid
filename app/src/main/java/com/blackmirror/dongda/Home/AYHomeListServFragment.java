@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -46,7 +50,10 @@ public class AYHomeListServFragment extends AYListFragment {
     public void onListItemClick (ListView parent, View view, int position, long id) {
         Log.d(TAG, "onListItemClick:" + position);
 
-//        Intent intent = new Intent(getActivity(),ServicePageActivity.class);
+        AYActivity act = (AYActivity) this.getActivity();
+        act.handleNotifications("didSelectedPositionNotify", new JSONObject());
+
+//        Intent intent = new Intent(getActivity(),AYServicePageActivity.class);
 //        //采用Intent普通传值的方式
 //        intent.putExtra("skip", "我是MainActivity传过来的值！");
 //        //跳转Activity
