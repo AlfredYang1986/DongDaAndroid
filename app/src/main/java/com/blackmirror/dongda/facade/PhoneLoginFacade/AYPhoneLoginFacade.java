@@ -53,4 +53,14 @@ public class AYPhoneLoginFacade extends AYFacade {
         broadcastingNotification("AYSendSMSCodeCommandFailed", args);
         return true;
     }
+
+    Boolean AYUpdateProfileCommandSuccess(JSONObject args) {
+        broadcastingNotification("AYUpdateProfileCommandSuccess", args);
+        return true;
+    }
+
+    Boolean AYUpdateProfileCommandFailed(JSONObject args) {
+        broadcastingNotification("AYUpdateProfileCommandFailed", args);
+        return true;
+    }
 }

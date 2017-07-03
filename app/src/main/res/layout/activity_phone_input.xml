@@ -77,4 +77,22 @@
                 android:layout_height="36dip"/>
 
     </LinearLayout>
+
+    <LinearLayout
+            android:orientation="horizontal"
+            android:background="@android:color/transparent"
+            android:layout_width="match_parent"
+            android:layout_marginLeft="36dip"
+            android:layout_marginRight="36dip"
+            android:layout_marginTop="30dip"
+            android:gravity="center"
+            android:layout_height="36dip">
+
+        <Button android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/landing_phone_input_next_step"
+                android:text="下一步" />
+
+    </LinearLayout>
+
 </LinearLayout>

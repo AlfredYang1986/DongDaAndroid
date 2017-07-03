@@ -13,9 +13,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.blackmirror.dongda.AY.AYIntentRequestCode;
+import com.blackmirror.dongda.Home.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import org.json.JSONException;
@@ -36,7 +38,9 @@ public class PhotoChangeActivity extends AYActivity {
 
     private String path = null;
     private Bitmap bm = null;
+
     private Boolean isChangeScreenPhoto = false;
+    private String post_upload_uuid = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,18 @@ public class PhotoChangeActivity extends AYActivity {
             @Override
             public void onClick(View v) {
                 Log.i(TAG, "enter button clicked");
+
+                if (isChangeScreenPhoto) {
+                    /**
+                     * 1. 看看是否修改照片
+                     */
+                    Log.i(TAG, "current path is " + path);
+                    uploadUserScreenPhoto(path);
+                } else {
+                    loginSuccess();
+                }
+
+
             }
         });
 
@@ -69,7 +85,8 @@ public class PhotoChangeActivity extends AYActivity {
         cancel_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadUserScreenPhoto(path);
+//                uploadUserScreenPhoto(path);
+                setOriginScreenName();
             }
         });
     }
@@ -127,11 +144,6 @@ public class PhotoChangeActivity extends AYActivity {
 
     }
 
-    protected void resetImageChoose() {
-        path = null;
-        bm = null;
-    }
-
     protected Boolean downloadSuccess(JSONObject arg) {
 
         Log.i(TAG, "send sms code result is " + arg.toString());
@@ -162,6 +174,11 @@ public class PhotoChangeActivity extends AYActivity {
     }
 
     protected void setOriginScreenPhoto() {
+        path = null;
+        bm = null;
+        isChangeScreenPhoto = false;
+        post_upload_uuid = null;
+
         String screen_photo = p.getScreen_photo();
 
         AYCommand cmd = (AYCommand) AYFactoryManager.
@@ -229,8 +246,27 @@ public class PhotoChangeActivity extends AYActivity {
         Log.i(TAG, "send sms code result is " + arg.toString());
 
         try {
-            String uuid = arg.getString("uuid");
-            Log.i(TAG, "uuid is " + uuid);
+            post_upload_uuid = arg.getString("uuid");
+            Log.i(TAG, "upload uuid is " + post_upload_uuid);
+
+            /**
+             * 2. 如果修改照片修改用户Profile
+             */
+            String ori_photo = p.getScreen_photo();
+
+            if (!post_upload_uuid.equals(ori_photo)) {
+                AYFacade facade = this.facades.get("LoginFacade");
+                AYCommand cmd = facade.cmds.get("UpdateProfile");
+
+                Map<String, Object> m = new HashMap<>();
+                m.put("user_id", p.getUser_id());
+                m.put("auth_token", p.getAuth_token());
+                m.put("screen_photo", post_upload_uuid);
+                JSONObject args = new JSONObject(m);
+                cmd.excute(args);
+            } else {
+                loginSuccess();
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -241,6 +277,34 @@ public class PhotoChangeActivity extends AYActivity {
 
     protected Boolean uploadFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
+        return true;
+    }
+
+    protected void loginSuccess() {
+        /**
+         * 3. 登陆成功
+         */
+        Intent intent = new Intent(this, AYHomeActivity.class);
+        startActivity(intent);
+    }
+
+    protected Boolean AYUpdateProfileCommandSuccess(JSONObject arg) {
+        Log.i(TAG, "update profile command success");
+
+        /**
+         * 修改本地数据库
+         */
+        AYFacade facade = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "DongdaCommanFacade");
+        AYCommand cmd = facade.cmds.get("UpdateLocalProfile");
+        p.setScreen_photo(post_upload_uuid);
+        cmd.excute(p);
+
+        loginSuccess();
+        return true;
+    }
+
+    protected Boolean AYUpdateProfileCommandFailed(JSONObject arg) {
+        Log.i(TAG, "update profile command failed");
         return true;
     }
 }
