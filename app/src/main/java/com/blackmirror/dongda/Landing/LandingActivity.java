@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import com.blackmirror.dongda.Home.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
@@ -57,6 +58,8 @@ public class LandingActivity extends AYActivity {
                  * 打印已登陆用户
                  */
                 Log.i(TAG, o.toString());
+                Intent intent = new Intent(this, AYHomeActivity.class);
+                startActivity(intent);
             }
         }
     }
