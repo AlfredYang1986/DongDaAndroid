@@ -16,6 +16,7 @@
 
         <command short="LoginWithPhone" />
         <command short="SendSMSCode" />
+        <command short="UpdateProfile" />
     </facade>
 
     <facade

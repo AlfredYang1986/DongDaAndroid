@@ -58,6 +58,14 @@ public class PhoneInputActivity extends AYActivity {
                 }
             }
         });
+
+        Button next_step = (Button) findViewById(R.id.landing_phone_input_next_step);
+        next_step.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginWithPhoneAndCode();
+            }
+        });
     }
 
     @Override

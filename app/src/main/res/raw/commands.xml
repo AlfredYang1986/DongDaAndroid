@@ -16,6 +16,11 @@
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
     <command
+            short="UpdateProfile"
+            name="com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYUpdateProfileCommand"
+            factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
             short="QueryDAOProxy"
             name="com.blackmirror.dongda.facade.DongdaCommonFacade.LoginSuccessCommand.AYQueryDAOProxyCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
