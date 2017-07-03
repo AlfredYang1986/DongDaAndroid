@@ -56,12 +56,22 @@ public class AYSQLiteProxy extends SQLiteOpenHelper {
         return getWritableDatabase().insert(TABLE_USER_PROFILE, null, cv);
     }
 
+    public long updateProfile(AYDaoUserProfile p) {
+        String user_id = p.getUser_id();
+        deleteProfile(user_id);
+        return insertProfile(p);
+    }
+
     public AYDaoUserProfile queryProfile(String user_id) {
         //execSQL("select * from user_profile where user_id=" + user_id);
         Cursor c = getReadableDatabase().query(TABLE_USER_PROFILE, null,
                 COLUM_USER_PROFILE_USER_ID + "=?", new String[] {user_id}, null, null, null);
         c.moveToFirst();
         return cursor2Profile(c);
+    }
+
+    public long deleteProfile(String user_id) {
+        return getWritableDatabase().delete(TABLE_USER_PROFILE, COLUM_USER_PROFILE_USER_ID + "=?", new String[] {user_id});
     }
 
     public AYDaoUserProfile currentProfile() {

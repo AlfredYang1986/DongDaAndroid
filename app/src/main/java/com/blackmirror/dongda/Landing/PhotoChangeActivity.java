@@ -17,6 +17,7 @@ import com.blackmirror.dongda.Home.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import org.json.JSONException;
@@ -254,7 +255,17 @@ public class PhotoChangeActivity extends AYActivity {
             String ori_photo = p.getScreen_photo();
 
             if (!post_upload_uuid.equals(ori_photo)) {
+                AYFacade facade = this.facades.get("LoginFacade");
+                AYCommand cmd = facade.cmds.get("UpdateProfile");
 
+                Map<String, Object> m = new HashMap<>();
+                m.put("user_id", p.getUser_id());
+                m.put("auth_token", p.getAuth_token());
+                m.put("screen_photo", post_upload_uuid);
+                JSONObject args = new JSONObject(m);
+                cmd.excute(args);
+            } else {
+                loginSuccess();
             }
 
         } catch (JSONException e) {
@@ -275,5 +286,25 @@ public class PhotoChangeActivity extends AYActivity {
          */
         Intent intent = new Intent(this, AYHomeActivity.class);
         startActivity(intent);
+    }
+
+    protected Boolean AYUpdateProfileCommandSuccess(JSONObject arg) {
+        Log.i(TAG, "update profile command success");
+
+        /**
+         * 修改本地数据库
+         */
+        AYFacade facade = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "DongdaCommanFacade");
+        AYCommand cmd = facade.cmds.get("UpdateLocalProfile");
+        p.setScreen_photo(post_upload_uuid);
+        cmd.excute(p);
+
+        loginSuccess();
+        return true;
+    }
+
+    protected Boolean AYUpdateProfileCommandFailed(JSONObject arg) {
+        Log.i(TAG, "update profile command failed");
+        return true;
     }
 }

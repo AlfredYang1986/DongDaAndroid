@@ -7,6 +7,7 @@
         <command short="QueryDAOProxy" />
         <command short="LoginSuccess" />
         <command short="QueryCurrentLoginUser" />
+        <command short="UpdateLocalProfile" />
     </facade>
 
     <facade
@@ -25,5 +26,6 @@
             factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
 
         <command short="DownloadFile" />
+        <command short="uploadFile" />
     </facade>
 </facades>
