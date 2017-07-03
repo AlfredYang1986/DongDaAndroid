@@ -29,6 +29,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     public Map<String, AYCommand> cmds;
     public Map<String, AYFacade> facades;
     public Map<String, AYFragment> fragments;
+    protected FragmentManager mFragmentManage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,8 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
          */
         AYFactory fac = AYFactoryManager.getInstance(this).queryFactoryInstance("controller", getClassTag());
         fac.postCreation(this);
+
+        mFragmentManage = getSupportFragmentManager();
 
         bindingFragments();
     }

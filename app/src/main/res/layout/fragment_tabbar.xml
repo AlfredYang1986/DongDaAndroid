@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="49dp"
+    android:layout_alignParentBottom="true"
+    android:orientation="horizontal"
+    tools:context="com.blackmirror.dongda.fragment.AYTabBarFragment">
+
+
+    <LinearLayout
+        android:id="@+id/tabbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:textAllCaps="false"
+            android:background="@color/colorWhiteBackground"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tabbar_home"
+            android:text="咚哒"
+            android:textSize="11sp"
+            android:drawableTop="@drawable/tab_icon_home_normal"
+            android:drawablePadding="6dp"
+            style="?android:attr/borderlessButtonStyle"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:textAllCaps="false"
+            android:background="@color/colorWhiteBackground"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tabbar_message"
+            android:drawableTop="@drawable/tab_icon_message_normal"
+            android:text="消息"
+            android:textSize="11sp"
+            android:drawablePadding="6dp"
+            style="?android:attr/borderlessButtonStyle"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:textAllCaps="false"
+            android:background="@color/colorWhiteBackground"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tabbar_schedule"
+            android:textSize="11sp"
+            android:text="日程"
+            android:drawableTop="@drawable/tab_icon_schedule_normal"
+            android:drawablePadding="6dp"
+            style="?android:attr/borderlessButtonStyle"/>
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:textAllCaps="false"
+            android:background="@color/colorWhiteBackground"
+            android:textColor="@color/colorBlack"
+            android:id="@+id/tabbar_profile"
+            android:text="我的"
+            android:textSize="11sp"
+            android:drawableTop="@drawable/tab_icon_user_normal"
+            android:drawablePadding="6dp"
+            style="?android:attr/borderlessButtonStyle"/>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_line_top"
+        android:background="@color/colorDarkLine"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/tabbar"/>
+
+</RelativeLayout>

@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragments>
     <fragment
-            short="frag_test"
-            name="com.blackmirror.dongda.fragment.FragmentTest.AYFragmentTest"
-            factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
+        short="frag_test"
+        name="com.blackmirror.dongda.fragment.FragmentTest.AYFragmentTest"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory"
+        >
 
+        <comma>
+
+        </comma>
+    </fragment>
+
+    <fragment
+        short="frag_navbar"
+        name="com.blackmirror.dongda.fragment.AYNavBarFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
+    <fragment
+        short="frag_tabbar"
+        name="com.blackmirror.dongda.fragment.AYTabBarFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
 </fragments>
