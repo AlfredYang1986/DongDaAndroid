@@ -39,10 +39,15 @@
         name="com.blackmirror.dongda.Home.AYHomeActivity"
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
-        <facade short="LoginFacade" />
         <fragment short="frag_navbar"/>
         <fragment short="frag_tabbar"/>
         <listfragment short="frag_homelist_serv"/>
     </controller>
 
+    <controller short="AYServiceActivity"
+        name="com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity"
+        factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <fragment short="frag_navbar"/>
+    </controller>
 </controllers>

@@ -37,7 +37,7 @@
         android:layout_centerVertical="true"
         android:background="@color/colorAlpha"
         android:scaleType="fitCenter"
-        android:padding="2dp"/>
+        android:padding="8dp"/>
 
     <Button
         android:id="@+id/nav_right_btn_text"
@@ -55,7 +55,7 @@
         android:id="@+id/nav_right_btn_img"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:src="@drawable/tab_icon_user_select"
+        android:src="@drawable/home_icon_mapfilter"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_marginRight="20dp"
@@ -63,13 +63,13 @@
         android:layout_centerVertical="true"
         android:background="@color/colorAlpha"
         android:scaleType="fitCenter"
-        android:padding="2dp"/>
+        android:padding="8dp"/>
 
     <View
-        android:id="@+id/view_line_bottom"
+        android:id="@+id/nav_line_bottom"
         android:background="@color/colorDarkLine"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="0.5dp"
         android:layout_alignParentBottom="true"/>
 
 </RelativeLayout>

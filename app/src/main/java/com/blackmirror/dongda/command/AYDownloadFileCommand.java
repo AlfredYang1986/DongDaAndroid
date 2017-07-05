@@ -16,7 +16,7 @@ import java.net.URL;
 /**
  * Created by alfredyang on 28/06/2017.
  */
-public class AYDongloadFileCommand extends AYCommand {
+public class AYDownloadFileCommand extends AYCommand {
 
     final String TAG = "download file";
     final String path = "/mnt/sdcard/dongda/";
@@ -80,8 +80,11 @@ public class AYDongloadFileCommand extends AYCommand {
         protected void onPostExecute(JSONObject result) {
             super.onPostExecute(result);
             try {
-                result.put("resource_id", resource_id);
-                result.put("resource_index", resource_index);
+                if (result != null) {
+                    result.put("resource_id", resource_id);
+                    result.put("resource_index", resource_index);
+                }
+
                 if (handler != null) {
                     if (result.getString("status").equals("ok")) {
                         handler.handleNotifications(success_notify_func_name, result);

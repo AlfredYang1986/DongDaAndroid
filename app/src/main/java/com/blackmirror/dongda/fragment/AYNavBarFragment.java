@@ -44,6 +44,7 @@ public class AYNavBarFragment extends AYFragment {
     private TextView text_center;
     private Button nav_right_btn_text;
     private ImageButton nav_right_btn_img;
+    private View nav_line_bottom;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,8 @@ public class AYNavBarFragment extends AYFragment {
         text_center = (TextView) view.findViewById(R.id.title_center);
         text_center.setText("标题");
 //        text_center.setVisibility(text_center.GONE);
+
+        nav_line_bottom = view.findViewById(R.id.nav_line_bottom);
 
         nav_left_btn_text = (Button) view.findViewById(R.id.nav_left_btn_text);
         nav_left_btn_text.setVisibility(nav_left_btn_text.GONE);
@@ -159,6 +162,13 @@ public class AYNavBarFragment extends AYFragment {
         text_center.setVisibility(text_center.INVISIBLE);
     }
 
+    public void setBottomLineVisible () {
+        nav_line_bottom.setVisibility(nav_line_bottom.VISIBLE);
+    }
+    public void setBottomLineInvisible () {
+        nav_line_bottom.setVisibility(nav_line_bottom.INVISIBLE);
+    }
+
 
     public void didLeftBtnClick(){
         Log.d(TAG, "didLeftBtnClick: ");
@@ -173,4 +183,5 @@ public class AYNavBarFragment extends AYFragment {
         AYActivity act = (AYActivity) this.getActivity();
         act.handleNotifications("didNavRightBtnClickNotify", new JSONObject());
     }
+
 }

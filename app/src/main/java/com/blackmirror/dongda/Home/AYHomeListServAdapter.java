@@ -29,12 +29,13 @@ public class AYHomeListServAdapter extends BaseAdapter {
 
     @Override
     public int getCount (){
+
         serviceData = ServiceData.getDataInstance().getServDataWithArgs();
         return serviceData.size();
     }
     @Override
     public Object getItem(int position) {
-        return null;
+        return serviceData.get(position);
     }
     @Override
     public long getItemId(int position) {
@@ -56,5 +57,9 @@ public class AYHomeListServAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public ArrayList changeQueryData () {
+        return serviceData;
     }
 }
