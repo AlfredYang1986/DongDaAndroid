@@ -35,7 +35,7 @@ public class AYHomeListServAdapter extends BaseAdapter {
     }
     @Override
     public Object getItem(int position) {
-        return null;
+        return serviceData.get(position);
     }
     @Override
     public long getItemId(int position) {
@@ -57,5 +57,9 @@ public class AYHomeListServAdapter extends BaseAdapter {
         }
 
         return convertView;
+    }
+
+    public ArrayList changeQueryData () {
+        return serviceData;
     }
 }

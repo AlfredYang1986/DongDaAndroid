@@ -1,6 +1,5 @@
 package com.blackmirror.dongda.Home.ServicePage;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
@@ -8,9 +7,9 @@ import android.util.Log;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
-import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -20,6 +19,7 @@ import org.json.JSONObject;
 public class AYServicePageActivity extends AYActivity {
 
     final private String TAG = "AYHomeActivity";
+    private JSONObject js_service_info;
 
     @Override
     public String getClassTag() {
@@ -32,9 +32,16 @@ public class AYServicePageActivity extends AYActivity {
         setContentView(R.layout.activity_servicepage);
 
         //新页面接收数据
-        Bundle bundle = this.getIntent().getExtras();
+        String name = this.getIntent().getStringExtra("service_info");
+
         //接收name值
-        String name = bundle.getString("name");
+        try {
+            js_service_info = new JSONObject(name);
+            Log.d(TAG, "onCreate: " + js_service_info.getString("service_title"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -53,17 +60,17 @@ public class AYServicePageActivity extends AYActivity {
     }
 
     public void didNavLeftBtnClickNotify (JSONObject args) {
-        Intent intent =getIntent();
-        //这里使用bundle绷带来传输数据
-        Bundle bundle = new Bundle();
-        //传输的内容仍然是键值对的形式
-        bundle.putString("second","hello world from secondActivity!");//回发的消息,hello world from secondActivity!
-        intent.putExtras(bundle);
-        setResult(RESULT_OK,intent);
-        finish();
+//        Intent intent = getIntent();
+//        //这里使用bundle绷带来传输数据
+//        Bundle bundle = new Bundle();
+//        //传输的内容仍然是键值对的形式
+//        bundle.putString("second","hello world from secondActivity!");//回发的消息,hello world from secondActivity!
+//        intent.putExtras(bundle);
+//        setResult(RESULT_OK,intent);
+        this.finish();
     }
-    public void didNavRightBtnClickNotify (JSONObject args) {
 
+    public void didNavRightBtnClickNotify (JSONObject args) {
         Log.d(TAG, "didNavRightBtnClickNotify: in Activity");
     }
 }

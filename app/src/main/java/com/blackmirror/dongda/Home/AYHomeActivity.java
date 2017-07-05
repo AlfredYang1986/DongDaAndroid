@@ -2,18 +2,15 @@ package com.blackmirror.dongda.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.AYScreenSingleton;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
-import com.blackmirror.dongda.fragment.AYTabBarFragment;
 
 import org.json.JSONObject;
 

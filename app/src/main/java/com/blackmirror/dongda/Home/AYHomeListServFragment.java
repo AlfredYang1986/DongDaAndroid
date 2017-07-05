@@ -1,24 +1,19 @@
 package com.blackmirror.dongda.Home;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by alfredyang on 3/7/17.
@@ -50,8 +45,11 @@ public class AYHomeListServFragment extends AYListFragment {
     public void onListItemClick (ListView parent, View view, int position, long id) {
         Log.d(TAG, "onListItemClick:" + position);
 
+        Map<String,Object> tmp = (Map<String, Object>) homelistAdapter.getItem(position);
+        JSONObject js = new JSONObject(tmp);
+
         AYActivity act = (AYActivity) this.getActivity();
-        act.handleNotifications("didSelectedPositionNotify", new JSONObject());
+        act.handleNotifications("didSelectedPositionNotify", js);
 
 //        Intent intent = new Intent(getActivity(),AYServicePageActivity.class);
 //        //采用Intent普通传值的方式
