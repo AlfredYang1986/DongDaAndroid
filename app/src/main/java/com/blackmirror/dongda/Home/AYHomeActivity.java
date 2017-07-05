@@ -7,12 +7,17 @@ import android.util.Log;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.ServiceData;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by alfredyang on 29/6/17.
@@ -21,6 +26,8 @@ import org.json.JSONObject;
 public class AYHomeActivity extends AYActivity {
 
     final private String TAG = "AYHomeActivity";
+    private AYHomeListServAdapter serviceListAdapter;
+    private ArrayList serviceData;
 
     @Override
     public String getClassTag() {
@@ -32,6 +39,9 @@ public class AYHomeActivity extends AYActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        serviceData = ServiceData.getDataInstance().getServDataWithArgs();
+        serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
+        ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).setListAdapter(serviceListAdapter);
     }
 
     @Override
@@ -48,6 +58,7 @@ public class AYHomeActivity extends AYActivity {
         FragmentTransaction task = mFragmentManage.beginTransaction();
         task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_navbar"));
         task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_tabbar"));
+        task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_homeseg"));
         task.add(R.id.activity_home, (AYListFragment)this.fragments.get("frag_homelist_serv"));
         task.commit();
     }
@@ -66,12 +77,21 @@ public class AYHomeActivity extends AYActivity {
     public void didSelectedPositionNotify (JSONObject args) {
         Log.d(TAG, "didSelectedPositionNotify: in Activity");
 
-        Intent intent = new Intent(this, AYServicePageActivity.class);
-        //采用Intent普通传值的方式
-        intent.putExtra("service_info", args.toString());
-        //跳转Activity
-//        startActivityForResult(intent, requestCode);
-        startActivity(intent);
+        int position = 0;
+        try {
+            position = args.getInt("position");
+            Map<String,Integer> tmp = (Map<String, Integer>) serviceData.get(position);
+            JSONObject js = new JSONObject(tmp);
+
+            Intent intent = new Intent(this, AYServicePageActivity.class);
+            //采用Intent普通传值的方式
+            intent.putExtra("service_info", js.toString());
+    //        startActivityForResult(intent, requestCode);
+            startActivity(intent);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

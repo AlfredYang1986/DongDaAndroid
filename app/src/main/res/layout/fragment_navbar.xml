@@ -38,7 +38,7 @@
         android:layout_centerVertical="true"
         android:background="@color/colorAlpha"
         android:scaleType="fitCenter"
-        android:padding="8dp"/>
+        android:padding="10dp"/>
 
     <Button
         android:id="@+id/nav_right_btn_text"
@@ -64,7 +64,7 @@
         android:layout_centerVertical="true"
         android:background="@color/colorAlpha"
         android:scaleType="fitCenter"
-        android:padding="8dp"/>
+        android:padding="10dp"/>
 
     <View
         android:id="@+id/nav_line_bottom"

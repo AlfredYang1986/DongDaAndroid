@@ -13,6 +13,7 @@ import com.blackmirror.dongda.fragment.AYListFragment;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -23,15 +24,9 @@ public class AYHomeListServFragment extends AYListFragment {
 
     private static final String TAG = "ListFragmentImpl";
 
-    private AYHomeListServAdapter homelistAdapter;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        homelistAdapter = new AYHomeListServAdapter(getActivity());
-        setListAdapter(homelistAdapter);
-
 //        this.setListAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, classes));
     }
 
@@ -45,7 +40,8 @@ public class AYHomeListServFragment extends AYListFragment {
     public void onListItemClick (ListView parent, View view, int position, long id) {
         Log.d(TAG, "onListItemClick:" + position);
 
-        Map<String,Object> tmp = (Map<String, Object>) homelistAdapter.getItem(position);
+        Map<String,Integer> tmp = new HashMap<String, Integer>();
+        tmp.put("position",position);
         JSONObject js = new JSONObject(tmp);
 
         AYActivity act = (AYActivity) this.getActivity();

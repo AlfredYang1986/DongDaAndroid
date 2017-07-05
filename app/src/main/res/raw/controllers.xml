@@ -41,6 +41,7 @@
 
         <fragment short="frag_navbar"/>
         <fragment short="frag_tabbar"/>
+        <fragment short="frag_homeseg"/>
         <listfragment short="frag_homelist_serv"/>
     </controller>
 

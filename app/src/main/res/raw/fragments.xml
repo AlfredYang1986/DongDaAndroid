@@ -16,6 +16,12 @@
         name="com.blackmirror.dongda.fragment.AYTabBarFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
 
+    <fragment
+        short="frag_homeseg"
+        name="com.blackmirror.dongda.Home.AYHomeSegFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
+
+    </fragment>
 
     <listfragment
         short="frag_homelist_serv"

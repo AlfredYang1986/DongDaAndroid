@@ -22,15 +22,20 @@ public class AYHomeListServAdapter extends BaseAdapter {
     private LayoutInflater itemInflater;
     private ArrayList serviceData;
 
-    public AYHomeListServAdapter(Context context) {
+    public AYHomeListServAdapter(Context context, ArrayList querydata) {
         super();
+        serviceData = querydata;
         itemInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public void refreshList () {
+        notifyDataSetChanged();
     }
 
     @Override
     public int getCount (){
         serviceData = ServiceData.getDataInstance().getServDataWithArgs();
-        return serviceData.size();
+        return serviceData.size() + 1;
     }
 
     @Override
@@ -49,11 +54,16 @@ public class AYHomeListServAdapter extends BaseAdapter {
         Map<String,Object> tmp = (Map<String, Object>) serviceData.get(position);
 
         if (convertView == null) {
-            convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
-            ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
-            ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("service_title"));
-            ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("service_addr"));
-            ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + (String)tmp.get("service_price"));
+            if (position == 0){
+                convertView = itemInflater.inflate(R.layout.cell_home_hello, null);
+            } else {
+
+                convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
+                ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
+                ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("service_title"));
+                ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("service_addr"));
+                ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + (String)tmp.get("service_price"));
+            }
         }
 
         return convertView;
