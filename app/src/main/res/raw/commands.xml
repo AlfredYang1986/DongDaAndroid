@@ -42,7 +42,7 @@
 
     <command
             short="DownloadFile"
-            name="com.blackmirror.dongda.command.AYDongloadFileCommand"
+            name="com.blackmirror.dongda.command.AYDownloadFileCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
     <command
