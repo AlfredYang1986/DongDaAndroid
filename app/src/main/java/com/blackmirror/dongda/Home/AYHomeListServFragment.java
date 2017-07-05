@@ -51,11 +51,5 @@ public class AYHomeListServFragment extends AYListFragment {
         AYActivity act = (AYActivity) this.getActivity();
         act.handleNotifications("didSelectedPositionNotify", js);
 
-//        Intent intent = new Intent(getActivity(),AYServicePageActivity.class);
-//        //采用Intent普通传值的方式
-//        intent.putExtra("skip", "我是MainActivity传过来的值！");
-//        //跳转Activity
-////        startActivityForResult(intent, requestCode);
-//        startActivity(intent);
     }
 }

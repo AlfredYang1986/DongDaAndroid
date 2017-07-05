@@ -1,30 +1,24 @@
 package com.blackmirror.dongda.controllers;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.view.View;
+
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
-import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
-import com.blackmirror.dongda.fragment.AYFragment;
+
 import org.json.JSONObject;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
  * Created by alfredyang on 17/05/2017.
  */
-public abstract class AYActivity extends AppCompatActivity implements AYSysNotificationHandler {
+public abstract class AYActivity extends FragmentActivity implements AYSysNotificationHandler {
 
     public Map<String, AYCommand> cmds;
     public Map<String, AYFacade> facades;

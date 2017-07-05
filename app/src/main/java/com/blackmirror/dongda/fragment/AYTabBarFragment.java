@@ -9,11 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.blackmirror.dongda.Tools.AYScreenSingleton;
-import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.R;
-
-import static android.content.ContentValues.TAG;
+import com.blackmirror.dongda.Tools.AYScreenSingleton;
 
 /**
  * Created by alfredyang on 29/6/17.
@@ -38,8 +35,7 @@ public class AYTabBarFragment extends AYFragment {
 
     public Drawable findImgAsSquare(int id) {
         Drawable drawable = ContextCompat.getDrawable(getContext(),id);
-        float screenScale = getContext().getResources().getDisplayMetrics().density;
-        screenScale = (new AYScreenSingleton()).getScreenDensity(getContext());
+        float screenScale = (new AYScreenSingleton()).getScreenDensity(getContext());
         Log.d(TAG, "findImgAsSquare: "+screenScale);
         drawable.setBounds(0, (int)(6*screenScale), (int)(28*screenScale), (int)(28*screenScale));
         return drawable;
