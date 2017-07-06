@@ -103,7 +103,7 @@ public abstract class AYRemoteCommand extends AYCommand {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                t.handleNotifications(getSuccessCallBackName(), result);
+                // t.handleNotifications(getSuccessCallBackName(), result);
             }
         }
     }

@@ -19,7 +19,7 @@ public class AYPhoneLoginFacade extends AYFacade {
         return TAG;
     }
 
-    Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
+    public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
 
         /**
          * 将当前的登陆的用的存入数据库中
@@ -39,27 +39,27 @@ public class AYPhoneLoginFacade extends AYFacade {
         return true;
     }
 
-    Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
+    public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
         broadcastingNotification("AYLoginWithPhoneCommandFailed", args);
         return true;
     }
 
-    Boolean AYSendSMSCodeCommandSuccess(JSONObject args) {
+    public Boolean AYSendSMSCodeCommandSuccess(JSONObject args) {
         broadcastingNotification("AYSendSMSCodeCommandSuccess", args);
         return true;
     }
 
-    Boolean AYSendSMSCodeCommandFailed(JSONObject args) {
+    public Boolean AYSendSMSCodeCommandFailed(JSONObject args) {
         broadcastingNotification("AYSendSMSCodeCommandFailed", args);
         return true;
     }
 
-    Boolean AYUpdateProfileCommandSuccess(JSONObject args) {
+    public Boolean AYUpdateProfileCommandSuccess(JSONObject args) {
         broadcastingNotification("AYUpdateProfileCommandSuccess", args);
         return true;
     }
 
-    Boolean AYUpdateProfileCommandFailed(JSONObject args) {
+    public Boolean AYUpdateProfileCommandFailed(JSONObject args) {
         broadcastingNotification("AYUpdateProfileCommandFailed", args);
         return true;
     }

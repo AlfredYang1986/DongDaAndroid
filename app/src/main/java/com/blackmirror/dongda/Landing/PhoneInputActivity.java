@@ -138,14 +138,14 @@ public class PhoneInputActivity extends AYActivity {
 
     private SendSMSCodeResult sms_result = null;
 
-    protected Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
+    public Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
         Log.i(TAG, "send sms code result is " + arg.toString());
         Toast.makeText(this, "发送SMS Code成功", LENGTH_LONG).show();
         sms_result = new SendSMSCodeResult(arg);
         return true;
     }
 
-    protected Boolean AYSendSMSCodeCommandFailed(JSONObject arg) {
+    public Boolean AYSendSMSCodeCommandFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
         Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
         sms_result = new SendSMSCodeResult(arg);
@@ -173,7 +173,7 @@ public class PhoneInputActivity extends AYActivity {
         }
     }
 
-    Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
+    public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
         Toast.makeText(this, "登陆成功", LENGTH_LONG).show();
 
         String screen_name = null;
@@ -206,7 +206,7 @@ public class PhoneInputActivity extends AYActivity {
         return true;
     }
 
-    Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
+    public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
         Toast.makeText(this, "登陆失败", LENGTH_LONG);
         return true;
     }
