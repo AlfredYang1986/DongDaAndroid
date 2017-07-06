@@ -10,8 +10,9 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 
-import java.util.ArrayList;
-import java.util.Map;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by alfredyang on 3/7/17.
@@ -19,16 +20,16 @@ import java.util.Map;
 
 public class AYHomeListServAdapter extends BaseAdapter {
     private LayoutInflater itemInflater;
-    private ArrayList<Map<String, Object>> serviceData;
+    private JSONArray serviceData;
 
-    public AYHomeListServAdapter(Context context, ArrayList querydata) {
+    public AYHomeListServAdapter(Context context, JSONArray querydata) {
         super();
         serviceData = querydata;
         itemInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     /* 重置数据 刷新视图 */
-    public void setQueryData (ArrayList querydata) {
+    public void setQueryData (JSONArray querydata) {
         serviceData = querydata;
     }
     public void refreshList () {
@@ -37,12 +38,21 @@ public class AYHomeListServAdapter extends BaseAdapter {
 
     @Override
     public int getCount (){
-        return serviceData.size() + 1;
+        if (serviceData == null) {
+            return 1;
+        } else
+            return serviceData.length() + 1;
     }
 
     @Override
     public Object getItem(int position) {
-        return serviceData.get(position);
+        Object item = null;
+        try {
+            item = serviceData.getJSONObject(position);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return item;
     }
 
     @Override
@@ -55,22 +65,50 @@ public class AYHomeListServAdapter extends BaseAdapter {
 
         if (position == 0 && convertView == null) {
             convertView = itemInflater.inflate(R.layout.cell_home_hello, null);
-
-        } else if (position != 0){
-
-            Map<String,Object> tmp = serviceData.get(position-1);
-
-            convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
-            ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
-            ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("service_title"));
-            ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("service_addr"));
-            ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + tmp.get("service_price"));
+            convertView.setTag("0");
         }
-        return convertView;
+        else if (position == 0) {
+            if (convertView.getTag().equals("1")) {
+                convertView = itemInflater.inflate(R.layout.cell_home_hello, null);
+                convertView.setTag("0");
+            }
+        }
+        else if (convertView == null) {
 
+            JSONObject tmp = null;
+            try {
+                tmp = serviceData.getJSONObject(position-1);
+
+                convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
+                convertView.setTag("1");
+                ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
+                ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("title"));
+                ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("address"));
+                ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + tmp.get("price"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (convertView.getTag().equals("0")) {
+                convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
+                convertView.setTag("1");
+            }
+            JSONObject tmp = null;
+            try {
+                tmp = serviceData.getJSONObject(position-1);
+                ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
+                ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("title"));
+                ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("address"));
+                ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + tmp.get("price"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return convertView;
     }
 
-    public ArrayList changeQueryData () {
+    public JSONArray changeQueryData () {
         return serviceData;
     }
 }

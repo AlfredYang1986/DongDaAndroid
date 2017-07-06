@@ -1,15 +1,18 @@
 package com.blackmirror.dongda.command;
 
 import android.os.AsyncTask;
+
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
-import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.command.AYRemoteCommand;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 //import com.blackmirror.dongda.command.AYRemoteCommand;
 
@@ -19,7 +22,7 @@ import java.net.URL;
 public class AYDownloadFileCommand extends AYCommand {
 
     final String TAG = "download file";
-    final String path = "/mnt/sdcard/dongda/";
+    final String path = "/sdcard/dongda/";
     final String endpoint = "http://www.altlys.com:9000/query/downloadFile/";
 
     final String failed_notify_func_name = "downloadFailed";

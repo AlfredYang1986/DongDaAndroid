@@ -7,16 +7,21 @@ import android.util.Log;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.ServiceData;
+import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
+import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -27,7 +32,7 @@ public class AYHomeActivity extends AYActivity {
 
     final private String TAG = "AYHomeActivity";
     private AYHomeListServAdapter serviceListAdapter;
-    private ArrayList serviceData;
+    private JSONArray serviceData;
 
     @Override
     public String getClassTag() {
@@ -39,13 +44,21 @@ public class AYHomeActivity extends AYActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-//        AYFacade facade = facades.get("QueryServiceFacade");
-//        AYCommand cmd = facade.cmds.get("SearchService");
-//        Map<String, Object> m = new HashMap<>();
-//        JSONObject args = new JSONObject(m);
-//        cmd.excute(args);
+        AYFacade f_login = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "DongdaCommanFacade");
+        AYCommand cmd_profile = f_login.cmds.get("QueryCurrentLoginUser");
+        AYDaoUserProfile user = cmd_profile.excute();
 
-        serviceData = ServiceData.getDataInstance().getServDataWithArgs();
+        AYFacade facade = facades.get("QueryServiceFacade");
+        AYCommand cmd = facade.cmds.get("SearchService");
+        Map<String, Object> search_args = new HashMap<>();
+        search_args.put("user_id", user.getUser_id());
+        search_args.put("auth_token", user.getAuth_token());
+        search_args.put("skip", 0);
+        search_args.put("date", new Date().getTime());
+        JSONObject args = new JSONObject(search_args);
+        cmd.excute(args);
+
+//        serviceData = ServiceData.getDataInstance().getServDataWithArgs();
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
         ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).setListAdapter(serviceListAdapter);
     }
@@ -90,7 +103,6 @@ public class AYHomeActivity extends AYActivity {
             JSONObject js = new JSONObject(tmp);
 
             Intent intent = new Intent(this, AYServicePageActivity.class);
-            //采用Intent普通传值的方式
             intent.putExtra("service_info", js.toString());
     //        startActivityForResult(intent, requestCode);
             startActivity(intent);
@@ -98,6 +110,24 @@ public class AYHomeActivity extends AYActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public Boolean AYSearchServiceCommandSuccess (JSONObject args) {
+
+        JSONArray data = null;
+        try {
+            data = args.getJSONArray("result");
+            serviceListAdapter.setQueryData(data);
+            serviceListAdapter.refreshList();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return true;
+    }
+    public Boolean AYSearchServiceCommandFailed (JSONObject args) {
+
+        return true;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.facade.AYQueryDataFacade;
 
-import com.blackmirror.dongda.facade.AYRemoteCommonFacade;
+import com.blackmirror.dongda.facade.AYFacade;
 
 import org.json.JSONObject;
 
@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * Created by alfredyang on 6/7/17.
  */
 
-public class AYQueryServiceFacade extends AYRemoteCommonFacade {
+public class AYQueryServiceFacade extends AYFacade {
 
     private final String TAG = "AYQueryServiceFacade";
 
