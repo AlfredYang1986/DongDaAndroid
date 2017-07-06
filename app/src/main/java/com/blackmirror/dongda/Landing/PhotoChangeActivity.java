@@ -144,7 +144,7 @@ public class PhotoChangeActivity extends AYActivity {
 
     }
 
-    protected Boolean downloadSuccess(JSONObject arg) {
+    public Boolean downloadSuccess(JSONObject arg) {
 
         Log.i(TAG, "send sms code result is " + arg.toString());
 
@@ -168,7 +168,7 @@ public class PhotoChangeActivity extends AYActivity {
         return true;
     }
 
-    protected Boolean downloadFailed(JSONObject arg) {
+    public Boolean downloadFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
         return true;
     }
@@ -241,7 +241,7 @@ public class PhotoChangeActivity extends AYActivity {
         cmd.excute(args, this);
     }
 
-    protected Boolean uploadSuccess(JSONObject arg) {
+    public Boolean uploadSuccess(JSONObject arg) {
 
         Log.i(TAG, "send sms code result is " + arg.toString());
 
@@ -275,7 +275,7 @@ public class PhotoChangeActivity extends AYActivity {
         return true;
     }
 
-    protected Boolean uploadFailed(JSONObject arg) {
+    public Boolean uploadFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
         return true;
     }
@@ -288,7 +288,7 @@ public class PhotoChangeActivity extends AYActivity {
         startActivity(intent);
     }
 
-    protected Boolean AYUpdateProfileCommandSuccess(JSONObject arg) {
+    public Boolean AYUpdateProfileCommandSuccess(JSONObject arg) {
         Log.i(TAG, "update profile command success");
 
         /**
@@ -303,7 +303,7 @@ public class PhotoChangeActivity extends AYActivity {
         return true;
     }
 
-    protected Boolean AYUpdateProfileCommandFailed(JSONObject arg) {
+    public Boolean AYUpdateProfileCommandFailed(JSONObject arg) {
         Log.i(TAG, "update profile command failed");
         return true;
     }
