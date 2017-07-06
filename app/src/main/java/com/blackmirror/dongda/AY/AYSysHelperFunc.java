@@ -49,8 +49,8 @@ public class AYSysHelperFunc {
         AYSysObject result = null;
         try {
             Class clazz1 = Class.forName(name);
-            Constructor c = clazz1.getConstructor(new Class[0]);
-            result = (AYSysObject)c.newInstance(new Object[]{});
+            Constructor c = clazz1.getConstructor();
+            result = (AYSysObject)c.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

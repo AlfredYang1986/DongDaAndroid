@@ -49,6 +49,7 @@
         name="com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity"
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
+        <facade short="QueryServiceFacade" />
         <fragment short="frag_navbar"/>
     </controller>
 </controllers>

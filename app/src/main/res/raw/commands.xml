@@ -49,4 +49,9 @@
             short="uploadFile"
             name="com.blackmirror.dongda.command.AYUploadFileCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+        short="SearchService"
+        name="com.blackmirror.dongda.facade.AYQueryDataFacade.ServiceRemote.AYSearchServiceCommand"
+        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>

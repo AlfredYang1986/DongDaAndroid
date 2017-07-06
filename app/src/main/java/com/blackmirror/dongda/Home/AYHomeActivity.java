@@ -8,7 +8,9 @@ import android.util.Log;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.ServiceData;
+import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
@@ -17,6 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -38,6 +41,12 @@ public class AYHomeActivity extends AYActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        AYFacade facade = facades.get("QueryServiceFacade");
+        AYCommand cmd = facade.cmds.get("SearchService");
+        Map<String, Object> m = new HashMap<>();
+        JSONObject args = new JSONObject(m);
+        cmd.excute(args);
 
         serviceData = ServiceData.getDataInstance().getServDataWithArgs();
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
