@@ -17,12 +17,12 @@ public class AYQueryServiceFacade extends AYFacade {
         return TAG;
     }
 
-    Boolean AYSearchServiceCommandSuccess(JSONObject args) {
+    public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
         broadcastingNotification("AYSearchServiceCommandSuccess", args);
         return true;
     }
 
-    Boolean AYSearchServiceCommandFailed(JSONObject args) {
+    public Boolean AYSearchServiceCommandFailed(JSONObject args) {
         broadcastingNotification("AYSearchServiceCommandFailed", args);
         return true;
     }

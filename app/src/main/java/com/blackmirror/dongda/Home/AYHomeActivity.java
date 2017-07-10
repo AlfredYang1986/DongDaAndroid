@@ -69,6 +69,8 @@ public class AYHomeActivity extends AYActivity {
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setLeftBtnTextWithString("北京市");
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setRightBtnImageWithImageId(R.drawable.home_icon_mapfilter);
+
+//        ((AYHomeSegFragment)this.fragments.get("frag_homeseg")).changeFocusItemWithIndex(0);
     }
 
     @Override
@@ -112,6 +114,15 @@ public class AYHomeActivity extends AYActivity {
         }
     }
 
+    public void didSegFristItemClickNotify (JSONObject args) {
+
+        Log.d(TAG, "didSegFristItemClickNotify: in Activity");
+    }
+    public void didSegSecondItemClickNotify (JSONObject args) {
+
+        Log.d(TAG, "didSegSecondItemClickNotify: in Activity");
+    }
+
     public Boolean AYSearchServiceCommandSuccess (JSONObject args) {
 
         JSONArray data = null;
@@ -126,7 +137,6 @@ public class AYHomeActivity extends AYActivity {
         return true;
     }
     public Boolean AYSearchServiceCommandFailed (JSONObject args) {
-
         return true;
     }
 
