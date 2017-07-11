@@ -15,6 +15,8 @@ import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;

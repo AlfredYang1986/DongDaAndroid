@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.Home;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYTools;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,6 +93,24 @@ public class AYHomeListServAdapter extends BaseAdapter {
                 convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
                 convertView.setTag("1");
                 ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
+
+                JSONArray imagesArr = tmp.getJSONArray("images");
+                if (imagesArr.length() > 0) {
+
+                    String imageUrl = "http://altlys.com:9000/query/downloadFile/" + imagesArr.getString(0);
+
+                    //显示图片的配置
+                    DisplayImageOptions options = new DisplayImageOptions.Builder()
+                            .showImageOnLoading(R.drawable.default_image)
+                            .showImageOnFail(R.drawable.default_image)
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true)
+                            .bitmapConfig(Bitmap.Config.RGB_565)
+                            .build();
+
+                    ImageLoader.getInstance().displayImage(imageUrl, (ImageView)convertView.findViewById(R.id.img_cover), options);
+                }
+
                 ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("title"));
                 ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("address"));
                 ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + tmp.get("price"));
@@ -105,6 +126,23 @@ public class AYHomeListServAdapter extends BaseAdapter {
             try {
                 tmp = serviceData.getJSONObject(position-1);
                 ((ImageView)convertView.findViewById(R.id.img_cover)).setImageResource(R.drawable.default_image);
+
+                JSONArray imagesArr = tmp.getJSONArray("images");
+                if (imagesArr.length() > 0) {
+
+                    String imageUrl = "http://altlys.com:9000/query/downloadFile/" + imagesArr.getString(0);
+
+                    //显示图片的配置
+                    DisplayImageOptions options = new DisplayImageOptions.Builder()
+                            .showImageOnLoading(R.drawable.default_image)
+                            .showImageOnFail(R.drawable.default_image)
+                            .cacheInMemory(true)
+                            .cacheOnDisk(true)
+                            .bitmapConfig(Bitmap.Config.RGB_565)
+                            .build();
+
+                    ImageLoader.getInstance().displayImage(imageUrl, (ImageView)convertView.findViewById(R.id.img_cover), options);
+                }
                 ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("title"));
                 ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("address"));
                 ((TextView)convertView.findViewById(R.id.text_price)).setText("¥" + tmp.get("price"));
