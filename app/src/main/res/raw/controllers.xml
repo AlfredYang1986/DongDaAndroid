@@ -47,10 +47,11 @@
         <listfragment short="frag_homelist_serv"/>
     </controller>
 
-    <controller short="AYServiceActivity"
+    <controller short="AYServicePageActivity"
         name="com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity"
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <fragment short="frag_navbar"/>
+        <fragment short="frag_servpage_bottom"/>
     </controller>
 </controllers>

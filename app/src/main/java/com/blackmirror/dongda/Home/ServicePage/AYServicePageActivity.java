@@ -18,7 +18,7 @@ import org.json.JSONObject;
 
 public class AYServicePageActivity extends AYActivity {
 
-    final private String TAG = "AYHomeActivity";
+    final private String TAG = "AYServicePageActivity";
     private JSONObject js_service_info;
 
     @Override
@@ -32,12 +32,12 @@ public class AYServicePageActivity extends AYActivity {
         setContentView(R.layout.activity_servicepage);
 
         //新页面接收数据
-        String name = this.getIntent().getStringExtra("service_info");
-
+        String info = this.getIntent().getStringExtra("service_info");
+        Log.d(TAG, "onCreate: "+info);
         //接收name值
         try {
-            js_service_info = new JSONObject(name);
-            Log.d(TAG, "onCreate: " + js_service_info.getString("service_title"));
+            js_service_info = new JSONObject(info);
+            Log.d(TAG, "onCreate: " + js_service_info.getString("title"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -49,13 +49,16 @@ public class AYServicePageActivity extends AYActivity {
         super.onStart();
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextWithString("服务详情");
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setRightBtnImageWithImageId(R.drawable.home_icon_love_select);
+        ((AYServicePageBottomFragment)this.fragments.get("frag_servpage_bottom")).setServPageBottomInfo(js_service_info);
     }
 
     @Override
     protected void bindingFragments() {
 
+        Log.d(TAG, "bindingFragments: "+this.fragments);
         FragmentTransaction task = mFragmentManage.beginTransaction();
         task.add(R.id.activity_servicepage, (AYFragment)this.fragments.get("frag_navbar"));
+        task.add(R.id.activity_servicepage, (AYFragment)this.fragments.get("frag_servpage_bottom"));
         task.commit();
     }
 

@@ -30,5 +30,11 @@
 
     </listfragment>
 
+    <fragment
+        short="frag_servpage_bottom"
+        name="com.blackmirror.dongda.Home.ServicePage.AYServicePageBottomFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
+
+    </fragment>
 
 </fragments>

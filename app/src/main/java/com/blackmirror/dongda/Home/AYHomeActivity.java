@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
@@ -15,8 +16,6 @@ import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +35,9 @@ public class AYHomeActivity extends AYActivity {
     private AYHomeListServAdapter serviceListAdapter;
     private JSONArray serviceData;
 
+    private long skipedCount;
+    private long timeSpan;
+
     @Override
     public String getClassTag() {
         return TAG;
@@ -46,19 +48,10 @@ public class AYHomeActivity extends AYActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        AYFacade f_login = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "DongdaCommanFacade");
-        AYCommand cmd_profile = f_login.cmds.get("QueryCurrentLoginUser");
-        AYDaoUserProfile user = cmd_profile.excute();
+        skipedCount = 0;
+        timeSpan = new Date().getTime();
 
-        AYFacade facade = facades.get("QueryServiceFacade");
-        AYCommand cmd = facade.cmds.get("SearchService");
-        Map<String, Object> search_args = new HashMap<>();
-        search_args.put("user_id", user.getUser_id());
-        search_args.put("auth_token", user.getAuth_token());
-        search_args.put("skip", 0);
-        search_args.put("date", new Date().getTime());
-        JSONObject args = new JSONObject(search_args);
-        cmd.excute(args);
+        searchServiceRemote();
 
 //        serviceData = ServiceData.getDataInstance().getServDataWithArgs();
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
@@ -85,7 +78,23 @@ public class AYHomeActivity extends AYActivity {
         task.add(R.id.activity_home, (AYListFragment)this.fragments.get("frag_homelist_serv"));
         task.commit();
     }
-    
+
+    private void searchServiceRemote() {
+
+        AYFacade f_login = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade", "DongdaCommanFacade");
+        AYCommand cmd_profile = f_login.cmds.get("QueryCurrentLoginUser");
+        AYDaoUserProfile user = cmd_profile.excute();
+
+        AYFacade facade = facades.get("QueryServiceFacade");
+        AYCommand cmd = facade.cmds.get("SearchService");
+        Map<String, Object> search_args = new HashMap<>();
+        search_args.put("user_id", user.getUser_id());
+        search_args.put("auth_token", user.getAuth_token());
+        search_args.put("skip", skipedCount);
+        search_args.put("date", timeSpan);
+        JSONObject args = new JSONObject(search_args);
+        cmd.excute(args);
+    }
     
     public void didNavLeftBtnClickNotify (JSONObject args) {
         Log.d(TAG, "didNavLeftBtnClickNotify: in Activity");
@@ -97,39 +106,59 @@ public class AYHomeActivity extends AYActivity {
         Log.d(TAG, "didNavRightBtnClickNotify: in Activity");
     }
 
+    public void didSegFristItemClickNotify (JSONObject args) {
+        Log.d(TAG, "didSegFristItemClickNotify: in Activity");
+
+    }
+    public void didSegSecondItemClickNotify (JSONObject args) {
+        Log.d(TAG, "didSegSecondItemClickNotify: in Activity");
+
+    }
+
+    public void sendRefreshDataNotify (JSONObject args) {
+        Log.d(TAG, "sendRefreshDataNotify: in Activity");
+        skipedCount = 0;
+        timeSpan = new Date().getTime();
+        searchServiceRemote();
+    }
+    public void sendLoadMoreDataNotify (JSONObject args) {
+        Log.d(TAG, "sendLoadMoreDataNotify: in Activity");
+        searchServiceRemote();
+    }
+
     public void didSelectedPositionNotify (JSONObject args) {
         Log.d(TAG, "didSelectedPositionNotify: in Activity");
 
         int position = 0;
         try {
             position = args.getInt("position");
-            Map<String,Integer> tmp = (Map<String, Integer>) serviceData.get(position);
-            JSONObject js = new JSONObject(tmp);
+            Log.d(TAG, "didSelectedPositionNotify: selected-->"+position);
+            if (position == 0) {
 
-            Intent intent = new Intent(this, AYServicePageActivity.class);
-            intent.putExtra("service_info", js.toString());
-    //        startActivityForResult(intent, requestCode);
-            startActivity(intent);
+            } else {
+                JSONObject js = serviceData.getJSONObject(position-1);
+//                Log.d(TAG, "didSelectedPositionNotify: "+js);
+                Intent intent = new Intent(this, AYServicePageActivity.class);
+                intent.putExtra("service_info", js.toString());
+                //        startActivityForResult(intent, requestCode);
+                startActivity(intent);
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public void didSegFristItemClickNotify (JSONObject args) {
-
-        Log.d(TAG, "didSegFristItemClickNotify: in Activity");
-    }
-    public void didSegSecondItemClickNotify (JSONObject args) {
-
-        Log.d(TAG, "didSegSecondItemClickNotify: in Activity");
-    }
 
     public Boolean AYSearchServiceCommandSuccess (JSONObject args) {
+        ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).refreshOrLoadMoreComplete();
 
         JSONArray data = null;
         try {
             data = args.getJSONArray("result");
+            serviceData = data;
+            skipedCount += data.length();
+
             serviceListAdapter.setQueryData(data);
             serviceListAdapter.refreshList();
         } catch (JSONException e) {
@@ -139,6 +168,8 @@ public class AYHomeActivity extends AYActivity {
         return true;
     }
     public Boolean AYSearchServiceCommandFailed (JSONObject args) {
+        ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).refreshOrLoadMoreComplete();
+        Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
         return true;
     }
 
