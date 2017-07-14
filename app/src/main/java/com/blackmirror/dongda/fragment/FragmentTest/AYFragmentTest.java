@@ -31,6 +31,6 @@ public class AYFragmentTest extends AYFragment {
 
     @Override
     protected void bindingSubFragments() {
-//        FragmentManager fm = this.getFragmentManager();
+        FragmentManager fm = this.getFragmentManager();
     }
 }

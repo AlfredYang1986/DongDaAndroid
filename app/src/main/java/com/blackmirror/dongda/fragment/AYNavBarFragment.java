@@ -1,25 +1,18 @@
 package com.blackmirror.dongda.fragment;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.controllers.AYActivity;
 
 import org.json.JSONObject;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by alfredyang on 29/6/17.
@@ -28,6 +21,7 @@ import static android.content.ContentValues.TAG;
 public class AYNavBarFragment extends AYFragment {
 
     private final String TAG = "AYNavBarFragment";
+    private View viewFragment;
 
     @Override
     public String getClassTag() {
@@ -54,16 +48,16 @@ public class AYNavBarFragment extends AYFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_navbar, container, false);
-        text_center = (TextView) view.findViewById(R.id.title_center);
+        viewFragment = inflater.inflate(R.layout.fragment_navbar, container, false);
+        text_center = (TextView) viewFragment.findViewById(R.id.title_center);
         text_center.setText("标题");
 //        text_center.setVisibility(text_center.GONE);
 
-        nav_line_bottom = view.findViewById(R.id.nav_line_bottom);
+        nav_line_bottom = viewFragment.findViewById(R.id.nav_line_bottom);
 
-        nav_left_btn_text = (Button) view.findViewById(R.id.nav_left_btn_text);
+        nav_left_btn_text = (Button) viewFragment.findViewById(R.id.nav_left_btn_text);
         nav_left_btn_text.setVisibility(nav_left_btn_text.GONE);
-        nav_left_btn_img = (ImageButton)view.findViewById(R.id.nav_left_btn_img);
+        nav_left_btn_img = (ImageButton)viewFragment.findViewById(R.id.nav_left_btn_img);
         nav_left_btn_text.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,8 +71,8 @@ public class AYNavBarFragment extends AYFragment {
             }
         });
 
-        nav_right_btn_text = (Button)view.findViewById(R.id.nav_right_btn_text);
-        nav_right_btn_img = (ImageButton)view.findViewById(R.id.nav_right_btn_img);
+        nav_right_btn_text = (Button)viewFragment.findViewById(R.id.nav_right_btn_text);
+        nav_right_btn_img = (ImageButton)viewFragment.findViewById(R.id.nav_right_btn_img);
         nav_right_btn_img.setVisibility(nav_right_btn_img.GONE);
         nav_right_btn_text.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +87,7 @@ public class AYNavBarFragment extends AYFragment {
             }
         });
 
-        return view;
+        return viewFragment;
     }
 
     @Override
@@ -167,6 +161,10 @@ public class AYNavBarFragment extends AYFragment {
     }
     public void setBottomLineInvisible () {
         nav_line_bottom.setVisibility(nav_line_bottom.INVISIBLE);
+    }
+
+    public void setBackgroundWithColor (int color) {
+        viewFragment.setBackgroundColor(color);
     }
 
 

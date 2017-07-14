@@ -46,7 +46,7 @@ public class AYHomeListServAdapter extends BaseAdapter {
     @Override
     public int getCount (){
         if (serviceData == null) {
-            return 1;
+            return 2;
         } else
             return serviceData.length() + 1;
     }
@@ -77,12 +77,16 @@ public class AYHomeListServAdapter extends BaseAdapter {
             ((TextView)convertView.findViewById(R.id.hello_title)).setText(dateStr);
         }
         else if (position == 0) {
-            if (convertView.getTag().equals("1")) {
+            if (!convertView.getTag().equals("0")) {
                 convertView = itemInflater.inflate(R.layout.cell_home_hello, null);
                 convertView.setTag("0");
                 String dateStr = getTimeOnString();
                 ((TextView)convertView.findViewById(R.id.hello_title)).setText(dateStr);
             }
+        }
+        else if (serviceData == null) {
+            convertView = itemInflater.inflate(R.layout.cell_nocontent, null);
+            convertView.setTag("99");
         }
         else if (convertView == null) {
 
@@ -118,7 +122,7 @@ public class AYHomeListServAdapter extends BaseAdapter {
                 e.printStackTrace();
             }
         } else {
-            if (convertView.getTag().equals("0")) {
+            if (!convertView.getTag().equals("1")) {
                 convertView = itemInflater.inflate(R.layout.cell_homelist_serv, null);
                 convertView.setTag("1");
             }

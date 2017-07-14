@@ -28,13 +28,15 @@
     cube_ptr:ptr_resistance="1.7"
     cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2">
 
-
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:drawSelectorOnTop="false"
         android:listSelector="@android:color/transparent"
-        android:divider="@null"/>
+        android:divider="@null">
+
+    </ListView>
+
 
 </in.srain.cube.views.ptr.PtrClassicFrameLayout>

@@ -52,6 +52,8 @@
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <fragment short="frag_navbar"/>
+        <!--<fragment short="frag_servpage_images"/>-->
+        <fragment short="frag_servpage_info"/>
         <fragment short="frag_servpage_bottom"/>
     </controller>
 </controllers>

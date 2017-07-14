@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scroll_servpage"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginBottom="49dp"
+    android:background="@color/colorGaryBackground"
+    android:scrollbarAlwaysDrawVerticalTrack="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpage_servpage_cover"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="@drawable/default_image"/>
+
+        <RelativeLayout
+            android:id="@+id/servinfo_group_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/viewpage_servpage_cover"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/servpage_tiile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service title info"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginTop="5dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/servinfo_group_title"
+            android:id="@+id/servinfo_group_owner"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="22dp">
+
+            <TextView
+                android:id="@+id/servpage_owner_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Owner User's info"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servinfo_group_capacity"
+            android:layout_below="@id/servinfo_group_owner"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/servpage_capacity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service capacity info"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servinfo_group_desc"
+            android:layout_below="@id/servinfo_group_capacity"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/servpage_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service description info"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servinfo_group_location"
+            android:layout_below="@id/servinfo_group_desc"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/servpage_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service location"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servinfo_group_facility"
+            android:layout_below="@id/servinfo_group_location"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/servpage_facility"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service facility"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/servinfo_group_notice"
+            android:layout_below="@id/servinfo_group_facility"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/servpage_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Service notice"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

@@ -34,7 +34,18 @@
         short="frag_servpage_bottom"
         name="com.blackmirror.dongda.Home.ServicePage.AYServicePageBottomFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
+    </fragment>
 
+    <fragment
+        short="frag_servpage_images"
+        name="com.blackmirror.dongda.Home.ServicePage.AYServiceImagesFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
+    </fragment>
+
+    <fragment
+        short="frag_servpage_info"
+        name="com.blackmirror.dongda.Home.ServicePage.AYServicePageInfoFragment"
+        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
     </fragment>
 
 </fragments>

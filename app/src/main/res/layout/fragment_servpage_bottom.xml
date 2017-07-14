@@ -10,7 +10,7 @@
 
     <Button
         android:id="@+id/servpage_botoom_chat"
-        android:layout_width="49dp"
+        android:layout_width="60dp"
         android:layout_height="49dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -20,18 +20,30 @@
         android:background="@color/colorAlpha"
         android:drawableTop="@drawable/tab_icon_home_select" />
 
+    <Button
+        android:id="@+id/servpage_bottom_book"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:text="查看可预定时间"
+        android:textSize="14sp"
+        android:textColor="@color/colorBlack"
+        android:background="@color/colorTheme"/>
+
+
     <RelativeLayout
-        android:layout_alignLeft="@id/servpage_botoom_chat"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_marginLeft="49dp"
-        android:layout_marginRight="150dp">
+        android:layout_toRightOf="@id/servpage_botoom_chat"
+        android:layout_toLeftOf="@id/servpage_bottom_book">
 
         <TextView
             android:id="@+id/servpage_bottom_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            android:layout_marginStart="20dp"
             android:text="¥ Price"
             android:layout_alignParentTop="true"
             android:layout_marginTop="5dp"/>
@@ -48,22 +60,17 @@
             android:textSize="12sp"/>
 
     </RelativeLayout>
-
-    <Button
-        android:id="@+id/servpage_bottom_book"
-        android:layout_width="150dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:text="查看可预定时间"
-        android:textSize="14sp"
-        android:textColor="@color/colorBlack"
-        android:background="@color/colorTheme"/>
-
     <View
         android:id="@+id/view_servpage_bottom"
         android:background="@color/colorDarkLine"
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_alignParentTop="true"/>
+    <View
+        android:id="@+id/view_servpage_line_lr"
+        android:background="@color/colorDarkLine"
+        android:layout_width="0.5dp"
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/servpage_botoom_chat"/>
 
 </RelativeLayout>

@@ -45,6 +45,7 @@ public class AYHomeListServFragment extends AYListFragment {
         View view = inflater.inflate(R.layout.fragment_homelist_serv, container, false);
         ptrLayout = (PtrClassicFrameLayout) view.findViewById(R.id.prtframelayout);
 //        listViewv = (ListView) view.findViewById(R.id.id_main_lv_lv);
+//        listViewv.offsetTopAndBottom(20);
 
 //        PtrClassicDefaultHeader header = new PtrClassicDefaultHeader(getContext());
 //        ptrLayout.setHeaderView(header);
