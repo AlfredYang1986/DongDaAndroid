@@ -18,7 +18,7 @@
         android:textSize="12sp"
         android:textColor="@color/colorGary227"
         android:background="@color/colorAlpha"
-        android:drawableTop="@drawable/tab_icon_home_select" />
+        android:drawableTop="@drawable/details_icon_chat"/>
 
     <Button
         android:id="@+id/servpage_bottom_book"
@@ -28,8 +28,8 @@
         android:layout_alignParentEnd="true"
         android:text="查看可预定时间"
         android:textSize="14sp"
-        android:textColor="@color/colorBlack"
-        android:background="@color/colorTheme"/>
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/details_button_checktime"/>
 
 
     <RelativeLayout

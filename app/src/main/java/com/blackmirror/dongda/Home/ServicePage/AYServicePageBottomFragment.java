@@ -40,7 +40,7 @@ public class AYServicePageBottomFragment extends AYFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_servpage_bottom, container, false);
         Button btn_chat = (Button)view.findViewById(R.id.servpage_botoom_chat);
-        btn_chat.setCompoundDrawables(null, findImgAsSquare(R.drawable.tab_icon_home_select), null, null);
+        btn_chat.setCompoundDrawables(null, findImgAsSquare(R.drawable.details_icon_chat), null, null);
 
         text_price = (TextView)view.findViewById(R.id.servpage_bottom_price);
         text_leastcount = (TextView)view.findViewById(R.id.servpage_bottom_leastcount);
@@ -56,7 +56,7 @@ public class AYServicePageBottomFragment extends AYFragment {
         Drawable drawable = ContextCompat.getDrawable(getContext(),id);
         float screenScale = (new AYScreenSingleton()).getScreenDensity(getContext());
 //        Log.d(TAG, "findImgAsSquare: "+ screenScale);
-        drawable.setBounds(0, (int)(6*screenScale), (int)(28*screenScale), (int)(28*screenScale));
+        drawable.setBounds(0, (int)(6*screenScale), (int)(26*screenScale), (int)(26*screenScale));
         return drawable;
     }
 

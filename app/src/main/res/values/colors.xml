@@ -9,17 +9,21 @@
 
     <!--Common-->
     <color name="colorTheme">#FF59D5C7</color>
+    <color name="colorWhite">#FFFFFFFF</color>
     <color name="colorAlpha">#00000000</color>
+    <color name="colorAlphaBorder">#77FFFFFF</color>
 
     <!--Font-->
     <color name="colorBlack">#FF595959</color>
     <!--Font GaryList-->
     <color name="colorGary227">#FF595959</color>
     <color name="colorGary158">#FF999999</color>
+    <color name="colorGary178">#FFAAAAAA</color>
+    <color name="colorGary102">#FF888888</color>
 
 
     <!--Backgroung-->
-    <color name="colorGaryBackground">#FFFFFFFF</color>
+    <color name="colorGaryBackground">#FFCCCCCC</color>
     <color name="colorDarkBackground">#FFD3F5F2</color>
     <color name="colorWhiteBackground">#FFFFFFFF</color>
 

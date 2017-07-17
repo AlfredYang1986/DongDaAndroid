@@ -8,8 +8,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYScreenSingleton;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYNavBarFragment;
@@ -31,6 +33,9 @@ public class AYServicePageActivity extends AYActivity {
 
     final private String TAG = "AYServicePageActivity";
     private JSONObject js_service_info;
+
+    private ArrayList dotArr;
+    private View dotViewTmp;
 
     @Override
     public String getClassTag() {
@@ -66,24 +71,39 @@ public class AYServicePageActivity extends AYActivity {
 
         JSONArray imagesArr = null;
         List viewList = new ArrayList<View>();
-        View dotView = new View(this);
         try {
             imagesArr = js_service_info.getJSONArray("images");
             if (imagesArr.length() > 0) {
+                dotArr = new ArrayList();
+                View dotDivView = new View(this);
+                float screenScale = (new AYScreenSingleton()).getScreenDensity(this);
+                float screenwidth = (new AYScreenSingleton()).getScreenWidth(this);
+                int dotWidth = 5*(int)screenScale;
+                int dotMargin = 5*(int)screenScale;
+                RelativeLayout dotLayout = (RelativeLayout)findViewById(R.id.servinfo_group_cover);
 
                 for (int i = 0; i < imagesArr.length(); ++i) {
+
+                    View dotView = new View(this);
+                    if (i==0){
+                        dotView.setBackgroundColor(getResources().getColor(R.color.colorTheme));
+                        dotViewTmp = dotView;
+                    } else
+                        dotView.setBackgroundColor(getResources().getColor(R.color.colorAlphaBorder));
+
+                    RelativeLayout.LayoutParams dotLP = new RelativeLayout.LayoutParams(dotWidth, dotWidth);
+                    dotLP.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewpage_servpage_cover);
+                    dotView.setLayoutParams(dotLP);
+                    dotLayout.addView(dotView);
+                    dotLP.setMargins((int)((screenwidth*screenScale-imagesArr.length() *(dotMargin+dotWidth))/2 + (dotMargin+dotWidth)*i), 0, 0, 20*(int)screenScale);
+                    dotArr.add(dotView);
+
                     ImageView imageView = new ImageView(this);
                     FrameLayout.LayoutParams lytp = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                             FrameLayout.LayoutParams.MATCH_PARENT);
                     imageView.setLayoutParams(lytp);
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-//                    imageView.setBackgroundColor(getResources().getColor(R.color.colorBlack));
                     viewList.add(imageView);
-
-//                    RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-//                            RelativeLayout.LayoutParams.MATCH_PARENT);
-//                    imageView.setLayoutParams(lp);
-
 
 //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     String imageUrl = "http://altlys.com:9000/query/downloadFile/" + imagesArr.getString(i);
@@ -97,6 +117,7 @@ public class AYServicePageActivity extends AYActivity {
                             .build();
                     ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
                 }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -104,7 +125,25 @@ public class AYServicePageActivity extends AYActivity {
         ViewPager imagesViewPager = ((AYServicePageInfoFragment)this.fragments.get("frag_servpage_info")).mViewPager;
         imagesViewPager.setAdapter(new AYServiceImagesAdapter(viewList));
         imagesViewPager.setCurrentItem(0);
-//        imagesViewPager.setOnPageChangeListener(new );
+        imagesViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                dotViewTmp.setBackgroundColor(getResources().getColor(R.color.colorAlphaBorder));
+                View dot = (View)dotArr.get(position);
+                dot.setBackgroundColor(getResources().getColor(R.color.colorTheme));
+                dotViewTmp = dot;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
     }
 
@@ -114,9 +153,6 @@ public class AYServicePageActivity extends AYActivity {
         Log.d(TAG, "bindingFragments: " + this.fragments);
         FragmentTransaction task = mFragmentManage.beginTransaction();
         task.add(R.id.activity_servicepage, (AYFragment)this.fragments.get("frag_servpage_info"));
-//        task.add(R.id.activity_servicepage, new AYServicePageInfoFragment());
-
-//        task.add(R.id.activity_servicepage, (AYFragment)this.fragments.get("frag_servpage_images"));
         task.add(R.id.activity_servicepage, (AYFragment)this.fragments.get("frag_navbar"));
         task.add(R.id.activity_servicepage, (AYFragment)this.fragments.get("frag_servpage_bottom"));
         task.commit();

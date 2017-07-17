@@ -9,30 +9,49 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/colorGaryBackground">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpage_servpage_cover"
+        <RelativeLayout
+            android:id="@+id/servinfo_group_cover"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:background="@drawable/default_image"/>
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhiteBackground">
+
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpage_servpage_cover"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:background="@drawable/default_image"/>
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/servinfo_group_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/viewpage_servpage_cover"
-            android:layout_marginTop="10dp">
+            android:layout_below="@id/servinfo_group_cover"
+            android:padding="15dp"
+            android:background="@color/colorWhiteBackground">
 
             <TextView
-                android:id="@+id/servpage_tiile"
+                android:id="@+id/servpage_servinfo_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Service title info"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginTop="5dp"/>
+                android:layout_marginLeft="50dp"/>
+
+            <TextView
+                android:id="@+id/servpage_servinfo_canscat"
+                android:layout_width="32dp"
+                android:layout_height="16dp"
+                android:layout_alignTop="@id/servpage_servinfo_title"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/details_category_bg"
+                android:text="课程"
+                android:textColor="@color/colorWhiteBackground"
+                android:textSize="10sp"
+                android:gravity="center"/>
 
         </RelativeLayout>
 
@@ -43,67 +62,239 @@
             android:id="@+id/servinfo_group_owner"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="22dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/colorWhiteBackground"
+            android:padding="15dp">
+
+            <ImageView
+                android:id="@+id/servpage_servinfo_owner_photo"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/default_user"/>
 
             <TextView
                 android:id="@+id/servpage_owner_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Owner User's info"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_alignTop="@id/servpage_servinfo_owner_photo"
+                android:layout_toRightOf="@id/servpage_servinfo_owner_photo"
+                android:layout_toEndOf="@id/servpage_servinfo_owner_photo"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp"/>
+
+            <ImageView
+                android:id="@+id/servpage_servinfo_is_realname_sign"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:src="@drawable/details_icon_renzheng"
+                android:layout_below="@+id/servpage_owner_name"
+                android:layout_alignLeft="@+id/servpage_owner_name"
+                android:layout_alignStart="@+id/servpage_owner_name"
+                android:layout_marginTop="12dp" />
+            <TextView
+                android:id="@+id/servpage_servinfo_is_realname_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Realname info"
+                android:textSize="12sp"
+                android:layout_alignTop="@+id/servpage_servinfo_is_realname_sign"
+                android:layout_toRightOf="@+id/servpage_servinfo_is_realname_sign"
+                android:layout_toEndOf="@+id/servpage_servinfo_is_realname_sign"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="-3dp"/>
+
+            <ImageView
+                android:id="@+id/servpage_servinfo_is_hasphone_sign"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:src="@drawable/details_icon_renzheng"
+                android:layout_below="@+id/servpage_owner_name"
+                android:layout_toRightOf="@+id/servpage_servinfo_is_realname_text"
+                android:layout_toEndOf="@+id/servpage_servinfo_is_realname_text"
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="10dp"/>
+            <TextView
+                android:id="@+id/servpage_servinfo_is_hasphone_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hasphone info"
+                android:textSize="12sp"
+                android:layout_alignTop="@+id/servpage_servinfo_is_realname_sign"
+                android:layout_toRightOf="@+id/servpage_servinfo_is_hasphone_sign"
+                android:layout_toEndOf="@+id/servpage_servinfo_is_hasphone_sign"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="-3dp"/>
 
         </RelativeLayout>
 
+        <!--Capacity Group-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/servinfo_group_capacity"
             android:layout_below="@id/servinfo_group_owner"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/colorWhiteBackground">
 
-            <TextView
-                android:id="@+id/servpage_capacity"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Service capacity info"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_height="100dp">
 
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1.0"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="25dp">
+                    <TextView
+                        android:id="@+id/servpage_servinfo_boundry"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textSize="22sp"
+                        android:textColor="@color/colorTheme"
+                        android:layout_centerHorizontal="true"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textSize="13sp"
+                        android:textColor="@color/colorGary178"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1.0"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="25dp">
+                    <TextView
+                        android:id="@+id/servpage_servinfo_capacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textSize="22sp"
+                        android:textColor="@color/colorTheme"
+                        android:layout_centerHorizontal="true"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textSize="13sp"
+                        android:textColor="@color/colorGary178"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+                    android:layout_weight="1.0"
+                    android:paddingTop="25dp"
+                    android:paddingBottom="25dp">
+                    <TextView
+                        android:id="@+id/servpage_servinfo_servant"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textSize="22sp"
+                        android:textColor="@color/colorTheme"
+                        android:layout_centerHorizontal="true"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service"
+                        android:textSize="13sp"
+                        android:textColor="@color/colorGary178"
+                        android:layout_centerHorizontal="true"
+                        android:layout_alignParentBottom="true"/>
+                </RelativeLayout>
+
+            </LinearLayout>
         </RelativeLayout>
 
+        <!--Description Group-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/servinfo_group_desc"
             android:layout_below="@id/servinfo_group_capacity"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/colorWhiteBackground"
+            android:padding="15dp">
 
             <TextView
                 android:id="@+id/servpage_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="服务介绍"
+                android:textSize="18dp"
+                android:textColor="@color/colorGary178"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="5dp"/>
+            <TextView
+                android:id="@+id/servpage_miniter_sign_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="分钟"
+                android:textSize="11dp"
+                android:textColor="@color/colorTheme"
+                android:layout_alignBottom="@id/servpage_desc"
+                android:layout_alignParentRight="true"/>
+
+            <TextView
+                android:id="@+id/servpage_servinfo_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45"
+                android:textSize="18dp"
+                android:textColor="@color/colorTheme"
+                android:layout_alignBottom="@+id/servpage_miniter_sign_text"
+                android:layout_toLeftOf="@+id/servpage_miniter_sign_text"
+                android:layout_toStartOf="@+id/servpage_miniter_sign_text"
+                android:layout_marginRight="2dp"
+                android:layout_marginEnd="2dp"
+                android:layout_marginBottom="-3dp"/>
+
+            <ImageView
+                android:id="@+id/servpage_olock_sign"
+                android:layout_width="13dp"
+                android:layout_height="13dp"
+                android:src="@drawable/lessondetails_icon_time"
+                android:layout_alignBottom="@+id/servpage_miniter_sign_text"
+                android:layout_toLeftOf="@+id/servpage_servinfo_duration"
+                android:layout_toStartOf="@+id/servpage_servinfo_duration" />
+
+            <TextView
+                android:id="@+id/servpage_servinfo_desc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Service description info"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:text="服务详情描述"
+                android:textSize="15dp"
+                android:textColor="@color/colorGary102"
+                android:layout_below="@id/servpage_desc"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp" />
 
         </RelativeLayout>
 
+        <!--Location Group-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/servinfo_group_location"
             android:layout_below="@id/servinfo_group_desc"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/colorWhiteBackground">
 
             <TextView
                 android:id="@+id/servpage_location"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="100dp"
                 android:text="Service location"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="5dp"
@@ -112,22 +303,194 @@
 
         </RelativeLayout>
 
+        <!--Facility Group-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/servinfo_group_facility"
             android:layout_below="@id/servinfo_group_location"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:background="@color/colorWhiteBackground">
 
             <TextView
                 android:id="@+id/servpage_facility"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Service facility"
+                android:text="友好性设施"
+                android:textSize="18dp"
+                android:textColor="@color/colorGary178"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginTop="25dp"
+                android:layout_marginLeft="15dp"/>
+
+            <LinearLayout
+                android:id="@+id/servpage_facility_row0"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@id/servpage_facility"
+                android:layout_marginTop="30dp">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_0"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_0_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_1_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_2"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_2_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_3"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_3_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/servpage_facility_row1"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_below="@id/servpage_facility_row0"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp">
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_4"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_4_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_5"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_5_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_6"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_6_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1.0">
+                    <ImageView
+                        android:id="@+id/servpage_servinfo_facility_7"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:src="@drawable/details_icon_facility_7_unable"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="facility_0"
+                        android:textSize="13dp"
+                        android:textColor="@color/colorGary178" />
+                </RelativeLayout>
+            </LinearLayout>
 
         </RelativeLayout>
 
@@ -136,17 +499,31 @@
             android:layout_height="wrap_content"
             android:id="@+id/servinfo_group_notice"
             android:layout_below="@id/servinfo_group_facility"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10dp"
+            android:padding="15dp"
+            android:background="@color/colorWhiteBackground">
 
             <TextView
                 android:id="@+id/servpage_notice"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Service notice"
+                android:text="服务守则"
+                android:textSize="18dp"
+                android:textColor="@color/colorGary178"
                 android:layout_alignParentTop="true"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginTop="5dp"/>
+
+            <TextView
+                android:id="@+id/servpage_servinfo_notice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="是否需要家长陪同"
+                android:textSize="15dp"
+                android:textColor="@color/colorGary102"
+                android:layout_below="@id/servpage_notice"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="20dp" />
 
         </RelativeLayout>
 
