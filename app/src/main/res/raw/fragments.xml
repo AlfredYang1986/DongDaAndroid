@@ -9,23 +9,23 @@
 
     <fragment
         short="frag_navbar"
-        name="com.blackmirror.dongda.fragment.AYNavBarFragment"
+        name="com.blackmirror.dongda.fragment.DefaultFragment.AYNavBarFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
     <fragment
         short="frag_tabbar"
-        name="com.blackmirror.dongda.fragment.AYTabBarFragment"
+        name="com.blackmirror.dongda.fragment.DefaultFragment.AYTabBarFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
 
     <fragment
         short="frag_homeseg"
-        name="com.blackmirror.dongda.Home.AYHomeSegFragment"
+        name="com.blackmirror.dongda.Home.HomeActivity.AYHomeSegFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
 
     </fragment>
 
     <listfragment
         short="frag_homelist_serv"
-        name="com.blackmirror.dongda.Home.AYHomeListServFragment"
+        name="com.blackmirror.dongda.Home.HomeActivity.AYHomeListServFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYListFragmentFactory">
 
     </listfragment>

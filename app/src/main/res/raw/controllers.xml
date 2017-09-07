@@ -36,7 +36,7 @@
     </controller>
 
     <controller short="AYHomeActivity"
-        name="com.blackmirror.dongda.Home.AYHomeActivity"
+        name="com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity"
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="QueryServiceFacade" />
@@ -56,4 +56,13 @@
         <fragment short="frag_servpage_info"/>
         <fragment short="frag_servpage_bottom"/>
     </controller>
+
+    <controller short="AYProfileActivity"
+        name="com.blackmirror.dongda.Profile.ProfileActivity.AYProfileActivity"
+        factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <fragment short="frag_navbar"/>
+        <fragment short="frag_tabbar"/>
+    </controller>
+
 </controllers>

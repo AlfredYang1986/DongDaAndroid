@@ -17,7 +17,7 @@ public class AYSearchServiceCommand extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return "http://www.altlys.com:9000/v3.1/kidnap/search";
+        return kDONGDABASEURL +  "v3.1/kidnap/search";
     }
 
     @Override

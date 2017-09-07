@@ -15,7 +15,9 @@
             android:icon="@mipmap/dongda_logo"
             android:supportsRtl="true"
             android:theme="@style/AppThemeNoTitle">
-        <activity android:name=".Home.AYHomeActivity">
+        <activity android:name=".Profile.ProfileActivity.AYProfileActivity">
+        </activity>
+        <activity android:name=".Home.HomeActivity.AYHomeActivity">
         </activity>
         <activity android:name=".Home.ServicePage.AYServicePageActivity">
         </activity>

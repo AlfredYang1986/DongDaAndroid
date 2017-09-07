@@ -17,7 +17,7 @@ public class AYQueryOrdersCommand extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return "http://www.altlys.com:9000/v3/order/query";
+        return kDONGDABASEURL + "v3/order/query";
     }
 
     @Override

@@ -23,7 +23,7 @@ public class AYDownloadFileCommand extends AYCommand {
 
     final String TAG = "download file";
     final String path = "/sdcard/dongda/";
-    final String endpoint = "http://www.altlys.com:9000/query/downloadFile/";
+    final String endpoint = kDONGDABASEURL + "query/downloadFile/";
 
     final String failed_notify_func_name = "downloadFailed";
     final String success_notify_func_name = "downloadSuccess";

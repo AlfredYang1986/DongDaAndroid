@@ -8,6 +8,8 @@ import com.blackmirror.dongda.AY.AYSysNotifier;
 public abstract class AYCommand extends AYSysNotifier {
     public abstract <Args, Result> Result excute(Args ... defaultArgs);
 
+    public String kDONGDABASEURL = "http://www.altlys.com:9000/";
+
     protected String cmd_name;
     public String getCmdName() {
         return cmd_name;

@@ -6,7 +6,7 @@
     android:layout_height="49dp"
     android:layout_alignParentBottom="true"
     android:orientation="horizontal"
-    tools:context="com.blackmirror.dongda.fragment.AYTabBarFragment">
+    tools:context="com.blackmirror.dongda.fragment.DefaultFragment.AYTabBarFragment">
 
 
     <LinearLayout

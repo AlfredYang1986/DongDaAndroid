@@ -26,7 +26,7 @@ public class AYUploadFileCommand extends AYCommand {
 
     final String destination = "/mnt/sdcard/dongda/";
 //    final String endpoint = "http://192.168.100.12:9000/post/uploadFile";
-    final String endpoint = "http://www.altlys.com:9000/post/uploadFile";
+    final String endpoint = kDONGDABASEURL + "post/uploadFile";
 
     final String failed_notify_func_name = "uploadFailed";
     final String success_notify_func_name = "uploadSuccess";

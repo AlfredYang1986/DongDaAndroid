@@ -1,4 +1,4 @@
-package com.blackmirror.dongda.Home;
+package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,7 +15,8 @@ import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUse
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
-import com.blackmirror.dongda.fragment.AYNavBarFragment;
+import com.blackmirror.dongda.fragment.DefaultFragment.AYNavBarFragment;
+import com.blackmirror.dongda.fragment.DefaultFragment.AYTabBarFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,11 +40,6 @@ public class AYHomeActivity extends AYActivity {
     private long timeSpan;
 
     @Override
-    public String getClassTag() {
-        return TAG;
-    }
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
@@ -53,7 +49,6 @@ public class AYHomeActivity extends AYActivity {
 
         searchServiceRemote();
 
-//        serviceData = ServiceData.getDataInstance().getServDataWithArgs();
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
         ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).setListAdapter(serviceListAdapter);
     }
@@ -64,8 +59,7 @@ public class AYHomeActivity extends AYActivity {
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setLeftBtnTextWithString("北京市");
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setRightBtnImageWithImageId(R.drawable.home_icon_mapfilter);
-
-//        ((AYHomeSegFragment)this.fragments.get("frag_homeseg")).changeFocusItemWithIndex(0);
+        ((AYTabBarFragment)this.fragments.get("frag_tabbar")).setTabFocusOptionWithIndex(0);
     }
 
     @Override

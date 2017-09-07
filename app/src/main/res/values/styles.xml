@@ -15,4 +15,13 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="stylr_tab_homeseg" parent="Widget.Design.TabLayout">
+        <!--tab的布局-->
+        <item name="tabGravity">fill</item>
+        <!--tab下面的滚动条的颜色-->
+        <item name="tabIndicatorColor">#ff3355</item>
+        <!--将tab设置成固定-->
+        <item name="tabMode">fixed</item>
+    </style>
+
 </resources>

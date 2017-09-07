@@ -3,15 +3,14 @@ package com.blackmirror.dongda.command;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.factory.AYFactoryManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -20,6 +19,7 @@ import java.net.URL;
  * Created by alfredyang on 23/05/2017.
  */
 public abstract class AYRemoteCommand extends AYCommand {
+
     protected class AYAsyncTask extends AsyncTask<JSONObject, Integer, JSONObject> {
         @Override
         protected void onPreExecute() {

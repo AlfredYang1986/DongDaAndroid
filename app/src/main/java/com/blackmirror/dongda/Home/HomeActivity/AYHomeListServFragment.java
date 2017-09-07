@@ -1,4 +1,4 @@
-package com.blackmirror.dongda.Home;
+package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.os.Bundle;
 import android.util.Log;

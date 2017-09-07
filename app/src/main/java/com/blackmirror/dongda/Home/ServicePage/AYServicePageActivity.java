@@ -14,7 +14,7 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYScreenSingleton;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
-import com.blackmirror.dongda.fragment.AYNavBarFragment;
+import com.blackmirror.dongda.fragment.DefaultFragment.AYNavBarFragment;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 

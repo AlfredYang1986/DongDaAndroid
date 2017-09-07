@@ -1,4 +1,4 @@
-package com.blackmirror.dongda.fragment;
+package com.blackmirror.dongda.fragment.DefaultFragment;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.fragment.AYFragment;
 
 import org.json.JSONObject;
 
@@ -146,6 +147,15 @@ public class AYNavBarFragment extends AYFragment {
         nav_right_btn_text.setVisibility(nav_right_btn_text.VISIBLE);
         nav_right_btn_img.setVisibility(nav_right_btn_img.GONE);
         nav_right_btn_text.setText(string);
+    }
+
+    public void setLeftBtnInvisible(){
+        nav_left_btn_text.setVisibility(nav_left_btn_text.INVISIBLE);
+        nav_left_btn_img.setVisibility(nav_left_btn_img.INVISIBLE);
+    }
+    public void setRightBtnInvisible(){
+        nav_right_btn_text.setVisibility(nav_left_btn_text.INVISIBLE);
+        nav_right_btn_img.setVisibility(nav_left_btn_img.INVISIBLE);
     }
 
     public void setTitleTextWithString(String string) {

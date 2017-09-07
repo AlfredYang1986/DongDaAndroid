@@ -1,5 +1,6 @@
-package com.blackmirror.dongda.fragment;
+package com.blackmirror.dongda.fragment.DefaultFragment;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -9,8 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.Profile.ProfileActivity.AYProfileActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYScreenSingleton;
+import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.fragment.AYFragment;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by alfredyang on 29/6/17.
@@ -23,15 +31,7 @@ public class AYTabBarFragment extends AYFragment {
     private Button btn_schedule;
     private Button btn_profile;
 
-    private int holder_btn_image_normal_id;
-    private Button btn_holder;
-
     private final String TAG = "AYTabBarFragment";
-
-    @Override
-    public String getClassTag() {
-        return TAG;
-    }
 
     public Drawable findImgAsSquare(int id) {
         Drawable drawable = ContextCompat.getDrawable(getContext(),id);
@@ -57,12 +57,11 @@ public class AYTabBarFragment extends AYFragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: btn_home");
-//                Activity ac = new MainActivity();
-//                if (getActivity().getClass() == ac.getClass()) {
-//                    Log.d(TAG, "onClick: no action");
-//                    return;
-//                }
-                changeFocusBtnWith(R.drawable.tab_icon_home_select, R.drawable.tab_icon_home_normal, btn_home);
+                if ((getContext().getClass().getSimpleName()).equals("AYHomeActivity")) {
+                    return;
+                }
+                Intent intent = new Intent(getContext(), AYHomeActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -72,7 +71,6 @@ public class AYTabBarFragment extends AYFragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: btn_message");
-                changeFocusBtnWith(R.drawable.tab_icon_message_select, R.drawable.tab_icon_message_normal, btn_message);
             }
         });
 
@@ -82,7 +80,6 @@ public class AYTabBarFragment extends AYFragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: btn_schedule");
-                changeFocusBtnWith(R.drawable.tab_icon_schedule_select, R.drawable.tab_icon_schedule_normal, btn_schedule);
             }
         });
 
@@ -92,11 +89,14 @@ public class AYTabBarFragment extends AYFragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: btn_profile");
-                changeFocusBtnWith(R.drawable.tab_icon_user_select, R.drawable.tab_icon_user_normal, btn_profile);
+                if ((getContext().getClass().getSimpleName()).equals("AYProfileActivity")) {
+                    return;
+                }
+                Intent intent = new Intent(getContext(), AYProfileActivity.class);
+                startActivity(intent);
             }
         });
 
-        setTabFocusOptionWithIndex(0);
         return view;
     }
 
@@ -105,43 +105,43 @@ public class AYTabBarFragment extends AYFragment {
 
     }
 
-    private void changeFocusBtnWith(int focusImageId, int normalImageId, Button focusBtn) {
-        btn_holder.setCompoundDrawables(null, findImgAsSquare(holder_btn_image_normal_id), null, null);
-        btn_holder.setTextColor(getResources().getColor(R.color.colorBlack));
-
-        focusBtn.setCompoundDrawables(null, findImgAsSquare(focusImageId), null, null);
-        focusBtn.setTextColor(getResources().getColor(R.color.colorTheme));
-
-        btn_holder = focusBtn;
-        holder_btn_image_normal_id = normalImageId;
-    }
-    private void saveFocusArgs (Button focusBtn, int holderId, int focusId) {
+    private void setBtnFocus (Button focusBtn, int focusId) {
         focusBtn.setCompoundDrawables(null, findImgAsSquare(focusId), null, null);
         focusBtn.setTextColor(getResources().getColor(R.color.colorTheme));
-        btn_holder = focusBtn;
-        holder_btn_image_normal_id = holderId;
     }
 
     public void setTabFocusOptionWithIndex(int index) {
         switch (index) {
             case 0 : {
-                saveFocusArgs(btn_home, R.drawable.tab_icon_home_normal, R.drawable.tab_icon_home_select);
+                setBtnFocus(btn_home, R.drawable.tab_icon_home_select);
             }
             break;
             case 1 : {
-                saveFocusArgs(btn_message, R.drawable.tab_icon_message_normal, R.drawable.tab_icon_message_select);
+                setBtnFocus(btn_message, R.drawable.tab_icon_message_select);
             }
             break;
             case 2 : {
-                saveFocusArgs(btn_schedule, R.drawable.tab_icon_schedule_normal, R.drawable.tab_icon_schedule_select);
+                setBtnFocus(btn_schedule, R.drawable.tab_icon_schedule_select);
             }
             break;
             case 3 : {
-                saveFocusArgs(btn_profile, R.drawable.tab_icon_user_normal, R.drawable.tab_icon_user_select);
+                setBtnFocus(btn_profile, R.drawable.tab_icon_user_select);
             }
             break;
             default:
                 break;
         }
+    }
+
+    private void changeFocusTabItemWithIndex(int index) {
+        JSONObject args = new JSONObject();
+//        args.put("args",index);
+        try {
+            args.put("args", index);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AYActivity act = (AYActivity) this.getActivity();
+        act.handleNotifications("didChangeTabItemNotify", args);
     }
 }

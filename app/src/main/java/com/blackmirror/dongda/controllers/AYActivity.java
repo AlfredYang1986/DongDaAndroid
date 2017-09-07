@@ -52,7 +52,7 @@ public abstract class AYActivity extends FragmentActivity implements AYSysNotifi
 
     @Override
     public String getClassTag() {
-        return "AYActivity";
+        return this.getClass().getSimpleName();
     }
 
     protected void registerCallback() {
