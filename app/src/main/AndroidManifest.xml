@@ -15,7 +15,11 @@
             android:icon="@mipmap/dongda_logo"
             android:supportsRtl="true"
             android:theme="@style/AppThemeNoTitle">
+        <activity android:name=".Message.MessageList.AYMessageListActivity">
+        </activity>
         <activity android:name=".Profile.ProfileActivity.AYProfileActivity">
+        </activity>
+        <activity android:name=".Order.OrderModeCommon.AYOrderCommonActivity">
         </activity>
         <activity android:name=".Home.HomeActivity.AYHomeActivity">
         </activity>

@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -56,6 +57,10 @@ public class AYHomeActivity extends AYActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        Method method = context.getClass().getMethod(name, JSONObject.class);
+        method.invoke(context, args);
+
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setLeftBtnTextWithString("北京市");
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setRightBtnImageWithImageId(R.drawable.home_icon_mapfilter);

@@ -32,7 +32,7 @@ public class AYListFragment extends ListFragment implements AYSysNotificationHan
 
     @Override
     public String getClassTag() {
-        return "AYListFragment";
+        return this.getClass().getSimpleName();
     }
 
     protected void registerCallback() {

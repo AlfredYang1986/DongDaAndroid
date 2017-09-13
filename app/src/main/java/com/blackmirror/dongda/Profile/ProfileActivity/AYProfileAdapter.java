@@ -1,15 +1,15 @@
 package com.blackmirror.dongda.Profile.ProfileActivity;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 /**
  * Created by alfredyang on 6/9/17.
@@ -17,15 +17,18 @@ import org.json.JSONObject;
 
 public class AYProfileAdapter extends BaseAdapter {
 
-    public JSONObject querydata;
+    public JSONArray querydata;
+    private LayoutInflater itemInflater;
 
-    public AYProfileAdapter(Context context, JSONObject object) {
+    public AYProfileAdapter(Context context, JSONArray object) {
         super();
         querydata = object;
+        itemInflater = LayoutInflater.from(context);
     }
 
-    public void changeQueryData(JSONObject object) {
+    public void changeQueryData(JSONArray object) {
         querydata = object;
+        Log.d(this.getClass().getSimpleName(), "changeQueryData: " + querydata);
     }
 
     public void refreshList() {
@@ -44,28 +47,21 @@ public class AYProfileAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return 4;
     }
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-//        LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
+
         if (i == 0) {
-            view = new View(view.getContext());
-            TextView nameText = new TextView(viewGroup.getContext());
-            nameText.setText("Name");
-            viewGroup.addView(nameText);
-
-            ImageView photoView = new ImageView(viewGroup.getContext());
-            photoView.setImageResource(R.drawable.default_image);
-            viewGroup.addView(photoView);
-
-            return viewGroup;
+            view = itemInflater.inflate(R.layout.cell_profile_head, null);
 
         } else {
-
+            view = itemInflater.inflate(R.layout.cell_profile_row, null);
         }
         return view;
     }
+
+//    HeaderViewListAdapter
 
 }

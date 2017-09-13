@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.fragment.DefaultFragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.Message.MessageList.AYMessageListActivity;
+import com.blackmirror.dongda.Order.OrderModeCommon.AYOrderCommonActivity;
 import com.blackmirror.dongda.Profile.ProfileActivity.AYProfileActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYScreenSingleton;
@@ -62,6 +65,7 @@ public class AYTabBarFragment extends AYFragment {
                 }
                 Intent intent = new Intent(getContext(), AYHomeActivity.class);
                 startActivity(intent);
+                ((Activity) getContext()).overridePendingTransition(0, 0);
             }
         });
 
@@ -71,6 +75,12 @@ public class AYTabBarFragment extends AYFragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: btn_message");
+                if ((getContext().getClass().getSimpleName()).equals("AYMessageListActivity")) {
+                    return;
+                }
+                Intent intent = new Intent(getContext(), AYMessageListActivity.class);
+                startActivity(intent);
+                ((Activity) getContext()).overridePendingTransition(0, 0);
             }
         });
 
@@ -80,6 +90,12 @@ public class AYTabBarFragment extends AYFragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: btn_schedule");
+                if ((getContext().getClass().getSimpleName()).equals("AYOrderCommonActivity")) {
+                    return;
+                }
+                Intent intent = new Intent(getContext(), AYOrderCommonActivity.class);
+                startActivity(intent);
+                ((Activity) getContext()).overridePendingTransition(0, 0);
             }
         });
 
@@ -94,6 +110,7 @@ public class AYTabBarFragment extends AYFragment {
                 }
                 Intent intent = new Intent(getContext(), AYProfileActivity.class);
                 startActivity(intent);
+                ((Activity)getContext()).overridePendingTransition(0, 0);
             }
         });
 

@@ -3,6 +3,8 @@ package com.blackmirror.dongda.controllers;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.util.Log;
+
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.command.AYCommand;
@@ -11,6 +13,8 @@ import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
 import org.json.JSONObject;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 /**
@@ -70,6 +74,31 @@ public abstract class AYActivity extends FragmentActivity implements AYSysNotifi
     @Override
     public Boolean handleNotifications(String name, JSONObject args) {
         return AYSysHelperFunc.getInstance().handleNotifications(name, args, this);
+    }
+
+    public boolean sendMessageToFragment (String frag, String methodName, JSONObject args) {
+
+
+        Boolean result = true;
+        try {
+            Method method = (this.fragments.get(frag)).getClass().getMethod(methodName, JSONObject.class);
+            method.invoke(this.fragments.get(frag), args);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            result = false;
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            result = false;
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            result = false;
+        }
+
+        if (!result) {
+            Log.i("method Invoke", "method invoke error");
+        }
+
+        return result;
     }
 
     protected abstract void bindingFragments();
