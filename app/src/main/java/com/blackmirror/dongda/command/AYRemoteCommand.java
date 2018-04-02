@@ -5,20 +5,34 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.Tools.LogUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.zip.GZIPInputStream;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * Created by alfredyang on 23/05/2017.
  */
 public abstract class AYRemoteCommand extends AYCommand {
+
+    private AYSysNotificationHandler mNotificationHandler;
+    private Call net_call;
 
     protected class AYAsyncTask extends AsyncTask<JSONObject, Integer, JSONObject> {
         @Override
@@ -117,9 +131,65 @@ public abstract class AYRemoteCommand extends AYCommand {
     public void excuteImpl(JSONObject ... args) {
         AYAsyncTask tk = new AYAsyncTask();
         tk.execute(args);
+        executeRequest(args);
+    }
+
+    private void executeRequest(JSONObject[] args) {
+        Request request = new Request.Builder()
+                .url(getUrl()).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), args.toString())).build();
+        mNotificationHandler = getTarget();
+        net_call = httpClient.newCall(request);
+        net_call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                if (e.toString().contains("closed")){//主动取消
+
+                }else {
+                    if (mNotificationHandler != null) {
+                        mNotificationHandler.handleNotifications(getFailedCallBackName(), null);
+                    }
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                InputStream in = inputStreamAfterCheck(response);
+                InputStreamReader iReader = new InputStreamReader(in);
+                BufferedReader bReader = new BufferedReader(iReader);
+                StringBuilder json = new StringBuilder();
+                String line=null;
+                while((line = bReader.readLine()) != null){
+                    json.append(line).append('\n');}
+                bReader.close();
+                iReader.close();
+                in.close();
+                //            T obj = (T)JSON.parseObject(json.toString(), myClass);
+                LogUtils.d("flag","返回的数据："+json.toString());
+                if (mNotificationHandler != null){
+                    mNotificationHandler.handleNotifications(getSuccessCallBackName(), null);
+                }
+            }
+        });
+
+    }
+
+    private static InputStream inputStreamAfterCheck(Response response) throws IOException {
+        InputStream input = response.body().byteStream();
+        if ("gzip".equalsIgnoreCase(response.header("Content-Encoding"))) {
+            input = new GZIPInputStream(input);
+        }
+        return input;
     }
 
     protected abstract String getUrl();
     protected abstract String getSuccessCallBackName();
     protected abstract String getFailedCallBackName();
+
+    @Override
+    protected void cancelNetCall() {
+        if (net_call != null && !net_call.isCanceled()){
+            net_call.cancel();
+        }
+    }
+
 }

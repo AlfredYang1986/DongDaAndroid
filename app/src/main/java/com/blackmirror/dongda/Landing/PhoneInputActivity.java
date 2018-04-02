@@ -10,17 +10,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYSendSMSCodeCommand;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -30,6 +41,8 @@ public class PhoneInputActivity extends AYActivity {
 
     private EditText et_phone = null;
     private EditText et_code = null;
+    private Button sms_code;
+    private Disposable mSms_disposable;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +51,10 @@ public class PhoneInputActivity extends AYActivity {
 
         setTitle("");
 
-        et_phone = (EditText) findViewById(R.id.phone_edit_text);
-        et_code = (EditText) findViewById(R.id.code_edit_text);
+        et_phone = findViewById(R.id.phone_edit_text);
+        et_code = findViewById(R.id.code_edit_text);
 
-        Button sms_code = (Button) findViewById(R.id.request_sms_code);
+        sms_code = findViewById(R.id.request_sms_code);
         sms_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,12 +63,15 @@ public class PhoneInputActivity extends AYActivity {
                 String input_phone = et_phone.getText().toString();
                 if (input_phone != null && !input_phone.isEmpty()) {
                     AYFacade facade = facades.get("LoginFacade");
-                    AYCommand cmd = facade.cmds.get("SendSMSCode");
+                    /*AYCommand cmd = facade.cmds.get("SendSMSCode");
+                               cmd.setTarget(facade);
+                    cmd.excute(args);*/
                     Map<String, Object> m = new HashMap<>();
                     m.put("phoneNo", input_phone);
                     JSONObject args = new JSONObject(m);
-                    cmd.excute(args);
+                    facade.execute("SendSMSCode",args);
                 }
+                getSmsMsg();
             }
         });
 
@@ -66,6 +82,69 @@ public class PhoneInputActivity extends AYActivity {
                 LoginWithPhoneAndCode();
             }
         });
+
+        init();
+    }
+
+    private void getSmsMsg() {
+        LogUtils.d("xxx");
+        sms_code.setEnabled(false);
+        Observable.intervalRange(0,10,0,1, TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mSms_disposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        sms_code.setText("重新获取("+(10-aLong)+")");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        sms_code.setEnabled(true);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        sms_code.setEnabled(true);
+                        sms_code.setText(getString(R.string.phone_input_btn_action_query_code));
+                    }
+                });
+
+    }
+
+    private void init() {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext("");
+                emitter.onComplete();
+            }
+        }).observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
@@ -204,6 +283,15 @@ public class PhoneInputActivity extends AYActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSms_disposable != null && !mSms_disposable.isDisposed()){
+            mSms_disposable.dispose();
+            mSms_disposable = null;
+        }
     }
 
     public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {

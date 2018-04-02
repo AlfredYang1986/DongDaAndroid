@@ -3,7 +3,7 @@ package com.blackmirror.dongda.facade;
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.controllers.AYActivity;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -48,5 +48,12 @@ public abstract class AYFacade implements AYSysNotificationHandler {
     public Boolean handleNotifications(String name, JSONObject args) {
         return AYSysHelperFunc.getInstance().handleNotifications(name, args, this);
     }
+
+    public void execute(String cmdName,JSONObject... object){
+        AYCommand cmd = cmds.get(cmdName);
+        cmd.setTarget(this);
+        cmd.excute(object);
+    }
+
 
 }

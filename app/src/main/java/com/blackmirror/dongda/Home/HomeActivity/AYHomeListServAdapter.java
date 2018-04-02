@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,6 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYTools;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -103,16 +100,6 @@ public class AYHomeListServAdapter extends BaseAdapter {
 
                     String imageUrl = "http://altlys.com:9000/query/downloadFile/" + imagesArr.getString(0);
 
-                    //显示图片的配置
-                    DisplayImageOptions options = new DisplayImageOptions.Builder()
-                            .showImageOnLoading(R.drawable.default_image)
-                            .showImageOnFail(R.drawable.default_image)
-                            .cacheInMemory(true)
-                            .cacheOnDisk(true)
-                            .bitmapConfig(Bitmap.Config.RGB_565)
-                            .build();
-
-                    ImageLoader.getInstance().displayImage(imageUrl, (ImageView)convertView.findViewById(R.id.img_cover), options);
                 }
 
                 ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("title"));
@@ -136,7 +123,7 @@ public class AYHomeListServAdapter extends BaseAdapter {
 
                     String imageUrl = "http://altlys.com:9000/query/downloadFile/" + imagesArr.getString(0);
 
-                    //显示图片的配置
+                    /*//显示图片的配置
                     DisplayImageOptions options = new DisplayImageOptions.Builder()
                             .showImageOnLoading(R.drawable.default_image)
                             .showImageOnFail(R.drawable.default_image)
@@ -145,7 +132,7 @@ public class AYHomeListServAdapter extends BaseAdapter {
                             .bitmapConfig(Bitmap.Config.RGB_565)
                             .build();
 
-                    ImageLoader.getInstance().displayImage(imageUrl, (ImageView)convertView.findViewById(R.id.img_cover), options);
+                    ImageLoader.getInstance().displayImage(imageUrl, (ImageView)convertView.findViewById(R.id.img_cover), options);*/
                 }
                 ((TextView)convertView.findViewById(R.id.text_title)).setText((String)tmp.get("title"));
                 ((TextView)convertView.findViewById(R.id.text_addr)).setText((String)tmp.get("address"));

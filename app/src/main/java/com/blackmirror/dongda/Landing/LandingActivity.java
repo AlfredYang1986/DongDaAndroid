@@ -1,34 +1,51 @@
 package com.blackmirror.dongda.Landing;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.ViewCompat;
 import android.view.View;
-import android.widget.Button;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 
-import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.factory.AYFactoryManager;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 public class LandingActivity extends AYActivity {
 
     final static String TAG = "Landing Activity";
+    private android.widget.RelativeLayout rl_phone_login;
+    private android.widget.RelativeLayout rl_wechat_login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);*/
+
         setContentView(R.layout.activity_landing);
+        rl_phone_login =  findViewById(R.id.rl_phone_login);
+        rl_wechat_login =  findViewById(R.id.rl_wechat_login);
+        //在setContentView之后调用
+        initSystemBarColor();
 
-        ImageLoaderConfiguration configuration = ImageLoaderConfiguration.createDefault(this);
-        ImageLoader.getInstance().init(configuration);
+        rl_phone_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
+                startActivity(intent);
+            }
+        });
 
-        setTitle("");
-        {
+        rl_wechat_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        /*{
             Button btn = (Button) findViewById(R.id.phone_login_btn);
             btn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -56,12 +73,24 @@ public class LandingActivity extends AYActivity {
             Object o = cmd.excute();
             if (o != null) {
 
-                /**
-                 * 打印已登陆用户
-                 */
+                *//**
+         * 打印已登陆用户
+         *//*
                 Log.i(TAG, o.toString());
                 Intent intent = new Intent(this, AYHomeActivity.class);
                 startActivity(intent);
+            }
+        }*/
+    }
+
+    private void initSystemBarColor() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            ViewGroup viewGroup = this.findViewById(Window.ID_ANDROID_CONTENT);
+            View childView = viewGroup.getChildAt(0);
+            if (null != childView) {
+                ViewCompat.setFitsSystemWindows(childView, false);
             }
         }
     }

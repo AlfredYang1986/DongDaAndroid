@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
+import okhttp3.Request;
 //import com.blackmirror.dongda.command.AYRemoteCommand;
 
 /**
@@ -71,6 +73,11 @@ public class AYDownloadFileCommand extends AYCommand {
     public void excuteImpl(String ... args) {
         AYAsyncTask tk = new AYAsyncTask();
         tk.execute(args);
+        executeRequest();
+    }
+
+    private void executeRequest() {
+        Request request = new Request.Builder().build();
     }
 
     protected class AYAsyncTask extends AsyncTask<String, Integer, JSONObject> {

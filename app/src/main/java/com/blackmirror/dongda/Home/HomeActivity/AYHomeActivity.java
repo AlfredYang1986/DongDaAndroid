@@ -22,7 +22,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class AYHomeActivity extends AYActivity {
         skipedCount = 0;
         timeSpan = new Date().getTime();
 
-        searchServiceRemote();
+//        searchServiceRemote();
 
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
         ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).setListAdapter(serviceListAdapter);
@@ -58,8 +57,8 @@ public class AYHomeActivity extends AYActivity {
     protected void onStart() {
         super.onStart();
 
-        Method method = context.getClass().getMethod(name, JSONObject.class);
-        method.invoke(context, args);
+        /*Method method = context.getClass().getMethod(name, JSONObject.class);
+        method.invoke(context, args);*/
 
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setLeftBtnTextWithString("北京市");
@@ -118,11 +117,11 @@ public class AYHomeActivity extends AYActivity {
         Log.d(TAG, "sendRefreshDataNotify: in Activity");
         skipedCount = 0;
         timeSpan = new Date().getTime();
-        searchServiceRemote();
+//        searchServiceRemote();
     }
     public void sendLoadMoreDataNotify (JSONObject args) {
         Log.d(TAG, "sendLoadMoreDataNotify: in Activity");
-        searchServiceRemote();
+//        searchServiceRemote();
     }
 
     public void didSelectedPositionNotify (JSONObject args) {

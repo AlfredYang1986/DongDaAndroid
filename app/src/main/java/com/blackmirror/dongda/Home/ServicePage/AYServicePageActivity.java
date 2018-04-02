@@ -1,6 +1,5 @@
 package com.blackmirror.dongda.Home.ServicePage;
 
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
@@ -15,8 +14,6 @@ import com.blackmirror.dongda.Tools.AYScreenSingleton;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.DefaultFragment.AYNavBarFragment;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,7 +104,7 @@ public class AYServicePageActivity extends AYActivity {
 
 //                    imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
                     String imageUrl = "http://altlys.com:9000/query/downloadFile/" + imagesArr.getString(i);
-                    DisplayImageOptions options = new DisplayImageOptions.Builder()
+                    /*DisplayImageOptions options = new DisplayImageOptions.Builder()
                             .showImageOnLoading(R.drawable.default_image)
                             .showImageOnFail(R.drawable.default_image)
                             .cacheInMemory(true)
@@ -115,7 +112,7 @@ public class AYServicePageActivity extends AYActivity {
 //                            .imageScaleType(ImageScaleType.EXACTLY) // default
                             .bitmapConfig(Bitmap.Config.RGB_565)
                             .build();
-                    ImageLoader.getInstance().displayImage(imageUrl, imageView, options);
+                    ImageLoader.getInstance().displayImage(imageUrl, imageView, options);*/
                 }
 
             }

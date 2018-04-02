@@ -2,12 +2,18 @@ package com.blackmirror.dongda.command;
 
 import android.os.AsyncTask;
 import android.util.Log;
+
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -15,6 +21,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+import okhttp3.MultipartBody;
 
 /**
  * Created by alfredyang on 29/06/2017.
@@ -70,6 +78,14 @@ public class AYUploadFileCommand extends AYCommand {
     public void excuteImpl(String ... args) {
         AYAsyncTask tk = new AYAsyncTask();
         tk.execute(args);
+        executeRequest(args);
+    }
+
+    private void executeRequest(String[] args) {
+        new MultipartBody.Builder("--AaB03x")
+                .setType(MultipartBody.FORM)
+                .build();
+
     }
 
     protected class AYAsyncTask extends AsyncTask<String, Integer, JSONObject> {
