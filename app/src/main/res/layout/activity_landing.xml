@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/activity_landing"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/login_bg"
-        android:orientation="vertical"
         tools:context="com.blackmirror.dongda.Landing.LandingActivity">
+
+    <android.support.constraint.Guideline
+         android:id="@+id/gl_root"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.214"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 
 
 
     <ImageView
-        android:layout_gravity="center_horizontal"
-         android:id="@+id/iv_login_logo"
-        android:layout_marginTop="143dp"
-        android:layout_centerHorizontal="true"
+        app:layout_constraintTop_toBottomOf="@id/gl_root"
+        android:id="@+id/iv_login_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/login_logo_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
     <TextView
+        app:layout_constraintTop_toBottomOf="@id/iv_login_logo"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="14dp"
         android:layout_width="wrap_content"
@@ -29,33 +38,39 @@
         android:text="为 孩 子 创 造 与 众 不 同"
         android:textColor="#FFFFFFFF"
         android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         />
 
+
+
     <RelativeLayout
+        app:layout_constraintBottom_toTopOf="@id/rl_wechat_login"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
          android:id="@+id/rl_phone_login"
         android:background="@drawable/landing_action_button"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="256dp"
+        android:layout_marginBottom="23dp"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
         <TextView
-            android:layout_centerInParent="true"
-            android:gravity="center"
             android:id="@+id/tv_phone_login"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
             android:text="手机号登录"
             android:textColor="#FF59D5C7"
             android:textSize="17sp"
-            android:drawablePadding="123dp"
             />
 
         <ImageView
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="14dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tv_phone_login"
             android:background="@drawable/login_icon_cellphone"
@@ -64,26 +79,27 @@
 
     </RelativeLayout>
 
-
-
     <RelativeLayout
-         android:id="@+id/rl_wechat_login"
-        android:background="@drawable/landing_wechat_button"
+        android:id="@+id/rl_wechat_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="23dp"
-        android:orientation="horizontal"
         android:layout_marginBottom="32dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@drawable/landing_wechat_button"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+       >
 
 
         <TextView
             android:layout_centerInParent="true"
-            android:gravity="center"
             android:id="@+id/tv_wechat_login"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
+            android:gravity="center"
             android:text="微信登陆"
             android:textColor="#FFFFFFFF"
             android:textSize="17sp"
@@ -100,22 +116,4 @@
     </RelativeLayout>
 
 
-
-
-
-   <!-- <Button
-        android:gravity="center_vertical"
-        android:id="@+id/wechat_login_btn"
-        android:layout_marginTop="@dimen/landing_activity_button_margin"
-        android:layout_width="match_parent"
-        android:background="@drawable/landing_wechat_button"
-        android:layout_height="50dp"
-        android:textSize="17sp"
-        android:text="微信账号登陆"
-        android:drawableLeft="@drawable/login_icon_wechat"
-        android:textColor="@android:color/white"
-        android:layout_marginLeft="@dimen/landing_activity_action_button_margin_left_right"
-        android:layout_marginRight="@dimen/landing_activity_action_button_margin_left_right"
-        />-->
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,10 +12,7 @@ import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
-import com.blackmirror.dongda.fragment.AYFragment;
-import com.blackmirror.dongda.fragment.AYListFragment;
-import com.blackmirror.dongda.fragment.DefaultFragment.AYNavBarFragment;
-import com.blackmirror.dongda.fragment.DefaultFragment.AYTabBarFragment;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,7 +42,8 @@ public class AYHomeActivity extends AYActivity {
 
         skipedCount = 0;
         timeSpan = new Date().getTime();
-
+        SimpleDraweeView sv_head_pic = findViewById(R.id.sv_head_pic);
+//        sv_head_pic.setImageURI("https://pic4.zhimg.com/03b2d57be62b30f158f48f388c8f3f33_b.png");
 //        searchServiceRemote();
 
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
@@ -60,21 +57,21 @@ public class AYHomeActivity extends AYActivity {
         /*Method method = context.getClass().getMethod(name, JSONObject.class);
         method.invoke(context, args);*/
 
-        ((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
+        /*((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setLeftBtnTextWithString("北京市");
         ((AYNavBarFragment)this.fragments.get("frag_navbar")).setRightBtnImageWithImageId(R.drawable.home_icon_mapfilter);
-        ((AYTabBarFragment)this.fragments.get("frag_tabbar")).setTabFocusOptionWithIndex(0);
+        ((AYTabBarFragment)this.fragments.get("frag_tabbar")).setTabFocusOptionWithIndex(0);*/
     }
 
     @Override
     protected void bindingFragments() {
 
-        FragmentTransaction task = mFragmentManage.beginTransaction();
+       /* FragmentTransaction task = mFragmentManage.beginTransaction();
         task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_navbar"));
         task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_tabbar"));
         task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_homeseg"));
         task.add(R.id.activity_home, (AYListFragment)this.fragments.get("frag_homelist_serv"));
-        task.commit();
+        task.commit();*/
     }
 
     private void searchServiceRemote() {

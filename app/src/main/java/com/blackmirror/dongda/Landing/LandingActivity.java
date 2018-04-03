@@ -8,9 +8,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 public class LandingActivity extends AYActivity {
 
@@ -41,7 +44,7 @@ public class LandingActivity extends AYActivity {
         rl_wechat_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                weChatLogin();
             }
         });
 
@@ -81,6 +84,18 @@ public class LandingActivity extends AYActivity {
                 startActivity(intent);
             }
         }*/
+    }
+
+    private void weChatLogin() {
+        if (!AYApplication.weChatApi.isWXAppInstalled()) {
+            Toast.makeText(getApplicationContext(), "您还未安装微信!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        final SendAuth.Req req = new SendAuth.Req();
+        req.scope = "snsapi_userinfo";
+        req.state = "diandi_wx_login";
+        AYApplication.weChatApi.sendReq(req);
+
     }
 
     private void initSystemBarColor() {

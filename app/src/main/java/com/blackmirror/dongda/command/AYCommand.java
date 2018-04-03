@@ -12,7 +12,7 @@ import okhttp3.OkHttpClient;
  */
 public abstract class AYCommand extends AYSysNotifier {
 
-    protected static OkHttpClient httpClient = new OkHttpClient().newBuilder()
+    public static OkHttpClient httpClient = new OkHttpClient().newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .addNetworkInterceptor(new StethoInterceptor())
             .readTimeout(60,TimeUnit.SECONDS)
