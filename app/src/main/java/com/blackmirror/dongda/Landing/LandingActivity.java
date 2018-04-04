@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.controllers.AYActivity;
@@ -44,7 +45,8 @@ public class LandingActivity extends AYActivity {
         rl_wechat_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                weChatLogin();
+//                weChatLogin();
+                startActivity(new Intent(LandingActivity.this, AYHomeActivity.class));
             }
         });
 
@@ -93,7 +95,7 @@ public class LandingActivity extends AYActivity {
         }
         final SendAuth.Req req = new SendAuth.Req();
         req.scope = "snsapi_userinfo";
-        req.state = "diandi_wx_login";
+        req.state = "dongda_wx_login";
         AYApplication.weChatApi.sendReq(req);
 
     }

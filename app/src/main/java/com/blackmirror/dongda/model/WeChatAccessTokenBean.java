@@ -13,9 +13,9 @@ public class WeChatAccessTokenBean {
     public boolean isSuccess;
 
     public String access_token;
-    public int expires_in;
-    public String refresh_token;
-    public String openid;
+    public int expires_in;//有效期
+    public String refresh_token;//刷新Token
+    public String openid;//授权用户唯一标识
     public String scope;
     public String unionid;
     public String errcode;

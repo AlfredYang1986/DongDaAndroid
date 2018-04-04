@@ -2,11 +2,16 @@ package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
+import com.blackmirror.dongda.adapter.HomeCareAdapter;
+import com.blackmirror.dongda.adapter.SpacesItemDecoration;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
@@ -18,8 +23,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,6 +41,9 @@ public class AYHomeActivity extends AYActivity {
 
     private long skipedCount;
     private long timeSpan;
+    private RecyclerView rv_featured_theme;
+    private RecyclerView rv_home_care;
+    private SimpleDraweeView sv_head_pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +52,53 @@ public class AYHomeActivity extends AYActivity {
 
         skipedCount = 0;
         timeSpan = new Date().getTime();
-        SimpleDraweeView sv_head_pic = findViewById(R.id.sv_head_pic);
 //        sv_head_pic.setImageURI("https://pic4.zhimg.com/03b2d57be62b30f158f48f388c8f3f33_b.png");
 //        searchServiceRemote();
 
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
         ((AYHomeListServFragment)this.fragments.get("frag_homelist_serv")).setListAdapter(serviceListAdapter);
+        initView();
+        initData();
+    }
+
+    private void initView() {
+        sv_head_pic = findViewById(R.id.sv_head_pic);
+        rv_featured_theme = findViewById(R.id.rv_featured_theme);
+        rv_home_care = findViewById(R.id.rv_home_care);
+    }
+
+    private void initData() {
+        sv_head_pic.setBackgroundResource(R.mipmap.dongda_logo);
+        //精选主题
+        List<Integer> featuredList=new ArrayList<>();
+        featuredList.add(R.drawable.home_cover_00);
+        featuredList.add(R.drawable.home_cover_01);
+        featuredList.add(R.drawable.home_cover_02);
+        featuredList.add(R.drawable.home_cover_03);
+        featuredList.add(R.drawable.home_cover_04);
+        LinearLayoutManager featuredManager = new LinearLayoutManager(AYHomeActivity.this);
+        featuredManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        FeaturedThemeAdapter featuredAdapter = new FeaturedThemeAdapter(AYHomeActivity.this, featuredList);
+        rv_featured_theme.setNestedScrollingEnabled(false);
+        rv_featured_theme.setLayoutManager(featuredManager);
+        rv_featured_theme.setAdapter(featuredAdapter);
+        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(28));
+
+        //看顾
+        List<Integer> careList=new ArrayList<>();
+        careList.add(R.drawable.home_cover_00);
+        careList.add(R.drawable.home_cover_01);
+        careList.add(R.drawable.home_cover_02);
+        careList.add(R.drawable.home_cover_03);
+        LinearLayoutManager careManager = new LinearLayoutManager(AYHomeActivity.this);
+        careManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        HomeCareAdapter caredAdapter = new HomeCareAdapter(AYHomeActivity.this, careList);
+        rv_home_care.setNestedScrollingEnabled(false);
+        rv_home_care.setLayoutManager(careManager);
+        rv_home_care.setAdapter(caredAdapter);
+        rv_home_care.addItemDecoration(new SpacesItemDecoration(8));
+
+
     }
 
     @Override

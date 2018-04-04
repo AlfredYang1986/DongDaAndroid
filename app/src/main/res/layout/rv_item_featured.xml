@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+<com.facebook.drawee.view.SimpleDraweeView
+    app:actualImageScaleType="focusCrop"
+    android:id="@+id/sv_featured_photo"
+    android:layout_width="235dp"
+    android:layout_height="311dp"
+    app:roundedCornerRadius="5dp"
+    />
+
+</android.support.constraint.ConstraintLayout>

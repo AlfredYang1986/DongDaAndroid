@@ -16,7 +16,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 public class AYApplication extends Application {
 
-    private static Context appConext;
+    public static Context appConext;
     private static Application me;
     public static IWXAPI weChatApi;
 
