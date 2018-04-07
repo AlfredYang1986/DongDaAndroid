@@ -9,7 +9,7 @@
     android:id="@+id/sv_care_photo"
     android:layout_width="319dp"
     android:layout_height="197dp"
-    app:roundedCornerRadius="5dp"
+    app:roundedCornerRadius="4dp"
     />
 
     <TextView
