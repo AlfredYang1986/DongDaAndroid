@@ -18,7 +18,7 @@ public class FeaturedThemeAdapter extends RecyclerView.Adapter<FeaturedThemeAdap
     protected Context context;
     private OnItemClickListener listener;
 
-    public void setListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 

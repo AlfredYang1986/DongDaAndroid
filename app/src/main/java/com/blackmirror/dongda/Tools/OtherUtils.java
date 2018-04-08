@@ -26,15 +26,6 @@ import java.lang.reflect.Method;
 public class OtherUtils {
     public static final String ANDROID_RESOURCE = "android.resource://";
     public static final String FOREWARD_SLASH = "/";
-    /**
-     * dp转px
-     * @param dp
-     * @return
-     */
-    public static int dp2px(int dp) {
-        float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
-        return (int) (dp * scale + 0.5f);
-    }
 
     public static Uri resourceIdToUri(Context context,int resourceId){
         return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
@@ -275,6 +266,31 @@ public class OtherUtils {
             }
         }
         return result;
+    }
+
+    public static int getStatusBarHeight(AppCompatActivity activity) {
+        int statusBarHeight = 0;
+        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            statusBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
+        }
+        LogUtils.d("xcx", "状态栏高度：" + px2dp(statusBarHeight) + "dp");
+        return statusBarHeight;
+    }
+
+    public static float px2dp(float pxVal) {
+        final float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
+        return (pxVal / scale);
+    }
+
+    /**
+     * dp转px
+     * @param dp
+     * @return
+     */
+    public static int dp2px(int dp) {
+        float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
+        return (int) (dp * scale + 0.5f);
     }
 
 

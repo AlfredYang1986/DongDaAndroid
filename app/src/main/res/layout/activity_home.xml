@@ -31,7 +31,6 @@
                 app:layout_constraintRight_toRightOf="@id/cl_root"
                 app:layout_constraintTop_toTopOf="@id/cl_root"
                 app:layout_constraintVertical_bias="0.0"
-                app:placeholderImage="@mipmap/dongda_logo"
                 app:placeholderImageScaleType="centerCrop"
                 app:roundAsCircle="true"
                 />

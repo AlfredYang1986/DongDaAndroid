@@ -24,4 +24,9 @@
         <item name="tabMode">fixed</item>
     </style>
 
+    <!--去除ToolBar阴影-->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="elevation">0dp</item>
+    </style>
+
 </resources>

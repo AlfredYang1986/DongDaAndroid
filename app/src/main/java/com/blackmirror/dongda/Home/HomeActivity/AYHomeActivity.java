@@ -1,21 +1,18 @@
 package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
+import com.blackmirror.dongda.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -33,8 +30,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,72 +64,16 @@ public class AYHomeActivity extends AYActivity {
 
         skipedCount = 0;
         timeSpan = new Date().getTime();
-        //        sv_head_pic.setImageURI("https://pic4.zhimg
-        // .com/03b2d57be62b30f158f48f388c8f3f33_b.png");
-        //        searchServiceRemote();
 
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
         ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv")).setListAdapter
                 (serviceListAdapter);
         initView();
         initData();
-        LogUtils.d("xcx","isMIUI "+OtherUtils.isMIUI());
-        LogUtils.d("xcx","MANUFACTURER "+Build.MANUFACTURER);
         OtherUtils.setStatusBarColor(AYHomeActivity.this);
     }
 
-    /**
-     * 设置Android状态栏的字体颜色，状态栏为亮色的时候字体和图标是黑色，状态栏为暗色的时候字体和图标为白色
-     *
-     * @param dark 状态栏字体和图标是否为深色
-     */
-    protected void setStatusBarFontDark(boolean dark) {
-        // 小米MIUI
-        try {
-            Window window = getWindow();
-            Class clazz = getWindow().getClass();
-            Class layoutParams = Class.forName("android.view.MiuiWindowManager$LayoutParams");
-            Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
-            int darkModeFlag = field.getInt(layoutParams);
-            Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-            if (dark) {    //状态栏亮色且黑色字体
-                extraFlagField.invoke(window, darkModeFlag, darkModeFlag);
-            } else {       //清除黑色字体
-                extraFlagField.invoke(window, 0, darkModeFlag);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        // 魅族FlymeUI
-        try {
-            Window window = getWindow();
-            WindowManager.LayoutParams lp = window.getAttributes();
-            Field darkFlag = WindowManager.LayoutParams.class.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON");
-            Field meizuFlags = WindowManager.LayoutParams.class.getDeclaredField("meizuFlags");
-            darkFlag.setAccessible(true);
-            meizuFlags.setAccessible(true);
-            int bit = darkFlag.getInt(null);
-            int value = meizuFlags.getInt(lp);
-            if (dark) {
-                value |= bit;
-            } else {
-                value &= ~bit;
-            }
-            meizuFlags.setInt(lp, value);
-            window.setAttributes(lp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        // android6.0+系统
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (dark) {
-                getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-            }
-        }
-    }
 
     private void initView() {
         sv_head_pic = findViewById(R.id.sv_head_pic);
@@ -146,37 +85,12 @@ public class AYHomeActivity extends AYActivity {
     }
 
     private void initData() {
-        sv_head_pic.setBackgroundResource(R.mipmap.dongda_logo);
+        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
+
         //精选主题
-        List<Integer> featuredList = new ArrayList<>();
-        featuredList.add(R.drawable.home_cover_00);
-        featuredList.add(R.drawable.home_cover_01);
-        featuredList.add(R.drawable.home_cover_02);
-        featuredList.add(R.drawable.home_cover_03);
-        featuredList.add(R.drawable.home_cover_04);
-        LinearLayoutManager featuredManager = new LinearLayoutManager(AYHomeActivity.this);
-        featuredManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        FeaturedThemeAdapter featuredAdapter = new FeaturedThemeAdapter(AYHomeActivity.this,
-                featuredList);
-        rv_featured_theme.setNestedScrollingEnabled(false);
-        rv_featured_theme.setLayoutManager(featuredManager);
-        rv_featured_theme.setAdapter(featuredAdapter);
-        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(28));
-
+        initSubject();
         //看顾
-        List<Integer> careList = new ArrayList<>();
-        careList.add(R.drawable.home_cover_00);
-        careList.add(R.drawable.home_cover_01);
-        careList.add(R.drawable.home_cover_02);
-        careList.add(R.drawable.home_cover_03);
-        LinearLayoutManager careManager = new LinearLayoutManager(AYHomeActivity.this);
-        careManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeCareAdapter caredAdapter = new HomeCareAdapter(AYHomeActivity.this, careList);
-        rv_home_care.setNestedScrollingEnabled(false);
-        rv_home_care.setLayoutManager(careManager);
-        rv_home_care.setAdapter(caredAdapter);
-        rv_home_care.addItemDecoration(new SpacesItemDecoration(8));
-
+        initCare();
         //艺术
         initArt();
         //运动
@@ -184,6 +98,49 @@ public class AYHomeActivity extends AYActivity {
         //科学
         initScience();
 
+    }
+
+    private void initSubject() {
+        List<Integer> featuredList = new ArrayList<>();
+        featuredList.add(R.drawable.home_cover_00);
+        featuredList.add(R.drawable.home_cover_01);
+        featuredList.add(R.drawable.home_cover_02);
+        featuredList.add(R.drawable.home_cover_03);
+        featuredList.add(R.drawable.home_cover_04);
+        LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        FeaturedThemeAdapter adapter = new FeaturedThemeAdapter(AYHomeActivity.this,
+                featuredList);
+        rv_featured_theme.setNestedScrollingEnabled(false);
+        rv_featured_theme.setLayoutManager(manager);
+        rv_featured_theme.setAdapter(adapter);
+        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(28));
+        adapter.setOnItemClickListener(new FeaturedThemeAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                startActivity(new Intent(AYHomeActivity.this, FeaturedDetailActivity.class));
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+    }
+
+    private void initCare() {
+        List<Integer> careList = new ArrayList<>();
+        careList.add(R.drawable.home_cover_00);
+        careList.add(R.drawable.home_cover_01);
+        careList.add(R.drawable.home_cover_02);
+        careList.add(R.drawable.home_cover_03);
+        LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        HomeCareAdapter adapter = new HomeCareAdapter(AYHomeActivity.this, careList);
+        rv_home_care.setNestedScrollingEnabled(false);
+        rv_home_care.setLayoutManager(manager);
+        rv_home_care.setAdapter(adapter);
+        rv_home_care.addItemDecoration(new SpacesItemDecoration(8));
     }
 
     private void initArt() {
