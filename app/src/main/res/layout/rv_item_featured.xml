@@ -9,7 +9,7 @@
     android:id="@+id/sv_featured_photo"
     android:layout_width="235dp"
     android:layout_height="311dp"
-    app:roundedCornerRadius="5dp"
+    app:roundedCornerRadius="4dp"
     />
 
 </android.support.constraint.ConstraintLayout>
