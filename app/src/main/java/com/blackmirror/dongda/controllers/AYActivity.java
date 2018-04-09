@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
@@ -44,6 +45,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
         isViewValid = true;
 
         bindingFragments();
+        OtherUtils.setStatusBarColor(this);
     }
 
     @Override

@@ -12,13 +12,14 @@ import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
-import com.blackmirror.dongda.activity.FeaturedDetailActivity;
+import com.blackmirror.dongda.activity.CareListActivity;
+import com.blackmirror.dongda.activity.ShowMapActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
 import com.blackmirror.dongda.adapter.HomeScienceAdapter;
 import com.blackmirror.dongda.adapter.HomeSportAdapter;
-import com.blackmirror.dongda.adapter.SpacesItemDecoration;
+import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
@@ -118,7 +119,7 @@ public class AYHomeActivity extends AYActivity {
         adapter.setOnItemClickListener(new FeaturedThemeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(AYHomeActivity.this, FeaturedDetailActivity.class));
+                startActivity(new Intent(AYHomeActivity.this, ShowMapActivity.class));
             }
 
             @Override
@@ -141,6 +142,12 @@ public class AYHomeActivity extends AYActivity {
         rv_home_care.setLayoutManager(manager);
         rv_home_care.setAdapter(adapter);
         rv_home_care.addItemDecoration(new SpacesItemDecoration(8));
+        adapter.setOnCareClickListener(new HomeCareAdapter.OnCareClickListener() {
+            @Override
+            public void onItemCareClick(View view, int position) {
+                startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
+            }
+        });
     }
 
     private void initArt() {

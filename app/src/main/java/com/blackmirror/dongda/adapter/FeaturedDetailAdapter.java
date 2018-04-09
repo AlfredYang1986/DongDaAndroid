@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.OtherUtils;
+import com.facebook.drawee.generic.GenericDraweeHierarchy;
+import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
+import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -17,8 +22,10 @@ import java.util.List;
 public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<Integer> list;
+    protected Context context;
 
-    public FeaturedDetailAdapter(List<Integer> list) {
+    public FeaturedDetailAdapter(Context context, List<Integer> list) {
+        this.context = context;
         this.list = list;
     }
 
@@ -39,10 +46,16 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeadViewHolder){
-
         }
         if (holder instanceof NormalViewHolder){
-
+            //设置圆角
+            RoundingParams roundingParams = new RoundingParams();
+            roundingParams.setCornersRadii(OtherUtils.dp2px(4), OtherUtils.dp2px(4), 0, 0);
+            GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(context.getResources());
+            GenericDraweeHierarchy hierarchy = builder.build();
+            hierarchy.setRoundingParams(roundingParams);
+            NormalViewHolder vh = (NormalViewHolder) holder;
+            vh.sv_featured_detail_photo.setHierarchy(hierarchy);
         }
     }
 

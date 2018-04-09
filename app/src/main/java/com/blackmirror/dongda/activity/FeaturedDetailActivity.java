@@ -39,7 +39,7 @@ public class FeaturedDetailActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         int top = toolbar.getPaddingTop();
         int height = OtherUtils.getStatusBarHeight(FeaturedDetailActivity.this);
-        toolbar.setPadding(toolbar.getPaddingLeft(),height/2,toolbar.getPaddingRight(),toolbar.getPaddingBottom());
+//        toolbar.setPadding(toolbar.getPaddingLeft(),height/2,toolbar.getPaddingRight(),toolbar.getPaddingBottom());
     }
 
     private void initView() {
@@ -55,7 +55,7 @@ public class FeaturedDetailActivity extends AppCompatActivity {
         list.add(1);
         list.add(2);
         list.add(3);
-        FeaturedDetailAdapter adapter = new FeaturedDetailAdapter(list);
+        FeaturedDetailAdapter adapter = new FeaturedDetailAdapter(FeaturedDetailActivity.this,list);
         LinearLayoutManager manager = new LinearLayoutManager(FeaturedDetailActivity.this);
         rv_featured_detail.setLayoutManager(manager);
         rv_featured_detail.setAdapter(adapter);

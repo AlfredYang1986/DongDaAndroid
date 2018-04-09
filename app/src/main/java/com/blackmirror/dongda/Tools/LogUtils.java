@@ -5,7 +5,7 @@ import android.util.Log;
 
 public class LogUtils {
     public static boolean SHOWLOG = true;
-    public static final String DEFAULT_TAG = "dongda";
+    public static final String DEFAULT_TAG = "xcx";
     public static final String DEFAULT_ERROR_MSG = "dongda exception: ";
 
     public static void d(String message) {

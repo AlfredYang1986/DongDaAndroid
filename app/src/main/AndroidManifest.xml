@@ -13,7 +13,21 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- 高德地图需要的权限 -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- 用于申请调用A-GPS模块 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
+    <!-- 用于申请获取蓝牙信息进行室内定位 -->
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
@@ -25,6 +39,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppThemeNoTitle">
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="7d5d988618fd8a707018941f8cd52931"/>
+
         <activity android:name=".activity.LaunchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -68,7 +86,15 @@
                 <data android:scheme="sdksample"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.FeaturedDetailActivity">
+        <activity android:name=".activity.FeaturedDetailActivity"/>
+        <!-- 高德地图 -->
+        <service android:name="com.amap.api.location.APSService"/>
+
+        <activity android:name=".activity.ShowMapActivity">
+        </activity>
+        <activity android:name=".activity.CareListActivity">
+        </activity>
+        <activity android:name=".activity.ArtListActivity">
         </activity>
     </application>
 

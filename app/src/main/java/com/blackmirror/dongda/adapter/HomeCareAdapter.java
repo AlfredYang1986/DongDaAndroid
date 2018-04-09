@@ -17,6 +17,12 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 
     List<Integer> list;
     protected Context context;
+    private OnCareClickListener listener;
+
+
+    public void setOnCareClickListener(OnCareClickListener listener) {
+        this.listener = listener;
+    }
 
     public HomeCareAdapter(Context context, List<Integer> list) {
         this.context = context;
@@ -37,15 +43,25 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 //        LogUtils.d("xcx",OtherUtils.getUriFromDrawableRes(context,list.get(position)).toString());
 
         holder.sv_care_photo.setImageURI(OtherUtils.resourceIdToUri(context,list.get(position)));
+        initListener(holder,position);
 
+    }
+
+    private void initListener(final HomeCareViewHolder holder, int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    int pos = holder.getAdapterPosition();
+                    listener.onItemCareClick(holder.itemView, pos);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        if (list != null) {
-            return list.size();
-        }
-        return 0;
+        return list == null ? 0 : list.size();
     }
 
     public static class HomeCareViewHolder extends RecyclerView.ViewHolder {
@@ -65,5 +81,9 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
         }
     }
 
+
+    public interface OnCareClickListener {
+        void onItemCareClick(View view, int position);
+    }
 
 }
