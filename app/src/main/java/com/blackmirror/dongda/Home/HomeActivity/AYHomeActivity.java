@@ -12,6 +12,7 @@ import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
+import com.blackmirror.dongda.activity.ArtListActivity;
 import com.blackmirror.dongda.activity.CareListActivity;
 import com.blackmirror.dongda.activity.ShowMapActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
@@ -171,7 +172,7 @@ public class AYHomeActivity extends AYActivity {
 
             @Override
             public void onItemClick(View view, int position) {
-
+                startActivity(new Intent(AYHomeActivity.this, ArtListActivity.class));
             }
 
             @Override

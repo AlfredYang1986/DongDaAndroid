@@ -2,12 +2,17 @@ package com.blackmirror.dongda.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.ToastUtils;
+import com.blackmirror.dongda.adapter.ArtListAdapter;
+import com.blackmirror.dongda.adapter.itemdecoration.GridItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +30,7 @@ public class ArtListActivity extends AppCompatActivity {
         initView();
         initData();
         initListener();
+        OtherUtils.setStatusBarColor(this);
     }
 
     private void initView() {
@@ -46,6 +52,16 @@ public class ArtListActivity extends AppCompatActivity {
         list.add(R.drawable.home_cover_02);
         list.add(R.drawable.home_cover_03);
         list.add(R.drawable.home_cover_04);
+        ArtListAdapter adapter = new ArtListAdapter(ArtListActivity.this, list);
+        rv_art_list.setLayoutManager(new GridLayoutManager(ArtListActivity.this,2));
+        rv_art_list.setAdapter(adapter);
+        rv_art_list.addItemDecoration(new GridItemDecoration(26,16,15,2));
+        adapter.setOnArtListClickListener(new ArtListAdapter.OnArtListClickListener() {
+            @Override
+            public void onItemArtListClick(View view, int position) {
+                ToastUtils.showShortToast("点击了 "+position);
+            }
+        });
     }
 
     private void initListener() {
