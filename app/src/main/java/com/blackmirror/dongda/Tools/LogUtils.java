@@ -4,7 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public class LogUtils {
-    public static boolean SHOWLOG = true;
+    public static boolean DEBUG = true;
     public static final String DEFAULT_TAG = "xcx";
     public static final String DEFAULT_ERROR_MSG = "dongda exception: ";
 
@@ -23,7 +23,7 @@ public class LogUtils {
     }
 
     public static void d(String TAG, String message, Throwable t) {
-        if (!SHOWLOG) {
+        if (!DEBUG) {
             return;
         }
         if (TextUtils.isEmpty(TAG))
@@ -46,7 +46,7 @@ public class LogUtils {
     }
 
     private static void e(String TAG, String message, Throwable t) {
-        if (!SHOWLOG)
+        if (!DEBUG)
             return;
         if (TextUtils.isEmpty(TAG))
             TAG = DEFAULT_TAG;

@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands;
 
+import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.command.AYRemoteCommand;
 
 /**
@@ -16,6 +17,8 @@ public class AYSendSMSCodeCommand extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
+        if (LogUtils.DEBUG)
+            return "http://192.168.100.174:9000/al/code/send";
         return "http://www.altlys.com:9000/v2/phone/code/send";
     }
 

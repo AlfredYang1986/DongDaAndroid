@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFFFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFFFF</color>
-    <color name="colorAccent">#ff4081</color>
+    <color name="colorAccent">#FFFFFFFF</color>
 
     <color name="landing_activity_background">#00D1C1</color>
     <color name="landing_activity_action_btn_text_color">#46bdca</color>

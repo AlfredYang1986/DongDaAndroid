@@ -2,21 +2,23 @@ package com.blackmirror.dongda.Landing;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.model.SendSmsBean;
+import com.blackmirror.dongda.model.SendSmsUiBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,18 +45,33 @@ public class PhoneInputActivity extends AYActivity {
     private EditText et_code = null;
     private Button sms_code;
     private Disposable mSms_disposable;
+    private Button next_step;
+    private SendSmsUiBean sendSmsUiBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_input);
 
-        setTitle("");
+        initView();
+        initData();
+        initListener();
 
+        init();
+    }
+
+    private void initView() {
         et_phone = findViewById(R.id.phone_edit_text);
         et_code = findViewById(R.id.code_edit_text);
-
         sms_code = findViewById(R.id.request_sms_code);
+        next_step = findViewById(R.id.landing_phone_input_next_step);
+    }
+
+    private void initData() {
+
+    }
+
+    private void initListener() {
         sms_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,28 +83,27 @@ public class PhoneInputActivity extends AYActivity {
                     /*AYCommand cmd = facade.cmds.get("SendSMSCode");
                                cmd.setTarget(facade);
                     cmd.excute(args);*/
+                    LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
                     Map<String, Object> m = new HashMap<>();
-                    m.put("phoneNo", input_phone);
+                    m.put("phone", input_phone);
                     JSONObject args = new JSONObject(m);
                     facade.execute("SendSMSCode",args);
+                    getSmsMsg();
+                }else {
+                    ToastUtils.showShortToast("手机号不能为空!");
                 }
-                getSmsMsg();
             }
         });
 
-        Button next_step = (Button) findViewById(R.id.landing_phone_input_next_step);
         next_step.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 LoginWithPhoneAndCode();
             }
         });
-
-        init();
     }
 
     private void getSmsMsg() {
-        LogUtils.d("xxx");
         sms_code.setEnabled(false);
         Observable.intervalRange(0,10,0,1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -147,27 +163,6 @@ public class PhoneInputActivity extends AYActivity {
                 });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        boolean result = super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = this.getMenuInflater();
-        inflater.inflate(R.menu.landing_next_menu, menu);
-        return result;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        boolean result = false;
-        switch (item.getItemId()) {
-            case R.id.menu_next_step:
-                Log.i(TAG, "next step selected");
-                LoginWithPhoneAndCode();
-                break;
-            default:
-                result = super.onOptionsItemSelected(item);
-        }
-        return result;
-    }
 
     @Override
     public String getClassTag() {
@@ -175,7 +170,7 @@ public class PhoneInputActivity extends AYActivity {
     }
 
 
-    protected class SendSMSCodeResult {
+    public static class SendSMSCodeResult {
         public SendSMSCodeResult(JSONObject args) {
             try {
                 if (args.getString("status").equals("ok")) {
@@ -215,37 +210,50 @@ public class PhoneInputActivity extends AYActivity {
         private String phoneNo = "";
     }
 
-    private SendSMSCodeResult sms_result = null;
 
     public Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
+        LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
+
         Log.i(TAG, "send sms code result is " + arg.toString());
-        Toast.makeText(this, "发送SMS Code成功", LENGTH_LONG).show();
-        sms_result = new SendSMSCodeResult(arg);
+        ToastUtils.showShortToast("验证码发送成功!");
+//        sms_result = new SendSMSCodeResult(arg);
+        SendSmsBean bean = JSON.parseObject(arg.toString(), SendSmsBean.class);
+        sendSmsUiBean = new SendSmsUiBean(bean);
         return true;
     }
 
     public Boolean AYSendSMSCodeCommandFailed(JSONObject arg) {
         Log.i(TAG, "send sms code error is " + arg.toString());
-        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
-        sms_result = new SendSMSCodeResult(arg);
+//        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
+//        sms_result = new SendSMSCodeResult(arg);
+        SendSmsBean bean = JSON.parseObject(arg.toString(), SendSmsBean.class);
+        sendSmsUiBean = new SendSmsUiBean(bean);
+        ToastUtils.showShortToast(sendSmsUiBean.message);
         return true;
     }
 
     protected void LoginWithPhoneAndCode() {
         Log.i(TAG, "login with phone code");
-        if (sms_result.canGoNext()) {
-
-            String phone = et_phone.getText().toString();
-            String code = et_code.getText().toString();
-
+        String phone = et_phone.getText().toString().trim();
+        String code = et_code.getText().toString().trim();
+        if (TextUtils.isEmpty(phone) || phone.length()<11){
+            ToastUtils.showShortToast(R.string.phone_no_empty);
+            return;
+        }
+        if (TextUtils.isEmpty(code)){
+            ToastUtils.showShortToast(R.string.code_no_empty);
+            return;
+        }
+        if (sendSmsUiBean.isSuccess) {
             AYFacade facade = facades.get("LoginFacade");
             AYCommand cmd = facade.cmds.get("LoginWithPhone");
             Map<String, Object> m = new HashMap<>();
-            m.put("phoneNo", phone);
-            m.put("reg_token", sms_result.getReg_token());
+            m.put("phone", phone);
+            m.put("reg_token", sendSmsUiBean.reg_token);
             m.put("code", code);
             JSONObject args = new JSONObject(m);
-            cmd.excute(args);
+//            cmd.excute(args);
+            facade.execute("LoginWithPhone",args);
 
         } else {
             Toast.makeText(this, R.string.phone_input_next_step_error, LENGTH_LONG).show();
@@ -254,6 +262,7 @@ public class PhoneInputActivity extends AYActivity {
 
     public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
         Toast.makeText(this, "登陆成功", LENGTH_LONG).show();
+        LogUtils.d("AYLoginWithPhoneCommandSuccess "+args.toString());
 
         String screen_name = null;
         try {
@@ -295,7 +304,7 @@ public class PhoneInputActivity extends AYActivity {
     }
 
     public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
-        Toast.makeText(this, "登陆失败", LENGTH_LONG);
+        ToastUtils.showShortToast( "登陆失败");
         return true;
     }
 

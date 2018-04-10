@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.blackmirror.dongda.Landing.LandingActivity;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
@@ -27,6 +28,7 @@ import java.util.zip.GZIPInputStream;
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
@@ -38,6 +40,16 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
     private static final int RETURN_MSG_TYPE_LOGIN = 1; //登录
     private static final int RETURN_MSG_TYPE_SHARE = 2; //分享
     private Context mContext;
+    private Disposable disposable;
+    private OnWeChatCallBack weChatCallBack;
+
+    public void setWeChatCallBack(OnWeChatCallBack weChatCallBack) {
+        this.weChatCallBack = weChatCallBack;
+    }
+
+    public void unWeChatRegisterCallBack(){
+        weChatCallBack = null;
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +59,6 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
         //这句没有写,是不能执行回调的方法的
         AYApplication.weChatApi.handleIntent(getIntent(), this);
     }
-
 
 
     // 微信发送请求到第三方应用时，会回调到该方法
@@ -85,8 +96,8 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                     LogUtils.d("xcx", "code:------>" + code);
 
                     //这里拿到了这个code，去做2次网络请求获取access_token和用户个人信息
-//                    WXLoginUtils().getWXLoginResult(code, this);
-                    getWeChatLoginResult(code,this);
+                    //                    WXLoginUtils().getWXLoginResult(code, this);
+                    getWeChatLoginResult(code, this);
                 } else if (type == RETURN_MSG_TYPE_SHARE) {
                     ToastUtils.showShortToast(mContext, "微信分享成功");
                 }
@@ -96,11 +107,10 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
 
     private void getWeChatLoginResult(String code, WXEntryActivity activity) {
         final String url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx66d179d99c9ba7d6" +
-                "&secret=469c1beed3ecaa3a836767a5999beeb1&code="+code+"&grant_type=authorization_code";
+                "&secret=469c1beed3ecaa3a836767a5999beeb1&code=" + code + "&grant_type=authorization_code";
 
 
-
-        Observable.just(url)
+        disposable = Observable.just(url)
                 .map(new Function<String, WeChatAccessTokenBean>() {
                     @Override
                     public WeChatAccessTokenBean apply(String s) throws Exception {
@@ -110,13 +120,12 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                 .flatMap(new Function<WeChatAccessTokenBean, ObservableSource<WeChatUserInfoBean>>() {
                     @Override
                     public ObservableSource<WeChatUserInfoBean> apply(WeChatAccessTokenBean bean) throws Exception {
-                        if (bean.isSuccess){
+                        if (bean.isSuccess) {
                             String user_url = "https://api.weixin.qq.com/sns/userinfo?access_token=" +
-                                    bean.access_token+"&openid="+bean.openid;
+                                    bean.access_token + "&openid=" + bean.openid;
                             return Observable.just(getUserInfo(user_url));
                         }
                         return Observable.just(new WeChatUserInfoBean());
-
                     }
                 })
                 .subscribeOn(Schedulers.io())
@@ -124,50 +133,65 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
                 .subscribe(new Consumer<WeChatUserInfoBean>() {
                     @Override
                     public void accept(WeChatUserInfoBean bean) throws Exception {
+                        unSubscribe();
                         finish();
+                        LandingActivity.getWeChatInfo().onNext(bean);
                     }
                 });
     }
 
-    private WeChatUserInfoBean getUserInfo(String url){
-        LogUtils.d("xcx","getUserInfo "+Thread.currentThread().getName());
+    private void unSubscribe() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+            disposable = null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
+    }
+
+    private WeChatUserInfoBean getUserInfo(String url) {
+        LogUtils.d("xcx", "getUserInfo " + Thread.currentThread().getName());
         WeChatUserInfoBean bean;
         Request request = new Request.Builder()
                 .url(url).get().build();
-        Call net_call = AYCommand.httpClient.newCall(request);
         try {
-            Response response = net_call.execute();
+            Response response = AYCommand.httpClient.newCall(request).execute();
             InputStream in = inputStreamAfterCheck(response);
             InputStreamReader iReader = new InputStreamReader(in);
             BufferedReader bReader = new BufferedReader(iReader);
             StringBuilder json = new StringBuilder();
-            String line=null;
-            while((line = bReader.readLine()) != null){
-                json.append(line).append('\n');}
+            String line = null;
+            while ((line = bReader.readLine()) != null) {
+                json.append(line).append('\n');
+            }
             bReader.close();
             iReader.close();
             in.close();
             //            T obj = (T)JSON.parseObject(json.toString(), myClass);
-            LogUtils.d("xcx","返回的数据："+json.toString());
-            bean = JSON.parseObject(json.toString(),WeChatUserInfoBean.class);
-            if (bean != null && TextUtils.isEmpty(bean.errcode)){
+            LogUtils.d("xcx", "返回的数据：" + json.toString());
+            bean = JSON.parseObject(json.toString(), WeChatUserInfoBean.class);
+            if (bean != null && TextUtils.isEmpty(bean.errcode)) {
                 bean.isSuccess = true;
             }
             return bean;
         } catch (Exception e) {
-            LogUtils.e(WXEntryActivity.class,e);
+            LogUtils.e(WXEntryActivity.class, e);
             bean = new WeChatUserInfoBean();
             bean.errcode = "400";
             bean.errmsg = e.getMessage();
         }
-        LogUtils.d("xcx",bean.toString());
+        LogUtils.d("xcx", bean.toString());
         return bean;
     }
 
     private Call net_call;
 
     private WeChatAccessTokenBean executeRequest(String url) {
-        LogUtils.d("xcx","executeRequest "+Thread.currentThread().getName());
+        LogUtils.d("xcx", "executeRequest " + Thread.currentThread().getName());
 
         WeChatAccessTokenBean bean;
         Request request = new Request.Builder()
@@ -179,26 +203,27 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
             InputStreamReader iReader = new InputStreamReader(in);
             BufferedReader bReader = new BufferedReader(iReader);
             StringBuilder json = new StringBuilder();
-            String line=null;
-            while((line = bReader.readLine()) != null){
-                json.append(line).append('\n');}
+            String line = null;
+            while ((line = bReader.readLine()) != null) {
+                json.append(line).append('\n');
+            }
             bReader.close();
             iReader.close();
             in.close();
             //            T obj = (T)JSON.parseObject(json.toString(), myClass);
-            LogUtils.d("xcx","返回的数据："+json.toString());
-            bean = JSON.parseObject(json.toString(),WeChatAccessTokenBean.class);
-            if (bean != null && TextUtils.isEmpty(bean.errcode)){
+            LogUtils.d("xcx", "返回的数据：" + json.toString());
+            bean = JSON.parseObject(json.toString(), WeChatAccessTokenBean.class);
+            if (bean != null && TextUtils.isEmpty(bean.errcode)) {
                 bean.isSuccess = true;
             }
-            LogUtils.d("xcx",bean.toString());
+            LogUtils.d("xcx", bean.toString());
             return bean;
         } catch (Exception e) {
-            LogUtils.e(WXEntryActivity.class,e);
+            LogUtils.e(WXEntryActivity.class, e);
             bean = new WeChatAccessTokenBean();
             bean.errcode = "400";
             bean.errmsg = e.getMessage();
-            LogUtils.d("xcx",bean.toString());
+            LogUtils.d("xcx", bean.toString());
         }
         return bean;
     }
@@ -209,6 +234,10 @@ public class WXEntryActivity extends AppCompatActivity implements IWXAPIEventHan
             input = new GZIPInputStream(input);
         }
         return input;
+    }
+
+    public interface OnWeChatCallBack {
+        void onWeChatCallBack(WeChatUserInfoBean bean);
     }
 }
 

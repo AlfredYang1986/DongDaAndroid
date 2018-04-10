@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.model;
 
-public class WeChatAccessTokenBean {
+public class WeChatAccessTokenBean extends BaseBean{
 
     /**
      * access_token : ACCESS_TOKEN

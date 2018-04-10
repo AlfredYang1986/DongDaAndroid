@@ -13,20 +13,31 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.PermissionUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.model.BaseBean;
+import com.blackmirror.dongda.model.WeChatUserInfoBean;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
+
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.subjects.PublishSubject;
 
 public class LandingActivity extends AYActivity {
 
     final static String TAG = "Landing Activity";
     private android.widget.RelativeLayout rl_phone_login;
     private android.widget.RelativeLayout rl_wechat_login;
+    private static final PublishSubject<? extends BaseBean> pb = PublishSubject.create();
+    private Disposable disposable;
+
+    public static PublishSubject getWeChatInfo(){
+        return pb;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +46,7 @@ public class LandingActivity extends AYActivity {
         //在setContentView之后调用
         initSystemBarColor();
         initView();
-        requestPermissions();
+//        requestPermissions();
         initData();
         initListener();
 
@@ -63,6 +74,17 @@ public class LandingActivity extends AYActivity {
     }
 
     private void initListener() {
+
+        disposable = pb.subscribe(new Consumer<BaseBean>() {
+            @Override
+            public void accept(BaseBean bean) throws Exception {
+                if (bean != null && bean instanceof WeChatUserInfoBean) {
+                    WeChatUserInfoBean infoBean = (WeChatUserInfoBean) bean;
+                    LogUtils.d(infoBean.toString());
+                }
+            }
+        });
+
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,8 +96,8 @@ public class LandingActivity extends AYActivity {
         rl_wechat_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //                weChatLogin();
-                startActivity(new Intent(LandingActivity.this, AYHomeActivity.class));
+                weChatLogin();
+//                startActivity(new Intent(LandingActivity.this, AYHomeActivity.class));
             }
         });
 
@@ -127,6 +149,19 @@ public class LandingActivity extends AYActivity {
         req.state = "dongda_wx_login";
         AYApplication.weChatApi.sendReq(req);
 
+    }
+
+    private void unSubscribe(){
+        if (disposable!=null && !disposable.isDisposed()){
+            disposable.dispose();
+            disposable=null;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
     }
 
     @Override

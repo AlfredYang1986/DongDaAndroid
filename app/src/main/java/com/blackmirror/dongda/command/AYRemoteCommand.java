@@ -15,12 +15,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.Call;
-import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -33,6 +40,7 @@ public abstract class AYRemoteCommand extends AYCommand {
 
     private AYSysNotificationHandler mNotificationHandler;
     private Call net_call;
+    private Disposable disposable;
 
     protected class AYAsyncTask extends AsyncTask<JSONObject, Integer, JSONObject> {
         @Override
@@ -41,7 +49,7 @@ public abstract class AYRemoteCommand extends AYCommand {
         }
 
         @Override
-        protected JSONObject doInBackground(JSONObject ... params) {
+        protected JSONObject doInBackground(JSONObject... params) {
             String result = "";
             HttpURLConnection conn = null;
             try {
@@ -73,7 +81,7 @@ public abstract class AYRemoteCommand extends AYCommand {
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(
                             conn.getInputStream(), "UTF-8"), 8);
-//                            conn.getInputStream(), "iso-8859-1"), 8);
+                    //                            conn.getInputStream(), "iso-8859-1"), 8);
                     StringBuilder sb = new StringBuilder();
                     String line = null;
                     while ((line = reader.readLine()) != null) {
@@ -85,6 +93,7 @@ public abstract class AYRemoteCommand extends AYCommand {
                 } else {
                     result = "";
                 }
+                LogUtils.d(result);
 
             } catch (Exception e) {
                 // System.out.println("exception in jsonparser class ........");
@@ -124,54 +133,165 @@ public abstract class AYRemoteCommand extends AYCommand {
 
     @Override
     public <Args, Result> Result excute(Args[] args) {
-        excuteImpl((JSONObject[])args);
+        excuteImpl((JSONObject[]) args);
         return null;
     }
 
-    public void excuteImpl(JSONObject ... args) {
-        AYAsyncTask tk = new AYAsyncTask();
-        tk.execute(args);
-        executeRequest(args);
+    public void excuteImpl(JSONObject... args) {
+        /*AYAsyncTask tk = new AYAsyncTask();
+        tk.execute(args);*/
+
+        sendRequestData(args);
     }
 
-    private void executeRequest(JSONObject[] args) {
+    private void sendRequestData(JSONObject[] args) {
+        if (args == null || args.length <= 0) {
+            return;
+        }
+        Observable.just(args[0]).map(new Function<JSONObject, JSONObject>() {
+            @Override
+            public JSONObject apply(JSONObject object) throws Exception {
+                return executeRequest(object);
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JSONObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposable = d;
+                        mNotificationHandler = getTarget();
+                    }
+
+                    @Override
+                    public void onNext(JSONObject o) {
+                        LogUtils.d("onNext "+o.toString());
+                        unSubscribe();
+                        try {
+                            if (o == null || !o.getString("status").equals("ok")) {
+                                if (mNotificationHandler != null) {
+                                    mNotificationHandler.handleNotifications(getFailedCallBackName(), o);
+                                }
+                            } else {
+                                if (mNotificationHandler != null) {
+                                    mNotificationHandler.handleNotifications(getSuccessCallBackName(), o);
+                                }
+                            }
+                        } catch (JSONException e) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.d("onError "+e.getMessage());
+                        unSubscribe();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        LogUtils.d("onComplete ");
+                        unSubscribe();
+                    }
+                });
+    }
+
+    private void unSubscribe() {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+            disposable = null;
+        }
+    }
+
+
+    private JSONObject executeRequest(JSONObject args) {
+        LogUtils.d(args.toString());
         Request request = new Request.Builder()
                 .url(getUrl()).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), args.toString())).build();
-        mNotificationHandler = getTarget();
-        net_call = httpClient.newCall(request);
-        net_call.enqueue(new Callback() {
+        try {
+            Response response = httpClient.newCall(request).execute();
+            InputStream in = inputStreamAfterCheck(response);
+            InputStreamReader iReader = new InputStreamReader(in);
+            BufferedReader bReader = new BufferedReader(iReader);
+            StringBuilder json = new StringBuilder();
+            String line = null;
+            while ((line = bReader.readLine()) != null) {
+                json.append(line).append('\n');
+            }
+            bReader.close();
+            iReader.close();
+            in.close();
+            LogUtils.d("xcx", "返回的数据：" + json.toString());
+            JSONObject js_result = null;
+            js_result = new JSONObject(json.toString());
+            return js_result;
+        } catch (SocketTimeoutException e1) {
+            return getErrorData(e1);
+        } catch (ConnectException e2) {
+            return getErrorData(e2);
+        } catch (JSONException e3) {
+            return getErrorData(e3);
+        } catch (Exception e4) {
+            return getErrorData(e4);
+        }
+        /*net_call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                if (e.toString().contains("closed")){//主动取消
 
-                }else {
-                    if (mNotificationHandler != null) {
-                        mNotificationHandler.handleNotifications(getFailedCallBackName(), null);
-                    }
-                }
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
+                LogUtils.d("onResponse " + Thread.currentThread().getName());
                 InputStream in = inputStreamAfterCheck(response);
                 InputStreamReader iReader = new InputStreamReader(in);
                 BufferedReader bReader = new BufferedReader(iReader);
                 StringBuilder json = new StringBuilder();
-                String line=null;
-                while((line = bReader.readLine()) != null){
-                    json.append(line).append('\n');}
+                String line = null;
+                while ((line = bReader.readLine()) != null) {
+                    json.append(line).append('\n');
+                }
                 bReader.close();
                 iReader.close();
                 in.close();
                 //            T obj = (T)JSON.parseObject(json.toString(), myClass);
-                LogUtils.d("flag","返回的数据："+json.toString());
-                if (mNotificationHandler != null){
-                    mNotificationHandler.handleNotifications(getSuccessCallBackName(), null);
+                LogUtils.d("xcx", "返回的数据：" + json.toString());
+                JSONObject js_result = null;
+                try {
+                    js_result = new JSONObject(json.toString());
+                    if (js_result == null || !js_result.getString("status").equals("ok")) {
+                        if (mNotificationHandler != null) {
+                            mNotificationHandler.handleNotifications(getFailedCallBackName(), js_result);
+                        }
+                    } else {
+                        if (mNotificationHandler != null) {
+                            mNotificationHandler.handleNotifications(getSuccessCallBackName(), js_result);
+                        }
+                    }
+
+                } catch (JSONException e) {
+
                 }
+
             }
-        });
+        });*/
 
     }
+
+    private JSONObject getErrorData(Exception e) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"status\":\"error\",")
+                .append("\"message\":")
+                .append("\"")
+                .append(e.getMessage())
+                .append("\"}");
+        JSONObject object = null;
+        try {
+            return new JSONObject(sb.toString());
+        } catch (JSONException e1) {
+
+        }
+        return object;
+    }
+
 
     private static InputStream inputStreamAfterCheck(Response response) throws IOException {
         InputStream input = response.body().byteStream();
@@ -182,12 +302,14 @@ public abstract class AYRemoteCommand extends AYCommand {
     }
 
     protected abstract String getUrl();
+
     protected abstract String getSuccessCallBackName();
+
     protected abstract String getFailedCallBackName();
 
     @Override
     protected void cancelNetCall() {
-        if (net_call != null && !net_call.isCanceled()){
+        if (net_call != null && !net_call.isCanceled()) {
             net_call.cancel();
         }
     }

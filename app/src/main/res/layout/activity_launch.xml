@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="bottom|center"
-    tools:context=".activity.LaunchActivity">
+    tools:context=".activity.SplashActivity">
     <ImageView
         android:background="@drawable/dongda_2x"
         android:layout_alignParentBottom="true"

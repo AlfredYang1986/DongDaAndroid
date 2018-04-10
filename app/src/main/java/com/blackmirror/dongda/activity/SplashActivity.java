@@ -17,7 +17,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class LaunchActivity extends AppCompatActivity {
+public class SplashActivity extends AppCompatActivity {
 
     final static String TAG = "Launch Activity";
     private Disposable disposable;
@@ -40,8 +40,8 @@ public class LaunchActivity extends AppCompatActivity {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         unSubscribe();
-//                        startActivity(new Intent(LaunchActivity.this, LandingActivity.class));
-                        startActivity(new Intent(LaunchActivity.this, AYHomeActivity.class));
+//                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
+                        startActivity(new Intent(SplashActivity.this, AYHomeActivity.class));
                         finish();
                     }
                 });

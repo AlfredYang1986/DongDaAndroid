@@ -1,15 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:orientation="vertical"
     android:background="@color/colorWhiteBackground">
 
+    <android.support.design.widget.AppBarLayout
+        style="@style/AppTheme.AppBarOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.v7.widget.Toolbar
+            android:background="@color/sys_bar_white"
+            android:id="@+id/tb_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetStart="0dp"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <android.support.constraint.ConstraintLayout
+                 android:id="@+id/cl_tb_root"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+
+                <com.facebook.drawee.view.SimpleDraweeView
+                    android:id="@+id/sv_head_pic"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    app:actualImageScaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="@id/cl_tb_root"
+                    app:layout_constraintHorizontal_bias="0.042667"
+                    app:layout_constraintLeft_toLeftOf="@id/cl_tb_root"
+                    app:layout_constraintRight_toRightOf="@id/cl_tb_root"
+                    app:layout_constraintTop_toTopOf="@id/cl_tb_root"
+                    app:placeholderImageScaleType="centerCrop"
+                    app:roundAsCircle="true"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_home_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/home_act_logo"
+                    app:layout_constraintBottom_toBottomOf="@id/sv_head_pic"
+                    app:layout_constraintHorizontal_bias="0.4"
+                    app:layout_constraintLeft_toLeftOf="@id/cl_tb_root"
+                    app:layout_constraintRight_toRightOf="@id/cl_tb_root"
+                    app:layout_constraintTop_toTopOf="@id/sv_head_pic"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="7dp"
+                    android:text="北京"
+                    android:textColor="#FF404040"
+                    android:textSize="13sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
+                    app:layout_constraintLeft_toRightOf="@id/iv_home_logo"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_home_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:background="@drawable/home_act_like"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
+                    app:layout_constraintRight_toRightOf="@id/cl_tb_root"
+                    app:layout_constraintTop_toTopOf="@id/iv_home_logo"/>
+
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.v4.widget.NestedScrollView
+
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -19,65 +101,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.facebook.drawee.view.SimpleDraweeView
-                android:id="@+id/sv_head_pic"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginTop="16dp"
-                app:actualImageScaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="@id/cl_root"
-                app:layout_constraintHorizontal_bias="0.042667"
-                app:layout_constraintLeft_toLeftOf="@id/cl_root"
-                app:layout_constraintRight_toRightOf="@id/cl_root"
-                app:layout_constraintTop_toTopOf="@id/cl_root"
-                app:layout_constraintVertical_bias="0.0"
-                app:placeholderImageScaleType="centerCrop"
-                app:roundAsCircle="true"
-                />
-
-            <ImageView
-                android:id="@+id/iv_home_logo"
+            <android.support.constraint.Guideline
+                 android:id="@+id/gl_content_root"
+                app:layout_constraintGuide_percent="0.042667"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_act_logo"
-                app:layout_constraintBottom_toBottomOf="@id/sv_head_pic"
-                app:layout_constraintHorizontal_bias="0.4"
-                app:layout_constraintLeft_toLeftOf="@id/cl_root"
-                app:layout_constraintRight_toRightOf="@id/cl_root"
-                app:layout_constraintTop_toTopOf="@id/sv_head_pic"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="7dp"
-                android:text="北京"
-                android:textColor="#FF404040"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
-                app:layout_constraintLeft_toRightOf="@id/iv_home_logo"
-                />
-
-            <ImageView
-                android:id="@+id/iv_home_like"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:background="@drawable/home_act_like"
-                app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
-                app:layout_constraintRight_toRightOf="@id/cl_root"
-                app:layout_constraintTop_toTopOf="@id/iv_home_logo"/>
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/tv_featured_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="16dp"
                 android:text="精选主题"
                 android:textColor="#FF404040"
                 android:textSize="28sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
-                app:layout_constraintTop_toBottomOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
+                app:layout_constraintTop_toTopOf="@id/cl_root"
                 />
 
             <android.support.v7.widget.RecyclerView
@@ -97,7 +137,7 @@
                 android:text="看顾"
                 android:textColor="#FF404040"
                 android:textSize="22sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/rv_featured_theme"
 
                 />
@@ -110,7 +150,7 @@
                 android:text="有温度的0-6岁Daycare"
                 android:textColor="#FF737373"
                 android:textSize="13sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_care"
                 />
 
@@ -133,18 +173,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintRight_toRightOf="@id/cl_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_care_content"/>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/home_btn_nearyou"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="@id/tv_home_care_more"
-                app:layout_constraintRight_toRightOf="@id/cl_root"
-                app:layout_constraintTop_toBottomOf="@id/tv_home_care_more"/>
 
 
             <TextView
@@ -155,7 +187,7 @@
                 android:text="艺术"
                 android:textColor="#FF404040"
                 android:textSize="22sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/rv_home_care"
                 />
 
@@ -167,7 +199,7 @@
                 android:text="在感受中学会欣赏和表达"
                 android:textColor="#FF737373"
                 android:textSize="13sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_art"
                 />
 
@@ -190,7 +222,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintRight_toRightOf="@id/cl_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_art_content"/>
 
@@ -203,7 +235,7 @@
                 android:text="运动"
                 android:textColor="#FF404040"
                 android:textSize="22sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/rv_home_art"
                 />
 
@@ -218,7 +250,7 @@
                 android:text="成长 激励 汗水和Team work"
                 android:textColor="#FF737373"
                 android:textSize="13sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_sport"
                 />
 
@@ -241,7 +273,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintRight_toRightOf="@id/cl_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_sport_content"/>
 
@@ -254,7 +286,7 @@
                 android:text="科学"
                 android:textColor="#FF404040"
                 android:textSize="22sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/rv_home_sport"
                 />
 
@@ -269,7 +301,7 @@
                 android:text="未来，在这里由宝贝们搭建"
                 android:textColor="#FF737373"
                 android:textSize="13sp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_science"
                 />
 
@@ -292,7 +324,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
-                app:layout_constraintLeft_toLeftOf="@id/sv_head_pic"
+                app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
                 app:layout_constraintRight_toRightOf="@id/cl_root"
                 app:layout_constraintTop_toBottomOf="@id/tv_home_science_content"/>
 
@@ -301,4 +333,23 @@
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+    <!--<android.support.design.widget.FloatingActionButton
+        android:src="@drawable/home_btn_nearyou"
+        app:fabSize="auto"
+        app:useCompatPadding="false"
+        android:layout_width="56dp"
+        android:layout_height="56dp"/>-->
+
+    <ImageView
+         android:id="@+id/iv_home_location"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="26dp"
+        android:layout_gravity="bottom|right"
+        android:background="@drawable/home_btn_nearyou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</android.support.design.widget.CoordinatorLayout>

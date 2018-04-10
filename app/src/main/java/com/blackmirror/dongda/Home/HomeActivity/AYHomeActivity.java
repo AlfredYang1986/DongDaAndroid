@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
@@ -56,6 +57,7 @@ public class AYHomeActivity extends AYActivity {
     private RecyclerView rv_home_art;
     private RecyclerView rv_home_sport;
     private RecyclerView rv_home_science;
+    private ImageView iv_home_location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +74,9 @@ public class AYHomeActivity extends AYActivity {
                 (serviceListAdapter);
         initView();
         initData();
+        initListener();
         OtherUtils.setStatusBarColor(AYHomeActivity.this);
     }
-
 
 
     private void initView() {
@@ -84,6 +86,7 @@ public class AYHomeActivity extends AYActivity {
         rv_home_art = findViewById(R.id.rv_home_art);
         rv_home_sport = findViewById(R.id.rv_home_sport);
         rv_home_science = findViewById(R.id.rv_home_science);
+        iv_home_location = findViewById(R.id.iv_home_location);
     }
 
     private void initData() {
@@ -100,6 +103,15 @@ public class AYHomeActivity extends AYActivity {
         //科学
         initScience();
 
+    }
+
+    private void initListener() {
+        iv_home_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.showShortToast("点击了location");
+            }
+        });
     }
 
     private void initSubject() {

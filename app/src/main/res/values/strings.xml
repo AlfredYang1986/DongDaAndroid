@@ -12,6 +12,8 @@
     <string name="phone_input_btn_action_query_code">获取动态密码</string>
 
     <string name="phone_input_next_step_error">请输入正确的手机号与动态验证密码</string>
+    <string name="phone_no_empty">请输入正确的手机号!</string>
+    <string name="code_no_empty">请输入正确的动态验证密码!</string>
 
     <string name="name_input_hint_nickname">输入您的姓名</string>
     <string name="ptr_demo_block_for_home">Ultra Pull to Refresh</string>

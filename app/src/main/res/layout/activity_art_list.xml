@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
     tools:context=".activity.ArtListActivity">
 
     <include layout="@layout/home_act_header"/>

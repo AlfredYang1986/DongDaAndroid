@@ -12,6 +12,7 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.ArtListAdapter;
+import com.blackmirror.dongda.adapter.ArtListTestAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.GridItemDecoration;
 
 import java.util.ArrayList;
@@ -29,8 +30,34 @@ public class ArtListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_art_list);
         initView();
         initData();
+        //        initTestData();
         initListener();
         OtherUtils.setStatusBarColor(this);
+    }
+
+    private void initTestData() {
+        tv_home_head_title.setText("艺术");
+        List<Integer> list = new ArrayList<>();
+        list.add(R.drawable.home_cover_00);
+        list.add(R.drawable.home_cover_01);
+        list.add(R.drawable.home_cover_02);
+        list.add(R.drawable.home_cover_03);
+        list.add(R.drawable.home_cover_04);
+        list.add(R.drawable.home_cover_00);
+        list.add(R.drawable.home_cover_01);
+        list.add(R.drawable.home_cover_02);
+        list.add(R.drawable.home_cover_03);
+        list.add(R.drawable.home_cover_04);
+        ArtListTestAdapter adapter = new ArtListTestAdapter(ArtListActivity.this, list);
+        rv_art_list.setLayoutManager(new GridLayoutManager(ArtListActivity.this, 2));
+        rv_art_list.setAdapter(adapter);
+        rv_art_list.addItemDecoration(new GridItemDecoration(26, 16, 15, 48, 44, 2));
+        adapter.setOnArtListClickListener(new ArtListTestAdapter.OnArtListClickListener() {
+            @Override
+            public void onItemArtListClick(View view, int position) {
+                ToastUtils.showShortToast("点击了 " + position);
+            }
+        });
     }
 
     private void initView() {
@@ -44,22 +71,22 @@ public class ArtListActivity extends AppCompatActivity {
         List<Integer> list = new ArrayList<>();
         list.add(R.drawable.home_cover_00);
         list.add(R.drawable.home_cover_01);
-        list.add(R.drawable.home_cover_02);
-        list.add(R.drawable.home_cover_03);
-        list.add(R.drawable.home_cover_04);
-        list.add(R.drawable.home_cover_00);
-        list.add(R.drawable.home_cover_01);
-        list.add(R.drawable.home_cover_02);
-        list.add(R.drawable.home_cover_03);
-        list.add(R.drawable.home_cover_04);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
+        list.add(R.drawable.coverlist_bg_theme);
         ArtListAdapter adapter = new ArtListAdapter(ArtListActivity.this, list);
-        rv_art_list.setLayoutManager(new GridLayoutManager(ArtListActivity.this,2));
+        rv_art_list.setLayoutManager(new GridLayoutManager(ArtListActivity.this, 2));
         rv_art_list.setAdapter(adapter);
-        rv_art_list.addItemDecoration(new GridItemDecoration(26,16,15,2));
+        rv_art_list.addItemDecoration(new GridItemDecoration(16, 16, 15, 48, 44, 2));
         adapter.setOnArtListClickListener(new ArtListAdapter.OnArtListClickListener() {
             @Override
             public void onItemArtListClick(View view, int position) {
-                ToastUtils.showShortToast("点击了 "+position);
+                ToastUtils.showShortToast("点击了 " + position);
             }
         });
     }

@@ -2,7 +2,7 @@ package com.blackmirror.dongda.model;
 
 import java.util.List;
 
-public class WeChatUserInfoBean {
+public class WeChatUserInfoBean extends BaseBean{
 
     /**
      * openid : OPENID
