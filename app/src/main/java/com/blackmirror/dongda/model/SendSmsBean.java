@@ -1,5 +1,7 @@
 package com.blackmirror.dongda.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Ruge on 2018-04-10 下午2:43
  */
@@ -9,12 +11,9 @@ public class SendSmsBean extends BaseBean {
      * status : ok
      * result : {"reg":{"phone":"17610279929","code":"1111","reg_token":"4ea2f7f8c9ef85eb2c229d2038cac3db","is_reg":1}}
      */
-
-    public String status;//ok 成功 其他失败
-    public String message;//错误信息
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable{
         /**
          * reg : {"phone":"17610279929","code":"1111","reg_token":"4ea2f7f8c9ef85eb2c229d2038cac3db","is_reg":1}
          */

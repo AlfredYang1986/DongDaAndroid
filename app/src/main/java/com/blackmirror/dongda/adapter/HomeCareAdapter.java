@@ -7,15 +7,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.model.HomeInfoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import java.util.List;
 
 public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCareViewHolder> {
 
 
-    List<Integer> list;
+    HomeInfoBean.ResultBean.HomepageServicesBean bean;
     protected Context context;
     private OnCareClickListener listener;
 
@@ -24,9 +22,9 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
         this.listener = listener;
     }
 
-    public HomeCareAdapter(Context context, List<Integer> list) {
+    public HomeCareAdapter(Context context, HomeInfoBean.ResultBean.HomepageServicesBean bean) {
         this.context = context;
-        this.list = list;
+        this.bean = bean;
     }
 
     @Override
@@ -42,7 +40,16 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 
 //        LogUtils.d("xcx",OtherUtils.getUriFromDrawableRes(context,list.get(position)).toString());
 
-        holder.sv_care_photo.setImageURI(OtherUtils.resourceIdToUri(context,list.get(position)));
+//        holder.sv_care_photo.setImageURI(OtherUtils.resourceIdToUri(context,bean.services.get(position)));
+        HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
+        holder.tv_care_name.setText(this.bean.services.get(position).service_tags.get(0));
+        StringBuilder sb = new StringBuilder();
+        sb.append(servicesBean.brand_name)
+                .append("的")
+                .append(servicesBean.operation.contains("低龄")?"低龄":"")
+                .append(servicesBean.service_leaf);
+        holder.tv_care_detail.setText(sb.toString());
+        holder.tv_care_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
         initListener(holder,position);
 
     }
@@ -61,7 +68,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return bean.services == null ? 0 : bean.services.size();
     }
 
     public static class HomeCareViewHolder extends RecyclerView.ViewHolder {

@@ -203,7 +203,7 @@ public abstract class AYRemoteCommand extends AYCommand {
 
 
     private JSONObject executeRequest(JSONObject args) {
-        LogUtils.d(args.toString());
+        LogUtils.d("flag","做网络请求前的json数据: "+args.toString());
         Request request = new Request.Builder()
                 .url(getUrl()).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), args.toString())).build();
         try {
@@ -277,12 +277,16 @@ public abstract class AYRemoteCommand extends AYCommand {
     }
 
     private JSONObject getErrorData(Exception e) {
+
+
         StringBuilder sb = new StringBuilder();
         sb.append("{\"status\":\"error\",")
-                .append("\"message\":")
-                .append("\"")
+                .append("\"error\":{")
+                .append("\"code\":")
+                .append("-9999,")
+                .append("\"message\":\"")
                 .append(e.getMessage())
-                .append("\"}");
+                .append("\"}}");
         JSONObject object = null;
         try {
             return new JSONObject(sb.toString());

@@ -1,27 +1,28 @@
 package com.blackmirror.dongda.factory;
 
 import android.content.Context;
+
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.factory.common.AYFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by alfredyang on 12/05/2017.
@@ -34,6 +35,8 @@ public class AYFactoryManager {
 
     private Context context = null;
     private Document cmd_doc, facade_doc, fragment_doc, activity_doc;
+    private Map<String, AYFactory> manager = new HashMap<>();
+
 
     public Context getContext() {
         return context;
@@ -52,6 +55,7 @@ public class AYFactoryManager {
             context = c.getApplicationContext();
         }
 
+        //加载raw下的xml
         cmd_doc = loadCmdConfig(R.raw.commands);
         facade_doc = loadCmdConfig(R.raw.facade);
         fragment_doc = loadCmdConfig(R.raw.fragments);
@@ -64,7 +68,6 @@ public class AYFactoryManager {
         f.mkdirs();
     }
 
-    private Map<String, AYFactory> manager = new HashMap<>();
 
     private Document loadCmdConfig(int resourceId) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -129,6 +132,12 @@ public class AYFactoryManager {
         return f.createInstance(t);
     }
 
+    /**
+     * 查找并创建对应的factory
+     * @param t
+     * @param short_name activity则传入对应的TAG
+     * @return
+     */
     public AYFactory queryFactoryInstance(String t, String short_name) {
         AYFactory result;
 
@@ -145,16 +154,21 @@ public class AYFactoryManager {
 
         Element elem = queryXmlElement(doc, t, "short", short_name);
         Map<String, String> tmp = queryAttrInElement(elem, "factory", "name");
-        String f_name = tmp.get("factory");
-        String name = tmp.get("name");
+        String f_name = tmp.get("factory");//facadeFactory全名
+        String name = tmp.get("name");//activity全名
 
         String md5_code = AYSysHelperFunc.getInstance().md5(name);
         result = queryFactoryInManager(md5_code);
 
+        //factory没有创建过
         if (result == null) {
 
             result = createNewFactory(md5_code, name, f_name);
 
+            /**
+             * 只是关联了cmd list 并没有真正的执行创建 controllers.xml没有command标签
+             * 相关的cmd在facade中
+             */
             List<String> cmds = querySubElement("command", elem);
             result.putSubInstanceName("command", cmds);
 
@@ -176,14 +190,21 @@ public class AYFactoryManager {
         else return null;
     }
 
+    /**
+     *
+     * @param md5_code
+     * @param name activity全名
+     * @param f_name factory全名
+     * @return
+     */
     protected AYFactory createNewFactory(String md5_code, String name, String f_name) {
-        AYFactory f = createFactoryImpl(f_name);
+        AYFactory f = createFactoryImpl(f_name);//反射创建factory
         f.setInstanceName(name);
         manager.put(md5_code, f);
         return f;
     }
 
     protected AYFactory createFactoryImpl(String factory_name) {
-        return (AYFactory) AYSysHelperFunc.getInstance().createInstanceByName(factory_name);
+        return (AYFactory) AYSysHelperFunc.getInstance().createInstanceByName(factory_name);//反射创建factory
     }
 }

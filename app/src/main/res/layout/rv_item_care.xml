@@ -6,6 +6,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 <com.facebook.drawee.view.SimpleDraweeView
     app:actualImageScaleType="focusCrop"
+    android:background="@drawable/home_cover_00"
     android:id="@+id/sv_care_photo"
     android:layout_width="319dp"
     android:layout_height="197dp"

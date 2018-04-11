@@ -18,7 +18,9 @@ public class SendSmsUiBean {
             isSuccess = true;
         } else {
             isSuccess = false;
-            message=bean.message;
+            if (bean!=null && bean.error!=null) {
+                message = bean.error.message;
+            }
         }
         if (bean != null && "ok".equals(bean.status) && bean.result != null && bean.result.reg != null) {
             phone=bean.result.reg.phone;

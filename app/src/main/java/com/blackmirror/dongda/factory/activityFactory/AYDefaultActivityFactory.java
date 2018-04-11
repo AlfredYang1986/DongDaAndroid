@@ -1,7 +1,7 @@
 package com.blackmirror.dongda.factory.activityFactory;
 
-import android.util.Log;
 import com.blackmirror.dongda.AY.AYSysObject;
+import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
@@ -10,7 +10,6 @@ import com.blackmirror.dongda.factory.common.AYFactory;
 import com.blackmirror.dongda.fragment.AYFragment;
 import com.blackmirror.dongda.fragment.AYListFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +30,7 @@ public class AYDefaultActivityFactory extends AYFactory {
 
     @Override
     public AYSysObject creation() {
-        Log.i(TAG, "should never been here");
+        LogUtils.d(TAG, "should never been here");
         return null;
     }
 

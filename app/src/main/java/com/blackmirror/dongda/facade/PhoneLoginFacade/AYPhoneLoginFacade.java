@@ -2,9 +2,9 @@ package com.blackmirror.dongda.facade.PhoneLoginFacade;
 
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.AYSQLiteProxy;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -46,6 +46,16 @@ public class AYPhoneLoginFacade extends AYFacade {
 
     public Boolean AYSendSMSCodeCommandSuccess(JSONObject args) {
         broadcastingNotification("AYSendSMSCodeCommandSuccess", args);
+        return true;
+    }
+
+    public Boolean AYWeChatLoginCmdSuccess(JSONObject args) {
+        broadcastingNotification("AYWeChatLoginCmdSuccess", args);
+        return true;
+    }
+
+    public Boolean AYWeChatLoginCmdFailed(JSONObject args) {
+        broadcastingNotification("AYWeChatLoginCmdFailed", args);
         return true;
     }
 

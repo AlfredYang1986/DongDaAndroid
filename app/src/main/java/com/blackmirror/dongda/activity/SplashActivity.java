@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.Landing.LandingActivity;
 import com.blackmirror.dongda.R;
 
 import java.util.concurrent.TimeUnit;
@@ -41,7 +41,7 @@ public class SplashActivity extends AppCompatActivity {
                     public void accept(Long aLong) throws Exception {
                         unSubscribe();
 //                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
-                        startActivity(new Intent(SplashActivity.this, AYHomeActivity.class));
+                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
                         finish();
                     }
                 });

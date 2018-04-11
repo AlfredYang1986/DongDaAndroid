@@ -11,6 +11,11 @@
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
     <command
+        short="LoginWithWeChat"
+        name="com.blackmirror.dongda.facade.WeChatLoginFacade.WeChatLoginCmd.AYWeChatLoginCmd"
+        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
             short="SendSMSCode"
             name="com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands.AYSendSMSCodeCommand"
             factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />

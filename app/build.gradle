@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+// 添加插件
+apply plugin: "com.mob.sdk"
 
 android {
     compileSdkVersion 26
@@ -17,6 +19,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+}
+MobSDK {
+    appKey "252704f3d1440"
+    appSecret "78c9af280d38f79cc137cc87b92a3376"
+
+    ShareSDK {
+        version "3.1.4"
+        gui false
+        //平台配置信息
+        devInfo {
+            Wechat {
+                appId "wx66d179d99c9ba7d6"
+                appSecret "469c1beed3ecaa3a836767a5999beeb1"
+            }
+
+        }
+    }
+
 }
 
 dependencies {
@@ -37,7 +57,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.facebook.stetho:stetho:1.5.0'
     implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     implementation 'com.alibaba:fastjson:1.2.46'
     implementation 'com.alibaba:fastjson:1.1.68.android'
     implementation 'com.android.support:recyclerview-v7:26.1.0'

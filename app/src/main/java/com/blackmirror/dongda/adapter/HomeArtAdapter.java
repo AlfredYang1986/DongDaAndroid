@@ -8,15 +8,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.model.HomeInfoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import java.util.List;
 
 public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtViewHolder> {
 
 
-    List<Integer> list;
+    HomeInfoBean.ResultBean.HomepageServicesBean bean;
     protected Context context;
     private OnItemClickListener listener;
 
@@ -24,9 +22,9 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
         this.listener = listener;
     }
 
-    public HomeArtAdapter(Context context, List<Integer> list) {
+    public HomeArtAdapter(Context context, HomeInfoBean.ResultBean.HomepageServicesBean bean) {
         this.context = context;
-        this.list = list;
+        this.bean = bean;
     }
 
     @Override
@@ -44,8 +42,16 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
         //        LogUtils.d("xcx",OtherUtils.getUriFromDrawableRes(context,list.get(position))
         // .toString());
 
-        holder.sv_item_art_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get
-                (position)));
+//        holder.sv_item_art_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get(position)));
+        HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
+        holder.tv_item_art_name.setText(this.bean.services.get(position).service_tags.get(0));
+        StringBuilder sb = new StringBuilder();
+        sb.append(servicesBean.brand_name)
+                .append("的")
+                .append(servicesBean.service_leaf)
+                .append(servicesBean.category);
+        holder.tv_item_art_detail.setText(sb.toString());
+        holder.tv_item_art_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
         initListener(holder, position);
 
     }
@@ -72,8 +78,8 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
 
     @Override
     public int getItemCount() {
-        if (list != null) {
-            return list.size();
+        if (bean.services != null) {
+            return bean.services.size();
         }
         return 0;
     }

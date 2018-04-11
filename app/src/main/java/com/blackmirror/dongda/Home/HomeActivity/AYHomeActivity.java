@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.activity.ArtListActivity;
@@ -28,6 +31,7 @@ import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
+import com.blackmirror.dongda.model.HomeInfoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
@@ -101,18 +105,31 @@ public class AYHomeActivity extends AYActivity {
     private void initData() {
         sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
 
+        AYFacade facade = facades.get("QueryServiceFacade");
+
+        String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
+        try {
+            JSONObject root = new JSONObject(json);
+            facade.execute("SearchService", root);
+
+        } catch (JSONException e) {
+
+        }
+
+
         //精选主题
         initSubject();
-        //看顾
-        initCare();
+        /*//看顾
+        initCare(bean.result.homepage_services.get(0));
         //艺术
-        initArt();
+        initArt(bean.result.homepage_services.get(1));
         //运动
-        initSport();
+        initSport(bean.result.homepage_services.get(2));
         //科学
-        initScience();
+        initScience(bean.result.homepage_services.get(3));*/
 
     }
+
 
     private void initListener() {
         iv_home_location.setOnClickListener(new View.OnClickListener() {
@@ -129,7 +146,7 @@ public class AYHomeActivity extends AYActivity {
                         .subscribe(new Consumer<Long>() {
                             @Override
                             public void accept(Long aLong) throws Exception {
-                                if (sl_home_refresh.isRefreshing()){
+                                if (sl_home_refresh.isRefreshing()) {
                                     sl_home_refresh.setRefreshing(false);
                                 }
                             }
@@ -166,15 +183,10 @@ public class AYHomeActivity extends AYActivity {
         });
     }
 
-    private void initCare() {
-        List<Integer> careList = new ArrayList<>();
-        careList.add(R.drawable.home_cover_00);
-        careList.add(R.drawable.home_cover_01);
-        careList.add(R.drawable.home_cover_02);
-        careList.add(R.drawable.home_cover_03);
+    private void initCare(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
         LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeCareAdapter adapter = new HomeCareAdapter(AYHomeActivity.this, careList);
+        HomeCareAdapter adapter = new HomeCareAdapter(AYHomeActivity.this, bean);
         rv_home_care.setNestedScrollingEnabled(false);
         rv_home_care.setLayoutManager(manager);
         rv_home_care.setAdapter(adapter);
@@ -187,15 +199,11 @@ public class AYHomeActivity extends AYActivity {
         });
     }
 
-    private void initArt() {
-        List<Integer> artList = new ArrayList<>();
-        artList.add(R.drawable.home_cover_00);
-        artList.add(R.drawable.home_cover_01);
-        artList.add(R.drawable.home_cover_02);
-        artList.add(R.drawable.home_cover_03);
+    private void initArt(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+
         LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeArtAdapter adapter = new HomeArtAdapter(AYHomeActivity.this, artList);
+        HomeArtAdapter adapter = new HomeArtAdapter(AYHomeActivity.this, bean);
         rv_home_art.setNestedScrollingEnabled(false);
         rv_home_art.setLayoutManager(manager);
         rv_home_art.setAdapter(adapter);
@@ -218,30 +226,21 @@ public class AYHomeActivity extends AYActivity {
         });
     }
 
-    private void initSport() {
-        List<Integer> sportList = new ArrayList<>();
-        sportList.add(R.drawable.home_cover_00);
-        sportList.add(R.drawable.home_cover_01);
-        sportList.add(R.drawable.home_cover_02);
-        sportList.add(R.drawable.home_cover_03);
+    private void initSport(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+
         LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeSportAdapter adapter = new HomeSportAdapter(AYHomeActivity.this, sportList);
+        HomeSportAdapter adapter = new HomeSportAdapter(AYHomeActivity.this, bean);
         rv_home_sport.setNestedScrollingEnabled(false);
         rv_home_sport.setLayoutManager(manager);
         rv_home_sport.setAdapter(adapter);
         rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
     }
 
-    private void initScience() {
-        List<Integer> scienceList = new ArrayList<>();
-        scienceList.add(R.drawable.home_cover_00);
-        scienceList.add(R.drawable.home_cover_01);
-        scienceList.add(R.drawable.home_cover_02);
-        scienceList.add(R.drawable.home_cover_03);
+    private void initScience(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
         LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeScienceAdapter adapter = new HomeScienceAdapter(AYHomeActivity.this, scienceList);
+        HomeScienceAdapter adapter = new HomeScienceAdapter(AYHomeActivity.this, bean);
         rv_home_science.setNestedScrollingEnabled(false);
         rv_home_science.setLayoutManager(manager);
         rv_home_science.setAdapter(adapter);
@@ -348,7 +347,7 @@ public class AYHomeActivity extends AYActivity {
 
 
     public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
-        ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
+        /*((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
                 .refreshOrLoadMoreComplete();
 
         JSONArray data = null;
@@ -361,9 +360,23 @@ public class AYHomeActivity extends AYActivity {
             serviceListAdapter.refreshList();
         } catch (JSONException e) {
             e.printStackTrace();
+        }*/
+        LogUtils.d("AYHomeActivity " + args.toString());
+        HomeInfoBean bean = JSON.parseObject(args.toString(), HomeInfoBean.class);
+        if (bean != null && "ok".equals(bean.status)) {
+            initCare(bean.result.homepage_services.get(0));
+            initArt(bean.result.homepage_services.get(1));
+            initSport(bean.result.homepage_services.get(2));
+            initScience(bean.result.homepage_services.get(3));
+        } else if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message);
         }
 
         return true;
+    }
+
+    private void initRvData(HomeInfoBean bean) {
+
     }
 
     public Boolean AYSearchServiceCommandFailed(JSONObject args) {

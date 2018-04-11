@@ -17,7 +17,8 @@ public class AYSearchServiceCommand extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return kDONGDABASEURL +  "v3.1/kidnap/search";
+//        return kDONGDABASEURL +  "v3.1/kidnap/search";
+        return "http://192.168.100.174:9000/al/homepage/service";
     }
 
     @Override

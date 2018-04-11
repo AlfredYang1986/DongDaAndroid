@@ -7,8 +7,7 @@ import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.stetho.Stetho;
-import com.tencent.mm.opensdk.openapi.IWXAPI;
-import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.mob.MobSDK;
 
 /**
  * Created by alfredyang on 10/7/17.
@@ -18,7 +17,7 @@ public class AYApplication extends Application {
 
     public static Context appConext;
     private static Application me;
-    public static IWXAPI weChatApi;
+//    public static IWXAPI weChatApi;
 
     @Override
     public void onCreate() {
@@ -27,17 +26,22 @@ public class AYApplication extends Application {
         appConext=this.getApplicationContext();
         Stetho.initializeWithDefaults(this);
         initFresco();
-        initWeChat();
+//        initWeChat();
+        initShareSDK();
+    }
+
+    private void initShareSDK() {
+        MobSDK.init(this);
     }
 
     /**
      * 初始化微信登录相关参数
      */
     private void initWeChat() {
-        //第二个参数是指你应用在微信开放平台上的AppID
+        /*//第二个参数是指你应用在微信开放平台上的AppID
         weChatApi = WXAPIFactory.createWXAPI(this, AppConstant.WECHAT_APP_ID, false);
         // 将该app注册到微信
-        weChatApi.registerApp(AppConstant.WECHAT_APP_ID);
+        weChatApi.registerApp(AppConstant.WECHAT_APP_ID);*/
     }
 
 

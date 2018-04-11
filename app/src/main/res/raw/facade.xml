@@ -16,6 +16,7 @@
             factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
 
         <command short="LoginWithPhone" />
+        <command short="LoginWithWeChat" />
         <command short="SendSMSCode" />
         <command short="UpdateProfile" />
     </facade>
