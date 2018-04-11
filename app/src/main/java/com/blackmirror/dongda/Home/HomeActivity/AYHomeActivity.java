@@ -2,6 +2,7 @@ package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -38,6 +39,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by alfredyang on 29/6/17.
@@ -58,6 +65,7 @@ public class AYHomeActivity extends AYActivity {
     private RecyclerView rv_home_sport;
     private RecyclerView rv_home_science;
     private ImageView iv_home_location;
+    private SwipeRefreshLayout sl_home_refresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +95,7 @@ public class AYHomeActivity extends AYActivity {
         rv_home_sport = findViewById(R.id.rv_home_sport);
         rv_home_science = findViewById(R.id.rv_home_science);
         iv_home_location = findViewById(R.id.iv_home_location);
+        sl_home_refresh = findViewById(R.id.sl_home_refresh);
     }
 
     private void initData() {
@@ -110,6 +119,21 @@ public class AYHomeActivity extends AYActivity {
             @Override
             public void onClick(View v) {
                 ToastUtils.showShortToast("点击了location");
+            }
+        });
+        sl_home_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                Observable.timer(1500, TimeUnit.MILLISECONDS, Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Consumer<Long>() {
+                            @Override
+                            public void accept(Long aLong) throws Exception {
+                                if (sl_home_refresh.isRefreshing()){
+                                    sl_home_refresh.setRefreshing(false);
+                                }
+                            }
+                        });
             }
         });
     }
