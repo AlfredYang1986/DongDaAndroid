@@ -9,13 +9,18 @@
     tools:context=".activity.CareListActivity">
 
     <include layout="@layout/home_act_header"/>
+    
+    <android.support.v4.widget.SwipeRefreshLayout
+         android:id="@+id/sl_care_list"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_care_list"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </android.support.design.widget.CoordinatorLayout>
