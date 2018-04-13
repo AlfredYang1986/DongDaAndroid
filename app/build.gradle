@@ -61,4 +61,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.46'
     implementation 'com.alibaba:fastjson:1.1.68.android'
     implementation 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.aliyun.dpa:oss-android-sdk:+'
 }

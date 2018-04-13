@@ -6,12 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.CareListAdapter;
@@ -113,16 +111,6 @@ public class CareListActivity extends AppCompatActivity {
                         }
 
                     }else {
-                       /* if (lastItemPosition == itemCount -2){
-                            *//*manager.scrollToPositionWithOffset(lastItemPosition, 0);
-                            manager.setStackFromEnd(true);*//*
-                            int top = recyclerView.getChildAt(itemCount -2 - manager.findFirstVisibleItemPosition()).getTop();
-                            View at = recyclerView.getChildAt(itemCount - 2 - manager.findFirstVisibleItemPosition());
-                            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) at.getLayoutParams();
-                            int margin = params.topMargin;
-                            recyclerView.scrollBy(0, -(top+margin));
-                        }*/
-//                        adapter.notifyItemChanged(lastItemPosition,"invisible");
                     }
 
                     if (lastItemPosition == itemCount -2 && manager.findLastVisibleItemPosition() == itemCount-1){
@@ -130,9 +118,6 @@ public class CareListActivity extends AppCompatActivity {
 //                            manager.setStackFromEnd(true);
                         int bottom = recyclerView.getChildAt(itemCount -1 - manager.findFirstVisibleItemPosition()).getBottom();
                         int top = recyclerView.getChildAt(itemCount -1 - manager.findFirstVisibleItemPosition()).getTop();
-                        View at = recyclerView.getChildAt(itemCount - 1 - manager.findFirstVisibleItemPosition());
-                        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) at.getLayoutParams();
-                        int margin = params.topMargin;
                         recyclerView.scrollBy(0, -(bottom-top));
                     }
 
@@ -146,12 +131,6 @@ public class CareListActivity extends AppCompatActivity {
                 super.onScrolled(recyclerView, dx, dy);
                 // 大于0表示正在向上滑动，小于等于0表示停止或向下滑动
                 isSlidingUpward = dy > 0;
-                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-                int lastItemPosition = manager.findLastVisibleItemPosition();
-                int itemCount = manager.getItemCount();
-//                layoutManager.getChildAt(position-firstVisibilityPosition)
-                int top = manager.getChildAt(lastItemPosition - manager.findFirstVisibleItemPosition()).getBottom();
-                LogUtils.d("onScrolled "+top);
             }
         });
     }

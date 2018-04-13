@@ -14,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.GetOSSClient;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
@@ -31,7 +32,10 @@ import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
+import com.blackmirror.dongda.model.ErrorInfoBean;
 import com.blackmirror.dongda.model.HomeInfoBean;
+import com.blackmirror.dongda.model.ImgTokenServerBean;
+import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
@@ -103,18 +107,20 @@ public class AYHomeActivity extends AYActivity {
     }
 
     private void initData() {
-        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
+
 
         AYFacade facade = facades.get("QueryServiceFacade");
-
-        String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
         try {
-            JSONObject root = new JSONObject(json);
-            facade.execute("SearchService", root);
-
+            JSONObject object = new JSONObject();
+            object.put("token",BasePrefUtils.getAuthToken());
+            facade.execute("getImgToken",object);
         } catch (JSONException e) {
-
+            e.printStackTrace();
         }
+
+
+        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
+
 
 
         //精选主题
@@ -128,6 +134,19 @@ public class AYHomeActivity extends AYActivity {
         //科学
         initScience(bean.result.homepage_services.get(3));*/
 
+    }
+
+    private void initHomeData() {
+        AYFacade facade = facades.get("QueryServiceFacade");
+
+        String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
+        try {
+            JSONObject root = new JSONObject(json);
+            facade.execute("SearchService", root);
+
+        } catch (JSONException e) {
+
+        }
     }
 
 
@@ -288,6 +307,30 @@ public class AYHomeActivity extends AYActivity {
         search_args.put("date", timeSpan);
         JSONObject args = new JSONObject(search_args);
         cmd.excute(args);
+    }
+
+    /**
+     * 获取图片token 用于生成url签名
+     * @param args
+     */
+    public void AYGetImgTokenCommandSuccess(JSONObject args){
+
+        ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
+        ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
+        BasePrefUtils.setAccesskeyId(bean.accessKeyId);
+        BasePrefUtils.setSecurityToken(bean.SecurityToken);
+        BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
+        BasePrefUtils.setExpiration(bean.Expiration);
+        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
+        initHomeData();
+    }
+
+    public void AYGetImgTokenCommandFailed(JSONObject args) {
+        initHomeData();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message);
+        }
     }
 
     public void didNavLeftBtnClickNotify(JSONObject args) {

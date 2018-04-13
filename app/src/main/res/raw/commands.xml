@@ -59,4 +59,9 @@
         short="SearchService"
         name="com.blackmirror.dongda.facade.AYQueryDataFacade.ServiceRemote.AYSearchServiceCommand"
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+        short="getImgToken"
+        name="com.blackmirror.dongda.facade.AYQueryDataFacade.ServiceRemote.homecmd.AYGetImgTokenCommand"
+        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>

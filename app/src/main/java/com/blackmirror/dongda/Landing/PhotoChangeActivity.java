@@ -49,8 +49,8 @@ public class PhotoChangeActivity extends AYActivity {
 
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
 
-        setOriginScreenPhoto();
-        setOriginScreenName();
+//        setOriginScreenPhoto();
+//        setOriginScreenName();
 
         Button btn = (Button) findViewById(R.id.landing_enter_btn);
         btn.setOnClickListener(new View.OnClickListener() {
