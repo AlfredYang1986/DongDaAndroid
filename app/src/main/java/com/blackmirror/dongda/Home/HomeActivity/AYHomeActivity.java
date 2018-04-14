@@ -20,7 +20,7 @@ import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.activity.ArtListActivity;
 import com.blackmirror.dongda.activity.CareListActivity;
-import com.blackmirror.dongda.activity.ShowMapActivity;
+import com.blackmirror.dongda.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -189,10 +189,16 @@ public class AYHomeActivity extends AYActivity {
         rv_featured_theme.setLayoutManager(manager);
         rv_featured_theme.setAdapter(adapter);
         rv_featured_theme.addItemDecoration(new SpacesItemDecoration(28));
+
+
+
         adapter.setOnItemClickListener(new FeaturedThemeAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(AYHomeActivity.this, ShowMapActivity.class));
+
+                Intent intent = new Intent(AYHomeActivity.this, FeaturedDetailActivity.class);
+                intent.putExtra("pos",position);
+                startActivity(intent);
             }
 
             @Override

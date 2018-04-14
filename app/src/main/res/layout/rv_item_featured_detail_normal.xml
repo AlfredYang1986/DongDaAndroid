@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
+    android:background="#33ADBADE"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+<android.support.constraint.ConstraintLayout
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+     android:id="@+id/cl_root"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="40dp"
+    android:layout_width="match_parent"
+    android:background="@color/sys_bar_white"
+    android:layout_height="wrap_content">
+
+
+
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/sv_featured_detail_photo"
         android:layout_width="343dp"
         android:layout_height="211dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="12dp"
         android:background="@drawable/home_cover_00"
         app:actualImageScaleType="focusCrop"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/cl_root"
+        app:layout_constraintRight_toRightOf="@id/cl_root"
+        app:layout_constraintTop_toTopOf="@id/cl_root"
         />
 
     <ImageView
-        android:layout_marginTop="13dp"
         android:layout_marginRight="13dp"
+        android:layout_marginTop="13dp"
         app:layout_constraintTop_toTopOf="@id/sv_featured_detail_photo"
-        app:layout_constraintRight_toRightOf="@id/sv_featured_detail_photo"
+        app:layout_constraintRight_toRightOf="@id/cl_root"
          android:id="@+id/iv_featured_detail_like"
         android:background="@drawable/home_art_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <TextView
+        android:lines="2"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
         android:id="@+id/tv_featured_detail_content"
-        android:layout_width="311dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="”和世界儿童一起分享当代视觉艺术,享受国际化创意课程.”"
@@ -46,7 +64,7 @@
         android:id="@+id/tv_featured_detail_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="44dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginTop="8dp"
         android:text="艺术·钢琴课程"
         android:textColor="#FF0D0D0D"
@@ -70,4 +88,5 @@
         />
 
 
+</android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>
