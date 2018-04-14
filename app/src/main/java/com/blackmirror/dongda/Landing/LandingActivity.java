@@ -105,7 +105,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
+                Intent intent = new Intent(LandingActivity.this, PhotoChangeActivity.class);
                 startActivity(intent);
             }
         });

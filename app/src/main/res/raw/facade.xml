@@ -36,5 +36,6 @@
         factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
 
         <command short="SearchService" />
+        <command short="getImgToken" />
     </facade>
 </facades>

@@ -2,12 +2,15 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.sdk.android.oss.ClientException;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.GetOSSClient;
 import com.blackmirror.dongda.model.HomeInfoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -35,15 +38,16 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
 
     @Override
     public void onBindViewHolder(HomeArtViewHolder holder, int position) {
-        /*Uri uri = new Uri.Builder().scheme("res").path(String.valueOf(list.get(position)))
-        .build();
-        holder.sv_featured.setImageURI(uri);*/
-
-        //        LogUtils.d("xcx",OtherUtils.getUriFromDrawableRes(context,list.get(position))
-        // .toString());
-
-//        holder.sv_item_art_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get(position)));
         HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
+
+        try {
+            String url = GetOSSClient.INSTANCE().oss.presignConstrainedObjectURL("bm-dongda", servicesBean.service_image+".jpg", 30 * 60);
+            Log.d("xcx", "url: "+url);
+            holder.sv_item_art_photo.setImageURI(url);
+        } catch (ClientException e) {
+            e.printStackTrace();
+        }
+
         holder.tv_item_art_name.setText(this.bean.services.get(position).service_tags.get(0));
         StringBuilder sb = new StringBuilder();
         sb.append(servicesBean.brand_name)

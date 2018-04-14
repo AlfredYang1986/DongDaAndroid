@@ -14,6 +14,42 @@ public class BasePrefUtils {
     private static final String WECHAT_UNIONID="wechat_unionid";//用户统一标识。针对一个微信开放平台帐号下的应用，同一用户的unionid是唯一的。
     private static final String AUTH_TOKEN="auth_token";//token
     private static final String USER_ID="user_id";//user_id
+    private static final String ACCESSKEYID="accessKeyId";
+    private static final String SECURITYTOKEN="SecurityToken";
+    private static final String ACCESSKEYSECRET="accessKeySecret";
+    private static final String EXPIRATION="Expiration";//
+
+    public static void setAccesskeyId(String accessKeyId){
+        setStringPref(AYApplication.appConext, USER_INFO,ACCESSKEYID,accessKeyId);
+    }
+
+    public static String getAccesskeyId(){
+        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(ACCESSKEYID,"");
+    }
+
+    public static void setSecurityToken(String SecurityToken){
+        setStringPref(AYApplication.appConext, USER_INFO,SECURITYTOKEN,SecurityToken);
+    }
+
+    public static String getSecurityToken(){
+        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(SECURITYTOKEN,"");
+    }
+
+    public static void setAccesskeySecret(String accessKeySecret){
+        setStringPref(AYApplication.appConext, USER_INFO,ACCESSKEYSECRET,accessKeySecret);
+    }
+
+    public static String getAccesskeySecret(){
+        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(ACCESSKEYSECRET,"");
+    }
+
+    public static void setExpiration(String Expiration){
+        setStringPref(AYApplication.appConext, USER_INFO,EXPIRATION,Expiration);
+    }
+
+    public static String getExpiration(){
+        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(EXPIRATION,"");
+    }
 
     public static void setAuthToken(String auth_token){
         setStringPref(AYApplication.appConext, USER_INFO,AUTH_TOKEN,auth_token);

@@ -26,4 +26,16 @@ public class AYQueryServiceFacade extends AYFacade {
         broadcastingNotification("AYSearchServiceCommandFailed", args);
         return true;
     }
+
+    /**
+     * 获取图片token 用于生成url签名
+     * @param args
+     */
+    public void AYGetImgTokenCommandSuccess(JSONObject args){
+        broadcastingNotification("AYGetImgTokenCommandSuccess", args);
+    }
+
+    public void AYGetImgTokenCommandFailed(JSONObject args) {
+        broadcastingNotification("AYGetImgTokenCommandFailed", args);
+    }
 }
