@@ -1,13 +1,21 @@
 package com.blackmirror.dongda.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.blackmirror.dongda.Landing.PhotoChangeActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AppConstant;
+import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.PermissionUtils;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -28,7 +36,28 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_launch);
-        init();
+
+//        init();
+        requestPermissions();
+    }
+
+    /**
+     * 动态申请权限
+     */
+    private void requestPermissions() {
+
+        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE};
+
+        List<String> list = PermissionUtils.checkPermissionWithNoGranted(SplashActivity.this,
+                permissions);
+
+        if (list.size()!=0){
+            PermissionUtils.requestMulitPermissions(SplashActivity.this, list);
+        }else {
+            init();
+        }
+
 
     }
 
@@ -40,7 +69,7 @@ public class SplashActivity extends AppCompatActivity {
                     public void accept(Long aLong) throws Exception {
                         unSubscribe();
 //                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
-                        startActivity(new Intent(SplashActivity.this, DetailInfoActivity.class));
+                        startActivity(new Intent(SplashActivity.this, PhotoChangeActivity.class));
                         finish();
                     }
                 });
@@ -58,5 +87,25 @@ public class SplashActivity extends AppCompatActivity {
             disposable = null;
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case AppConstant.PERMISSION_REQUEST:
+                for (int i = 0; i < grantResults.length; i++) {
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        LogUtils.d("xcx", permissions[i] + " granted");
+                    } else {
+                        LogUtils.d("xcx", permissions[i] + " denied");
+
+                    }
+                }
+                startActivity(new Intent(SplashActivity.this, PhotoChangeActivity.class));
+                finish();
+                break;
+        }
+    }
+
 
 }

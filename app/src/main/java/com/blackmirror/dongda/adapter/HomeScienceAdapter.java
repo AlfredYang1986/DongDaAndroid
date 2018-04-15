@@ -3,6 +3,7 @@ package com.blackmirror.dongda.adapter;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -32,7 +33,7 @@ public class HomeScienceAdapter extends RecyclerView.Adapter<HomeScienceAdapter.
 
     @Override
     public HomeScienceViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.rv_item_home_science, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_home_science,parent,false);
         return new HomeScienceViewHolder(view);
     }
 

@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -21,6 +22,7 @@ import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.activity.ArtListActivity;
 import com.blackmirror.dongda.activity.CareListActivity;
 import com.blackmirror.dongda.activity.FeaturedDetailActivity;
+import com.blackmirror.dongda.activity.MyLikeActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -58,7 +60,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by alfredyang on 29/6/17.
  */
 
-public class AYHomeActivity extends AYActivity {
+public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     final private String TAG = "AYHomeActivity";
     private AYHomeListServAdapter serviceListAdapter;
@@ -74,6 +76,11 @@ public class AYHomeActivity extends AYActivity {
     private RecyclerView rv_home_science;
     private ImageView iv_home_location;
     private SwipeRefreshLayout sl_home_refresh;
+    private TextView tv_home_care_more;
+    private TextView tv_home_art_more;
+    private TextView tv_home_sport_more;
+    private TextView tv_home_science_more;
+    private ImageView iv_home_like;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +111,11 @@ public class AYHomeActivity extends AYActivity {
         rv_home_science = findViewById(R.id.rv_home_science);
         iv_home_location = findViewById(R.id.iv_home_location);
         sl_home_refresh = findViewById(R.id.sl_home_refresh);
+        tv_home_care_more = findViewById(R.id.tv_home_care_more);
+        tv_home_art_more = findViewById(R.id.tv_home_art_more);
+        tv_home_sport_more = findViewById(R.id.tv_home_sport_more);
+        tv_home_science_more = findViewById(R.id.tv_home_care_more);
+        iv_home_like = findViewById(R.id.iv_home_like);
     }
 
     private void initData() {
@@ -151,12 +163,13 @@ public class AYHomeActivity extends AYActivity {
 
 
     private void initListener() {
-        iv_home_location.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ToastUtils.showShortToast("点击了location");
-            }
-        });
+        tv_home_care_more.setOnClickListener(this);
+        tv_home_art_more.setOnClickListener(this);
+        tv_home_sport_more.setOnClickListener(this);
+        tv_home_science_more.setOnClickListener(this);
+        iv_home_location.setOnClickListener(this);
+        iv_home_like.setOnClickListener(this);
+
         sl_home_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -295,6 +308,28 @@ public class AYHomeActivity extends AYActivity {
         task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_homeseg"));
         task.add(R.id.activity_home, (AYListFragment)this.fragments.get("frag_homelist_serv"));
         task.commit();*/
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.tv_home_care_more:
+                startActivity(new Intent(AYHomeActivity.this,CareListActivity.class));
+                break;
+            case R.id.tv_home_art_more:
+                startActivity(new Intent(AYHomeActivity.this,ArtListActivity.class));
+                break;
+            case R.id.tv_home_sport_more:
+                break;
+            case R.id.tv_home_science_more:
+                break;
+            case R.id.iv_home_location:
+                ToastUtils.showShortToast("点击了location");
+                break;
+            case R.id.iv_home_like:
+                startActivity(new Intent(AYHomeActivity.this,MyLikeActivity.class));
+                break;
+        }
     }
 
     private void searchServiceRemote() {
@@ -446,4 +481,6 @@ public class AYHomeActivity extends AYActivity {
             Log.d("text", text);
         }
     }
+
+
 }

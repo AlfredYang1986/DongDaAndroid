@@ -1,12 +1,11 @@
 package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
-import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
@@ -15,17 +14,13 @@ import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
 
-public class CareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareListViewHolder> {
 
-    private final int minCount = 10;
-    private final int totalCount = 301;
-    public boolean canLoadMore;
-    public boolean load_complete;
+
     private List<Integer> list;
     protected Context context;
     private OnCareListClickListener listener;
-    private static final int TYPE_FOOTER = 1;
-    private static final int TYPE_NORMAL = 2;
+
 
     public void setOnCareListClickListener(OnCareListClickListener listener) {
         this.listener = listener;
@@ -36,68 +31,25 @@ public class CareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         this.list = list;
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return position == list.size() ? TYPE_FOOTER : TYPE_NORMAL;
-    }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_NORMAL) {
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_care_list, null);
-            return new CareListViewHolder(view);
-        } else {
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_refresh_footer, null);
-            return new FooterViewHolder(view);
-        }
+    public CareListAdapter.CareListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_care_list,parent,false);
+        return new CareListViewHolder(view);
     }
 
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(CareListAdapter.CareListViewHolder holder, int position) {
 
-        if (holder instanceof CareListViewHolder) {
-            CareListViewHolder vh = (CareListViewHolder) holder;
-            vh.sv_care_list_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get(position)));
-            initListener(vh, position);
-        } else if (holder instanceof FooterViewHolder) {
-            FooterViewHolder vh= (FooterViewHolder) holder;
-            if (!canLoadMore){
-                vh.cpb_load_more.setVisibility(View.INVISIBLE);
-                vh.tv_load_more.setText("没有更多数据了");
-            }
-            if (load_complete){
-                load_complete=false;
-                vh.cpb_load_more.setVisibility(View.INVISIBLE);
-            }
-        }
+            holder.sv_care_list_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get
+                    (position)));
+        holder.iv_care_list_like.setBackgroundResource(R.drawable.home_art_like);
+        initListener(holder, position);
 
     }
 
-    @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
-        if (payloads.isEmpty()) {
-            onBindViewHolder(holder, position);
-        } else {
-            if (holder instanceof FooterViewHolder) {
-                String str = (String) payloads.get(0);
-                FooterViewHolder vh= (FooterViewHolder) holder;
-                if (canLoadMore){
-                    if (str.equals("visible")){
-                        vh.itemView.setVisibility(View.VISIBLE);
-                        vh.cpb_load_more.setVisibility(View.VISIBLE);
-                    }else {
-                        vh.itemView.setVisibility(View.VISIBLE);
-                        vh.cpb_load_more.setVisibility(View.INVISIBLE);
-                    }
-                }else {
-                    vh.cpb_load_more.setVisibility(View.INVISIBLE);
-                    vh.tv_load_more.setText("没有更多数据了");
-                }
-
-            }
-        }
-    }
 
     private void initListener(final CareListViewHolder holder, int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -113,7 +65,8 @@ public class CareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemCareLikeClick(holder.iv_care_list_like, holder.getAdapterPosition());
+                    listener.onItemCareLikeClick(holder.iv_care_list_like, holder
+                            .getAdapterPosition());
                 }
             }
         });
@@ -122,27 +75,11 @@ public class CareListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size() + 1;
+        return list == null ? 0 : list.size();
     }
 
     public void setMoreData(List<Integer> moreList) {
         list.addAll(moreList);
-    }
-
-    public static class FooterViewHolder extends RecyclerView.ViewHolder {
-
-
-        public RelativeLayout cl_foot_root;
-        public ContentLoadingProgressBar cpb_load_more;
-        public TextView tv_load_more;
-
-
-        public FooterViewHolder(View itemView) {
-            super(itemView);
-            cl_foot_root = itemView.findViewById(R.id.cl_foot_root);
-            cpb_load_more = itemView.findViewById(R.id.cpb_load_more);
-            tv_load_more = itemView.findViewById(R.id.tv_load_more);
-        }
     }
 
 

@@ -45,6 +45,10 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
         isViewValid = true;
 
         bindingFragments();
+        setStatusBarColor();
+    }
+
+    protected void setStatusBarColor() {
         OtherUtils.setStatusBarColor(this);
     }
 

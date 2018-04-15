@@ -23,7 +23,7 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/sv_featured_detail_photo"
-        android:layout_width="343dp"
+        android:layout_width="match_parent"
         android:layout_height="211dp"
         android:background="@drawable/home_cover_00"
         app:actualImageScaleType="focusCrop"

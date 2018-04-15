@@ -3,7 +3,6 @@ package com.blackmirror.dongda.Tools;
 import android.app.Application;
 import android.content.Context;
 
-import com.alibaba.sdk.android.oss.OSS;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;

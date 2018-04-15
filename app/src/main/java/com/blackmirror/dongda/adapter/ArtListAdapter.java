@@ -3,6 +3,7 @@ package com.blackmirror.dongda.adapter;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -40,10 +41,10 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_NORMAL) {
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_art_list, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_art_list,parent,false);
             return new ArtListViewHolder(view);
         }else {
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_footer, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_footer,parent,false);
             return new ArtFooterViewHolder(view);
         }
     }

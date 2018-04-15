@@ -12,8 +12,12 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     //5.0之后需要动态申请
     <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
@@ -86,6 +90,25 @@
         <activity android:name=".activity.MyLikeActivity">
         </activity>
         <activity android:name=".activity.DetailInfoActivity">
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.blackmirror.dongda.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
+        <activity android:name=".activity.EditUserInfoActivity">
+        </activity>
+        <activity android:name=".activity.ServiceProfileActivity">
+        </activity>
+        <activity android:name=".activity.UserAboutMeActivity">
+        </activity>
+        <activity android:name=".activity.UserAboutMeNoDataActivity">
         </activity>
     </application>
 

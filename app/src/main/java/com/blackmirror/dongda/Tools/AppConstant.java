@@ -8,5 +8,8 @@ public class AppConstant {
     public static final int PERMISSION_REQUEST = 10010;
     public static final LatLng BEIJING = new LatLng(39.90403, 116.407525);// 北京市经纬度
     public static final LatLng ZHONGGUANCUN = new LatLng(39.983456, 116.3154950);// 北京市中关村经纬度
+    public static final int CHOOSE_PIC=10011;
+    public static final int PICTURE_CUT=10012;
+    public static final int TAKE_PHOTO=10013;
 
 }

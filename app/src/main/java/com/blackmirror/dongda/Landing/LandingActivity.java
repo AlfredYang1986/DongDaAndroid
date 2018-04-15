@@ -19,7 +19,6 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
-import com.blackmirror.dongda.Tools.PermissionUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
@@ -86,7 +85,6 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE};
 
-        PermissionUtils.requestMulitPermissions(LandingActivity.this, permissions);
 
     }
 

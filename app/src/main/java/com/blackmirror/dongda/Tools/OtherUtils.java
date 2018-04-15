@@ -9,14 +9,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -46,50 +42,7 @@ public class OtherUtils {
         return Uri.parse(path);
     }
 
-    /**
-     * 是否是小米设备
-     * @return
-     */
-    public static boolean isMIUI() {
-        return "Xiaomi".equals(Build.MANUFACTURER) ||
-                !TextUtils.isEmpty(getSystemProperty("ro.miui.ui.version.name"));
-    }
 
-    /**
-     * 是否是魅族设备
-     * @return
-     */
-    public static boolean isFlyme() {
-        try {
-            final Method method = Build.class.getMethod("hasSmartBar");
-            return method != null;
-        } catch (final Exception e) {
-            return false;
-        }
-    }
-
-    private static String getSystemProperty(String propName) {
-        String line;
-        BufferedReader input = null;
-        try {
-            java.lang.Process p = Runtime.getRuntime().exec("getprop " + propName);
-            input = new BufferedReader(new InputStreamReader(p.getInputStream()), 1024);
-            line = input.readLine();
-            input.close();
-        } catch (IOException ex) {
-            return null;
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        LogUtils.d("xcx","line=="+line);
-        return line;
-    }
 
     /**
      * 修改状态栏为全透明
@@ -120,18 +73,20 @@ public class OtherUtils {
     public static void setStatusBarColor(Activity activity) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (isMIUI()){
-//                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            if (DeviceUtils.isMIUI()){
+                activity.getWindow().setStatusBarColor(Color.WHITE);
                 MIUISetStatusBarLightMode(activity, true);
                 return;
             }
-            if (isFlyme()){
-//                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
+            if (DeviceUtils.isFlyme()){
+                activity.getWindow().setStatusBarColor(Color.WHITE);
+                //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
                 FlymeSetStatusBarLightMode(activity.getWindow(), true);
                 return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Window window = activity.getWindow();
+                window.setStatusBarColor(Color.WHITE);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

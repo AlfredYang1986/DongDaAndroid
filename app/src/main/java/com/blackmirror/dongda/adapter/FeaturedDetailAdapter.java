@@ -2,6 +2,7 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,13 +41,13 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == HEAD_TYPE){
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_featured_detail_head,null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_featured_detail_head,parent,false);
             return new HeadViewHolder(view);
         }else if (viewType==NORMAL_TYPE){
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_featured_detail_normal,null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_featured_detail_normal,parent,false);
             return new NormalViewHolder(view);
         }else {
-            View view = View.inflate(parent.getContext(), R.layout.rv_item_featured_detail_footer,null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_featured_detail_footer,parent,false);
             return new FootViewHolder(view);
         }
     }

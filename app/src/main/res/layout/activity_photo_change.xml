@@ -27,7 +27,7 @@
                 android:gravity="center"/>
 
         <ImageView
-                android:id="@+id/landing_screen_photo_imgview"
+                android:id="@+id/iv_head_photo"
                 android:layout_marginTop="36dip"
                 android:layout_width="100dip"
                 android:layout_height="100dip"
@@ -44,7 +44,7 @@
                 android:gravity="center"/>
 
         <Button
-                android:id="@+id/landing_enter_btn"
+                android:id="@+id/btn_enter_home"
                 android:text="进入咚哒"
                 android:background="@drawable/landing_action_button"
                 android:textColor="#00d1c1"
@@ -65,21 +65,21 @@
             android:layout_alignParentBottom="true">
 
         <Button
-                android:id="@+id/landing_enter_album"
+                android:id="@+id/btn_enter_album"
                 android:text="相册"
                 android:textColor="#00d1c1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
         <Button
-                android:id="@+id/landing_enter_camera"
+                android:id="@+id/btn_open_camera"
                 android:text="相机"
                 android:textColor="#00d1c1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
         <Button
-                android:id="@+id/landing_enter_cancel"
+                android:id="@+id/btn_enter_cancel"
                 android:text="取消"
                 android:textColor="#00d1c1"
                 android:layout_marginTop="10dip"

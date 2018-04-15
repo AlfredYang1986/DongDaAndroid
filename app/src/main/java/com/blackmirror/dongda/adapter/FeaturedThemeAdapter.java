@@ -2,6 +2,7 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -29,7 +30,7 @@ public class FeaturedThemeAdapter extends RecyclerView.Adapter<FeaturedThemeAdap
 
     @Override
     public FeaturedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = View.inflate(parent.getContext(), R.layout.rv_item_featured, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_featured,parent,false);
         return new FeaturedViewHolder(view);
     }
 
