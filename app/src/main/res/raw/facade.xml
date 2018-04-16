@@ -42,4 +42,13 @@
         <command short="AYLikePopCommand" />
         <command short="AYLikeQueryCommand" />
     </facade>
+
+    <facade
+        short="UserFacade"
+        name="com.blackmirror.dongda.facade.userfacade.AYUserFacade"
+        factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+        <command short="AYEditUserInfoCmd" />
+        <command short="AYQueryUserInfoCmd" />
+    </facade>
 </facades>

@@ -1,12 +1,12 @@
 package com.blackmirror.dongda.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.controllers.AYActivity;
 
-public class EditUserInfoActivity extends AppCompatActivity {
+public class EditUserInfoActivity extends AYActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,11 @@ public class EditUserInfoActivity extends AppCompatActivity {
     }
 
     private void initListener() {
+
+    }
+
+    @Override
+    protected void bindingFragments() {
 
     }
 }
