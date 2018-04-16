@@ -61,10 +61,10 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
             outRect.right = inner_space;
         }
 
-        if (pos == count - 1) {
+        /*if (pos == count - 1) {
             outRect.top = lastTop;
             outRect.bottom = lastBottom;
-        }
+        }*/
 
 
     }

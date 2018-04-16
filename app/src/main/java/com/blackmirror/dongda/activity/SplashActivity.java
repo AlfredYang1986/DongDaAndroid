@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.blackmirror.dongda.Landing.PhotoChangeActivity;
+import com.blackmirror.dongda.Landing.LandingActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.LogUtils;
@@ -69,7 +69,7 @@ public class SplashActivity extends AppCompatActivity {
                     public void accept(Long aLong) throws Exception {
                         unSubscribe();
 //                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
-                        startActivity(new Intent(SplashActivity.this, PhotoChangeActivity.class));
+                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
                         finish();
                     }
                 });
@@ -101,7 +101,7 @@ public class SplashActivity extends AppCompatActivity {
 
                     }
                 }
-                startActivity(new Intent(SplashActivity.this, PhotoChangeActivity.class));
+                startActivity(new Intent(SplashActivity.this, LandingActivity.class));
                 finish();
                 break;
         }

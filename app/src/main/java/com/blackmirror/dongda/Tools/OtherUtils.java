@@ -1,20 +1,19 @@
 package com.blackmirror.dongda.Tools;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Ruge on 2018-04-04 下午12:19
@@ -25,45 +24,6 @@ public class OtherUtils {
 
     public static Uri resourceIdToUri(Context context,int resourceId){
         return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
-    }
-
-    /**
-     * 得到资源文件中图片的Uri
-     * @param context 上下文对象
-     * @param id 资源id
-     * @return Uri
-     */
-    public static Uri getUriFromDrawableRes(Context context, int id) {
-        Resources resources = context.getResources();
-        String path = ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
-                + resources.getResourcePackageName(id) + "/"
-                + resources.getResourceTypeName(id) + "/"
-                + resources.getResourceEntryName(id);
-        return Uri.parse(path);
-    }
-
-
-
-    /**
-     * 修改状态栏为全透明
-     * @param activity
-     */
-    @TargetApi(19)
-    public static void transparencyBar(Activity activity){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = activity.getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
-
-        } else
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window window =activity.getWindow();
-            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
-                    WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
     }
 
     /**
@@ -97,58 +57,6 @@ public class OtherUtils {
         }
     }
 
-    /**
-     *状态栏亮色模式，设置状态栏黑色文字、图标，
-     * 适配4.4以上版本MIUIV、Flyme和6.0以上版本其他Android
-     * @param activity
-     * @return 1:MIUI 2:Flyme 3:android6.0
-     */
-    public static int StatusBarLightMode(AppCompatActivity activity){
-        int result=0;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if(MIUISetStatusBarLightMode(activity, true)){
-                result=1;
-            }else if(FlymeSetStatusBarLightMode(activity.getWindow(), true)){
-                result=2;
-            }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-                activity.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                result=3;
-            }
-        }
-        return result;
-    }
-
-    /**
-     * 已知系统类型时，设置状态栏黑色文字、图标。
-     * 适配4.4以上版本MIUIV、Flyme和6.0以上版本其他Android
-     * @param activity
-     * @param type 1:MIUUI 2:Flyme 3:android6.0
-     */
-    public static void StatusBarLightMode(Activity activity,int type){
-        if(type==1){
-            MIUISetStatusBarLightMode(activity, true);
-        }else if(type==2){
-            FlymeSetStatusBarLightMode(activity.getWindow(), true);
-        }else if(type==3){
-            activity.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        }
-
-    }
-
-    /**
-     * 状态栏暗色模式，清除MIUI、flyme或6.0以上版本状态栏黑色文字、图标
-     */
-    public static void StatusBarDarkMode(Activity activity,int type){
-        if(type==1){
-            MIUISetStatusBarLightMode(activity, false);
-        }else if(type==2){
-            FlymeSetStatusBarLightMode(activity.getWindow(), false);
-        }else if(type==3){
-            activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
-        }
-
-    }
 
 
     /**
@@ -232,15 +140,6 @@ public class OtherUtils {
         return result;
     }
 
-    public static int getStatusBarHeight(AppCompatActivity activity) {
-        int statusBarHeight = 0;
-        int resourceId = activity.getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            statusBarHeight = activity.getResources().getDimensionPixelSize(resourceId);
-        }
-        LogUtils.d("xcx", "状态栏高度：" + px2dp(statusBarHeight) + "dp");
-        return statusBarHeight;
-    }
 
     public static float px2dp(float pxVal) {
         final float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
@@ -256,6 +155,29 @@ public class OtherUtils {
         float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
+
+    public static boolean isNeedRefreshToken(String token_time){
+        return false;
+    }
+
+    public static long getRefreshTime(String expirate_time){
+        return (getExpirateTime(expirate_time)-System.currentTimeMillis()/1000)/2;
+    }
+
+    public static long getExpirateTime(String expirate_time){
+        long time;
+        String date = expirate_time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z");//注意格式化的表达式
+        try {
+            Date d = format.parse(date);
+            time = d.getTime()/1000;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            time=System.currentTimeMillis()/1000+300;
+        }
+        return time;
+    }
+
 
 
 }

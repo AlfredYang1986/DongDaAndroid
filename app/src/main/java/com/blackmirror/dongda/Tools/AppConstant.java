@@ -11,5 +11,6 @@ public class AppConstant {
     public static final int CHOOSE_PIC=10011;
     public static final int PICTURE_CUT=10012;
     public static final int TAKE_PHOTO=10013;
+    public static final String DEFAULT_CHARSET_NAME = "utf-8";
 
 }

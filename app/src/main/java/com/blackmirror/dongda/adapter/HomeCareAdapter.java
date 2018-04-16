@@ -2,17 +2,18 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.alibaba.sdk.android.oss.ClientException;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.GetOSSClient;
+import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.model.HomeInfoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
+
+import java.util.List;
 
 public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCareViewHolder> {
 
@@ -41,13 +42,18 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
     public void onBindViewHolder(HomeCareViewHolder holder, int position) {
 
         HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
-        try {
+
+        String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
+        LogUtils.d("care url "+url);
+        holder.sv_care_photo.setImageURI(url);
+
+        /*try {
             String url = GetOSSClient.INSTANCE().oss.presignConstrainedObjectURL("bm-dongda", servicesBean.service_image+".jpg", 30 * 60);
             Log.d("xcx", "url: "+url);
             holder.sv_care_photo.setImageURI(url);
         } catch (ClientException e) {
             e.printStackTrace();
-        }
+        }*/
 
         holder.tv_care_name.setText(this.bean.services.get(position).service_tags.get(0));
         StringBuilder sb = new StringBuilder();
@@ -95,6 +101,11 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
         }
     }
 
+    public void setRefreshData(List<HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean> list){
+        bean.services.clear();
+        bean.services.addAll(list);
+        notifyDataSetChanged();
+    }
 
     public interface OnCareClickListener {
         void onItemCareClick(View view, int position);
