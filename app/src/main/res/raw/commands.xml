@@ -91,7 +91,7 @@
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
     <command
-        short="AYQueryUserInfoCmd"
-        name="com.blackmirror.dongda.facade.userfacade.usercmd.AYQueryUserInfoCmd"
+        short="AYGetDetailInfoCmd"
+        name="com.blackmirror.dongda.facade.detailfacade.detailcmd.AYGetDetailInfoCmd"
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>

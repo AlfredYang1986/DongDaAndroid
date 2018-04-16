@@ -51,4 +51,12 @@
         <command short="AYEditUserInfoCmd" />
         <command short="AYQueryUserInfoCmd" />
     </facade>
+
+    <facade
+        short="AYDetailInfoFacade"
+        name="com.blackmirror.dongda.facade.detailfacade.AYDetailInfoFacade"
+        factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+        <command short="AYGetDetailInfoCmd" />
+    </facade>
 </facades>
