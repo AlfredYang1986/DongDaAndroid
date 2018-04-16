@@ -1,6 +1,5 @@
 package com.blackmirror.dongda.Landing;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -77,16 +76,6 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
 
     }
 
-    /**
-     * 动态申请权限
-     */
-    private void requestPermissions() {
-
-        String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.CAMERA, Manifest.permission.READ_PHONE_STATE};
-
-
-    }
 
     private void initListener() {
 
@@ -103,7 +92,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, PhotoChangeActivity.class);
+                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
                 startActivity(intent);
             }
         });
@@ -167,7 +156,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         WeChatLoginServerBean bean = JSON.parseObject(arg.toString(), WeChatLoginServerBean.class);
         if (bean != null && "ok".equals(bean.status) && bean.result != null) {
             if (bean.result.user != null) {
-
+                BasePrefUtils.setUserId(bean.result.user.user_id);
             }
             BasePrefUtils.setAuthToken(bean.result.auth_token);
             startActivity(new Intent(LandingActivity.this, AYHomeActivity.class));

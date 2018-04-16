@@ -9,7 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.MyLikeListViewHolder> {
 
 
-    private List<Integer> list;
+    private List<QueryLikeServerBean.ResultBean.ServicesBean> list;
     protected Context context;
     private OnLikeListClickListener listener;
 
@@ -26,7 +27,7 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
         this.listener = listener;
     }
 
-    public MyLikeListAdapter(Context context, List<Integer> list) {
+    public MyLikeListAdapter(Context context, List<QueryLikeServerBean.ResultBean.ServicesBean> list) {
         this.context = context;
         this.list = list;
     }
@@ -43,9 +44,27 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
     @Override
     public void onBindViewHolder(MyLikeListAdapter.MyLikeListViewHolder holder, int position) {
 
-        holder.sv_care_list_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get
-                (position)));
-        holder.iv_care_list_like.setBackgroundResource(R.drawable.like_selected);
+
+        QueryLikeServerBean.ResultBean.ServicesBean servicesBean = list.get(position);
+
+        String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
+        holder.sv_care_list_photo.setImageURI(url);
+
+        if (servicesBean.is_collected){
+            holder.iv_care_list_like.setBackgroundResource(R.drawable.like_selected);
+        }else {
+            holder.iv_care_list_like.setBackgroundResource(R.drawable.home_art_like);
+        }
+
+        holder.tv_care_list_name.setText(list.get(position).service_tags.get(0));
+        StringBuilder sb = new StringBuilder();
+        sb.append(servicesBean.brand_name)
+                .append("的")
+                .append(servicesBean.service_leaf)
+                .append(servicesBean.category);
+        holder.tv_care_list_content.setText(sb.toString());
+        holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
+
         initListener(holder, position);
 
     }
@@ -78,9 +97,6 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
         return list == null ? 0 : list.size();
     }
 
-    public void setMoreData(List<Integer> moreList) {
-        list.addAll(moreList);
-    }
 
 
     public static class MyLikeListViewHolder extends RecyclerView.ViewHolder {

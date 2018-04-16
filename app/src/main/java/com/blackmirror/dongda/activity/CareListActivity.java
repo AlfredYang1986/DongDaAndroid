@@ -1,47 +1,60 @@
 package com.blackmirror.dongda.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.CareListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
+import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.AYFacade;
+import com.blackmirror.dongda.model.ErrorInfoBean;
+import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
+import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
+public class CareListActivity extends AYActivity {
 
-public class CareListActivity extends AppCompatActivity {
+    private final String TAG="CareListActivity";
 
     private ImageView iv_home_head_back;
     private TextView tv_home_head_title;
     private RecyclerView rv_care_list;
     private SmartRefreshLayout sl_care_list;
     private CareListAdapter adapter;
-    private int totalCount=30;
+    private int totalCount=32;
+    int skip=0;
+    int take=10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_care_list);
+//        totalCount=getIntent().getIntExtra("totalCount",0);
         initView();
-        initData();
+        initData(skip,take);
         initListener();
-        OtherUtils.setStatusBarColor(this);
+//        OtherUtils.setStatusBarColor(this);
+    }
+
+    @Override
+    protected void bindingFragments() {
+
     }
 
     private void initView() {
@@ -49,62 +62,26 @@ public class CareListActivity extends AppCompatActivity {
         tv_home_head_title = findViewById(R.id.tv_home_head_title);
         rv_care_list = findViewById(R.id.rv_care_list);
         sl_care_list = findViewById(R.id.sl_care_list);
-    }
-
-    private void initData() {
-
-        sl_care_list.setEnableLoadMore(true);
-        sl_care_list.setNoMoreData(false);
-        sl_care_list.setEnableLoadMoreWhenContentNotFull(true);//内容不满屏幕的时候也开启加载更多
+        sl_care_list.setEnableLoadMoreWhenContentNotFull(false);//内容不满屏幕的时候也开启加载更多
+        sl_care_list.setEnableAutoLoadMore(false);//内容不满屏幕的时候也开启加载更多
         sl_care_list.setRefreshHeader(new MaterialHeader(CareListActivity.this));
-        tv_home_head_title.setText("看顾");
-        List<Integer> list = new ArrayList<>();
-        list.add(R.drawable.home_cover_00);
-        list.add(R.drawable.home_cover_01);
-        list.add(R.drawable.home_cover_02);
-        list.add(R.drawable.home_cover_03);
-        list.add(R.drawable.home_cover_04);
-        list.add(R.drawable.home_cover_00);
-        list.add(R.drawable.home_cover_01);
-        list.add(R.drawable.home_cover_02);
-        list.add(R.drawable.home_cover_03);
-        list.add(R.drawable.home_cover_04);
+    }
 
-        adapter = new CareListAdapter(CareListActivity.this, list);
-        rv_care_list.setLayoutManager(new LinearLayoutManager(CareListActivity.this));
-        rv_care_list.setAdapter(adapter);
-        rv_care_list.addItemDecoration(new TopItemDecoration(40,40));
-        adapter.setOnCareListClickListener(new CareListAdapter.OnCareListClickListener() {
-            @Override
-            public void onItemCareListClick(View view, int position) {
+    private void initData(int skipCount,int takeCount) {
 
-            }
+        AYFacade facade = facades.get("QueryServiceFacade");
+        try {
+            String json="{\"skip\" : "+skipCount+",\"take\" : "+takeCount+",\"token\": \""+ BasePrefUtils.getAuthToken()+"\",\"condition\": {\"user_id\":\""+BasePrefUtils.getUserId()+"\",\"service_type\": \"看顾\"}}";
+            JSONObject object = new JSONObject(json);
+            facade.execute("AYSubjectMoreCommand",object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onItemCareLikeClick(View view, int position) {
-                ToastUtils.showShortToast("点击了 "+position);
-            }
-        });
+
 
     }
 
-    private void loadMore() {
-        Observable.timer(3000,TimeUnit.MILLISECONDS,Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        List<Integer> list = new ArrayList<>();
-                        list.add(R.drawable.home_btn_nearyou);
-                        list.add(R.drawable.home_btn_nearyou);
-                        list.add(R.drawable.home_btn_nearyou);
-                        list.add(R.drawable.home_btn_nearyou);
-                        list.add(R.drawable.home_btn_nearyou);
-                        adapter.setMoreData(list);
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-    }
 
     private void initListener() {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
@@ -113,20 +90,103 @@ public class CareListActivity extends AppCompatActivity {
                 finish();
             }
         });
-        /*sl_care_list.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        sl_care_list.setOnRefreshListener(new OnRefreshListener() {
             @Override
-            public void onRefresh() {
-                Observable.timer(1500, TimeUnit.MILLISECONDS, Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                if (sl_care_list.isRefreshing()){
-//                                    sl_care_list.setRefreshing(false);
-                                }
-                            }
-                        });
+            public void onRefresh(RefreshLayout refreshLayout) {
+                skip=0;
+                sl_care_list.setNoMoreData(false);
+                sl_care_list.setEnableLoadMore(true);
+                initData(skip,take);
             }
-        });*/
+        });
+
+
+        sl_care_list.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                LogUtils.d("skip=="+skip);
+                if (refreshLayout.getState().dragging){
+                    LogUtils.d("dragging");
+                }
+                if (totalCount<=adapter.getItemCount()){
+                    sl_care_list.finishLoadMore();
+                    sl_care_list.setEnableLoadMore(false);
+                    sl_care_list.setNoMoreData(true);
+                    return;
+                }
+                if ((skip+take)>=totalCount){
+                    initData(skip,totalCount-skip);
+                }else {
+                    skip+=take;
+                    initData(skip,take);
+                }
+            }
+        });
     }
+
+    /**
+     * 获取更多信息列表
+     * @param args
+     */
+    public void AYSubjectMoreCommandSuccess(JSONObject args){
+        CareMoreServerBean serverBean = JSON.parseObject(args.toString(), CareMoreServerBean.class);
+        CareMoreUiBean bean = new CareMoreUiBean(serverBean);
+        if (sl_care_list.getState().opening){
+            sl_care_list.finishLoadMore();
+            sl_care_list.finishRefresh();
+        }
+        setDataToRecyclerView(bean);
+    }
+
+    public void AYSubjectMoreCommandFailed(JSONObject args) {
+        if (sl_care_list.getState().opening){
+            sl_care_list.finishLoadMore(false);
+            sl_care_list.finishRefresh(false);
+        }
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    private void setDataToRecyclerView(CareMoreUiBean bean) {
+
+        if (bean.isSuccess) {
+
+            tv_home_head_title.setText("看顾");
+
+            if (skip==0){//首次加载或者下拉刷新
+                if (adapter==null){
+                    adapter = new CareListAdapter(CareListActivity.this, bean);
+                    rv_care_list.setLayoutManager(new LinearLayoutManager(CareListActivity.this));
+                    rv_care_list.setAdapter(adapter);
+                    rv_care_list.addItemDecoration(new TopItemDecoration(40, 40));
+                }else {
+                    adapter.setRefreshData(bean.services);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }else {
+                adapter.setMoreData(bean.services);
+                adapter.notifyDataSetChanged();
+            }
+
+
+            adapter.setOnCareListClickListener(new CareListAdapter.OnCareListClickListener() {
+                @Override
+                public void onItemCareListClick(View view, int position) {
+
+                }
+
+                @Override
+                public void onItemCareLikeClick(View view, int position) {
+                    ToastUtils.showShortToast("点击了 " + position);
+                }
+            });
+        }else {
+            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        }
+    }
+
+
 }

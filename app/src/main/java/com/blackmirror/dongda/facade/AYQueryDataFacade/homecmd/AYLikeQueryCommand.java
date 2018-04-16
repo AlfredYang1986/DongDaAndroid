@@ -1,4 +1,4 @@
-package com.blackmirror.dongda.facade.AYQueryDataFacade.ServiceRemote;
+package com.blackmirror.dongda.facade.AYQueryDataFacade.homecmd;
 
 import com.blackmirror.dongda.command.AYRemoteCommand;
 
@@ -6,9 +6,9 @@ import com.blackmirror.dongda.command.AYRemoteCommand;
  * Created by alfredyang on 6/7/17.
  */
 
-public class AYSearchServiceCommand extends AYRemoteCommand {
+public class AYLikeQueryCommand extends AYRemoteCommand {
 
-    final private String TAG = "AYSearchServiceCommand";
+    final private String TAG = "AYLikeQueryCommand";
 
     @Override
     public String getClassTag() {
@@ -18,7 +18,7 @@ public class AYSearchServiceCommand extends AYRemoteCommand {
     @Override
     protected String getUrl() {
 //        return kDONGDABASEURL +  "v3.1/kidnap/search";
-        return "http://192.168.100.174:9000/al/homepage/service";
+        return "http://192.168.100.174:9000/al/user/collected/services";
     }
 
     @Override

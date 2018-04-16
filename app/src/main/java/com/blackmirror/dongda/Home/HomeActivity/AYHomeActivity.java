@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.Home.HomeActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,8 +16,6 @@ import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
-import com.blackmirror.dongda.Tools.GetOSSClient;
-import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.activity.ArtListActivity;
@@ -37,7 +36,11 @@ import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.model.ErrorInfoBean;
 import com.blackmirror.dongda.model.HomeInfoBean;
 import com.blackmirror.dongda.model.ImgTokenServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
+import com.blackmirror.dongda.model.uibean.LikePopUiBean;
+import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONArray;
@@ -52,7 +55,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -81,6 +83,14 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private TextView tv_home_sport_more;
     private TextView tv_home_science_more;
     private ImageView iv_home_like;
+    private boolean isFirstLoad;
+    private HomeCareAdapter careAdapter;
+    private HomeArtAdapter artAdapter;
+    private HomeSportAdapter sportAdapter;
+    private HomeScienceAdapter scienceAdapter;
+    private HomeInfoBean bean;
+    private ProgressDialog pb;
+    private int clickLikePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,8 +129,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     }
 
     private void initData() {
-
-
+        isFirstLoad=true;
+        sl_home_refresh.setEnabled(false);
         AYFacade facade = facades.get("QueryServiceFacade");
         try {
             JSONObject object = new JSONObject();
@@ -130,21 +140,10 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             e.printStackTrace();
         }
 
-
         sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
-
-
 
         //精选主题
         initSubject();
-        /*//看顾
-        initCare(bean.result.homepage_services.get(0));
-        //艺术
-        initArt(bean.result.homepage_services.get(1));
-        //运动
-        initSport(bean.result.homepage_services.get(2));
-        //科学
-        initScience(bean.result.homepage_services.get(3));*/
 
     }
 
@@ -173,16 +172,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         sl_home_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                Observable.timer(1500, TimeUnit.MILLISECONDS, Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Consumer<Long>() {
-                            @Override
-                            public void accept(Long aLong) throws Exception {
-                                if (sl_home_refresh.isRefreshing()) {
-                                    sl_home_refresh.setRefreshing(false);
-                                }
-                            }
-                        });
+                initHomeData();
             }
         });
     }
@@ -222,67 +212,116 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     }
 
     private void initCare(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
-        LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeCareAdapter adapter = new HomeCareAdapter(AYHomeActivity.this, bean);
-        rv_home_care.setNestedScrollingEnabled(false);
-        rv_home_care.setLayoutManager(manager);
-        rv_home_care.setAdapter(adapter);
-        rv_home_care.addItemDecoration(new SpacesItemDecoration(8));
-        adapter.setOnCareClickListener(new HomeCareAdapter.OnCareClickListener() {
-            @Override
-            public void onItemCareClick(View view, int position) {
-                startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
-            }
-        });
+        if (careAdapter==null) {
+            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            careAdapter = new HomeCareAdapter(AYHomeActivity.this, bean);
+            rv_home_care.setNestedScrollingEnabled(false);
+            rv_home_care.setLayoutManager(manager);
+            rv_home_care.setAdapter(careAdapter);
+            rv_home_care.addItemDecoration(new SpacesItemDecoration(8));
+
+            careAdapter.setOnCareClickListener(new HomeCareAdapter.OnCareClickListener() {
+                @Override
+                public void onItemCareClick(View view, int position) {
+
+//                    startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
+                }
+            });
+        }else {
+            careAdapter.setRefreshData(bean.services);
+        }
     }
 
-    private void initArt(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+    private void initArt(final HomeInfoBean.ResultBean.HomepageServicesBean bean) {
 
-        LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeArtAdapter adapter = new HomeArtAdapter(AYHomeActivity.this, bean);
-        rv_home_art.setNestedScrollingEnabled(false);
-        rv_home_art.setLayoutManager(manager);
-        rv_home_art.setAdapter(adapter);
-        rv_home_art.addItemDecoration(new SpacesItemDecoration(8));
-        adapter.setOnItemClickListener(new HomeArtAdapter.OnItemClickListener() {
-            @Override
-            public void onArtLikeClick(View view, int postion) {
-                ToastUtils.showShortToast("点击了收藏");
+        if (artAdapter==null) {
+            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            artAdapter = new HomeArtAdapter(AYHomeActivity.this, bean);
+            rv_home_art.setNestedScrollingEnabled(false);
+            rv_home_art.setLayoutManager(manager);
+            rv_home_art.setAdapter(artAdapter);
+            rv_home_art.addItemDecoration(new SpacesItemDecoration(8));
+            artAdapter.setOnItemClickListener(new HomeArtAdapter.OnItemClickListener() {
+                @Override
+                public void onArtLikeClick(View view, int position, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
+//                    ToastUtils.showShortToast("点击了收藏");
+                    clickLikePos=position;
+                    sendLikeData(bean);
+                }
+
+                @Override
+                public void onItemClick(View view, int position) {
+                    Intent intent = new Intent(AYHomeActivity.this, ArtListActivity.class);
+                    intent.putExtra("totalCount",bean.totalCount);
+                    intent.putExtra("serviceType","艺术");
+                    intent.putExtra("title","艺术");
+                    startActivity(intent);
+                }
+
+                @Override
+                public void onItemLongClick(View view, int position) {
+
+                }
+            });
+        }else {
+            artAdapter.setRefreshData(bean.services);
+        }
+    }
+
+    private void sendLikeData(HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
+        String t=BasePrefUtils.getAuthToken();
+        String u=BasePrefUtils.getUserId();
+        showProcessDialog();
+        if (bean.is_collected){//已收藏 点击取消
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
             }
-
-            @Override
-            public void onItemClick(View view, int position) {
-                startActivity(new Intent(AYHomeActivity.this, ArtListActivity.class));
+        }else {
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
             }
-
-            @Override
-            public void onItemLongClick(View view, int position) {
-
-            }
-        });
+        }
     }
 
     private void initSport(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
 
-        LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeSportAdapter adapter = new HomeSportAdapter(AYHomeActivity.this, bean);
-        rv_home_sport.setNestedScrollingEnabled(false);
-        rv_home_sport.setLayoutManager(manager);
-        rv_home_sport.setAdapter(adapter);
-        rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
+        if (sportAdapter==null) {
+            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            sportAdapter = new HomeSportAdapter(AYHomeActivity.this, bean);
+            rv_home_sport.setNestedScrollingEnabled(false);
+            rv_home_sport.setLayoutManager(manager);
+            rv_home_sport.setAdapter(sportAdapter);
+            rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
+        }else {
+            sportAdapter.setRefreshData(bean.services);
+        }
     }
 
     private void initScience(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
-        LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        HomeScienceAdapter adapter = new HomeScienceAdapter(AYHomeActivity.this, bean);
-        rv_home_science.setNestedScrollingEnabled(false);
-        rv_home_science.setLayoutManager(manager);
-        rv_home_science.setAdapter(adapter);
-        rv_home_science.addItemDecoration(new SpacesItemDecoration(8));
+        if (scienceAdapter==null) {
+            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            scienceAdapter = new HomeScienceAdapter(AYHomeActivity.this, bean);
+            rv_home_science.setNestedScrollingEnabled(false);
+            rv_home_science.setLayoutManager(manager);
+            rv_home_science.setAdapter(scienceAdapter);
+            rv_home_science.addItemDecoration(new SpacesItemDecoration(8));
+        }else {
+            sportAdapter.setRefreshData(bean.services);
+        }
     }
 
     @Override
@@ -312,16 +351,37 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
+        Intent intent = new Intent(AYHomeActivity.this, ArtListActivity.class);
         switch(v.getId()){
             case R.id.tv_home_care_more:
                 startActivity(new Intent(AYHomeActivity.this,CareListActivity.class));
                 break;
             case R.id.tv_home_art_more:
-                startActivity(new Intent(AYHomeActivity.this,ArtListActivity.class));
+                if (bean!=null && bean.result!=null){
+                    int m = bean.result.homepage_services.get(1).totalCount;
+                    intent.putExtra("totalCount",m);
+                }
+                intent.putExtra("serviceType","艺术");
+                intent.putExtra("title","艺术");
+                startActivity(intent);
                 break;
             case R.id.tv_home_sport_more:
+                if (bean!=null && bean.result!=null){
+                    int m = bean.result.homepage_services.get(2).totalCount;
+                    intent.putExtra("totalCount",m);
+                }
+                intent.putExtra("serviceType","运动");
+                intent.putExtra("title","运动");
+                startActivity(intent);
                 break;
             case R.id.tv_home_science_more:
+                if (bean!=null && bean.result!=null){
+                    int m = bean.result.homepage_services.get(3).totalCount;
+                    intent.putExtra("totalCount",m);
+                }
+                intent.putExtra("serviceType","科学");
+                intent.putExtra("title","科学");
+                startActivity(intent);
                 break;
             case R.id.iv_home_location:
                 ToastUtils.showShortToast("点击了location");
@@ -356,22 +416,155 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
      */
     public void AYGetImgTokenCommandSuccess(JSONObject args){
 
+        sl_home_refresh.setEnabled(true);
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
         BasePrefUtils.setAccesskeyId(bean.accessKeyId);
         BasePrefUtils.setSecurityToken(bean.SecurityToken);
         BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
         BasePrefUtils.setExpiration(bean.Expiration);
-        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
-        initHomeData();
+        refreshToken();
+//        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
+        if (isFirstLoad) {
+            isFirstLoad=false;
+            initHomeData();
+        }
     }
 
     public void AYGetImgTokenCommandFailed(JSONObject args) {
-        initHomeData();
+        sl_home_refresh.setEnabled(false);
+        if (isFirstLoad) {
+            isFirstLoad=false;
+            initHomeData();
+        }
         ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);
         }
+    }
+
+    /**
+     * 收藏相关
+     * @param args
+     */
+    public void AYLikePushCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
+        LikePushUiBean popUiBean = new LikePushUiBean(serverBean);
+        if (popUiBean.isSuccess){
+            artAdapter.notifyItemChanged(clickLikePos,true);
+        }else {
+            if (bean != null && bean.error != null) {
+                ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+            }
+        }
+    }
+
+
+
+    public void AYLikePushCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    /**
+     * 取消收藏相关
+     * @param args
+     */
+    public void AYLikePopCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
+        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
+        if (popUiBean.isSuccess){
+            artAdapter.notifyItemChanged(clickLikePos,false);
+        }else {
+            if (bean != null && bean.error != null) {
+                ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+            }
+        }
+    }
+
+
+    public void AYLikePopCommandFailed(JSONObject args) {
+       closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    /**
+     * 收藏列表
+     * @param args
+     */
+    public void AYLikeQueryCommandSuccess(JSONObject args){
+
+        sl_home_refresh.setEnabled(true);
+        ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
+        ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
+        BasePrefUtils.setAccesskeyId(bean.accessKeyId);
+        BasePrefUtils.setSecurityToken(bean.SecurityToken);
+        BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
+        BasePrefUtils.setExpiration(bean.Expiration);
+        refreshToken();
+        //        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
+        if (isFirstLoad) {
+            isFirstLoad=false;
+            initHomeData();
+        }
+    }
+
+
+    public void AYLikeQueryCommandFailed(JSONObject args) {
+        sl_home_refresh.setEnabled(false);
+        if (isFirstLoad) {
+            isFirstLoad=false;
+            initHomeData();
+        }
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message);
+        }
+    }
+
+    private void showProcessDialog() {
+        if (pb==null) {
+            pb = new ProgressDialog(this);
+        }
+        pb.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+        pb.setCancelable(false);// 设置是否可以通过点击Back键取消
+        pb.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        pb.setTitle("提示");
+        pb.setMessage("正在处理中...");
+        pb.show();
+    }
+
+    private void closeProcessDialog(){
+        if (pb!=null && pb.isShowing()){
+            pb.dismiss();
+        }
+    }
+
+
+    private void refreshToken() {
+        Observable.interval(OtherUtils.getRefreshTime(BasePrefUtils.getExpiration()),OtherUtils.getRefreshTime(BasePrefUtils.getExpiration()),TimeUnit.SECONDS,Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        AYFacade facade = facades.get("QueryServiceFacade");
+                        try {
+                            JSONObject object = new JSONObject();
+                            object.put("token",BasePrefUtils.getAuthToken());
+                            facade.execute("getImgToken",object);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
     }
 
     public void didNavLeftBtnClickNotify(JSONObject args) {
@@ -445,8 +638,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
-        LogUtils.d("AYHomeActivity " + args.toString());
-        HomeInfoBean bean = JSON.parseObject(args.toString(), HomeInfoBean.class);
+        bean = JSON.parseObject(args.toString(), HomeInfoBean.class);
         if (bean != null && "ok".equals(bean.status)) {
             initCare(bean.result.homepage_services.get(0));
             initArt(bean.result.homepage_services.get(1));

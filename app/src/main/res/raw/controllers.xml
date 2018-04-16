@@ -81,4 +81,25 @@
         <fragment short="frag_navbar"/>
         <fragment short="frag_tabbar"/>
     </controller>
+
+    <controller short="CareListActivity"
+                name="com.blackmirror.dongda.activity.CareListActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="QueryServiceFacade" />
+    </controller>
+
+    <controller short="ArtListActivity"
+                name="com.blackmirror.dongda.activity.ArtListActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="QueryServiceFacade" />
+    </controller>
+
+    <controller short="MyLikeActivity"
+                name="com.blackmirror.dongda.activity.MyLikeActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="QueryServiceFacade" />
+    </controller>
 </controllers>

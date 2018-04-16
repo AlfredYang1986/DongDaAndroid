@@ -163,7 +163,7 @@ public abstract class AYRemoteCommand extends AYCommand {
 
                     @Override
                     public void onNext(JSONObject o) {
-                        LogUtils.d("onNext "+o.toString());
+                        LogUtils.d("flag","onNext "+o.toString());
                         unSubscribe();
                         try {
                             if (o == null || !o.getString("status").equals("ok")) {
@@ -182,13 +182,13 @@ public abstract class AYRemoteCommand extends AYCommand {
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtils.d("onError "+e.getMessage());
+                        LogUtils.d("flag","onError "+e.getMessage());
                         unSubscribe();
                     }
 
                     @Override
                     public void onComplete() {
-                        LogUtils.d("onComplete ");
+                        LogUtils.d("flag","onComplete ");
                         unSubscribe();
                     }
                 });
@@ -219,7 +219,7 @@ public abstract class AYRemoteCommand extends AYCommand {
             bReader.close();
             iReader.close();
             in.close();
-            LogUtils.d("xcx", "返回的数据：" + json.toString());
+            LogUtils.d("flag", "返回的数据：" + json.toString());
             JSONObject js_result = null;
             js_result = new JSONObject(json.toString());
             return js_result;

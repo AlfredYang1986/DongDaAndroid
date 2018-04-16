@@ -37,5 +37,9 @@
 
         <command short="SearchService" />
         <command short="getImgToken" />
+        <command short="AYSubjectMoreCommand" />
+        <command short="AYLikePushCommand" />
+        <command short="AYLikePopCommand" />
+        <command short="AYLikeQueryCommand" />
     </facade>
 </facades>

@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
+import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
 public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareListViewHolder> {
 
 
-    private List<Integer> list;
+    private CareMoreUiBean bean;
     protected Context context;
     private OnCareListClickListener listener;
 
@@ -26,9 +28,9 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
         this.listener = listener;
     }
 
-    public CareListAdapter(Context context, List<Integer> list) {
+    public CareListAdapter(Context context, CareMoreUiBean bean) {
         this.context = context;
-        this.list = list;
+        this.bean = bean;
     }
 
 
@@ -43,9 +45,23 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
     @Override
     public void onBindViewHolder(CareListAdapter.CareListViewHolder holder, int position) {
 
-            holder.sv_care_list_photo.setImageURI(OtherUtils.resourceIdToUri(context, list.get
-                    (position)));
-        holder.iv_care_list_like.setBackgroundResource(R.drawable.home_art_like);
+        CareMoreServerBean.ResultBean.ServicesBean servicesBean = this.bean.services.get(position);
+
+        String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
+        holder.sv_care_list_photo.setImageURI(url);
+        if (servicesBean.is_collected){
+            holder.iv_care_list_like.setBackgroundResource(R.drawable.like_selected);
+        }else {
+            holder.iv_care_list_like.setBackgroundResource(R.drawable.home_art_like);
+        }
+        holder.tv_care_list_name.setText(servicesBean.service_tags.get(0));
+        StringBuilder sb = new StringBuilder();
+        sb.append(servicesBean.brand_name)
+                .append("的")
+                .append(servicesBean.operation.contains("低龄")?"低龄":"")
+                .append(servicesBean.service_leaf);
+        holder.tv_care_list_content.setText(sb.toString());
+        holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
         initListener(holder, position);
 
     }
@@ -75,11 +91,16 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
 
     @Override
     public int getItemCount() {
-        return list == null ? 0 : list.size();
+        return bean.services == null ? 0 : bean.services.size();
     }
 
-    public void setMoreData(List<Integer> moreList) {
-        list.addAll(moreList);
+    public void setMoreData(List<CareMoreServerBean.ResultBean.ServicesBean> moreList) {
+        bean.services.addAll(moreList);
+    }
+
+    public void setRefreshData(List<CareMoreServerBean.ResultBean.ServicesBean> moreList) {
+        bean.services.clear();
+        bean.services.addAll(moreList);
     }
 
 
