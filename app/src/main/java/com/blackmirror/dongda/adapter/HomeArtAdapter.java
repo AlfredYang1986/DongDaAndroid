@@ -99,7 +99,7 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemClick(holder.itemView,holder.getAdapterPosition());
+                    listener.onItemClick(holder.itemView,holder.getAdapterPosition(),servicesBean.service_id);
                 }
             }
         });
@@ -141,7 +141,7 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
     public interface OnItemClickListener {
         void onArtLikeClick(View view, int postion, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean bean);
 
-        void onItemClick(View view, int position);
+        void onItemClick(View view, int position, String service_id);
 
         void onItemLongClick(View view, int position);
     }

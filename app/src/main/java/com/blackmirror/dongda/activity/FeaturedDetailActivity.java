@@ -19,6 +19,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 精选主题详情页
+ */
 public class FeaturedDetailActivity extends AYActivity {
 
     final static String TAG = "FeaturedDetailActivity";

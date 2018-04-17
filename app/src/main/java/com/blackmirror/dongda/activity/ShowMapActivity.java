@@ -7,6 +7,7 @@ import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
+import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
@@ -37,7 +38,7 @@ public class ShowMapActivity extends AppCompatActivity {
         }
         aMap.getUiSettings().setZoomControlsEnabled(false);
         //设置默认缩放比例 3-19
-        aMap.moveCamera(CameraUpdateFactory.zoomTo(13));
+        aMap.moveCamera(CameraUpdateFactory.zoomTo(15));
         addMarkers();
         initListener();
     }
@@ -58,10 +59,11 @@ public class ShowMapActivity extends AppCompatActivity {
     }
 
     private void addMarkers() {
+        aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(39.95439910888672,116.50338745117188)));
         markerOption = new MarkerOptions();
-        markerOption.position(AppConstant.BEIJING);
+        markerOption.position(new LatLng(39.95439910888672,116.50338745117188));
         markerOption.icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.home_btn_nearyou));
+                .fromResource(R.drawable.map_icon_art_normal));
         Marker marker = aMap.addMarker(markerOption);
         LogUtils.d("xcx","markerId== "+marker.getId());
 

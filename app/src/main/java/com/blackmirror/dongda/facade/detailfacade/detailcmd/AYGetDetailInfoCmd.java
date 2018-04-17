@@ -16,7 +16,7 @@ public class AYGetDetailInfoCmd extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return null;
+        return "http://192.168.100.174:9000/al/service/detail";
     }
 
     @Override

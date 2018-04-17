@@ -13,4 +13,7 @@ public class AppConstant {
     public static final int TAKE_PHOTO=10013;
     public static final String DEFAULT_CHARSET_NAME = "utf-8";
 
+    public static final int FROM_PHONE_INPUT=100;
+    public static final int FROM_NAME_INPUT=101;
+
 }

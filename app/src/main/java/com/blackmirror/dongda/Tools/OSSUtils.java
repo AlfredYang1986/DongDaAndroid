@@ -7,6 +7,10 @@ import android.util.Log;
  */
 public class OSSUtils {
 
+    public static String getSignedUrl(String imgUrl){
+        return getSignedUrl(imgUrl, 30*60);
+    }
+
     public static String getSignedUrl(String imgUrl,long time){
         long t= System.currentTimeMillis()/1000+time;
         String verb="GET\n";

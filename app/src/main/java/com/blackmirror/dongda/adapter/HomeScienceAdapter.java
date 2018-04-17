@@ -63,17 +63,28 @@ public class HomeScienceAdapter extends RecyclerView.Adapter<HomeScienceAdapter.
         holder.tv_item_science_detail.setText(sb.toString());
         holder.tv_item_science_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
 
-        initListener(holder, position);
+        initListener(holder, position, servicesBean);
 
     }
 
-    private void initListener(final HomeScienceViewHolder holder, int position) {
+    private void initListener(final HomeScienceViewHolder holder, int position, final HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    int pos = holder.getLayoutPosition();
+                    listener.onScienceItemClick(holder.iv_item_science_like, pos, servicesBean.service_id);
+                }
+            }
+        });
+
         holder.iv_item_science_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getLayoutPosition();
-                    listener.onArtLikeClick(holder.iv_item_science_like, pos);
+                    listener.onScienceLikeClick(holder.iv_item_science_like, pos);
                 }
             }
         });
@@ -113,11 +124,10 @@ public class HomeScienceAdapter extends RecyclerView.Adapter<HomeScienceAdapter.
     }
 
     public interface OnItemClickListener {
-        void onArtLikeClick(View view, int postion);
+        void onScienceLikeClick(View view, int position);
 
-        void onItemClick(View view, int position);
+        void onScienceItemClick(View view, int position, String service_id);
 
-        void onItemLongClick(View view, int position);
     }
 
 }

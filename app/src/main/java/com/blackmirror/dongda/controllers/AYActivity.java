@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.controllers;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     public Map<String, AYFacade> facades;
     public Map<String, Object> fragments;
     protected FragmentManager mFragmentManage;
+    protected ProgressDialog pb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +88,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
         return AYSysHelperFunc.getInstance().handleNotifications(name, args, this);
     }
 
-    public boolean sendMessageToFragment (String frag, String methodName, JSONObject args) {
+    public boolean sendMessageToFragment(String frag, String methodName, JSONObject args) {
 
 
         Boolean result = true;
@@ -117,9 +119,40 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
 
     @Override
     protected void onDestroy() {
+        closeProcessDialog();
+        pb = null;
         isViewValid = false;
         super.onDestroy();
     }
 
     protected abstract void bindingFragments();
+
+    protected void showProcessDialog() {
+        showProcessDialog("提示", "正在处理中...");
+    }
+
+    protected void showProcessDialog(String message) {
+        showProcessDialog("提示", message);
+    }
+
+    protected void showProcessDialog(String title, String message) {
+        if (!isViewValid()) {
+            return;
+        }
+        if (pb == null) {
+            pb = new ProgressDialog(this);
+        }
+        pb.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
+        pb.setCancelable(false);// 设置是否可以通过点击Back键取消
+        pb.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
+        pb.setTitle(title);
+        pb.setMessage(message);
+        pb.show();
+    }
+
+    protected void closeProcessDialog() {
+        if (pb != null && pb.isShowing()) {
+            pb.dismiss();
+        }
+    }
 }

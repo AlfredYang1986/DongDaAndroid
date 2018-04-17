@@ -29,10 +29,10 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
-import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
@@ -66,6 +66,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private Uri imageUri;//相机拍照图片保存地址
     private Button btn_enter_home;
     private Button btn_enter_cancel;
+    private boolean isFromNameInput;
 
 
     @Override
@@ -73,7 +74,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
-
+        isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_PHONE_INPUT;
         initView();
         initData();
         initListener();
@@ -126,6 +127,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             case R.id.btn_enter_cancel:
                 //                uploadUserScreenPhoto(path);
                 setOriginScreenName();
+                finish();
+                AYApplication.finishAllActivity();
                 break;
         }
     }
@@ -412,6 +415,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                     try {
                         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
                                 (outputUri));
+                        //                        isChangeScreenPhoto=true;
                         iv_head_photo.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -422,7 +426,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                     break;
             }
         } else {
-            ToastUtils.showShortToast("设置图片出错!");
+            //            ToastUtils.showShortToast("设置图片出错!");
         }
 
         /*if (resultCode != RESULT_OK) {        //此处的 RESULT_OK 是系统自定义得一个常量

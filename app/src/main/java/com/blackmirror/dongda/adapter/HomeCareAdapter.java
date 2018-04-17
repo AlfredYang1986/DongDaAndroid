@@ -63,17 +63,17 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
                 .append(servicesBean.service_leaf);
         holder.tv_care_detail.setText(sb.toString());
         holder.tv_care_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
-        initListener(holder,position);
+        initListener(holder,position,servicesBean);
 
     }
 
-    private void initListener(final HomeCareViewHolder holder, int position) {
+    private void initListener(final HomeCareViewHolder holder, int position, final HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getAdapterPosition();
-                    listener.onItemCareClick(holder.itemView, pos);
+                    listener.onItemCareClick(holder.itemView, pos,servicesBean.service_id);
                 }
             }
         });
@@ -108,7 +108,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
     }
 
     public interface OnCareClickListener {
-        void onItemCareClick(View view, int position);
+        void onItemCareClick(View view, int position, String service_id);
     }
 
 }

@@ -1,6 +1,5 @@
 package com.blackmirror.dongda.Home.HomeActivity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,6 +21,8 @@ import com.blackmirror.dongda.activity.ArtListActivity;
 import com.blackmirror.dongda.activity.CareListActivity;
 import com.blackmirror.dongda.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.activity.MyLikeActivity;
+import com.blackmirror.dongda.activity.ServiceDetailInfoActivity;
+import com.blackmirror.dongda.activity.ShowMapActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -89,8 +90,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private HomeSportAdapter sportAdapter;
     private HomeScienceAdapter scienceAdapter;
     private HomeInfoBean bean;
-    private ProgressDialog pb;
     private int clickLikePos;
+    private int clickAdapter=0;//1 art 2 sport 3 science
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +109,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         initView();
         initData();
         initListener();
-        OtherUtils.setStatusBarColor(AYHomeActivity.this);
     }
 
 
@@ -223,9 +223,12 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
             careAdapter.setOnCareClickListener(new HomeCareAdapter.OnCareClickListener() {
                 @Override
-                public void onItemCareClick(View view, int position) {
+                public void onItemCareClick(View view, int position, String service_id) {
 
 //                    startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
+                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
                 }
             });
         }else {
@@ -252,11 +255,9 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 }
 
                 @Override
-                public void onItemClick(View view, int position) {
-                    Intent intent = new Intent(AYHomeActivity.this, ArtListActivity.class);
-                    intent.putExtra("totalCount",bean.totalCount);
-                    intent.putExtra("serviceType","艺术");
-                    intent.putExtra("title","艺术");
+                public void onItemClick(View view, int position, String service_id) {
+                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
                     startActivity(intent);
                 }
 
@@ -295,7 +296,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void initSport(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+    private void initSport(final HomeInfoBean.ResultBean.HomepageServicesBean bean) {
 
         if (sportAdapter==null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
@@ -305,6 +306,19 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             rv_home_sport.setLayoutManager(manager);
             rv_home_sport.setAdapter(sportAdapter);
             rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
+            sportAdapter.setOnItemClickListener(new HomeSportAdapter.OnItemClickListener() {
+                @Override
+                public void onSportLikeClick(View view, int position, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+                    sendLikeData(servicesBean);
+                }
+
+                @Override
+                public void onSportItemClick(View view, int position, String service_id) {
+                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
+                }
+            });
         }else {
             sportAdapter.setRefreshData(bean.services);
         }
@@ -319,6 +333,19 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             rv_home_science.setLayoutManager(manager);
             rv_home_science.setAdapter(scienceAdapter);
             rv_home_science.addItemDecoration(new SpacesItemDecoration(8));
+            scienceAdapter.setOnItemClickListener(new HomeScienceAdapter.OnItemClickListener() {
+                @Override
+                public void onScienceLikeClick(View view, int position) {
+
+                }
+
+                @Override
+                public void onScienceItemClick(View view, int position, String service_id) {
+                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
+                }
+            });
         }else {
             sportAdapter.setRefreshData(bean.services);
         }
@@ -384,6 +411,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.iv_home_location:
+                startActivity(new Intent(AYHomeActivity.this,ShowMapActivity.class));
                 ToastUtils.showShortToast("点击了location");
                 break;
             case R.id.iv_home_like:
@@ -510,7 +538,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
         BasePrefUtils.setExpiration(bean.Expiration);
         refreshToken();
-        //        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
         if (isFirstLoad) {
             isFirstLoad=false;
             initHomeData();
@@ -530,23 +557,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void showProcessDialog() {
-        if (pb==null) {
-            pb = new ProgressDialog(this);
-        }
-        pb.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
-        pb.setCancelable(false);// 设置是否可以通过点击Back键取消
-        pb.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条
-        pb.setTitle("提示");
-        pb.setMessage("正在处理中...");
-        pb.show();
-    }
-
-    private void closeProcessDialog(){
-        if (pb!=null && pb.isShowing()){
-            pb.dismiss();
-        }
-    }
 
 
     private void refreshToken() {

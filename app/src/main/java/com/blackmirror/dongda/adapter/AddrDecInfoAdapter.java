@@ -5,10 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.facebook.drawee.view.SimpleDraweeView;
+import com.blackmirror.dongda.model.uibean.SafeUiBean;
 
 import java.util.List;
 
@@ -17,14 +18,14 @@ public class AddrDecInfoAdapter extends RecyclerView.Adapter<AddrDecInfoAdapter.
 
     protected Context context;
     private OnCareClickListener listener;
-    private List<Integer> list;
+    private List<SafeUiBean> list;
 
 
     public void setOnCareClickListener(OnCareClickListener listener) {
         this.listener = listener;
     }
 
-    public AddrDecInfoAdapter(Context context, List<Integer> list) {
+    public AddrDecInfoAdapter(Context context, List<SafeUiBean> list) {
         this.context = context;
         this.list = list;
     }
@@ -40,7 +41,9 @@ public class AddrDecInfoAdapter extends RecyclerView.Adapter<AddrDecInfoAdapter.
     @Override
     public void onBindViewHolder(AddrInfoViewHolder holder, int position) {
 
-        initListener(holder,position);
+        holder.iv_item_addr_photo.setBackgroundResource(list.get(position).res_id);
+        holder.tv_item_addr_dec.setText(list.get(position).dec);
+//        initListener(holder,position);
 
     }
 
@@ -63,14 +66,14 @@ public class AddrDecInfoAdapter extends RecyclerView.Adapter<AddrDecInfoAdapter.
 
     public static class AddrInfoViewHolder extends RecyclerView.ViewHolder {
 
-        public SimpleDraweeView sv_care_photo;
-        public TextView tv_care_name;
-        public TextView tv_care_detail;
-        public TextView tv_care_location;
+        public ImageView iv_item_addr_photo;
+        public TextView tv_item_addr_dec;
+
 
         public AddrInfoViewHolder(View itemView) {
             super(itemView);
-
+            iv_item_addr_photo=itemView.findViewById(R.id.iv_item_addr_photo);
+            tv_item_addr_dec=itemView.findViewById(R.id.tv_item_addr_dec);
         }
     }
 

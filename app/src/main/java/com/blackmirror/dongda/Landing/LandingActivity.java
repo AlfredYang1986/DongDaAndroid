@@ -149,7 +149,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
      * @param arg
      */
     public void AYWeChatLoginCmdSuccess(JSONObject arg) {
-        LogUtils.d("LandingActivity " + Thread.currentThread().getName());
+        closeProcessDialog();
 
         LogUtils.d("LandingActivity wechat login " + arg.toString());
         ToastUtils.showShortToast("登陆成功!");
@@ -173,6 +173,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
      * @param arg
      */
     public void AYWeChatLoginCmdFailed(JSONObject arg) {
+        closeProcessDialog();
         LogUtils.d("LandingActivity wechat failed " + arg.toString());
         //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
         //        sms_result = new SendSMSCodeResult(arg);
@@ -237,9 +238,6 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         }
     }
 
-    private void checkPermissionStatus() {
-
-    }
 
     private void initSystemBarColor() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -285,8 +283,8 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
 
         AYFacade facade = facades.get("LoginFacade");
 
+        showProcessDialog("正在登陆...");
         try {
-
             Map<String, String> m = new HashMap<>();
 
             m.put("provide_uid", userId);
@@ -305,6 +303,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
 
 
         } catch (JSONException e) {
+            closeProcessDialog();
             e.printStackTrace();
         }
 

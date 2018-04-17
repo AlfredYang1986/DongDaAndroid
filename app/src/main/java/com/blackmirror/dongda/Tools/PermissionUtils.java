@@ -43,6 +43,24 @@ public class PermissionUtils {
         return list;
     }
 
+    public static List<String> checkPermissionAndNeedGranted(AppCompatActivity activity, String[] permissionList) {
+        List<String> list = new ArrayList<>();
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+            return list;
+        }
+        if (activity == null || permissionList == null) {
+            return list;
+        }
+        for (int i = 0; i < permissionList.length; i++) {
+            if (ContextCompat.checkSelfPermission(activity, permissionList[i]) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.shouldShowRequestPermissionRationale(activity, permissionList[i])) {
+                list.add(permissionList[i]);
+            }
+
+        }
+        return list;
+    }
+
     public static void requestMulitPermissions(AppCompatActivity activity, List<String> list) {
         //如果是6.0以下的手机，ActivityCompat.checkSelfPermission()会始终等于PERMISSION_GRANTED，
         // 但是，如果用户关闭了你申请的权限，ActivityCompat.checkSelfPermission(),会导致程序崩溃(java.lang.RuntimeException: Unknown exception code: 1 msg null)，

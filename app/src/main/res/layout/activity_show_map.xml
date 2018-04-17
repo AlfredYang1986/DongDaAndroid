@@ -17,8 +17,10 @@
     <com.amap.api.maps2d.MapView
         app:layout_constraintBottom_toBottomOf="@id/gl_root"
         android:id="@+id/mv_map"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="13dp"
+        android:layout_marginBottom="41dp"
+        android:layout_width="327dp"
+        android:layout_height="117dp"/>
 
     <ImageView
          android:id="@+id/iv_map_back"

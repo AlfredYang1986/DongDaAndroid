@@ -2,12 +2,16 @@ package com.blackmirror.dongda.Tools;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v7.app.AppCompatActivity;
 
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.stetho.Stetho;
 import com.mob.MobSDK;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by alfredyang on 10/7/17.
@@ -17,6 +21,8 @@ public class AYApplication extends Application {
 
     public static Context appConext;
     private static Application me;
+
+    public static List<AppCompatActivity> activityList;
     //    public static IWXAPI weChatApi;
 
     @Override
@@ -28,6 +34,20 @@ public class AYApplication extends Application {
         initFresco();
 //        initWeChat();
         initShareSDK();
+        activityList= new ArrayList<>();
+    }
+
+    public static void addActivity(AppCompatActivity activity){
+        if (!activityList.contains(activity)){
+            activityList.add(activity);
+        }
+    }
+
+    public static void finishAllActivity(){
+        for (int i = 0; i < activityList.size(); i++) {
+            activityList.get(i).finish();
+        }
+        activityList.clear();
     }
 
 

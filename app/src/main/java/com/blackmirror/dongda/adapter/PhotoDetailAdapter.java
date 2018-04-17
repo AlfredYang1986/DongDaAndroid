@@ -5,6 +5,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.model.serverbean.ServiceDetailInfoServerBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -15,9 +18,9 @@ import java.util.List;
 
 public class PhotoDetailAdapter extends PagerAdapter {
 
-    List<Integer> list;
+    private List<ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean> list;
 
-    public PhotoDetailAdapter(List<Integer> list) {
+    public PhotoDetailAdapter(List<ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean> list) {
         this.list = list;
     }
 
@@ -28,9 +31,12 @@ public class PhotoDetailAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
+        LogUtils.d("instantiateItem ");
         View view=View.inflate(container.getContext(), R.layout.vp_item_photo,null);
         SimpleDraweeView sv_detail_photo=view.findViewById(R.id.sv_detail_photo);
 //        sv_detail_photo.setImageURI(list.get(position));
+        String url= OSSUtils.getSignedUrl(list.get(position).image);
+        sv_detail_photo.setImageURI(url);
         container.addView(view);
         return view;
 

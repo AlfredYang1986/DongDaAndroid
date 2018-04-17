@@ -116,4 +116,11 @@
 
         <facade short="AYDetailInfoFacade" />
     </controller>
+
+    <controller short="ServiceDetailInfoActivity"
+                name="com.blackmirror.dongda.activity.ServiceDetailInfoActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="AYDetailInfoFacade" />
+    </controller>
 </controllers>

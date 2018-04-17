@@ -62,17 +62,27 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
                 .append(servicesBean.category);
         holder.tv_item_sport_detail.setText(sb.toString());
         holder.tv_item_sport_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
-        initListener(holder, position);
+        initListener(holder, position,servicesBean);
 
     }
 
-    private void initListener(final HomeSportViewHolder holder, int position) {
+    private void initListener(final HomeSportViewHolder holder, int position, final HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    int pos = holder.getLayoutPosition();
+                    listener.onSportItemClick(holder.iv_item_sport_like, pos,servicesBean.service_id);
+                }
+            }
+        });
+
         holder.iv_item_sport_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getLayoutPosition();
-                    listener.onArtLikeClick(holder.iv_item_sport_like, pos);
+                    listener.onSportLikeClick(holder.iv_item_sport_like, pos, servicesBean);
                 }
             }
         });
@@ -112,11 +122,10 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
     }
 
     public interface OnItemClickListener {
-        void onArtLikeClick(View view, int postion);
+        void onSportLikeClick(View view, int position, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean);
 
-        void onItemClick(View view, int position);
+        void onSportItemClick(View view, int position,String service_id);
 
-        void onItemLongClick(View view, int position);
     }
 
 }

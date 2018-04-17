@@ -11,12 +11,15 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYApplication;
+import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.model.ErrorInfoBean;
 import com.blackmirror.dongda.model.SendSmsBean;
 import com.blackmirror.dongda.model.SendSmsUiBean;
 
@@ -28,12 +31,9 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import static android.widget.Toast.LENGTH_LONG;
 
@@ -56,8 +56,7 @@ public class PhoneInputActivity extends AYActivity {
         initView();
         initData();
         initListener();
-
-        init();
+        AYApplication.addActivity(this);
     }
 
     private void initView() {
@@ -115,7 +114,7 @@ public class PhoneInputActivity extends AYActivity {
 
                     @Override
                     public void onNext(Long aLong) {
-                        sms_code.setText("重新获取("+(10-aLong)+")");
+                        sms_code.setText("重新获取("+(30-aLong)+")");
                     }
 
                     @Override
@@ -132,36 +131,6 @@ public class PhoneInputActivity extends AYActivity {
 
     }
 
-    private void init() {
-        Observable.create(new ObservableOnSubscribe<String>() {
-            @Override
-            public void subscribe(ObservableEmitter<String> emitter) throws Exception {
-                emitter.onNext("");
-                emitter.onComplete();
-            }
-        }).observeOn(Schedulers.io()).subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<String>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(String s) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
 
 
     @Override
@@ -245,6 +214,7 @@ public class PhoneInputActivity extends AYActivity {
             return;
         }
         if (sendSmsUiBean.isSuccess) {
+            showProcessDialog("正在登陆...");
             AYFacade facade = facades.get("LoginFacade");
             AYCommand cmd = facade.cmds.get("LoginWithPhone");
             Map<String, Object> m = new HashMap<>();
@@ -261,6 +231,7 @@ public class PhoneInputActivity extends AYActivity {
     }
 
     public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
+        closeProcessDialog();
         Toast.makeText(this, "登陆成功", LENGTH_LONG).show();
         LogUtils.d("AYLoginWithPhoneCommandSuccess "+args.toString());
 
@@ -271,7 +242,7 @@ public class PhoneInputActivity extends AYActivity {
             e.printStackTrace();
         }
 
-        if (screen_name == null || screen_name.isEmpty()) {
+        if (TextUtils.isEmpty(screen_name)) {
             try {
                 Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
                 AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
@@ -283,6 +254,7 @@ public class PhoneInputActivity extends AYActivity {
         } else {
             try {
                 Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
+                intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
                 AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
                 intent.putExtra("current_user", p);
                 startActivity(intent);
@@ -304,7 +276,13 @@ public class PhoneInputActivity extends AYActivity {
     }
 
     public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
-        ToastUtils.showShortToast( "登陆失败");
+        closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast("登陆失败("+bean.error.code+")");
+        }else {
+            ToastUtils.showShortToast("登陆失败");
+        }
         return true;
     }
 

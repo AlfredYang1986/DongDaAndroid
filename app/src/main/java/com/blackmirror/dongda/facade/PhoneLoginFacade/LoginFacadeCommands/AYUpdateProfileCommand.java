@@ -16,7 +16,7 @@ public class AYUpdateProfileCommand extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return "http://www.altlys.com:9000/v2/profile/update";
+        return "http://192.168.100.174:9000/al/profile/update";
     }
 
     @Override
