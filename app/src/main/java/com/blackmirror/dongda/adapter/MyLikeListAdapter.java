@@ -65,18 +65,35 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
         holder.tv_care_list_content.setText(sb.toString());
         holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
 
-        initListener(holder, position);
+        initListener(holder, position,servicesBean);
 
     }
 
+    @Override
+    public void onBindViewHolder(MyLikeListViewHolder holder, int position, List<Object> payloads) {
 
-    private void initListener(final MyLikeListViewHolder holder, int position) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            boolean isLike= (boolean) payloads.get(0);
+            list.get(position).is_collected= isLike;
+            if (isLike){
+                holder.iv_care_list_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                holder.iv_care_list_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+        }
+    }
+
+
+    private void initListener(final MyLikeListViewHolder holder, int position,
+                              final QueryLikeServerBean.ResultBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getAdapterPosition();
-                    listener.onItemLikeListClick(holder.itemView, pos);
+                    listener.onItemLikeListClick(holder.itemView, pos, servicesBean.service_id);
                 }
             }
         });
@@ -85,7 +102,7 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
             public void onClick(View v) {
                 if (listener != null) {
                     listener.onItemLikeClick(holder.iv_care_list_like, holder
-                            .getAdapterPosition());
+                            .getAdapterPosition(), servicesBean);
                 }
             }
         });
@@ -120,9 +137,10 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
 
 
     public interface OnLikeListClickListener {
-        void onItemLikeListClick(View view, int position);
+        void onItemLikeListClick(View view, int position, String service_id);
 
-        void onItemLikeClick(View view, int position);
+        void onItemLikeClick(View view, int position, QueryLikeServerBean.ResultBean.ServicesBean
+                servicesBean);
     }
 
 }

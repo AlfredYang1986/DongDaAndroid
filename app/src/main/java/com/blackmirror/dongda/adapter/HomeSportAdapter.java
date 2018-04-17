@@ -66,6 +66,22 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
 
     }
 
+    @Override
+    public void onBindViewHolder(HomeSportViewHolder holder, int position, List<Object> payloads) {
+
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            boolean isLike= (boolean) payloads.get(0);
+            bean.services.get(position).is_collected= isLike;
+            if (isLike){
+                holder.iv_item_sport_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                holder.iv_item_sport_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+        }
+    }
+
     private void initListener(final HomeSportViewHolder holder, int position, final HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

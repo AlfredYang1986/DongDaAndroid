@@ -67,6 +67,22 @@ public class HomeScienceAdapter extends RecyclerView.Adapter<HomeScienceAdapter.
 
     }
 
+    @Override
+    public void onBindViewHolder(HomeScienceViewHolder holder, int position, List<Object> payloads) {
+
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            boolean isLike= (boolean) payloads.get(0);
+            bean.services.get(position).is_collected= isLike;
+            if (isLike){
+                holder.iv_item_science_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                holder.iv_item_science_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+        }
+    }
+
     private void initListener(final HomeScienceViewHolder holder, int position, final HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +100,7 @@ public class HomeScienceAdapter extends RecyclerView.Adapter<HomeScienceAdapter.
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getLayoutPosition();
-                    listener.onScienceLikeClick(holder.iv_item_science_like, pos);
+                    listener.onScienceLikeClick(holder.iv_item_science_like, pos, servicesBean);
                 }
             }
         });
@@ -124,7 +140,8 @@ public class HomeScienceAdapter extends RecyclerView.Adapter<HomeScienceAdapter.
     }
 
     public interface OnItemClickListener {
-        void onScienceLikeClick(View view, int position);
+        void onScienceLikeClick(View view, int position, HomeInfoBean.ResultBean
+                .HomepageServicesBean.ServicesBean servicesBean);
 
         void onScienceItemClick(View view, int position, String service_id);
 

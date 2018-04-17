@@ -62,18 +62,34 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
                 .append(servicesBean.service_leaf);
         holder.tv_care_list_content.setText(sb.toString());
         holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
-        initListener(holder, position);
+        initListener(holder, position,servicesBean);
 
     }
 
+    @Override
+    public void onBindViewHolder(CareListViewHolder holder, int position, List<Object> payloads) {
 
-    private void initListener(final CareListViewHolder holder, int position) {
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            boolean isLike= (boolean) payloads.get(0);
+            bean.services.get(position).is_collected= isLike;
+            if (isLike){
+                holder.iv_care_list_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                holder.iv_care_list_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+        }
+    }
+
+    private void initListener(final CareListViewHolder holder, int position, final CareMoreServerBean
+            .ResultBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getAdapterPosition();
-                    listener.onItemCareListClick(holder.itemView, pos);
+                    listener.onItemCareListClick(holder.itemView, pos, servicesBean.service_id);
                 }
             }
         });
@@ -82,7 +98,7 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
             public void onClick(View v) {
                 if (listener != null) {
                     listener.onItemCareLikeClick(holder.iv_care_list_like, holder
-                            .getAdapterPosition());
+                            .getAdapterPosition(),servicesBean);
                 }
             }
         });
@@ -125,9 +141,10 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
 
 
     public interface OnCareListClickListener {
-        void onItemCareListClick(View view, int position);
+        void onItemCareListClick(View view, int position, String service_id);
 
-        void onItemCareLikeClick(View view, int position);
+        void onItemCareLikeClick(View view, int position, CareMoreServerBean.ResultBean
+                .ServicesBean servicesBean);
     }
 
 }
