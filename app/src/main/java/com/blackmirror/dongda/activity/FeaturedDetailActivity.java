@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.activity;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -12,12 +11,15 @@ import android.widget.TextView;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.adapter.FeaturedDetailAdapter;
+import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.model.TestFeaturedDetailBean;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeaturedDetailActivity extends AppCompatActivity {
+public class FeaturedDetailActivity extends AYActivity {
 
     final static String TAG = "FeaturedDetailActivity";
     private ImageView iv_featured_detail_back;
@@ -126,6 +128,20 @@ public class FeaturedDetailActivity extends AppCompatActivity {
         });
     }
 
+    public void AYGetDetailInfoCmdSuccess(JSONObject args){
+
+    }
+
+
+    public void AYGetDetailInfoCmdFailed(JSONObject args) {
+
+    }
+
+
+    @Override
+    protected void bindingFragments() {
+
+    }
    /* @Override
     public String getClassTag() {
         return TAG;
