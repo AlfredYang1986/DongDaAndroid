@@ -43,7 +43,7 @@
         tools:replace="android:name">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="7d5d988618fd8a707018941f8cd52931"/>
+            android:value="4485c16a40931a555ff00c0bacdbf6e1"/>
 
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -77,7 +77,7 @@
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService"/>
 
-        <activity android:name=".activity.ShowMapActivity">
+        <activity android:name=".activity.NearServiceActivity">
         </activity>
         <activity android:name=".activity.CareListActivity">
         </activity>

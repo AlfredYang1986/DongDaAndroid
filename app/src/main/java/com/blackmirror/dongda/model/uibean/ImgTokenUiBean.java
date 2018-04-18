@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.model.uibean;
 
-import com.blackmirror.dongda.model.ImgTokenServerBean; /**
+import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean; /**
  * Created by Ruge on 2018-04-13 下午5:56
  */
 public class ImgTokenUiBean {

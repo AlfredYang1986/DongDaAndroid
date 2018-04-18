@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by Ruge on 2018-04-10 下午2:43
  */
-public class BaseBean implements Serializable {
+public class BaseServerBean implements Serializable {
 
     public String status;//ok 成功 其他失败
 

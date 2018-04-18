@@ -1,11 +1,13 @@
-package com.blackmirror.dongda.model;
+package com.blackmirror.dongda.model.serverbean;
+
+import com.blackmirror.dongda.model.BaseServerBean;
 
 import java.util.List;
 
 /**
  * Created by Ruge on 2018-04-11 下午1:40
  */
-public class HomeInfoBean extends BaseBean{
+public class HomeInfoServerBean extends BaseServerBean {
 
 
     /**

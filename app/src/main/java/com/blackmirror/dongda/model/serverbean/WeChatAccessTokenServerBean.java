@@ -1,6 +1,8 @@
-package com.blackmirror.dongda.model;
+package com.blackmirror.dongda.model.serverbean;
 
-public class WeChatAccessTokenBean extends BaseBean{
+import com.blackmirror.dongda.model.BaseServerBean;
+
+public class WeChatAccessTokenServerBean extends BaseServerBean {
 
     /**
      * access_token : ACCESS_TOKEN
@@ -23,7 +25,7 @@ public class WeChatAccessTokenBean extends BaseBean{
 
     @Override
     public String toString() {
-        return "WeChatAccessTokenBean{" +
+        return "WeChatAccessTokenServerBean{" +
                 "isSuccess=" + isSuccess +
                 ", access_token='" + access_token + '\'' +
                 ", expires_in=" + expires_in +

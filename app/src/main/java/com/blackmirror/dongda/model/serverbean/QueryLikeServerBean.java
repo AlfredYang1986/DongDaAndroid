@@ -1,13 +1,13 @@
 package com.blackmirror.dongda.model.serverbean;
 
-import com.blackmirror.dongda.model.BaseBean;
+import com.blackmirror.dongda.model.BaseServerBean;
 
 import java.util.List;
 
 /**
  * Created by Ruge on 2018-04-16 下午6:56
  */
-public class QueryLikeServerBean extends BaseBean {
+public class QueryLikeServerBean extends BaseServerBean {
 
     /**
      * result : {"services":[{"service_tags":["德国BMBF"],"is_collected":true,"punchline":"一起来过\u201c发现自我\u201d,陪\u201c摇晃期\u201d宝贝稳稳向前走。","service_leaf":"日间看顾","brand_id":"5a66fdeb59a6270918508f3a","location_id":"5a66fdeb59a6270918508f3b","operation":["低龄"],"service_image":"c58112f0-c1af-42c6-a30f-a4710b5f499d","brand_name":"柯莱特","service_type":"看顾","address":"朝阳区芳园南里9号院丽都水岸7号楼2层","category":"看顾","pin":{"latitude":39.96918487548828,"longitude":116.48291778564453},"service_id":"5a66fdeb59a6270918508f41"}]}

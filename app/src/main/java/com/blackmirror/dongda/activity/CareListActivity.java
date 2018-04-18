@@ -17,7 +17,7 @@ import com.blackmirror.dongda.adapter.CareListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.ErrorInfoBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
@@ -149,7 +149,7 @@ public class CareListActivity extends AYActivity {
             sl_care_list.finishLoadMore(false);
             sl_care_list.finishRefresh(false);
         }
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }
@@ -241,7 +241,7 @@ public class CareListActivity extends AYActivity {
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }
@@ -264,7 +264,7 @@ public class CareListActivity extends AYActivity {
 
     public void AYLikePopCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }

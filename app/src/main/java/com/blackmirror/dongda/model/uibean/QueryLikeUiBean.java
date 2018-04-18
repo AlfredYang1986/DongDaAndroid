@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.model.uibean;
 
-import com.blackmirror.dongda.model.UiBaseBean;
+import com.blackmirror.dongda.model.BaseUiBean;
 import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
 
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by Ruge on 2018-04-16 下午6:57
  */
-public class QueryLikeUiBean extends UiBaseBean {
+public class QueryLikeUiBean extends BaseUiBean {
 
     public List<QueryLikeServerBean.ResultBean.ServicesBean> services;
 

@@ -25,8 +25,12 @@ import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.model.ErrorInfoBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.serverbean.ServiceDetailInfoServerBean;
+import com.blackmirror.dongda.model.uibean.LikePopUiBean;
+import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.SafeUiBean;
 import com.blackmirror.dongda.model.uibean.ServiceDetailInfoUiBean;
 
@@ -58,9 +62,11 @@ public class ServiceDetailInfoActivity extends AYActivity {
     private TextView tv_service_location;
     private TextView tv_brand_tag;
     private ImageView iv_detail_back;
+    private ImageView iv_detail_like;
     private MapView mv_detail_location;
     private AMap aMap;
     private MarkerOptions markerOption;
+    private ServiceDetailInfoUiBean uiBean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +102,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         tv_service_location = findViewById(R.id.tv_service_location);
         tv_brand_tag = findViewById(R.id.tv_brand_tag);
         iv_detail_back = findViewById(R.id.iv_detail_back);
+        iv_detail_like = findViewById(R.id.iv_detail_like);
         mv_detail_location = findViewById(R.id.mv_detail_location);
         initMapView(savedInstanceState);
     }
@@ -148,35 +155,18 @@ public class ServiceDetailInfoActivity extends AYActivity {
                 }
             }
         });
+
+        iv_detail_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (uiBean!=null && uiBean.isSuccess){
+                    sendLikeData();
+                }
+            }
+        });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
-        mv_detail_location.onResume();
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
-        mv_detail_location.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
-        mv_detail_location.onDestroy();
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
-        mv_detail_location.onSaveInstanceState(outState);
-    }
 
     private void addMarkers(ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.PinBean pin) {
 
@@ -188,6 +178,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         markerOption.position(latLng);
         markerOption.icon(BitmapDescriptorFactory
                 .fromResource(R.drawable.map_icon_art_normal));
+        markerOption.anchor(0.5f,0.5f);
         Marker marker = aMap.addMarker(markerOption);
 
 
@@ -201,6 +192,13 @@ public class ServiceDetailInfoActivity extends AYActivity {
     }
 
     private void setData(ServiceDetailInfoUiBean bean) {
+
+        if (bean.service.is_collected){
+            iv_detail_like.setBackgroundResource(R.drawable.like_selected);
+        }else {
+            iv_detail_like.setBackgroundResource(R.drawable.home_art_like);
+        }
+
         PhotoDetailAdapter adapter = new PhotoDetailAdapter(bean.service.location.location_images);
         for (int i = 0; i < bean.service.location.location_images.size(); i++) {
             tl_detail_tab.addTab(tl_detail_tab.newTab().setText(bean.service.location.location_images.get(i).tag));
@@ -303,21 +301,124 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
     public void AYGetDetailInfoCmdSuccess(JSONObject args){
         ServiceDetailInfoServerBean serverBean = JSON.parseObject(args.toString(), ServiceDetailInfoServerBean.class);
-        ServiceDetailInfoUiBean uiBean = new ServiceDetailInfoUiBean(serverBean);
+        uiBean = new ServiceDetailInfoUiBean(serverBean);
         if (uiBean.isSuccess){
             setData(uiBean);
         }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+            ToastUtils.showShortToast(uiBean.message+"("+ uiBean.code+")");
         }
     }
 
 
 
     public void AYGetDetailInfoCmdFailed(JSONObject args) {
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }
+    }
+
+    /**
+     * 收藏相关
+     * @param args
+     */
+    public void AYLikePushCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
+        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
+        if (pushUiBean.isSuccess){
+           uiBean.service.is_collected=true;
+           iv_detail_like.setBackgroundResource(R.drawable.home_icon_love_select);
+        }else {
+            ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
+        }
+    }
+
+    public void AYLikePushCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    /**
+     * 取消收藏相关
+     * @param args
+     */
+    public void AYLikePopCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
+        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
+        if (popUiBean.isSuccess){
+            uiBean.service.is_collected=false;
+            iv_detail_like.setBackgroundResource(R.drawable.home_art_like);
+        }else {
+            ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
+        }
+    }
+
+    public void AYLikePopCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    private void sendLikeData() {
+        String t=BasePrefUtils.getAuthToken();
+        String u=BasePrefUtils.getUserId();
+        showProcessDialog();
+        if (uiBean.service.is_collected){//已收藏 点击取消
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+service_id+"\"}," +
+                    "\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
+            }
+        }else {
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+service_id+"\"}," +
+                    "\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
+        mv_detail_location.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
+        mv_detail_location.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
+        mv_detail_location.onDestroy();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
+        mv_detail_location.onSaveInstanceState(outState);
     }
 
 

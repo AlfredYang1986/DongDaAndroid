@@ -1,4 +1,6 @@
-package com.blackmirror.dongda.model;
+package com.blackmirror.dongda.model.uibean;
+
+import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
 
 /**
  * Created by Ruge on 2018-04-10 下午3:29
@@ -12,7 +14,7 @@ public class SendSmsUiBean {
     public String reg_token;
     public int is_reg;
 
-    public SendSmsUiBean(SendSmsBean bean) {
+    public SendSmsUiBean(SendSmsServerBean bean) {
         status=bean.status;
         if (bean != null && "ok".equals(bean.status)) {
             isSuccess = true;

@@ -1,8 +1,10 @@
-package com.blackmirror.dongda.model;
+package com.blackmirror.dongda.model.serverbean;
+
+import com.blackmirror.dongda.model.BaseServerBean;
 
 import java.util.List;
 
-public class WeChatUserInfoBean extends BaseBean{
+public class WeChatUserInfoServerBean extends BaseServerBean {
 
     /**
      * openid : OPENID
@@ -32,7 +34,7 @@ public class WeChatUserInfoBean extends BaseBean{
 
     @Override
     public String toString() {
-        return "WeChatUserInfoBean{" +
+        return "WeChatUserInfoServerBean{" +
                 "openid='" + openid + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", sex=" + sex +

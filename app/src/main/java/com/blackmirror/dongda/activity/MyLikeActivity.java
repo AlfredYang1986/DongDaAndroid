@@ -15,7 +15,7 @@ import com.blackmirror.dongda.adapter.MyLikeListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.ErrorInfoBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
@@ -110,7 +110,7 @@ public class MyLikeActivity extends AYActivity {
 
     public void AYLikeQueryCommandFailed(JSONObject args) {
 
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             if (bean != null && bean.error != null) {
                 ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
@@ -160,7 +160,7 @@ public class MyLikeActivity extends AYActivity {
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }
@@ -183,7 +183,7 @@ public class MyLikeActivity extends AYActivity {
 
     public void AYLikePopCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }

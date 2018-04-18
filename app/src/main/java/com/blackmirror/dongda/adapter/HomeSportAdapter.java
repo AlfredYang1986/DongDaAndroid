@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OSSUtils;
-import com.blackmirror.dongda.model.HomeInfoBean;
+import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.HomeSportViewHolder> {
 
 
-    HomeInfoBean.ResultBean.HomepageServicesBean bean;
+    HomeInfoServerBean.ResultBean.HomepageServicesBean bean;
     protected Context context;
     private OnItemClickListener listener;
 
@@ -26,7 +26,7 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
         this.listener = listener;
     }
 
-    public HomeSportAdapter(Context context, HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+    public HomeSportAdapter(Context context, HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
         this.context = context;
         this.bean = bean;
     }
@@ -40,7 +40,7 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
     @Override
     public void onBindViewHolder(HomeSportViewHolder holder, int position) {
 
-        HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
+        HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
 
 
         String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
@@ -82,7 +82,7 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
         }
     }
 
-    private void initListener(final HomeSportViewHolder holder, int position, final HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+    private void initListener(final HomeSportViewHolder holder, int position, final HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,7 +112,7 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
         return 0;
     }
 
-    public void setRefreshData(List<HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean> list){
+    public void setRefreshData(List<HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean> list){
         bean.services.clear();
         bean.services.addAll(list);
         notifyDataSetChanged();
@@ -138,7 +138,7 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
     }
 
     public interface OnItemClickListener {
-        void onSportLikeClick(View view, int position, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean);
+        void onSportLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean);
 
         void onSportItemClick(View view, int position,String service_id);
 

@@ -1,12 +1,12 @@
 package com.blackmirror.dongda.model.serverbean;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.blackmirror.dongda.model.BaseBean;
+import com.blackmirror.dongda.model.BaseServerBean;
 
 /**
  * Created by Ruge on 2018-04-16 下午6:12
  */
-public class LikePopServerBean extends BaseBean {
+public class LikePopServerBean extends BaseServerBean {
 
     /**
      * result : {"minus collection":"success"}

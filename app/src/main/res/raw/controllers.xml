@@ -123,4 +123,11 @@
 
         <facade short="AYDetailInfoFacade" />
     </controller>
+
+    <controller short="NearServiceActivity"
+                name="com.blackmirror.dongda.activity.NearServiceActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="AYMapCommonFacade" />
+    </controller>
 </controllers>

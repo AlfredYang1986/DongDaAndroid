@@ -19,9 +19,9 @@ import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.model.ErrorInfoBean;
-import com.blackmirror.dongda.model.SendSmsBean;
-import com.blackmirror.dongda.model.SendSmsUiBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
+import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -186,7 +186,7 @@ public class PhoneInputActivity extends AYActivity {
         Log.i(TAG, "send sms code result is " + arg.toString());
         ToastUtils.showShortToast("验证码发送成功!");
 //        sms_result = new SendSMSCodeResult(arg);
-        SendSmsBean bean = JSON.parseObject(arg.toString(), SendSmsBean.class);
+        SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
         sendSmsUiBean = new SendSmsUiBean(bean);
         return true;
     }
@@ -195,7 +195,7 @@ public class PhoneInputActivity extends AYActivity {
         Log.i(TAG, "send sms code error is " + arg.toString());
 //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
 //        sms_result = new SendSMSCodeResult(arg);
-        SendSmsBean bean = JSON.parseObject(arg.toString(), SendSmsBean.class);
+        SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
         sendSmsUiBean = new SendSmsUiBean(bean);
         ToastUtils.showShortToast(sendSmsUiBean.message);
         return true;
@@ -213,7 +213,7 @@ public class PhoneInputActivity extends AYActivity {
             ToastUtils.showShortToast(R.string.code_no_empty);
             return;
         }
-        if (sendSmsUiBean.isSuccess) {
+        if (sendSmsUiBean!=null && sendSmsUiBean.isSuccess) {
             showProcessDialog("正在登陆...");
             AYFacade facade = facades.get("LoginFacade");
             AYCommand cmd = facade.cmds.get("LoginWithPhone");
@@ -277,7 +277,7 @@ public class PhoneInputActivity extends AYActivity {
 
     public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast("登陆失败("+bean.error.code+")");
         }else {

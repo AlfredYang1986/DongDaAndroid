@@ -13,7 +13,6 @@ import android.widget.TextView;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
-import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.ArtMoreServerBean;
 import com.blackmirror.dongda.model.uibean.ArtMoreUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -79,27 +78,44 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     .append(servicesBean.service_leaf);
             vh.tv_art_list_content.setText(sb.toString());
             vh.tv_art_list_location.setText(servicesBean.address.substring(0, servicesBean.address.indexOf("区") + 1));
-            initListener(vh, position);
+            initListener(vh, position, servicesBean);
         } else if (holder instanceof ArtFooterViewHolder) {
-            LogUtils.d("totalCount "+totalCount+" size "+getItemCount());
+            /*LogUtils.d("totalCount "+totalCount+" size "+getItemCount());
             ArtFooterViewHolder vh= (ArtFooterViewHolder) holder;
             if (getItemCount()-1<totalCount){
                 vh.cl_art_root.setVisibility(View.GONE);
             }else {
                 vh.cl_art_root.setVisibility(View.VISIBLE);
                 vh.cl_art_root.setPadding(0, OtherUtils.dp2px(48),0,OtherUtils.dp2px(44));
-            }
+            }*/
         }
 
     }
 
-    private void initListener(final ArtListViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else {
+            ArtListViewHolder vh = (ArtListViewHolder) holder;
+            boolean isLike= (boolean) payloads.get(0);
+            bean.services.get(position).is_collected= isLike;
+            if (isLike){
+                vh.iv_item_art_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                vh.iv_item_art_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+        }
+    }
+
+    private void initListener(final ArtListViewHolder holder, int position, final ArtMoreServerBean.ResultBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getAdapterPosition();
-                    listener.onItemArtListClick(holder.itemView, pos);
+                    listener.onItemArtListClick(holder.itemView, pos, servicesBean.service_id);
                 }
             }
         });
@@ -108,7 +124,7 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getAdapterPosition();
-                    listener.onItemArtLikeClick(holder.iv_item_art_like, pos);
+                    listener.onItemArtLikeClick(holder.iv_item_art_like, pos, servicesBean);
                 }
             }
         });
@@ -161,9 +177,9 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public interface OnArtListClickListener {
-        void onItemArtListClick(View view, int position);
+        void onItemArtListClick(View view, int position, String service_id);
 
-        void onItemArtLikeClick(View view, int position);
+        void onItemArtLikeClick(View view, int position, ArtMoreServerBean.ResultBean.ServicesBean servicesBean);
     }
 
     @Override

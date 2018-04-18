@@ -21,25 +21,29 @@ import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.BaseBean;
-import com.blackmirror.dongda.model.ErrorInfoBean;
-import com.blackmirror.dongda.model.WeChatLoginServerBean;
-import com.blackmirror.dongda.model.WeChatUserInfoBean;
+import com.blackmirror.dongda.model.BaseServerBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.WeChatLoginServerBean;
+import com.blackmirror.dongda.model.serverbean.WeChatUserInfoServerBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 public class LandingActivity extends AYActivity implements PlatformActionListener {
@@ -47,7 +51,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
     final static String TAG = "Landing Activity";
     private android.widget.RelativeLayout rl_phone_login;
     private android.widget.RelativeLayout rl_wechat_login;
-    private static final PublishSubject<? extends BaseBean> pb = PublishSubject.create();
+    private static final PublishSubject<? extends BaseServerBean> pb = PublishSubject.create();
     private Disposable disposable;
 
     public static PublishSubject getWeChatInfo() {
@@ -79,11 +83,11 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
 
     private void initListener() {
 
-        disposable = pb.subscribe(new Consumer<BaseBean>() {
+        disposable = pb.subscribe(new Consumer<BaseServerBean>() {
             @Override
-            public void accept(BaseBean bean) throws Exception {
-                if (bean != null && bean instanceof WeChatUserInfoBean) {
-                    WeChatUserInfoBean infoBean = (WeChatUserInfoBean) bean;
+            public void accept(BaseServerBean bean) throws Exception {
+                if (bean != null && bean instanceof WeChatUserInfoServerBean) {
+                    WeChatUserInfoServerBean infoBean = (WeChatUserInfoServerBean) bean;
                     LogUtils.d(infoBean.toString());
                 }
             }
@@ -149,6 +153,9 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
      * @param arg
      */
     public void AYWeChatLoginCmdSuccess(JSONObject arg) {
+
+        LogUtils.d("AYWeChatLoginCmdSuccess " + Thread.currentThread().getName());
+
         closeProcessDialog();
 
         LogUtils.d("LandingActivity wechat login " + arg.toString());
@@ -177,7 +184,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         LogUtils.d("LandingActivity wechat failed " + arg.toString());
         //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
         //        sms_result = new SendSMSCodeResult(arg);
-        ErrorInfoBean bean = JSON.parseObject(arg.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);
         }
@@ -264,9 +271,9 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
     }
 
     @Override
-    public void onComplete(Platform platform, int i, HashMap<String, Object> map) {
+    public void onComplete(Platform platform, int i, final HashMap<String, Object> map) {
         LogUtils.d("onComplete " + Thread.currentThread().getName());
-        /*WeChatInfoBean bean = new WeChatInfoBean();
+        /*WeChatInfoServerBean bean = new WeChatInfoServerBean();
         //获取用户资料
         bean.userId = platform.getDb().getUserId();//获取用户账号
         bean.userName = platform.getDb().getUserName();//获取用户名字
@@ -281,22 +288,42 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         String token = platform.getDb().getToken();
 
 
-        AYFacade facade = facades.get("LoginFacade");
+        final Map<String, String> m = new HashMap<>();
 
-        showProcessDialog("正在登陆...");
+        m.put("provide_uid", userId);
+        m.put("provide_token", token);
+        m.put("provide_screen_name", userName);
+        m.put("provide_name", "wechat");
+        m.put("provide_screen_photo", userIcon);
+
+
+        Observable.just("").flatMap(new Function<String, ObservableSource<?>>() {
+            @Override
+            public ObservableSource<?> apply(String s) throws Exception {
+                showProcessDialog("正在登陆...");
+                return Observable.timer(1000, TimeUnit.MILLISECONDS, Schedulers.io());
+            }
+        }).subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object o) throws Exception {
+                        LogUtils.d("Observable " + Thread.currentThread().getName());
+                        login(m);
+                    }
+                });
+
+
+    }
+
+    private void login(Map<String, String> map) {
         try {
-            Map<String, String> m = new HashMap<>();
 
-            m.put("provide_uid", userId);
-            m.put("provide_token", token);
-            m.put("provide_screen_name", userName);
-            m.put("provide_name", "wechat");
-            m.put("provide_screen_photo", userIcon);
 
             //            object.put("third", m);
-            JSONObject o = new JSONObject(m);
+            JSONObject o = new JSONObject(map);
             JSONObject object = new JSONObject();
             object.put("third", o);
+            AYFacade facade = facades.get("LoginFacade");
 
             LogUtils.d("wechat " + object.toString());
             facade.execute("LoginWithWeChat", object);
@@ -306,7 +333,6 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
             closeProcessDialog();
             e.printStackTrace();
         }
-
     }
 
     @Override

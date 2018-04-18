@@ -1,9 +1,11 @@
-package com.blackmirror.dongda.model;
+package com.blackmirror.dongda.model.serverbean;
+
+import com.blackmirror.dongda.model.BaseServerBean;
 
 /**
  * Created by Ruge on 2018-04-11 下午4:01
  */
-public class WeChatInfoBean extends BaseBean {
+public class WeChatInfoServerBean extends BaseServerBean {
     public String userId;//获取用户账号
     public String userName;//获取用户名字
     public String userIcon;//获取用户头像

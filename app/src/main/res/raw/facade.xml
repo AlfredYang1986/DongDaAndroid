@@ -59,4 +59,12 @@
 
         <command short="AYGetDetailInfoCmd" />
     </facade>
+
+    <facade
+        short="AYMapCommonFacade"
+        name="com.blackmirror.dongda.facade.mapfacade.AYMapCommonFacade"
+        factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
+
+        <command short="AYGetNearServiceCmd" />
+    </facade>
 </facades>

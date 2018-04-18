@@ -35,6 +35,13 @@ public class AYApplication extends Application {
 //        initWeChat();
         initShareSDK();
         activityList= new ArrayList<>();
+        initAMap();
+    }
+
+    /**
+     * 初始化高德地图
+     */
+    private void initAMap() {
     }
 
     public static void addActivity(AppCompatActivity activity){

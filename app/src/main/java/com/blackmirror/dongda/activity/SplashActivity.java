@@ -48,7 +48,7 @@ public class SplashActivity extends AppCompatActivity {
         String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE};
 
-        List<String> list = PermissionUtils.checkPermissionAndNeedGranted(SplashActivity.this,
+        List<String> list = PermissionUtils.checkPermissionWithNoGranted(SplashActivity.this,
                 permissions);
 
         if (list.size()!=0){

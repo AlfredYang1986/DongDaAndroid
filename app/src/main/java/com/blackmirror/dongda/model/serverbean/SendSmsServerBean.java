@@ -1,11 +1,13 @@
-package com.blackmirror.dongda.model;
+package com.blackmirror.dongda.model.serverbean;
+
+import com.blackmirror.dongda.model.BaseServerBean;
 
 import java.io.Serializable;
 
 /**
  * Created by Ruge on 2018-04-10 下午2:43
  */
-public class SendSmsBean extends BaseBean {
+public class SendSmsServerBean extends BaseServerBean {
 
     /**
      * status : ok

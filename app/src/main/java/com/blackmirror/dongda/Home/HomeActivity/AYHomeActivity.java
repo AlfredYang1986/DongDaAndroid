@@ -22,7 +22,7 @@ import com.blackmirror.dongda.activity.CareListActivity;
 import com.blackmirror.dongda.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.activity.MyLikeActivity;
 import com.blackmirror.dongda.activity.ServiceDetailInfoActivity;
-import com.blackmirror.dongda.activity.ShowMapActivity;
+import com.blackmirror.dongda.activity.NearServiceActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -34,9 +34,9 @@ import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
-import com.blackmirror.dongda.model.ErrorInfoBean;
-import com.blackmirror.dongda.model.HomeInfoBean;
-import com.blackmirror.dongda.model.ImgTokenServerBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
@@ -90,7 +90,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private HomeArtAdapter artAdapter;
     private HomeSportAdapter sportAdapter;
     private HomeScienceAdapter scienceAdapter;
-    private HomeInfoBean bean;
+    private HomeInfoServerBean bean;
     private int clickLikePos;
     private int clickAdapter=0;//1 art 2 sport 3 science
     private Disposable disposable;
@@ -213,7 +213,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         });
     }
 
-    private void initCare(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+    private void initCare(HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
         if (careAdapter==null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -238,7 +238,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void initArt(final HomeInfoBean.ResultBean.HomepageServicesBean bean) {
+    private void initArt(final HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
 
         if (artAdapter==null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
@@ -250,7 +250,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             rv_home_art.addItemDecoration(new SpacesItemDecoration(8));
             artAdapter.setOnItemClickListener(new HomeArtAdapter.OnItemClickListener() {
                 @Override
-                public void onArtLikeClick(View view, int position, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
+                public void onArtLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
 //                    ToastUtils.showShortToast("点击了收藏");
                     clickLikePos=position;
                     clickAdapter=1;
@@ -274,7 +274,67 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void sendLikeData(HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
+    private void initSport(final HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+
+        if (sportAdapter==null) {
+            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            sportAdapter = new HomeSportAdapter(AYHomeActivity.this, bean);
+            rv_home_sport.setNestedScrollingEnabled(false);
+            rv_home_sport.setLayoutManager(manager);
+            rv_home_sport.setAdapter(sportAdapter);
+            rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
+            sportAdapter.setOnItemClickListener(new HomeSportAdapter.OnItemClickListener() {
+                @Override
+                public void onSportLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+                    sendLikeData(servicesBean);
+                    clickLikePos=position;
+                    clickAdapter=2;
+                }
+
+                @Override
+                public void onSportItemClick(View view, int position, String service_id) {
+                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
+                }
+            });
+        }else {
+            sportAdapter.setRefreshData(bean.services);
+        }
+    }
+
+    private void initScience(HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+        if (scienceAdapter==null) {
+            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
+            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            scienceAdapter = new HomeScienceAdapter(AYHomeActivity.this, bean);
+            rv_home_science.setNestedScrollingEnabled(false);
+            rv_home_science.setLayoutManager(manager);
+            rv_home_science.setAdapter(scienceAdapter);
+            rv_home_science.addItemDecoration(new SpacesItemDecoration(8));
+            scienceAdapter.setOnItemClickListener(new HomeScienceAdapter.OnItemClickListener() {
+                @Override
+                public void onScienceLikeClick(View view, int position, HomeInfoServerBean.ResultBean
+                        .HomepageServicesBean.ServicesBean servicesBean) {
+                    clickLikePos=position;
+                    clickAdapter=3;
+                    sendLikeData(servicesBean);
+                }
+
+                @Override
+                public void onScienceItemClick(View view, int position, String service_id) {
+                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
+                }
+            });
+        }else {
+            sportAdapter.setRefreshData(bean.services);
+        }
+    }
+
+    private void sendLikeData(HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
         String t=BasePrefUtils.getAuthToken();
         String u=BasePrefUtils.getUserId();
         showProcessDialog();
@@ -296,66 +356,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 e.printStackTrace();
                 closeProcessDialog();
             }
-        }
-    }
-
-    private void initSport(final HomeInfoBean.ResultBean.HomepageServicesBean bean) {
-
-        if (sportAdapter==null) {
-            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
-            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            sportAdapter = new HomeSportAdapter(AYHomeActivity.this, bean);
-            rv_home_sport.setNestedScrollingEnabled(false);
-            rv_home_sport.setLayoutManager(manager);
-            rv_home_sport.setAdapter(sportAdapter);
-            rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
-            sportAdapter.setOnItemClickListener(new HomeSportAdapter.OnItemClickListener() {
-                @Override
-                public void onSportLikeClick(View view, int position, HomeInfoBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
-                    sendLikeData(servicesBean);
-                    clickLikePos=position;
-                    clickAdapter=2;
-                }
-
-                @Override
-                public void onSportItemClick(View view, int position, String service_id) {
-                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
-                    intent.putExtra("service_id",service_id);
-                    startActivity(intent);
-                }
-            });
-        }else {
-            sportAdapter.setRefreshData(bean.services);
-        }
-    }
-
-    private void initScience(HomeInfoBean.ResultBean.HomepageServicesBean bean) {
-        if (scienceAdapter==null) {
-            LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
-            manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-            scienceAdapter = new HomeScienceAdapter(AYHomeActivity.this, bean);
-            rv_home_science.setNestedScrollingEnabled(false);
-            rv_home_science.setLayoutManager(manager);
-            rv_home_science.setAdapter(scienceAdapter);
-            rv_home_science.addItemDecoration(new SpacesItemDecoration(8));
-            scienceAdapter.setOnItemClickListener(new HomeScienceAdapter.OnItemClickListener() {
-                @Override
-                public void onScienceLikeClick(View view, int position, HomeInfoBean.ResultBean
-                        .HomepageServicesBean.ServicesBean servicesBean) {
-                    clickLikePos=position;
-                    clickAdapter=3;
-                    sendLikeData(servicesBean);
-                }
-
-                @Override
-                public void onScienceItemClick(View view, int position, String service_id) {
-                    Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
-                    intent.putExtra("service_id",service_id);
-                    startActivity(intent);
-                }
-            });
-        }else {
-            sportAdapter.setRefreshData(bean.services);
         }
     }
 
@@ -425,7 +425,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 startActivity(intent);
                 break;
             case R.id.iv_home_location:
-                startActivity(new Intent(AYHomeActivity.this,ShowMapActivity.class));
+                startActivity(new Intent(AYHomeActivity.this,NearServiceActivity.class));
                 ToastUtils.showShortToast("点击了location");
                 break;
             case R.id.iv_home_like:
@@ -479,7 +479,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             isFirstLoad=false;
             initHomeData();
         }
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);
         }
@@ -508,7 +508,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
         }
@@ -537,42 +537,9 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     public void AYLikePopCommandFailed(JSONObject args) {
        closeProcessDialog();
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
-        }
-    }
-
-    /**
-     * 收藏列表
-     * @param args
-     */
-    public void AYLikeQueryCommandSuccess(JSONObject args){
-
-        sl_home_refresh.setEnabled(true);
-        ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
-        ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
-        BasePrefUtils.setAccesskeyId(bean.accessKeyId);
-        BasePrefUtils.setSecurityToken(bean.SecurityToken);
-        BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
-        BasePrefUtils.setExpiration(bean.Expiration);
-        refreshToken();
-        if (isFirstLoad) {
-            isFirstLoad=false;
-            initHomeData();
-        }
-    }
-
-
-    public void AYLikeQueryCommandFailed(JSONObject args) {
-        sl_home_refresh.setEnabled(false);
-        if (isFirstLoad) {
-            isFirstLoad=false;
-            initHomeData();
-        }
-        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message);
         }
     }
 
@@ -669,7 +636,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
-        bean = JSON.parseObject(args.toString(), HomeInfoBean.class);
+        sl_home_refresh.setRefreshing(false);
+        bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
         if (bean != null && "ok".equals(bean.status)) {
             initCare(bean.result.homepage_services.get(0));
             initArt(bean.result.homepage_services.get(1));
@@ -682,11 +650,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         return true;
     }
 
-    private void initRvData(HomeInfoBean bean) {
-
-    }
-
     public Boolean AYSearchServiceCommandFailed(JSONObject args) {
+        sl_home_refresh.setRefreshing(false);
         ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
                 .refreshOrLoadMoreComplete();
         Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
