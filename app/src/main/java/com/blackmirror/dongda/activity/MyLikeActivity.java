@@ -16,7 +16,11 @@ import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.model.ErrorInfoBean;
+import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
+import com.blackmirror.dongda.model.uibean.LikePopUiBean;
+import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.QueryLikeUiBean;
 
 import org.json.JSONException;
@@ -28,6 +32,7 @@ public class MyLikeActivity extends AYActivity {
     private ImageView iv_home_head_back;
     private TextView tv_home_head_title;
     private MyLikeListAdapter adapter;
+    private int clickLikePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +82,7 @@ public class MyLikeActivity extends AYActivity {
      */
     public void AYLikeQueryCommandSuccess(JSONObject args){
 
-        QueryLikeServerBean serverBean = JSON.parseObject(args.toString(), QueryLikeServerBean.class);
+        final QueryLikeServerBean serverBean = JSON.parseObject(args.toString(), QueryLikeServerBean.class);
         QueryLikeUiBean bean = new QueryLikeUiBean(serverBean);
         if (bean.isSuccess){
             adapter = new MyLikeListAdapter(MyLikeActivity.this, bean.services);
@@ -86,13 +91,15 @@ public class MyLikeActivity extends AYActivity {
             rv_my_like.addItemDecoration(new TopItemDecoration(40,40));
             adapter.setOnLikeListClickListener(new MyLikeListAdapter.OnLikeListClickListener() {
                 @Override
-                public void onItemLikeListClick(View view, int position) {
+                public void onItemLikeListClick(View view, int position, String service_id) {
 
                 }
 
                 @Override
-                public void onItemLikeClick(View view, int position) {
-                    ToastUtils.showShortToast("点击了 "+position);
+                public void onItemLikeClick(View view, int position, QueryLikeServerBean
+                        .ResultBean.ServicesBean likeBean) {
+                    clickLikePos=position;
+                    sendLikeData(likeBean);
                 }
             });
         }else {
@@ -110,6 +117,79 @@ public class MyLikeActivity extends AYActivity {
             }
         }
     }
+
+    private void sendLikeData(QueryLikeServerBean.ResultBean.ServicesBean bean) {
+        String t=BasePrefUtils.getAuthToken();
+        String u=BasePrefUtils.getUserId();
+        showProcessDialog();
+        if (bean.is_collected){//已收藏 点击取消
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
+            }
+        }else {
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
+            }
+        }
+    }
+
+    /**
+     * 收藏相关
+     * @param args
+     */
+    public void AYLikePushCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
+        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
+        if (pushUiBean.isSuccess){
+            adapter.notifyItemChanged(clickLikePos,true);
+        }else {
+            ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
+        }
+    }
+
+    public void AYLikePushCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    /**
+     * 取消收藏相关
+     * @param args
+     */
+    public void AYLikePopCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
+        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
+        if (popUiBean.isSuccess){
+            adapter.notifyItemChanged(clickLikePos,false);
+        }else {
+            ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
+        }
+    }
+
+    public void AYLikePopCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+
 
     @Override
     protected void bindingFragments() {

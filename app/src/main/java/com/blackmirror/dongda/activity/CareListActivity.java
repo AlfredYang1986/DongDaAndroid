@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +19,11 @@ import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.model.ErrorInfoBean;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
+import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
+import com.blackmirror.dongda.model.uibean.LikePopUiBean;
+import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -37,15 +42,16 @@ public class CareListActivity extends AYActivity {
     private RecyclerView rv_care_list;
     private SmartRefreshLayout sl_care_list;
     private CareListAdapter adapter;
-    private int totalCount=32;
+    private int totalCount;
     int skip=0;
     int take=10;
+    private int clickLikePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_care_list);
-//        totalCount=getIntent().getIntExtra("totalCount",0);
+        totalCount=getIntent().getIntExtra("totalCount",10);
         initView();
         initData(skip,take);
         initListener();
@@ -174,19 +180,97 @@ public class CareListActivity extends AYActivity {
 
             adapter.setOnCareListClickListener(new CareListAdapter.OnCareListClickListener() {
                 @Override
-                public void onItemCareListClick(View view, int position) {
-
+                public void onItemCareListClick(View view, int position, String service_id) {
+                    Intent intent = new Intent(CareListActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
                 }
 
                 @Override
-                public void onItemCareLikeClick(View view, int position) {
-                    ToastUtils.showShortToast("点击了 " + position);
+                public void onItemCareLikeClick(View view, int position, CareMoreServerBean
+                        .ResultBean.ServicesBean servicesBean) {
+                    clickLikePos=position;
+                    sendLikeData(servicesBean);
                 }
             });
         }else {
             ToastUtils.showShortToast(bean.message+"("+bean.code+")");
         }
     }
+
+
+    private void sendLikeData(CareMoreServerBean.ResultBean.ServicesBean bean) {
+        String t=BasePrefUtils.getAuthToken();
+        String u=BasePrefUtils.getUserId();
+        showProcessDialog();
+        if (bean.is_collected){//已收藏 点击取消
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
+            }
+        }else {
+            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+            try {
+                JSONObject object = new JSONObject(json);
+                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                closeProcessDialog();
+            }
+        }
+    }
+
+    /**
+     * 收藏相关
+     * @param args
+     */
+    public void AYLikePushCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
+        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
+        if (pushUiBean.isSuccess){
+            adapter.notifyItemChanged(clickLikePos,true);
+        }else {
+            ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
+        }
+    }
+
+    public void AYLikePushCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+    /**
+     * 取消收藏相关
+     * @param args
+     */
+    public void AYLikePopCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
+        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
+        if (popUiBean.isSuccess){
+            adapter.notifyItemChanged(clickLikePos,false);
+        }else {
+            ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
+        }
+    }
+
+    public void AYLikePopCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ErrorInfoBean bean = JSON.parseObject(args.toString(), ErrorInfoBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        }
+    }
+
+
 
 
 }
