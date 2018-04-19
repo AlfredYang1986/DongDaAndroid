@@ -1,12 +1,16 @@
 package com.blackmirror.dongda.Tools;
 
 import android.app.Application;
+import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 
 import com.facebook.cache.disk.DiskCacheConfig;
+import com.facebook.common.util.ByteConstants;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
+import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.facebook.stetho.Stetho;
 import com.mob.MobSDK;
 
@@ -81,13 +85,39 @@ public class AYApplication extends Application {
         DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(this)
                 .setBaseDirectoryPath(this.getExternalCacheDir())
                 .setBaseDirectoryName("/image")
+                .setMaxCacheSizeOnLowDiskSpace(100 * ByteConstants.MB)
+                .setMaxCacheSizeOnVeryLowDiskSpace(50 * ByteConstants.MB)
+                .setMaxCacheSize(80 * ByteConstants.MB)
                 .build();
 
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
                 .setCacheKeyFactory(MyCacheKeyFactory.getInstance())
                 .setMainDiskCacheConfig(diskCacheConfig)
+                .setBitmapsConfig(Bitmap.Config.RGB_565)
                 .build();
         Fresco.initialize(this,config);
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        try {
+            if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) { // 60
+                ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        try {
+            ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();
+        } catch (Exception e) {
+
+        }
     }
 
     public static Context getAppConext(){

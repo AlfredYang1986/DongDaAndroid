@@ -99,4 +99,9 @@
         short="AYGetNearServiceCmd"
         name="com.blackmirror.dongda.facade.mapfacade.locationcmd.AYGetNearServiceCmd"
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+        short="AYUploadFileBySDKCommand"
+        name="com.blackmirror.dongda.facade.userfacade.usercmd.AYUploadFileBySDKCommand"
+        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>

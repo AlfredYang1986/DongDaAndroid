@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,17 +28,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
+import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
+import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -55,9 +64,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private ImageView iv_head_photo;
     private Button btn_enter_album;
     private Button btn_open_camera;
-
+    private Bitmap bm;
     private AYDaoUserProfile p = null;
-    private Bitmap bm = null;
     private Boolean isChangeScreenPhoto = false;
     private String path = null;
     private String post_upload_uuid = null;
@@ -73,14 +81,22 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
+        OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
         isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_PHONE_INPUT;
         initView();
         initData();
         initListener();
+        AYFacade facade = facades.get("LoginFacade");
+        try {
+            JSONObject object = new JSONObject();
+            object.put("token",BasePrefUtils.getAuthToken());
+            facade.execute("getImgToken",object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         //        setOriginScreenPhoto();
         //        setOriginScreenName();
-
     }
 
     private void initView() {
@@ -114,15 +130,21 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 checkCameraPermission();
                 break;
             case R.id.btn_enter_home:
-                if (isChangeScreenPhoto) {
-                    /**
+
+                if (isChangeScreenPhoto){
+                    showProcessDialog("正在上传头像...");
+                    facades.get("LoginFacade").execute("AYUploadFileBySDKCommand",null);
+                }
+
+               /* if (isChangeScreenPhoto) {
+                    *//**
                      * 1. 看看是否修改照片
-                     */
+                     *//*
                     Log.i(TAG, "current path is " + path);
                     uploadUserScreenPhoto(path);
                 } else {
                     loginSuccess();
-                }
+                }*/
                 break;
             case R.id.btn_enter_cancel:
                 //                uploadUserScreenPhoto(path);
@@ -218,6 +240,44 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     @Override
     protected void bindingFragments() {
 
+    }
+
+    /**
+     * 获取图片token 用于生成url签名
+     * @param args
+     */
+    public void AYGetImgTokenCommandSuccess(JSONObject args){
+
+        ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
+        ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
+        if (bean.isSuccess){
+            BasePrefUtils.setAccesskeyId(bean.accessKeyId);
+            BasePrefUtils.setSecurityToken(bean.SecurityToken);
+            BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
+            BasePrefUtils.setExpiration(bean.Expiration);
+            OSSUtils.initOSS(this,bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
+        }
+    }
+
+    public void AYGetImgTokenCommandFailed(JSONObject args) {
+        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message);
+        }
+    }
+
+    /**
+     * 上传文件回调
+     * @param args
+     */
+    public void AYUploadFileBySDKCommandSuccess(JSONObject args){
+        closeProcessDialog();
+        ToastUtils.showShortToast("上传成功!");
+    }
+
+    public void AYUploadFileBySDKCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ToastUtils.showShortToast("上传失败!");
     }
 
     public Boolean downloadSuccess(JSONObject arg) {
@@ -415,7 +475,10 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                     try {
                         bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
                                 (outputUri));
-                        //                        isChangeScreenPhoto=true;
+                        isChangeScreenPhoto=true;
+                        LogUtils.d("xcx", "压缩前图片的大小" + (bitmap.getByteCount() / 1024 )
+                                + "k宽度为" + bitmap.getWidth() + "高度为" + bitmap.getHeight());
+//                        scaleBitmap(bitmap,outputUri);
                         iv_head_photo.setImageBitmap(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -467,6 +530,79 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 Log.e(TAG, e.toString());
             }
         }*/
+    }
+
+    private void scaleBitmap(Bitmap bitmap, Uri outputUri) throws FileNotFoundException {
+
+        BitmapFactory.Options options2 = new BitmapFactory.Options();
+        options2.inPreferredConfig = Bitmap.Config.RGB_565;
+        Bitmap bm1 = null;
+        Bitmap bm2 = null;
+
+        Matrix matrix = new Matrix();
+        matrix.setScale(0.5f, 0.5f);
+        bm2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
+                bitmap.getHeight(), matrix, true);
+
+        LogUtils.d("xcx", "Matrix 压缩后图片的大小" + (bm2.getByteCount() / 1024 )
+                + "k 宽度为 " + bm2.getWidth() + ",高度为 " + bm2.getHeight());
+
+
+
+        bm1 = Bitmap.createBitmap(bm2.getWidth(),bm2.getHeight(), Bitmap.Config.RGB_565);
+
+
+        LogUtils.d("xcx", "rgb 565 压缩后图片的大小" + (bm1.getByteCount() / 1024 )
+                + "k 宽度为 " + bm1.getWidth() + ",高度为 " + bm1.getHeight());
+
+
+
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        Bitmap bm3 = null;
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeStream(getContentResolver().openInputStream
+                (outputUri),null,options);
+
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, 300, 300);
+
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+
+        bm3=BitmapFactory.decodeStream(getContentResolver().openInputStream
+                (outputUri),null,options);
+
+        LogUtils.d("xcx", "inSampleSize 压缩后图片的大小" + (bm3.getByteCount() / 1024)
+                + "k 宽度为 " + bm3.getWidth() + ",高度为 " + bm3.getHeight());
+
+        iv_head_photo.setImageBitmap(bm3);
+
+
+
+    }
+
+    public  int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+        LogUtils.d("inSampleSize "+inSampleSize);
+        return inSampleSize;
     }
 
     // 4.4及以上系统使用这个方法处理图片 相册图片返回的不再是真实的Uri,而是分装过的Uri
@@ -529,8 +665,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         intent.putExtra("aspectY", 1);
         intent.putExtra("crop", "true");//可裁剪
         // 裁剪后输出图片的尺寸大小
-        //intent.putExtra("outputX", 400);
-        //intent.putExtra("outputY", 200);
+        intent.putExtra("outputX", 300);
+        intent.putExtra("outputY", 300);
         intent.putExtra("scale", true);//支持缩放
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);

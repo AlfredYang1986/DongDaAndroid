@@ -5,7 +5,6 @@ import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -24,17 +23,15 @@ public class AYPhoneLoginFacade extends AYFacade {
         /**
          * 将当前的登陆的用的存入数据库中
          */
-        try {
-            AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
-            p.setIs_current(1);
 
-            AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");
-            AYCommand cmd = f.cmds.get("LoginSuccess");
-            cmd.excute(p);
+        AYDaoUserProfile p = new AYDaoUserProfile(args);
+        p.setIs_current(1);
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");
+        AYCommand cmd = f.cmds.get("LoginSuccess");
+        cmd.excute(p);
+
+
         broadcastingNotification("AYLoginWithPhoneCommandSuccess", args);
         return true;
     }
@@ -64,13 +61,49 @@ public class AYPhoneLoginFacade extends AYFacade {
         return true;
     }
 
-    public Boolean AYUpdateProfileCommandSuccess(JSONObject args) {
+    /**
+     * 修改用户信息回调
+     * @param args
+     * @return
+     */
+    public void AYUpdateProfileCommandSuccess(JSONObject args) {
+        /**
+         * 修改用户信息到数据库
+         */
+        AYDaoUserProfile p = new AYDaoUserProfile(args);
+        p.setIs_current(1);
+
+        AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");
+        AYCommand cmd = f.cmds.get("LoginSuccess");
+        cmd.excute(p);
         broadcastingNotification("AYUpdateProfileCommandSuccess", args);
-        return true;
     }
 
-    public Boolean AYUpdateProfileCommandFailed(JSONObject args) {
+    public void AYUpdateProfileCommandFailed(JSONObject args) {
         broadcastingNotification("AYUpdateProfileCommandFailed", args);
-        return true;
+    }
+
+    /**
+     * 获取图片token 用于生成url签名
+     * @param args
+     */
+    public void AYGetImgTokenCommandSuccess(JSONObject args){
+        broadcastingNotification("AYGetImgTokenCommandSuccess", args);
+    }
+
+    public void AYGetImgTokenCommandFailed(JSONObject args) {
+        broadcastingNotification("AYGetImgTokenCommandFailed", args);
+    }
+
+    /**
+     * 上传文件回调
+     * @param args
+     */
+    public void AYUploadFileBySDKCommandSuccess(JSONObject args){
+        broadcastingNotification("AYUploadFileBySDKCommandSuccess", args);
+    }
+
+    public void AYUploadFileBySDKCommandFailed(JSONObject args) {
+        broadcastingNotification("AYUploadFileBySDKCommandSuccess", args);
     }
 }

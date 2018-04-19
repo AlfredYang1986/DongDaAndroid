@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
@@ -104,6 +105,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
         skipedCount = 0;
         timeSpan = new Date().getTime();
+
+        AYApplication.finishAllActivity();
 
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
         ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv")).setListAdapter

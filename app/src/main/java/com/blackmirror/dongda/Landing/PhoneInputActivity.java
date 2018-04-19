@@ -14,13 +14,16 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.PhoneLoginServerBean;
 import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
+import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
 import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
 
 import org.json.JSONException;
@@ -57,6 +60,7 @@ public class PhoneInputActivity extends AYActivity {
         initData();
         initListener();
         AYApplication.addActivity(this);
+        OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
     }
 
     private void initView() {
@@ -77,20 +81,29 @@ public class PhoneInputActivity extends AYActivity {
                 Log.i(TAG, "request SMS code from server");
 
                 String input_phone = et_phone.getText().toString();
-                if (input_phone != null && !input_phone.isEmpty()) {
-                    AYFacade facade = facades.get("LoginFacade");
-                    /*AYCommand cmd = facade.cmds.get("SendSMSCode");
-                               cmd.setTarget(facade);
-                    cmd.excute(args);*/
-                    LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
-                    Map<String, Object> m = new HashMap<>();
-                    m.put("phone", input_phone);
-                    JSONObject args = new JSONObject(m);
-                    facade.execute("SendSMSCode",args);
-                    getSmsMsg();
-                }else {
+
+                if (TextUtils.isEmpty(input_phone)){
                     ToastUtils.showShortToast("手机号不能为空!");
+                    return;
                 }
+
+                if (input_phone.trim().length()!=11){
+                    ToastUtils.showShortToast("请输入正确的手机号!");
+                    return;
+                }
+
+
+                AYFacade facade = facades.get("LoginFacade");
+                /*AYCommand cmd = facade.cmds.get("SendSMSCode");
+                           cmd.setTarget(facade);
+                cmd.excute(args);*/
+                LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
+                Map<String, Object> m = new HashMap<>();
+                m.put("phone", input_phone);
+                JSONObject args = new JSONObject(m);
+                facade.execute("SendSMSCode",args);
+                getSmsMsg();
+
             }
         });
 
@@ -205,7 +218,7 @@ public class PhoneInputActivity extends AYActivity {
         Log.i(TAG, "login with phone code");
         String phone = et_phone.getText().toString().trim();
         String code = et_code.getText().toString().trim();
-        if (TextUtils.isEmpty(phone) || phone.length()<11){
+        if (TextUtils.isEmpty(phone) || phone.length()!=11){
             ToastUtils.showShortToast(R.string.phone_no_empty);
             return;
         }
@@ -235,18 +248,19 @@ public class PhoneInputActivity extends AYActivity {
         Toast.makeText(this, "登陆成功", LENGTH_LONG).show();
         LogUtils.d("AYLoginWithPhoneCommandSuccess "+args.toString());
 
-        String screen_name = null;
-        try {
-            screen_name = args.getJSONObject("result").getString("screen_name");
-        } catch (JSONException e) {
-            e.printStackTrace();
+        PhoneLoginServerBean serverBean = JSON.parseObject(args.toString(), PhoneLoginServerBean.class);
+        PhoneLoginUiBean uiBean = new PhoneLoginUiBean(serverBean);
+
+        if (!uiBean.isSuccess){
+            ToastUtils.showShortToast("登陆失败");
+            return false;
         }
 
-        if (TextUtils.isEmpty(screen_name)) {
+        if (TextUtils.isEmpty(uiBean.screen_name)) {
             try {
                 Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
-                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
-                intent.putExtra("current_user", p);
+                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result").getJSONObject("user"));
+                intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
                 startActivity(intent);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -255,7 +269,7 @@ public class PhoneInputActivity extends AYActivity {
             try {
                 Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
                 intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
-                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result"));
+                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result").getJSONObject("user"));
                 intent.putExtra("current_user", p);
                 startActivity(intent);
             } catch (JSONException e) {

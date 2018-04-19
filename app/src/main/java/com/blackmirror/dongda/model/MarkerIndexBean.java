@@ -8,6 +8,7 @@ import com.amap.api.maps2d.model.Marker;
 public class MarkerIndexBean {
     public Marker marker;
     public int list_index;
+    public boolean is_select;
 
     public MarkerIndexBean(Marker marker, int list_index) {
         this.marker = marker;

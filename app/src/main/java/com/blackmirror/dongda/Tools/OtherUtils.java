@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.support.annotation.ColorInt;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -27,6 +28,20 @@ public class OtherUtils {
 
     public static Uri resourceIdToUri(Context context,int resourceId){
         return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
+    }
+
+
+
+    public static void initSystemBarColor(AppCompatActivity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            ViewGroup viewGroup = activity.findViewById(Window.ID_ANDROID_CONTENT);
+            View childView = viewGroup.getChildAt(0);
+            if (null != childView) {
+                ViewCompat.setFitsSystemWindows(childView, false);
+            }
+        }
     }
 
     /**
@@ -64,23 +79,23 @@ public class OtherUtils {
      * 修改状态栏颜色，支持4.4以上版本
      * @param activity
      */
-    public static void setStatusBarColor(Activity activity,int color) {
+    public static void setStatusBarColor(Activity activity,@ColorInt int color) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (DeviceUtils.isMIUI()){
-                activity.getWindow().setStatusBarColor(Color.BLACK);
+                activity.getWindow().setStatusBarColor(color);
                 MIUISetStatusBarLightMode(activity, false);
                 return;
             }
             if (DeviceUtils.isFlyme()){
-                activity.getWindow().setStatusBarColor(Color.WHITE);
+                activity.getWindow().setStatusBarColor(color);
                 //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
                 FlymeSetStatusBarLightMode(activity.getWindow(), false);
                 return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Window window = activity.getWindow();
-                window.setStatusBarColor(Color.BLACK);
+                window.setStatusBarColor(color);
                 window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                 window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                 window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

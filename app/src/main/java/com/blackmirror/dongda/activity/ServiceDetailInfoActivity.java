@@ -25,6 +25,7 @@ import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
@@ -199,13 +200,23 @@ public class ServiceDetailInfoActivity extends AYActivity {
             iv_detail_like.setBackgroundResource(R.drawable.home_art_like);
         }
 
-        PhotoDetailAdapter adapter = new PhotoDetailAdapter(bean.service.location.location_images);
-        for (int i = 0; i < bean.service.location.location_images.size(); i++) {
-            tl_detail_tab.addTab(tl_detail_tab.newTab().setText(bean.service.location.location_images.get(i).tag));
+        List<ServiceDetailPhotoBean> tabList=new ArrayList<>();
+
+
+        for (ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean image : bean.service.location.location_images) {
+            tabList.add(new ServiceDetailPhotoBean(image.tag,image.image));
+            tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
         }
 
+        for (ServiceDetailInfoServerBean.ResultBean.ServiceBean.ServiceImagesBean image : bean.service.service_images) {
+            tabList.add(new ServiceDetailPhotoBean(image.tag,image.image));
+            tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
+        }
+
+        PhotoDetailAdapter adapter = new PhotoDetailAdapter(tabList);
+
         vp_detail_photo.setAdapter(adapter);
-        vp_detail_photo.setOffscreenPageLimit(bean.service.location.location_images.size());
+//        vp_detail_photo.setOffscreenPageLimit(bean.service.location.location_images.size());
         //下面的方法可以解决tab字体丢失的问题,不要用setupWithViewPager()方法
         //        tl_detail_tab.setupWithViewPager(vp_detail_photo);
         vp_detail_photo.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tl_detail_tab));

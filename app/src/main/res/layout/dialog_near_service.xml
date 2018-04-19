@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/sys_bar_white"
-    android:layout_width="350dp"
-    android:layout_height="180dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:background="@drawable/popup_bg_shape"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
     <com.facebook.drawee.view.SimpleDraweeView
@@ -96,5 +102,5 @@
         android:textSize="15sp"
         />
 
-
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

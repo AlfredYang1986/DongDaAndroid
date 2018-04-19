@@ -19,6 +19,8 @@
         <command short="LoginWithWeChat" />
         <command short="SendSMSCode" />
         <command short="UpdateProfile" />
+        <command short="getImgToken" />
+        <command short="AYUploadFileBySDKCommand" />
     </facade>
 
     <facade

@@ -31,19 +31,17 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 public class LandingActivity extends AYActivity implements PlatformActionListener {
@@ -297,7 +295,23 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         m.put("provide_screen_photo", userIcon);
 
 
-        Observable.just("").flatMap(new Function<String, ObservableSource<?>>() {
+        Observable.create(new ObservableOnSubscribe<String>() {
+            @Override
+            public void subscribe(final ObservableEmitter<String> emitter) throws Exception {
+                emitter.onNext("");
+                emitter.onComplete();
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                showProcessDialog("正在登陆...");
+                LogUtils.d("Observable " + Thread.currentThread().getName());
+                login(m);
+            }
+        });
+
+        /*Observable.just("").flatMap(new Function<String, ObservableSource<?>>() {
             @Override
             public ObservableSource<?> apply(String s) throws Exception {
                 showProcessDialog("正在登陆...");
@@ -310,7 +324,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
                         LogUtils.d("Observable " + Thread.currentThread().getName());
                         login(m);
                     }
-                });
+                });*/
 
 
     }
@@ -365,4 +379,5 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
                     }
                 });
     }
+
 }

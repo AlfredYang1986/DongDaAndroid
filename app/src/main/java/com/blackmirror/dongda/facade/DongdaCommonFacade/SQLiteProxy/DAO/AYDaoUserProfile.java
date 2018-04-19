@@ -1,5 +1,7 @@
 package com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO;
 
+import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,16 +22,41 @@ public class AYDaoUserProfile implements Serializable {
     }
 
     public AYDaoUserProfile(JSONObject o) {
+        /*{
+            "status": "ok",
+                "result": {
+            "user": {
+                "screen_name": "xcx",
+                        "has_auth_phone": 1,
+                        "current_device_type": "",
+                        "is_service_provider": 0,
+                        "user_id": "2737d748bce21504447cf27d7b1f4f99",
+                        "screen_photo": "",
+                        "current_device_id": ""
+            },
+            "auth_token": "bearer2737d748bce21504447cf27d7b1f4f99"
+        }
+        }*/
         super();
         try {
-            this.user_id = o.getString("user_id");
-            this.auth_token = o.getString("auth_token");
-            this.screen_name = o.getString("screen_name");
-            this.screen_photo = o.getString("screen_photo");
+            JSONObject result = o.getJSONObject("result");
+            JSONObject user = o.getJSONObject("result").getJSONObject("user");
+            this.auth_token = result.getString("auth_token");
+            this.user_id = user.getString("user_id");
+            this.screen_name = user.getString("screen_name");
+            this.screen_photo = user.getString("screen_photo");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public AYDaoUserProfile(PhoneLoginUiBean bean) {
+        this.user_id = bean.user_id;
+        this.auth_token = bean.auth_token;
+        this.screen_name = bean.screen_name;
+        this.screen_photo = bean.screen_photo;
+
     }
 
     public String getUser_id() {

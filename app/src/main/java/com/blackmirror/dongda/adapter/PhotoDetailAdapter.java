@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
-import com.blackmirror.dongda.model.serverbean.ServiceDetailInfoServerBean;
+import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -18,10 +18,11 @@ import java.util.List;
 
 public class PhotoDetailAdapter extends PagerAdapter {
 
-    private List<ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean> list;
+    List<ServiceDetailPhotoBean> list;
 
-    public PhotoDetailAdapter(List<ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean> list) {
-        this.list = list;
+
+    public PhotoDetailAdapter(List<ServiceDetailPhotoBean> list) {
+        this.list=list;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class PhotoDetailAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        container.removeView(container.getChildAt(position));
+        container.removeView((View) object);
     }
 
     @Override

@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -33,7 +33,6 @@ import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.dialog.CustomDialog;
-import com.blackmirror.dongda.model.MarkerIndexBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.NearServiceServerBean;
 import com.blackmirror.dongda.model.uibean.NearServiceUiBean;
@@ -61,12 +60,13 @@ public class NearServiceActivity extends AYActivity {
     private TextView tv_near_title;
     private TextView tv_near_dec;
     private TextView tv_near_location;
-    private Map<String, MarkerIndexBean> markers;
+    private Map<String, Marker> markers;
     private NearServiceUiBean uiBean;
     private CustomDialog dialog;
     private PopupWindow popupWindow;
     private TranslateAnimation animation;
     private View view;
+    private String lastClickMarker;
 
     //设置定位回调监听
 //mLocationClient.setLocationListener(mLocationListener);
@@ -142,6 +142,8 @@ public class NearServiceActivity extends AYActivity {
         iv_current_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showProcessDialog("正在定位...");
+                popupWindow.dismiss();
                 stopLocation();
                 if (locationClient != null) {
                     locationClient.startLocation();
@@ -157,36 +159,61 @@ public class NearServiceActivity extends AYActivity {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LogUtils.d("onclick "+marker.getId());
-
-                refreshOtherMarkers();
-                refreshBottomDialog(marker);
+                refreshPopUpWindow(marker);
                 return true;
             }
         });
     }
 
-    private void refreshOtherMarkers() {
+    private void refreshPopUpWindow(Marker marker) {
+
+
+//        LogUtils.d("is_select"+markers.get(marker.getId()).is_select);
+
+        //重复点击
+        if (marker.getId().equals(lastClickMarker)){
+            return;
+        }
+
+        boolean b1 = marker == markers.get(marker.getId());
+
+        LogUtils.d("marker equals "+marker.equals(markers.get(marker.getId())));
+        LogUtils.d("marker == "+b1);
+
+        view.clearAnimation();
+        if (popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
+        showPopUpWindow();
+
+        NearServiceServerBean.ResultBean.ServicesBean b= (NearServiceServerBean.ResultBean.ServicesBean) marker.getObject();
+
+        marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(b.service_type,true)));
+        sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image));
+        tv_near_title.setText(b.service_leaf);
+        tv_near_dec.setText(b.punchline);
+        tv_near_location.setText(b.address);
+        NearServiceServerBean.ResultBean.ServicesBean l= (NearServiceServerBean.ResultBean.ServicesBean) markers.get(lastClickMarker).getObject();
+        markers.get(lastClickMarker).setIcon(BitmapDescriptorFactory.fromResource(getImageResId(l.service_type,false)));
+
+        lastClickMarker=marker.getId();
 
     }
 
-    private void refreshBottomDialog(Marker marker) {
-        popupWindow.dismiss();
-        popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-        view.startAnimation(animation);
-        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_day_care_normal));
-        for (Map.Entry<String, MarkerIndexBean> entry : markers.entrySet()) {
-            String key = entry.getKey();
-            MarkerIndexBean value = entry.getValue();
-            if (key.equals(marker.getId())){
-                NearServiceServerBean.ResultBean.ServicesBean b = uiBean.services.get(value.list_index);
-                sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image));
-                tv_near_title.setText(b.service_leaf);
-                tv_near_dec.setText(b.punchline);
-                tv_near_location.setText(b.address);
-            }else {
-                value.marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_icon_art_normal));
-            }
+    private int getImageResId(String serviceType, boolean isSelect) {
+        if (serviceType.equals("看顾")){
+            return isSelect ? R.drawable.map_icon_day_care_select : R.drawable.map_icon_day_care_normal;
         }
+        if (serviceType.equals("艺术")){
+            return isSelect ? R.drawable.map_icon_art_select : R.drawable.map_icon_art_normal;
+        }
+        if (serviceType.equals("运动")){
+            return isSelect ? R.drawable.map_icon_sport_select : R.drawable.map_icon_sport_normal;
+        }
+        if (serviceType.equals("科学")){
+            return isSelect ? R.drawable.map_icon_science_select : R.drawable.map_icon_science_normal;
+        }
+        return R.drawable.map_icon_day_care_normal;
     }
 
 
@@ -245,6 +272,7 @@ public class NearServiceActivity extends AYActivity {
     public void AYGetNearServiceCmdSuccess(JSONObject args) {
         closeProcessDialog();
         NearServiceServerBean serverBean = JSON.parseObject(args.toString(), NearServiceServerBean.class);
+
         uiBean = new NearServiceUiBean(serverBean);
         if (uiBean.isSuccess){
             addMarkers(uiBean);
@@ -262,63 +290,58 @@ public class NearServiceActivity extends AYActivity {
     }
 
 
-    private void setDataToUi(NearServiceUiBean uiBean) {
-
-    }
-
     private void addMarkers(NearServiceUiBean uiBean) {
 
-        showBottomDialog(uiBean.services.get(0));
-
-
+        showPopUpWindow();
         for (int i = 0; i < uiBean.services.size(); i++) {
 
             markerOption = new MarkerOptions();
             markerOption.position(new LatLng(uiBean.services.get(i).pin.latitude,uiBean.services.get(i).pin.longitude));
-            markerOption.icon(BitmapDescriptorFactory
-                    .fromResource(R.drawable.map_icon_art_normal));
+            markerOption.anchor(0.5f,0.5f);//必须加这个
+
             Marker marker = aMap.addMarker(markerOption);
+            marker.setObject(uiBean.services.get(i));
 //            LogUtils.d("xcx","markerId== "+marker.getId());
-            MarkerIndexBean b = new MarkerIndexBean(marker, i);
-            markers.put(marker.getId(),b);
+            if (i==0){//展示第一个
+                lastClickMarker=marker.getId();
+                NearServiceServerBean.ResultBean.ServicesBean sb = uiBean.services.get(0);
+                marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(sb.service_type,true)));
+                sv_near_photo.setImageURI(OSSUtils.getSignedUrl(sb.service_image));
+                tv_near_title.setText(sb.service_leaf);
+                tv_near_dec.setText(sb.punchline);
+                tv_near_location.setText(sb.address);
+            }else {
+                marker.setIcon(BitmapDescriptorFactory
+                        .fromResource(getImageResId(uiBean.services.get(i).service_type,false)));
+            }
+            markers.put(marker.getId(),marker);
         }
 
-        /*markerOption = new MarkerOptions();
-        markerOption.position(new LatLng(39.95439910888672,116.50338745117188));
-        markerOption.icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.map_icon_art_normal));
-        Marker marker = aMap.addMarker(markerOption);
-        LogUtils.d("xcx","markerId== "+marker.getId());
-
-
-        markerOption = new MarkerOptions();
-        markerOption.position(AppConstant.ZHONGGUANCUN);
-        markerOption.icon(BitmapDescriptorFactory
-                .fromResource(R.drawable.home_btn_nearyou));
-        Marker marker2 = aMap.addMarker(markerOption);
-        LogUtils.d("xcx","markerId== "+marker2.getId());*/
     }
 
-    private void showBottomDialog(NearServiceServerBean.ResultBean.ServicesBean bean) {
-        view = View.inflate(NearServiceActivity.this, R.layout.dialog_near_service,null);
-        sv_near_photo = view.findViewById(R.id.sv_near_photo);
-        tv_near_title = view.findViewById(R.id.tv_near_title);
-        tv_near_dec = view.findViewById(R.id.tv_near_dec);
-        tv_near_location = view.findViewById(R.id.tv_near_location);
-        popupWindow = new PopupWindow(view,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setFocusable(true);// 取得焦点
-        //注意  要是点击外部空白处弹框消息  那么必须给弹框设置一个背景色  不然是不起作用的
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        //点击外部消失
-        popupWindow.setOutsideTouchable(false);
-        //设置可以点击
-        popupWindow.setTouchable(false);
-        animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0,
-                Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
-        animation.setInterpolator(new AccelerateInterpolator());
-        animation.setDuration(200);
+    private void showPopUpWindow() {
+        if (view == null) {
+            view = View.inflate(NearServiceActivity.this, R.layout.dialog_near_service, null);
+            sv_near_photo = view.findViewById(R.id.sv_near_photo);
+            tv_near_title = view.findViewById(R.id.tv_near_title);
+            tv_near_dec = view.findViewById(R.id.tv_near_dec);
+            tv_near_location = view.findViewById(R.id.tv_near_location);
+        }
+        if (popupWindow == null){
+            popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            popupWindow.setFocusable(true);// 取得焦点
+            //注意  要是点击外部空白处弹框消息  那么必须给弹框设置一个背景色  不然是不起作用的
+            popupWindow.setBackgroundDrawable(new BitmapDrawable());
+            //点击外部消失
+            popupWindow.setOutsideTouchable(false);
+            //设置可以点击
+            popupWindow.setTouchable(false);
+            animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0,
+                    Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
+            animation.setDuration(500);
+        }
+
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
         view.startAnimation(animation);
     }

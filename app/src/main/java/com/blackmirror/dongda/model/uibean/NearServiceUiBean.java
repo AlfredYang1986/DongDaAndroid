@@ -26,4 +26,14 @@ public class NearServiceUiBean extends BaseUiBean {
             }
         }
     }
+
+    @Override
+    public String toString() {
+        return "NearServiceUiBean{" +
+                "services=" + services +
+                ", code=" + code +
+                ", message='" + message + '\'' +
+                ", isSuccess=" + isSuccess +
+                '}';
+    }
 }

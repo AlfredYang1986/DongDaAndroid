@@ -60,7 +60,51 @@ public class NearServiceServerBean extends BaseServerBean {
 
                 public double latitude;
                 public double longitude;
+
+                @Override
+                public String toString() {
+                    return "PinBean{" +
+                            "latitude=" + latitude +
+                            ", longitude=" + longitude +
+                            '}';
+                }
+            }
+
+            @Override
+            public String toString() {
+                return "ServicesBean{" +
+                        "is_collected=" + is_collected +
+                        ", punchline='" + punchline + '\'' +
+                        ", service_leaf='" + service_leaf + '\'' +
+                        ", brand_id='" + brand_id + '\'' +
+                        ", location_id='" + location_id + '\'' +
+                        ", service_image='" + service_image + '\'' +
+                        ", brand_name='" + brand_name + '\'' +
+                        ", service_type='" + service_type + '\'' +
+                        ", address='" + address + '\'' +
+                        ", category='" + category + '\'' +
+                        ", pin=" + pin +
+                        ", service_id='" + service_id + '\'' +
+                        ", service_tags=" + service_tags +
+                        ", operation=" + operation +
+                        '}';
             }
         }
+
+        @Override
+        public String toString() {
+            return "ResultBean{" +
+                    "services=" + services +
+                    '}';
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "NearServiceServerBean{" +
+                "result=" + result +
+                ", status='" + status + '\'' +
+                ", error=" + error +
+                '}';
     }
 }
