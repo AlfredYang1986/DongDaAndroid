@@ -1,5 +1,7 @@
 package com.blackmirror.dongda.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,11 +30,11 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
-import com.blackmirror.dongda.dialog.CustomDialog;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.NearServiceServerBean;
 import com.blackmirror.dongda.model.uibean.NearServiceUiBean;
@@ -62,11 +64,11 @@ public class NearServiceActivity extends AYActivity {
     private TextView tv_near_location;
     private Map<String, Marker> markers;
     private NearServiceUiBean uiBean;
-    private CustomDialog dialog;
     private PopupWindow popupWindow;
     private TranslateAnimation animation;
     private View view;
     private String lastClickMarker;
+    private AlertDialog dialog;
 
     //设置定位回调监听
 //mLocationClient.setLocationListener(mLocationListener);
@@ -263,6 +265,8 @@ public class NearServiceActivity extends AYActivity {
                 sb.append("错误信息:" + location.getErrorInfo() + "\n");
                 sb.append("错误描述:" + location.getLocationDetail() + "\n");
 
+                showLocationDialog(location.getErrorCode());
+
             }
         }
     };
@@ -363,6 +367,9 @@ public class NearServiceActivity extends AYActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (dialog!=null && dialog.isShowing()){
+            dialog.dismiss();
+        }
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
         mv_near_map.onDestroy();
         stopLocation();
@@ -436,7 +443,7 @@ public class NearServiceActivity extends AYActivity {
      * @param statusCode GPS状态码
      * @return
      */
-    private String getGPSStatusString(int statusCode){
+    private void showLocationDialog(int statusCode){
         String str = "";
         switch (statusCode){
             case AMapLocationQualityReport.GPS_STATUS_OK:
@@ -444,17 +451,43 @@ public class NearServiceActivity extends AYActivity {
                 break;
             case AMapLocationQualityReport.GPS_STATUS_NOGPSPROVIDER:
                 str = "手机中没有GPS Provider，无法进行GPS定位";
+                ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_OFF:
                 str = "GPS关闭，建议开启GPS，提高定位质量";
+                ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_MODE_SAVING:
                 str = "选择的定位模式中不包含GPS定位，建议选择包含GPS定位的模式，提高定位质量";
+                ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION:
                 str = "没有GPS定位权限，建议开启gps定位权限";
+                showGoSettingDialog();
                 break;
         }
-        return str;
+    }
+
+    private void showGoSettingDialog() {
+
+        dialog = new AlertDialog.Builder(NearServiceActivity.this)
+                .setCancelable(false)
+                .setTitle("权限拒绝")
+                .setMessage("请在设置->应用管理->咚哒->权限管理打开定位权限.")
+                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        DeviceUtils.gotoPermissionSetting(NearServiceActivity.this);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
+
     }
 }

@@ -64,6 +64,10 @@ public class ServiceDetailInfoActivity extends AYActivity {
     private TextView tv_brand_tag;
     private ImageView iv_detail_back;
     private ImageView iv_detail_like;
+    private ImageView iv_detail_class;
+    private ImageView iv_detail_teacher;
+    private TextView tv_detail_class_dec;
+    private TextView tv_detail_teacher_dec;
     private MapView mv_detail_location;
     private AMap aMap;
     private MarkerOptions markerOption;
@@ -104,6 +108,10 @@ public class ServiceDetailInfoActivity extends AYActivity {
         tv_brand_tag = findViewById(R.id.tv_brand_tag);
         iv_detail_back = findViewById(R.id.iv_detail_back);
         iv_detail_like = findViewById(R.id.iv_detail_like);
+        iv_detail_class = findViewById(R.id.iv_detail_class);
+        iv_detail_teacher = findViewById(R.id.iv_detail_teacher);
+        tv_detail_class_dec = findViewById(R.id.tv_detail_class_dec);
+        tv_detail_teacher_dec = findViewById(R.id.tv_detail_teacher_dec);
         mv_detail_location = findViewById(R.id.mv_detail_location);
         initMapView(savedInstanceState);
     }
@@ -238,6 +246,9 @@ public class ServiceDetailInfoActivity extends AYActivity {
                 .append(bean.service.max_age)
                 .append("岁");
         tv_age_range.setText(range.toString());//年龄范围
+
+        checkClassMaxStu(bean.service.class_max_stu);
+
         tv_class_mb_no.setText(bean.service.class_max_stu+"");//班级人数
 
         int m= CalUtils.getGongyue(bean.service.class_max_stu,bean.service.teacher_num);
@@ -308,6 +319,28 @@ public class ServiceDetailInfoActivity extends AYActivity {
         tv_service_location.setText(bean.service.location.address);
 
         addMarkers(bean.service.location.pin);
+    }
+
+    /**
+     * 检查人数是否正确 服务器返回了-1
+     * @param max_stu
+     */
+    private void checkClassMaxStu(int max_stu) {
+        if (max_stu<=-1){//隐藏
+            iv_detail_class.setVisibility(View.GONE);
+            tv_detail_class_dec.setVisibility(View.GONE);
+            tv_class_mb_no.setVisibility(View.GONE);
+            iv_detail_teacher.setVisibility(View.GONE);
+            tv_detail_teacher_dec.setVisibility(View.GONE);
+            tv_t_s_ratio.setVisibility(View.GONE);
+        } else {
+             iv_detail_class.setVisibility(View.VISIBLE);
+             tv_detail_class_dec.setVisibility(View.VISIBLE);
+             tv_class_mb_no.setVisibility(View.VISIBLE);
+             iv_detail_teacher.setVisibility(View.VISIBLE);
+             tv_detail_teacher_dec.setVisibility(View.VISIBLE);
+             tv_t_s_ratio.setVisibility(View.VISIBLE);
+        }
     }
 
     public void AYGetDetailInfoCmdSuccess(JSONObject args){

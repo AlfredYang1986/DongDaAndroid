@@ -46,7 +46,9 @@ import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUse
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
+import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
+import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,6 +77,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private Button btn_enter_home;
     private Button btn_enter_cancel;
     private boolean isFromNameInput;
+    private String name;
 
 
     @Override
@@ -83,6 +86,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         setContentView(R.layout.activity_photo_change);
         OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
+        name = getIntent().getStringExtra("name");
         isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_PHONE_INPUT;
         initView();
         initData();
@@ -135,6 +139,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                     showProcessDialog("正在上传头像...");
                     facades.get("LoginFacade").execute("AYUploadFileBySDKCommand",null);
                 }
+
 
                /* if (isChangeScreenPhoto) {
                     *//**
@@ -271,13 +276,61 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      * @param args
      */
     public void AYUploadFileBySDKCommandSuccess(JSONObject args){
-        closeProcessDialog();
-        ToastUtils.showShortToast("上传成功!");
+//        ToastUtils.showShortToast("上传成功!");
+        senDataToServer();
     }
+
+
 
     public void AYUploadFileBySDKCommandFailed(JSONObject args) {
         closeProcessDialog();
         ToastUtils.showShortToast("上传失败!");
+    }
+
+    /**
+     * 修改用户信息回调
+     * @param args
+     * @return
+     */
+    public void AYUpdateProfileCommandSuccess(JSONObject args) {
+        closeProcessDialog();
+        UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
+        UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
+
+        if (uiBean.isSuccess){
+            AYDaoUserProfile profile = new AYDaoUserProfile();
+            profile.auth_token = uiBean.token;
+            profile.user_id = uiBean.user_id;
+            profile.screen_name = uiBean.screen_name;
+            profile.screen_photo = uiBean.screen_photo;
+            profile.is_current=1;
+            AYCommand cmd = facades.get("DongdaCommanFacade").cmds.get("UpdateLocalProfile");
+            long result = cmd.excute(profile);
+            if (result>0){
+                closeProcessDialog();
+                ToastUtils.showShortToast("修改成功!");
+                startActivity(new Intent(PhotoChangeActivity.this, AYHomeActivity.class));
+                AYApplication.finishAllActivity();
+            }else {
+                closeProcessDialog();
+                ToastUtils.showShortToast("系统异常(SQL)");
+            }
+        }
+    }
+
+    public void AYUpdateProfileCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        ToastUtils.showShortToast("修改失败!");
+    }
+
+    private void senDataToServer() {
+        try {
+            String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"},\"profile\":{\"screen_name\":\""+name+"\",}}";
+            JSONObject object = new JSONObject(json);
+            facades.get("LoginFacade").execute("UpdateProfile",object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public Boolean downloadSuccess(JSONObject arg) {
@@ -397,26 +450,6 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    public Boolean AYUpdateProfileCommandSuccess(JSONObject arg) {
-        Log.i(TAG, "update profile command success");
-
-        /**
-         * 修改本地数据库
-         */
-        AYFacade facade = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade",
-                "DongdaCommanFacade");
-        AYCommand cmd = facade.cmds.get("UpdateLocalProfile");
-        p.setScreen_photo(post_upload_uuid);
-        cmd.excute(p);
-
-        loginSuccess();
-        return true;
-    }
-
-    public Boolean AYUpdateProfileCommandFailed(JSONObject arg) {
-        Log.i(TAG, "update profile command failed");
-        return true;
-    }
 
 
     /**

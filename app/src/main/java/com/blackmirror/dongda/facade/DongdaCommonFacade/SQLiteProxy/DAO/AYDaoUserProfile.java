@@ -11,11 +11,11 @@ import java.io.Serializable;
  * Created by alfredyang on 27/05/2017.
  */
 public class AYDaoUserProfile implements Serializable {
-    private String user_id;
-    private String auth_token;
-    private int is_current = 0;
-    private String screen_name;
-    private String screen_photo;
+    public String user_id;
+    public String auth_token;
+    public int is_current = 0;
+    public String screen_name;
+    public String screen_photo;
 
     public AYDaoUserProfile() {
         super();

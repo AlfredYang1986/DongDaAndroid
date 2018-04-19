@@ -8,13 +8,16 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
+import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
+import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
 
@@ -99,12 +102,29 @@ public class NameInputActivity extends AYActivity {
         UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
 
         if (uiBean.isSuccess){
-            ToastUtils.showShortToast("修改成功!");
+            AYDaoUserProfile profile = new AYDaoUserProfile();
+            profile.auth_token = uiBean.token;
+            profile.user_id = uiBean.user_id;
+            profile.screen_name = uiBean.screen_name;
+            profile.screen_photo = uiBean.screen_photo;
+            profile.is_current=1;
+            AYCommand cmd = facades.get("DongdaCommanFacade").cmds.get("UpdateLocalProfile");
+            long result = cmd.excute(profile);
+            if (result>0){
+                closeProcessDialog();
+                ToastUtils.showShortToast("修改成功!");
+                startActivity(new Intent(NameInputActivity.this, AYHomeActivity.class));
+                AYApplication.finishAllActivity();
+            }else {
+                closeProcessDialog();
+                ToastUtils.showShortToast("系统异常(SQL)");
+            }
         }
     }
 
     public void AYUpdateProfileCommandFailed(JSONObject args) {
         closeProcessDialog();
+        ToastUtils.showShortToast("修改失败!");
     }
 
     @Override
