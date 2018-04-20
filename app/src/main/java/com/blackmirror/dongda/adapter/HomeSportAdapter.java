@@ -54,6 +54,12 @@ public class HomeSportAdapter extends RecyclerView.Adapter<HomeSportAdapter.Home
             e.printStackTrace();
         }*/
 
+        if (servicesBean.is_collected){
+            holder.iv_item_sport_like.setBackgroundResource(R.drawable.like_selected);
+        }else {
+            holder.iv_item_sport_like.setBackgroundResource(R.drawable.home_art_like);
+        }
+
         holder.tv_item_sport_name.setText(this.bean.services.get(position).service_tags.get(0));
         StringBuilder sb = new StringBuilder();
         sb.append(servicesBean.brand_name)

@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -204,6 +205,36 @@ public class OtherUtils {
         float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
+
+    public static int getScreenWidthDp(){
+        //2、通过Resources获取
+        DisplayMetrics dm = AYApplication.appConext.getResources().getDisplayMetrics();
+
+        float density = dm.density;
+        int width = (int) (dm.widthPixels/density);
+
+        /*// 屏幕宽度:屏幕宽度（像素）/屏幕密度
+        screenWidth = width / density;  // 屏幕宽度(dp)
+        screenHeight = height / density;// 屏幕高度(dp)
+        screenDensity = density;*/
+        return width;
+    }
+
+    public static int getScreenHeightDp(){
+        //2、通过Resources获取
+        DisplayMetrics dm = AYApplication.appConext.getResources().getDisplayMetrics();
+
+        float density = dm.density;
+        int height = (int) (dm.heightPixels/density);
+
+        /*// 屏幕宽度:屏幕宽度（像素）/屏幕密度
+        screenWidth = width / density;  // 屏幕宽度(dp)
+        screenHeight = height / density;// 屏幕高度(dp)
+        screenDensity = density;*/
+        return height;
+    }
+
+
 
     public static boolean isNeedRefreshToken(String token_time){
         return false;

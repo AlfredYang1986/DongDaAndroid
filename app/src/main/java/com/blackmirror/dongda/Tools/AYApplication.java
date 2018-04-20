@@ -13,6 +13,7 @@ import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.facebook.stetho.Stetho;
 import com.mob.MobSDK;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,12 @@ public class AYApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
         me=this;
         appConext=this.getApplicationContext();
         Stetho.initializeWithDefaults(this);
@@ -40,6 +47,7 @@ public class AYApplication extends Application {
         initShareSDK();
         activityList= new ArrayList<>();
         initAMap();
+
     }
 
     /**
@@ -93,6 +101,7 @@ public class AYApplication extends Application {
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
                 .setCacheKeyFactory(MyCacheKeyFactory.getInstance())
                 .setMainDiskCacheConfig(diskCacheConfig)
+                .setDownsampleEnabled(true)
                 .setBitmapsConfig(Bitmap.Config.RGB_565)
                 .build();
         Fresco.initialize(this,config);

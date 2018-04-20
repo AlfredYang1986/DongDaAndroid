@@ -11,13 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.model.serverbean.ArtMoreServerBean;
 import com.blackmirror.dongda.model.uibean.ArtMoreUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -28,6 +29,8 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_FOOTER = 100;
     private static final int TYPE_NORMAL = 101;
     public int totalCount;
+
+    public Set<String> urlSet=new HashSet<>();
 
 
     public void setOnArtListClickListener(OnArtListClickListener listener) {
@@ -57,13 +60,24 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        LogUtils.d("totalCount "+totalCount+" size "+getItemCount());
 
         if (holder instanceof ArtListViewHolder) {
             ArtListViewHolder vh = (ArtListViewHolder) holder;
             ArtMoreServerBean.ResultBean.ServicesBean servicesBean = this.bean.services.get(position);
 
+           /* if (urlMap.containsKey(position)){
+//                String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
+                vh.sv_art_list_photo.setImageURI(urlMap.get(position));
+            }else {
+                String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
+                urlMap.put(position,url);
+                vh.sv_art_list_photo.setImageURI(url);
+            }*/
+
+
             String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
+            urlSet.add(getCacheUrl(url));
+
             vh.sv_art_list_photo.setImageURI(url);
             if (servicesBean.is_collected) {
                 vh.iv_item_art_like.setBackgroundResource(R.drawable.like_selected);
@@ -200,6 +214,14 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
         }
+    }
+
+    protected String getCacheUrl(String url){
+        if (url.contains("?")){
+            return url.substring(0,url.indexOf("?")+1);
+        }
+        return url;
+
     }
 }
 

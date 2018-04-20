@@ -343,6 +343,8 @@
         />
 
     <TextView
+        android:layout_marginRight="24dp"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="13dp"
         app:layout_constraintLeft_toLeftOf="@id/tv_service_dec"
         app:layout_constraintTop_toBottomOf="@id/tv_service_dec_content_more"
@@ -350,7 +352,7 @@
         android:singleLine="true"
         android:ellipsize="end"
          android:id="@+id/tv_service_type"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="#资深外教# #修身养性#"
         android:textColor="#FFA6A6A6"
@@ -418,11 +420,16 @@
         />
 
     <TextView
+        android:singleLine="true"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_marginRight="24dp"
+        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginTop="9dp"
         app:layout_constraintTop_toBottomOf="@id/tv_service_location_dec"
         app:layout_constraintLeft_toLeftOf="@id/view_line_5"
          android:id="@+id/tv_service_location"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="朝阳区望京悠乐汇A4座-213"
         android:textColor="#FF404040"
@@ -430,14 +437,24 @@
 
 
     <com.amap.api.maps2d.MapView
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="24dp"
+        app:layout_constraintBottom_toTopOf="@id/view_6"
          android:id="@+id/mv_detail_location"
-        app:layout_constraintLeft_toLeftOf="@id/view_line_5"
+        app:layout_constraintLeft_toLeftOf="@id/tv_service_location"
         app:layout_constraintTop_toBottomOf="@id/tv_service_location"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="13dp"
-        android:layout_marginBottom="41dp"
         android:layout_width="327dp"
         android:layout_height="117dp"/>
+
+    <View
+        android:layout_marginBottom="41dp"
+        app:layout_constraintTop_toBottomOf="@id/mv_detail_location"
+        app:layout_constraintBottom_toBottomOf="parent"
+         android:id="@+id/view_6"
+        android:layout_width="1dp"
+        android:layout_height="0dp"/>
+
 
 
 </android.support.constraint.ConstraintLayout>

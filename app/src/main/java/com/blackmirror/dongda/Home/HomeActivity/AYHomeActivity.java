@@ -1,7 +1,10 @@
 package com.blackmirror.dongda.Home.HomeActivity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,15 +18,19 @@ import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
+import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.CalUtils;
+import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.activity.ArtListActivity;
 import com.blackmirror.dongda.activity.CareListActivity;
 import com.blackmirror.dongda.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.activity.MyLikeActivity;
-import com.blackmirror.dongda.activity.ServiceDetailInfoActivity;
 import com.blackmirror.dongda.activity.NearServiceActivity;
+import com.blackmirror.dongda.activity.ServiceDetailInfoActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -40,6 +47,7 @@ import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
@@ -73,6 +81,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     private long skipedCount;
     private long timeSpan;
+    private CoordinatorLayout ctl_root;
     private RecyclerView rv_featured_theme;
     private RecyclerView rv_home_care;
     private SimpleDraweeView sv_head_pic;
@@ -118,6 +127,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
 
     private void initView() {
+        ctl_root = findViewById(R.id.ctl_root);
         sv_head_pic = findViewById(R.id.sv_head_pic);
         rv_featured_theme = findViewById(R.id.rv_featured_theme);
         rv_home_care = findViewById(R.id.rv_home_care);
@@ -129,12 +139,13 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         tv_home_care_more = findViewById(R.id.tv_home_care_more);
         tv_home_art_more = findViewById(R.id.tv_home_art_more);
         tv_home_sport_more = findViewById(R.id.tv_home_sport_more);
-        tv_home_science_more = findViewById(R.id.tv_home_care_more);
+        tv_home_science_more = findViewById(R.id.tv_home_science_more);
         iv_home_like = findViewById(R.id.iv_home_like);
     }
 
     private void initData() {
         isFirstLoad=true;
+        showProcessDialog();
         sl_home_refresh.setEnabled(false);
         AYFacade facade = facades.get("QueryServiceFacade");
         try {
@@ -145,14 +156,17 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             e.printStackTrace();
         }
 
-        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
-
+//        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
         //精选主题
         initSubject();
 
     }
 
     private void initHomeData() {
+//        showProcessDialog();
+        String url = OSSUtils.getSignedUrl(CalUtils.md5(BasePrefUtils.getUserId()));
+        LogUtils.d("pic url "+url);
+        sv_head_pic.setImageURI(url);
         AYFacade facade = facades.get("QueryServiceFacade");
 
         String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
@@ -396,9 +410,9 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 Intent careIntent = new Intent(AYHomeActivity.this, CareListActivity.class);
                 if (bean!=null && bean.result!=null){
                     int m = bean.result.homepage_services.get(0).totalCount;
-                    intent.putExtra("totalCount",m);
+                    careIntent.putExtra("totalCount",m);
                 }
-                startActivity(careIntent);
+                startActivityForResult(careIntent,AppConstant.CARE_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_art_more:
                 if (bean!=null && bean.result!=null){
@@ -407,7 +421,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 }
                 intent.putExtra("serviceType","艺术");
                 intent.putExtra("title","艺术");
-                startActivity(intent);
+                startActivityForResult(intent,AppConstant.ART_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_sport_more:
                 if (bean!=null && bean.result!=null){
@@ -416,7 +430,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 }
                 intent.putExtra("serviceType","运动");
                 intent.putExtra("title","运动");
-                startActivity(intent);
+                startActivityForResult(intent,AppConstant.SPORT_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_science_more:
                 if (bean!=null && bean.result!=null){
@@ -425,14 +439,13 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 }
                 intent.putExtra("serviceType","科学");
                 intent.putExtra("title","科学");
-                startActivity(intent);
+                startActivityForResult(intent,AppConstant.SCIENCE_REQUEST_CODE);
                 break;
             case R.id.iv_home_location:
                 startActivity(new Intent(AYHomeActivity.this,NearServiceActivity.class));
-                ToastUtils.showShortToast("点击了location");
                 break;
             case R.id.iv_home_like:
-                startActivity(new Intent(AYHomeActivity.this,MyLikeActivity.class));
+                startActivityForResult(new Intent(AYHomeActivity.this,MyLikeActivity.class), AppConstant.MY_LIKE_REQUEST_CODE);
                 break;
         }
     }
@@ -460,7 +473,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
      * @param args
      */
     public void AYGetImgTokenCommandSuccess(JSONObject args){
-
         sl_home_refresh.setEnabled(true);
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
@@ -511,9 +523,18 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("关闭", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    }).show();
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -540,13 +561,21 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     public void AYLikePopCommandFailed(JSONObject args) {
        closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("关闭", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    }).show();
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
+
     }
-
-
 
     private void refreshToken() {
         disposable = Observable.interval(OtherUtils.getRefreshTime(BasePrefUtils
@@ -639,6 +668,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }*/
+        closeProcessDialog();
         sl_home_refresh.setRefreshing(false);
         bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
         if (bean != null && "ok".equals(bean.status)) {
@@ -654,10 +684,25 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     }
 
     public Boolean AYSearchServiceCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        LogUtils.d("AYSearchServiceCommandFailed "+args.toString());
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         sl_home_refresh.setRefreshing(false);
-        ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
-                .refreshOrLoadMoreComplete();
-        Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
+        if (uiBean.code==10010){
+            Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
+                    .setAction("关闭", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    }).show();
+        }else {
+            ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
+                    .refreshOrLoadMoreComplete();
+            Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
+        }
+
         return true;
     }
 
@@ -673,12 +718,30 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        needsRefreshHomeData(requestCode,resultCode,data);
+
         if (requestCode == 0 && resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             String text = null;
             if (bundle != null)
                 text = bundle.getString("second");
             Log.d("text", text);
+        }
+    }
+
+    private void needsRefreshHomeData(int requestCode, int resultCode, Intent data) {
+        switch(requestCode){
+            case AppConstant.CARE_MORE_REQUEST_CODE:
+            case AppConstant.ART_MORE_REQUEST_CODE:
+            case AppConstant.SPORT_MORE_REQUEST_CODE:
+            case AppConstant.SCIENCE_REQUEST_CODE:
+            case AppConstant.MY_LIKE_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK){
+                    sl_home_refresh.setRefreshing(false);
+                    initHomeData();
+                }
+                break;
         }
     }
 

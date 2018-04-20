@@ -70,7 +70,7 @@ public class AYPhoneLoginFacade extends AYFacade {
         /**
          * 修改用户信息到数据库
          */
-        AYDaoUserProfile p = new AYDaoUserProfile(args);
+        AYDaoUserProfile p = new AYDaoUserProfile(args,true);
         p.setIs_current(1);
 
         AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");

@@ -343,7 +343,7 @@ public class NearServiceActivity extends AYActivity {
             animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0,
                     Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
             animation.setInterpolator(new AccelerateDecelerateInterpolator());
-            animation.setDuration(500);
+            animation.setDuration(300);
         }
 
         popupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);

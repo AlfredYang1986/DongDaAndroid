@@ -9,6 +9,7 @@ import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.command.AYCommand;
@@ -52,7 +53,7 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
         notificationHandler=getTarget();
 
 
-        PutObjectRequest put = new PutObjectRequest("bm-dongda", BasePrefUtils.getUserId()+".jpg", path);
+        PutObjectRequest put = new PutObjectRequest("bm-dongda", CalUtils.md5(BasePrefUtils.getUserId())+".jpg", path);
 
         OSSAsyncTask task = OSSUtils.getOSS().asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override

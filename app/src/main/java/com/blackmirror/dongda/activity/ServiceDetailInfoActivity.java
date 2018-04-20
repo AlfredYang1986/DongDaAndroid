@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -72,6 +73,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
     private AMap aMap;
     private MarkerOptions markerOption;
     private ServiceDetailInfoUiBean uiBean;
+    private boolean isNeedRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +136,9 @@ public class ServiceDetailInfoActivity extends AYActivity {
     }
 
     private void initData() {
-        String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"service_id\":\""+service_id+"\"}}";
         try {
+            showProcessDialog();
+            String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"service_id\":\""+service_id+"\"}}";
             JSONObject object = new JSONObject(json);
             facades.get("AYDetailInfoFacade").execute("AYGetDetailInfoCmd",object);
         } catch (JSONException e) {
@@ -148,6 +151,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         iv_detail_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -230,7 +234,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         vp_detail_photo.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tl_detail_tab));
         tl_detail_tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_detail_photo));
 
-        tv_detail_content.setText(bean.service.punchline);//第一个描述
+        tv_detail_content.setText("\""+bean.service.punchline+"\"");//第一个描述
 
         StringBuilder sb = new StringBuilder();
         sb.append(bean.service.service_type)
@@ -301,9 +305,8 @@ public class ServiceDetailInfoActivity extends AYActivity {
                 b.res_id= R.drawable.guard;
             }else if (s.equals("急救包")){
                 b.res_id= R.drawable.kit;
-            }else if (s.equals("")){
-            }else {
-                b.res_id= R.drawable.other;
+            }else if (s.equals("安全桌角")){
+                b.res_id= R.drawable.safe_table;
             }
             if (!s.equals("")) {
                 list.add(b);
@@ -344,6 +347,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
     }
 
     public void AYGetDetailInfoCmdSuccess(JSONObject args){
+        closeProcessDialog();
         ServiceDetailInfoServerBean serverBean = JSON.parseObject(args.toString(), ServiceDetailInfoServerBean.class);
         uiBean = new ServiceDetailInfoUiBean(serverBean);
         if (uiBean.isSuccess){
@@ -356,6 +360,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
 
     public void AYGetDetailInfoCmdFailed(JSONObject args) {
+        closeProcessDialog();
         ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
@@ -367,6 +372,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
      * @param args
      */
     public void AYLikePushCommandSuccess(JSONObject args){
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
         LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
@@ -391,6 +397,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
      * @param args
      */
     public void AYLikePopCommandSuccess(JSONObject args){
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
         LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
@@ -468,6 +475,13 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
     @Override
     protected void bindingFragments() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        super.onBackPressed();
 
     }
 }
