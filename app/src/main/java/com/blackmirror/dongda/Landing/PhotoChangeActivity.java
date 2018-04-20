@@ -269,6 +269,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         senDataToServer();
     }
 
+
+
     public void AYUploadFileBySDKCommandFailed(JSONObject args) {
         closeProcessDialog();
         ToastUtils.showShortToast("上传失败!");
@@ -280,6 +282,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      * @return
      */
     public void AYUpdateProfileCommandSuccess(JSONObject args) {
+        closeProcessDialog();
         UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
         UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
 
@@ -290,9 +293,11 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             profile.screen_name = uiBean.screen_name;
             profile.screen_photo = uiBean.screen_photo;
             profile.is_current=1;
+
             AYCommand cmd = facades.get("LoginFacade").cmds.get("UpdateLocalProfile");
             long result = cmd.excute(profile);
             if (result>0){
+
                 ToastUtils.showShortToast("修改成功!");
                 startActivity(new Intent(PhotoChangeActivity.this, AYHomeActivity.class));
                 AYApplication.finishAllActivity();
@@ -309,6 +314,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     }
 
     private void senDataToServer() {
+
         String json;
         try {
             if (isFromNameInput){
