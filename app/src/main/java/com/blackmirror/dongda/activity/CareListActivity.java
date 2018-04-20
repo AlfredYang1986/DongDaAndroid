@@ -1,6 +1,8 @@
 package com.blackmirror.dongda.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +19,16 @@ import com.blackmirror.dongda.adapter.CareListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -35,7 +40,7 @@ import org.json.JSONObject;
 
 public class CareListActivity extends AYActivity {
 
-    private final String TAG="CareListActivity";
+    private final String TAG = "CareListActivity";
 
     private ImageView iv_home_head_back;
     private TextView tv_home_head_title;
@@ -43,19 +48,20 @@ public class CareListActivity extends AYActivity {
     private SmartRefreshLayout sl_care_list;
     private CareListAdapter adapter;
     private int totalCount;
-    int skip=0;
-    int take=10;
+    int skip = 0;
+    int take = 10;
+    private boolean isNeedRefresh;
     private int clickLikePos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_care_list);
-        totalCount=getIntent().getIntExtra("totalCount",10);
+        totalCount = getIntent().getIntExtra("totalCount", 10);
         initView();
-        initData(skip,take);
+        initData(skip, take);
         initListener();
-//        OtherUtils.setStatusBarColor(this);
+        //        OtherUtils.setStatusBarColor(this);
     }
 
     @Override
@@ -73,17 +79,16 @@ public class CareListActivity extends AYActivity {
         sl_care_list.setRefreshHeader(new MaterialHeader(CareListActivity.this));
     }
 
-    private void initData(int skipCount,int takeCount) {
+    private void initData(int skipCount, int takeCount) {
 
         AYFacade facade = facades.get("QueryServiceFacade");
         try {
-            String json="{\"skip\" : "+skipCount+",\"take\" : "+takeCount+",\"token\": \""+ BasePrefUtils.getAuthToken()+"\",\"condition\": {\"user_id\":\""+BasePrefUtils.getUserId()+"\",\"service_type\": \"看顾\"}}";
+            String json = "{\"skip\" : " + skipCount + ",\"take\" : " + takeCount + ",\"token\": \"" + BasePrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + BasePrefUtils.getUserId() + "\",\"service_type\": \"看顾\"}}";
             JSONObject object = new JSONObject(json);
-            facade.execute("AYSubjectMoreCommand",object);
+            facade.execute("AYSubjectMoreCommand", object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
 
     }
@@ -93,16 +98,17 @@ public class CareListActivity extends AYActivity {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 finish();
             }
         });
         sl_care_list.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshLayout) {
-                skip=0;
+                skip = 0;
                 sl_care_list.setNoMoreData(false);
                 sl_care_list.setEnableLoadMore(true);
-                initData(skip,take);
+                initData(skip, take);
             }
         });
 
@@ -110,21 +116,21 @@ public class CareListActivity extends AYActivity {
         sl_care_list.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                LogUtils.d("skip=="+skip);
-                if (refreshLayout.getState().dragging){
+                LogUtils.d("skip==" + skip);
+                if (refreshLayout.getState().dragging) {
                     LogUtils.d("dragging");
                 }
-                if (totalCount<=adapter.getItemCount()){
+                if (totalCount <= adapter.getItemCount()) {
                     sl_care_list.finishLoadMore();
                     sl_care_list.setEnableLoadMore(false);
                     sl_care_list.setNoMoreData(true);
                     return;
                 }
-                if ((skip+take)>=totalCount){
-                    initData(skip,totalCount-skip);
-                }else {
-                    skip+=take;
-                    initData(skip,take);
+                if ((skip + take) >= totalCount) {
+                    initData(skip, totalCount - skip);
+                } else {
+                    skip += take;
+                    initData(skip, take);
                 }
             }
         });
@@ -132,12 +138,13 @@ public class CareListActivity extends AYActivity {
 
     /**
      * 获取更多信息列表
+     *
      * @param args
      */
-    public void AYSubjectMoreCommandSuccess(JSONObject args){
+    public void AYSubjectMoreCommandSuccess(JSONObject args) {
         CareMoreServerBean serverBean = JSON.parseObject(args.toString(), CareMoreServerBean.class);
         CareMoreUiBean bean = new CareMoreUiBean(serverBean);
-        if (sl_care_list.getState().opening){
+        if (sl_care_list.getState().opening) {
             sl_care_list.finishLoadMore();
             sl_care_list.finishRefresh();
         }
@@ -145,13 +152,13 @@ public class CareListActivity extends AYActivity {
     }
 
     public void AYSubjectMoreCommandFailed(JSONObject args) {
-        if (sl_care_list.getState().opening){
+        if (sl_care_list.getState().opening) {
             sl_care_list.finishLoadMore(false);
             sl_care_list.finishRefresh(false);
         }
         ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+            ToastUtils.showShortToast(bean.error.message + "(" + bean.error.code + ")");
         }
     }
 
@@ -161,20 +168,18 @@ public class CareListActivity extends AYActivity {
 
             tv_home_head_title.setText("看顾");
 
-            if (skip==0){//首次加载或者下拉刷新
-                if (adapter==null){
+            if (skip == 0) {//首次加载或者下拉刷新
+                if (adapter == null) {
                     adapter = new CareListAdapter(CareListActivity.this, bean);
                     rv_care_list.setLayoutManager(new LinearLayoutManager(CareListActivity.this));
                     rv_care_list.setAdapter(adapter);
                     rv_care_list.addItemDecoration(new TopItemDecoration(40, 40));
-                }else {
+                } else {
                     adapter.setRefreshData(bean.services);
-                    adapter.notifyDataSetChanged();
                 }
 
-            }else {
+            } else {
                 adapter.setMoreData(bean.services);
-                adapter.notifyDataSetChanged();
             }
 
 
@@ -182,41 +187,41 @@ public class CareListActivity extends AYActivity {
                 @Override
                 public void onItemCareListClick(View view, int position, String service_id) {
                     Intent intent = new Intent(CareListActivity.this, ServiceDetailInfoActivity.class);
-                    intent.putExtra("service_id",service_id);
+                    intent.putExtra("service_id", service_id);
                     startActivity(intent);
                 }
 
                 @Override
                 public void onItemCareLikeClick(View view, int position, CareMoreServerBean
                         .ResultBean.ServicesBean servicesBean) {
-                    clickLikePos=position;
+                    clickLikePos = position;
                     sendLikeData(servicesBean);
                 }
             });
-        }else {
-            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 
 
     private void sendLikeData(CareMoreServerBean.ResultBean.ServicesBean bean) {
-        String t=BasePrefUtils.getAuthToken();
-        String u=BasePrefUtils.getUserId();
+        String t = BasePrefUtils.getAuthToken();
+        String u = BasePrefUtils.getUserId();
         showProcessDialog();
-        if (bean.is_collected){//已收藏 点击取消
-            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+        if (bean.is_collected) {//已收藏 点击取消
+            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
             try {
                 JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
+                facades.get("QueryServiceFacade").execute("AYLikePopCommand", object);
             } catch (JSONException e) {
                 e.printStackTrace();
                 closeProcessDialog();
             }
-        }else {
-            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
+        } else {
+            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
             try {
                 JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
+                facades.get("QueryServiceFacade").execute("AYLikePushCommand", object);
             } catch (JSONException e) {
                 e.printStackTrace();
                 closeProcessDialog();
@@ -226,16 +231,18 @@ public class CareListActivity extends AYActivity {
 
     /**
      * 收藏相关
+     *
      * @param args
      */
-    public void AYLikePushCommandSuccess(JSONObject args){
+    public void AYLikePushCommandSuccess(JSONObject args) {
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
         LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess){
-            adapter.notifyItemChanged(clickLikePos,true);
-        }else {
-            ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
+        if (pushUiBean.isSuccess) {
+            adapter.notifyItemChanged(clickLikePos, true);
+        } else {
+            ToastUtils.showShortToast(pushUiBean.message + "(" + pushUiBean.code + ")");
         }
     }
 
@@ -243,22 +250,24 @@ public class CareListActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+            ToastUtils.showShortToast(bean.error.message + "(" + bean.error.code + ")");
         }
     }
 
     /**
      * 取消收藏相关
+     *
      * @param args
      */
-    public void AYLikePopCommandSuccess(JSONObject args){
+    public void AYLikePopCommandSuccess(JSONObject args) {
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
         LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess){
-            adapter.notifyItemChanged(clickLikePos,false);
-        }else {
-            ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
+        if (popUiBean.isSuccess) {
+            adapter.notifyItemChanged(clickLikePos, false);
+        } else {
+            ToastUtils.showShortToast(popUiBean.message + "(" + popUiBean.code + ")");
         }
     }
 
@@ -266,11 +275,41 @@ public class CareListActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+            ToastUtils.showShortToast(bean.error.message + "(" + bean.error.code + ")");
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        super.onBackPressed();
+    }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        clearMemBitMap();
+    }
 
+    private void clearMemBitMap() {
+        if (adapter!=null){
+            for (String url : adapter.urlSet) {
+                try {
+                    Uri uri = Uri.parse(url);
+                    ImageRequest request= ImageRequestBuilder.newBuilderWithSource(uri).build();
+                    boolean cache = Fresco.getImagePipeline().isInBitmapMemoryCache(uri);
 
+                    LogUtils.d(url+" in memory "+cache);
+                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
+                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
+
+                } catch (Exception e) {
+                    LogUtils.e(ArtListActivity.class,"CacheException: ",e);
+                }
+            }
+            adapter.urlSet.clear();
+            adapter.urlSet=null;
+            adapter=null;
+        }
+    }
 }

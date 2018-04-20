@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.NetUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -140,8 +141,32 @@ public abstract class AYRemoteCommand extends AYCommand {
     public void excuteImpl(JSONObject... args) {
         /*AYAsyncTask tk = new AYAsyncTask();
         tk.execute(args);*/
+        if (NetUtils.isNetworkAvailable()) {
+            sendRequestData(args);
+        }else {//确定所有网络请求发起都在主线程
+            if (mNotificationHandler==null) {
+                mNotificationHandler = getTarget();
+            }
+            mNotificationHandler.handleNotifications(getFailedCallBackName(),getErrorNetData());
+        }
+    }
 
-        sendRequestData(args);
+    private JSONObject getErrorNetData() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("{\"status\":\"error\",")
+                .append("\"error\":{")
+                .append("\"code\":")
+                .append("10010,")
+                .append("\"message\":\"")
+                .append("网络异常,请改善网络环境并重试")
+                .append("\"}}");
+        JSONObject object = null;
+        try {
+            return new JSONObject(sb.toString());
+        } catch (JSONException e1) {
+
+        }
+        return object;
     }
 
     private void sendRequestData(JSONObject[] args) {
@@ -158,7 +183,9 @@ public abstract class AYRemoteCommand extends AYCommand {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposable = d;
-                        mNotificationHandler = getTarget();
+                        if (mNotificationHandler==null) {
+                            mNotificationHandler = getTarget();
+                        }
                     }
 
                     @Override

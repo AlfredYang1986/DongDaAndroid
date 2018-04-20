@@ -175,7 +175,8 @@ public class MyLikeActivity extends AYActivity {
         LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
         LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
         if (popUiBean.isSuccess){
-            adapter.notifyItemChanged(clickLikePos,false);
+//            adapter.notifyItemChanged(clickLikePos,false);
+            adapter.removeItem(clickLikePos);
         }else {
             ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
         }

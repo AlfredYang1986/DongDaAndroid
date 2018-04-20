@@ -117,7 +117,7 @@ public class PhoneInputActivity extends AYActivity {
 
     private void getSmsMsg() {
         sms_code.setEnabled(false);
-        Observable.intervalRange(0,10,0,1, TimeUnit.SECONDS)
+        Observable.intervalRange(0,30,0,1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
                     @Override
@@ -257,24 +257,20 @@ public class PhoneInputActivity extends AYActivity {
         }
 
         if (TextUtils.isEmpty(uiBean.screen_name)) {
-            try {
-                Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
-                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result").getJSONObject("user"));
-                intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
-                startActivity(intent);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+            Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
+            AYDaoUserProfile p = new AYDaoUserProfile(args);
+            intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
+            startActivity(intent);
+
         } else {
-            try {
-                Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
-                intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
-                AYDaoUserProfile p = new AYDaoUserProfile(args.getJSONObject("result").getJSONObject("user"));
-                intent.putExtra("current_user", p);
-                startActivity(intent);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+            Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
+            intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
+            AYDaoUserProfile p = new AYDaoUserProfile(args);
+            intent.putExtra("current_user", p);
+            intent.putExtra("name", uiBean.screen_name);
+            startActivity(intent);
         }
 
         return true;

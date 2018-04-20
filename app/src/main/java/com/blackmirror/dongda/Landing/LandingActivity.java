@@ -17,6 +17,7 @@ import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
@@ -161,6 +162,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         WeChatLoginServerBean bean = JSON.parseObject(arg.toString(), WeChatLoginServerBean.class);
         if (bean != null && "ok".equals(bean.status) && bean.result != null) {
             if (bean.result.user != null) {
+                LogUtils.d("cal ", bean.result.user.user_id+"   "+CalUtils.md5(bean.result.user.user_id));
                 BasePrefUtils.setUserId(bean.result.user.user_id);
             }
             BasePrefUtils.setAuthToken(bean.result.auth_token);

@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.activity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -64,10 +65,15 @@ public class ServiceDetailInfoActivity extends AYActivity {
     private TextView tv_brand_tag;
     private ImageView iv_detail_back;
     private ImageView iv_detail_like;
+    private ImageView iv_detail_class;
+    private ImageView iv_detail_teacher;
+    private TextView tv_detail_class_dec;
+    private TextView tv_detail_teacher_dec;
     private MapView mv_detail_location;
     private AMap aMap;
     private MarkerOptions markerOption;
     private ServiceDetailInfoUiBean uiBean;
+    private boolean isNeedRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +110,10 @@ public class ServiceDetailInfoActivity extends AYActivity {
         tv_brand_tag = findViewById(R.id.tv_brand_tag);
         iv_detail_back = findViewById(R.id.iv_detail_back);
         iv_detail_like = findViewById(R.id.iv_detail_like);
+        iv_detail_class = findViewById(R.id.iv_detail_class);
+        iv_detail_teacher = findViewById(R.id.iv_detail_teacher);
+        tv_detail_class_dec = findViewById(R.id.tv_detail_class_dec);
+        tv_detail_teacher_dec = findViewById(R.id.tv_detail_teacher_dec);
         mv_detail_location = findViewById(R.id.mv_detail_location);
         initMapView(savedInstanceState);
     }
@@ -126,8 +136,9 @@ public class ServiceDetailInfoActivity extends AYActivity {
     }
 
     private void initData() {
-        String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"service_id\":\""+service_id+"\"}}";
         try {
+            showProcessDialog();
+            String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"service_id\":\""+service_id+"\"}}";
             JSONObject object = new JSONObject(json);
             facades.get("AYDetailInfoFacade").execute("AYGetDetailInfoCmd",object);
         } catch (JSONException e) {
@@ -140,6 +151,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         iv_detail_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -222,7 +234,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         vp_detail_photo.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tl_detail_tab));
         tl_detail_tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_detail_photo));
 
-        tv_detail_content.setText(bean.service.punchline);//第一个描述
+        tv_detail_content.setText("\""+bean.service.punchline+"\"");//第一个描述
 
         StringBuilder sb = new StringBuilder();
         sb.append(bean.service.service_type)
@@ -238,6 +250,9 @@ public class ServiceDetailInfoActivity extends AYActivity {
                 .append(bean.service.max_age)
                 .append("岁");
         tv_age_range.setText(range.toString());//年龄范围
+
+        checkClassMaxStu(bean.service.class_max_stu);
+
         tv_class_mb_no.setText(bean.service.class_max_stu+"");//班级人数
 
         int m= CalUtils.getGongyue(bean.service.class_max_stu,bean.service.teacher_num);
@@ -290,9 +305,8 @@ public class ServiceDetailInfoActivity extends AYActivity {
                 b.res_id= R.drawable.guard;
             }else if (s.equals("急救包")){
                 b.res_id= R.drawable.kit;
-            }else if (s.equals("")){
-            }else {
-                b.res_id= R.drawable.other;
+            }else if (s.equals("安全桌角")){
+                b.res_id= R.drawable.safe_table;
             }
             if (!s.equals("")) {
                 list.add(b);
@@ -310,7 +324,30 @@ public class ServiceDetailInfoActivity extends AYActivity {
         addMarkers(bean.service.location.pin);
     }
 
+    /**
+     * 检查人数是否正确 服务器返回了-1
+     * @param max_stu
+     */
+    private void checkClassMaxStu(int max_stu) {
+        if (max_stu<=-1){//隐藏
+            iv_detail_class.setVisibility(View.GONE);
+            tv_detail_class_dec.setVisibility(View.GONE);
+            tv_class_mb_no.setVisibility(View.GONE);
+            iv_detail_teacher.setVisibility(View.GONE);
+            tv_detail_teacher_dec.setVisibility(View.GONE);
+            tv_t_s_ratio.setVisibility(View.GONE);
+        } else {
+             iv_detail_class.setVisibility(View.VISIBLE);
+             tv_detail_class_dec.setVisibility(View.VISIBLE);
+             tv_class_mb_no.setVisibility(View.VISIBLE);
+             iv_detail_teacher.setVisibility(View.VISIBLE);
+             tv_detail_teacher_dec.setVisibility(View.VISIBLE);
+             tv_t_s_ratio.setVisibility(View.VISIBLE);
+        }
+    }
+
     public void AYGetDetailInfoCmdSuccess(JSONObject args){
+        closeProcessDialog();
         ServiceDetailInfoServerBean serverBean = JSON.parseObject(args.toString(), ServiceDetailInfoServerBean.class);
         uiBean = new ServiceDetailInfoUiBean(serverBean);
         if (uiBean.isSuccess){
@@ -323,6 +360,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
 
     public void AYGetDetailInfoCmdFailed(JSONObject args) {
+        closeProcessDialog();
         ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
@@ -334,6 +372,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
      * @param args
      */
     public void AYLikePushCommandSuccess(JSONObject args){
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
         LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
@@ -358,6 +397,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
      * @param args
      */
     public void AYLikePopCommandSuccess(JSONObject args){
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
         LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
@@ -435,6 +475,13 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
     @Override
     protected void bindingFragments() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        super.onBackPressed();
 
     }
 }

@@ -11,37 +11,36 @@ import java.io.Serializable;
  * Created by alfredyang on 27/05/2017.
  */
 public class AYDaoUserProfile implements Serializable {
-    private String user_id;
-    private String auth_token;
-    private int is_current = 0;
-    private String screen_name;
-    private String screen_photo;
+    public String user_id;
+    public String auth_token;
+    public int is_current = 0;
+    public String screen_name;
+    public String screen_photo;
 
     public AYDaoUserProfile() {
         super();
     }
 
     public AYDaoUserProfile(JSONObject o) {
-        /*{
-            "status": "ok",
-                "result": {
-            "user": {
-                "screen_name": "xcx",
-                        "has_auth_phone": 1,
-                        "current_device_type": "",
-                        "is_service_provider": 0,
-                        "user_id": "2737d748bce21504447cf27d7b1f4f99",
-                        "screen_photo": "",
-                        "current_device_id": ""
-            },
-            "auth_token": "bearer2737d748bce21504447cf27d7b1f4f99"
-        }
-        }*/
         super();
         try {
             JSONObject result = o.getJSONObject("result");
             JSONObject user = o.getJSONObject("result").getJSONObject("user");
             this.auth_token = result.getString("auth_token");
+            this.user_id = user.getString("user_id");
+            this.screen_name = user.getString("screen_name");
+            this.screen_photo = user.getString("screen_photo");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public AYDaoUserProfile(JSONObject o,boolean isUpdate) {
+        try {
+            JSONObject result = o.getJSONObject("result");
+            JSONObject user = o.getJSONObject("result").getJSONObject("profile");
+            this.auth_token = user.getString("token");
             this.user_id = user.getString("user_id");
             this.screen_name = user.getString("screen_name");
             this.screen_photo = user.getString("screen_photo");

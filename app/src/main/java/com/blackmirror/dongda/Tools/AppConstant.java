@@ -1,13 +1,8 @@
 package com.blackmirror.dongda.Tools;
 
-import com.amap.api.maps2d.model.LatLng;
-
 public class AppConstant {
-    //微信APP_ID
-    public static final String WECHAT_APP_ID="wx66d179d99c9ba7d6";
+
     public static final int PERMISSION_REQUEST = 10010;
-    public static final LatLng BEIJING = new LatLng(39.90403, 116.407525);// 北京市经纬度
-    public static final LatLng ZHONGGUANCUN = new LatLng(39.983456, 116.3154950);// 北京市中关村经纬度
     public static final int CHOOSE_PIC=10011;
     public static final int PICTURE_CUT=10012;
     public static final int TAKE_PHOTO=10013;
@@ -15,5 +10,12 @@ public class AppConstant {
 
     public static final int FROM_PHONE_INPUT=100;
     public static final int FROM_NAME_INPUT=101;
+
+
+    public static final int CARE_MORE_REQUEST_CODE=100;
+    public static final int ART_MORE_REQUEST_CODE=101;
+    public static final int SPORT_MORE_REQUEST_CODE=102;
+    public static final int SCIENCE_REQUEST_CODE=103;
+    public static final int MY_LIKE_REQUEST_CODE =114;
 
 }

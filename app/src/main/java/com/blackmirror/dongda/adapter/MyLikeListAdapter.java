@@ -143,4 +143,12 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
                 servicesBean);
     }
 
+    public void removeItem(int position){
+        list.remove(position);
+        notifyItemRemoved(position);
+        if (position!=list.size()){
+            notifyItemRangeChanged(position,list.size()-position);
+        }
+    }
+
 }

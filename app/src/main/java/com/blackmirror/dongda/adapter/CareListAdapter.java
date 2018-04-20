@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,19 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareListViewHolder> {
 
@@ -22,6 +31,8 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
     private CareMoreUiBean bean;
     protected Context context;
     private OnCareListClickListener listener;
+    public Set<String> urlSet=new HashSet<>();
+
 
 
     public void setOnCareListClickListener(OnCareListClickListener listener) {
@@ -47,8 +58,14 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
 
         CareMoreServerBean.ResultBean.ServicesBean servicesBean = this.bean.services.get(position);
 
+
         String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
-        holder.sv_care_list_photo.setImageURI(url);
+//        holder.sv_care_list_photo.setImageURI(url);
+        urlSet.add(getCacheUrl(url));
+
+
+        displayImage(Uri.parse(url),holder.sv_care_list_photo);
+
         if (servicesBean.is_collected){
             holder.iv_care_list_like.setBackgroundResource(R.drawable.like_selected);
         }else {
@@ -112,11 +129,13 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
 
     public void setMoreData(List<CareMoreServerBean.ResultBean.ServicesBean> moreList) {
         bean.services.addAll(moreList);
+        notifyDataSetChanged();
     }
 
     public void setRefreshData(List<CareMoreServerBean.ResultBean.ServicesBean> moreList) {
         bean.services.clear();
         bean.services.addAll(moreList);
+        notifyDataSetChanged();
     }
 
 
@@ -145,6 +164,27 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
 
         void onItemCareLikeClick(View view, int position, CareMoreServerBean.ResultBean
                 .ServicesBean servicesBean);
+    }
+
+    public void displayImage(Uri uri, SimpleDraweeView draweeView){
+
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(OtherUtils.dp2px(OtherUtils.getScreenWidthDp()-32), OtherUtils.dp2px(212)))
+                .build();
+
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setOldController(draweeView.getController())
+                .build();
+        draweeView.setController(controller);
+    }
+
+    protected String getCacheUrl(String url){
+        if (url.contains("?")){
+            return url.substring(0,url.indexOf("?")+1);
+        }
+        return url;
+
     }
 
 }

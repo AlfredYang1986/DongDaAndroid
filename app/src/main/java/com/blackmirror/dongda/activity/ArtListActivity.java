@@ -1,6 +1,8 @@
 package com.blackmirror.dongda.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,13 +19,16 @@ import com.blackmirror.dongda.adapter.ArtListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.GridItemDecoration;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.ArtMoreServerBean;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.ArtMoreUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -48,6 +53,7 @@ public class ArtListActivity extends AYActivity {
     private int take = 10;
     private ArtListAdapter adapter;
     private int clickLikePos;
+    private boolean isNeedRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,7 @@ public class ArtListActivity extends AYActivity {
     }
 
     private void initData() {
+        showProcessDialog();
         getGridListData(skip, take);
         tv_home_head_title.setText(title);
     }
@@ -82,13 +89,13 @@ public class ArtListActivity extends AYActivity {
     private void getGridListData(int skipCount, int takeCount) {
         try {
             AYFacade facade = facades.get("QueryServiceFacade");
-            showProcessDialog();
+//            showProcessDialog();
             String json = "{\"skip\" : " + skipCount + ",\"take\" : " + takeCount + ",\"token\": \"" + BasePrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + BasePrefUtils.getUserId() + "\",\"service_type\": \"" +
                     serviceType + "\"}}";
             JSONObject object = new JSONObject(json);
             facade.execute("AYSubjectMoreCommand", object);
         } catch (JSONException e) {
-            closeProcessDialog();
+//            closeProcessDialog();
             e.printStackTrace();
         }
     }
@@ -129,6 +136,7 @@ public class ArtListActivity extends AYActivity {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -237,6 +245,7 @@ public class ArtListActivity extends AYActivity {
      * @param args
      */
     public void AYLikePushCommandSuccess(JSONObject args){
+        isNeedRefresh = true;
         closeProcessDialog();
         LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
         LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
@@ -260,6 +269,7 @@ public class ArtListActivity extends AYActivity {
      * @param args
      */
     public void AYLikePopCommandSuccess(JSONObject args){
+        isNeedRefresh = false;
         closeProcessDialog();
         LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
         LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
@@ -283,4 +293,37 @@ public class ArtListActivity extends AYActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        clearMemBitMap();
+    }
+
+    private void clearMemBitMap() {
+        if (adapter!=null){
+            for (String url : adapter.urlSet) {
+                try {
+                    Uri uri = Uri.parse(url);
+                    ImageRequest request= ImageRequestBuilder.newBuilderWithSource(uri).build();
+                    boolean cache = Fresco.getImagePipeline().isInBitmapMemoryCache(uri);
+
+                    LogUtils.d(url+" in memory "+cache);
+                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
+                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
+
+                } catch (Exception e) {
+                    LogUtils.e(ArtListActivity.class,"CacheException: ",e);
+                }
+            }
+            adapter.urlSet.clear();
+            adapter.urlSet=null;
+            adapter=null;
+        }
+    }
 }

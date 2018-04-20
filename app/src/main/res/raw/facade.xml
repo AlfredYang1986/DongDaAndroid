@@ -21,6 +21,7 @@
         <command short="UpdateProfile" />
         <command short="getImgToken" />
         <command short="AYUploadFileBySDKCommand" />
+        <command short="UpdateLocalProfile" />
     </facade>
 
     <facade
