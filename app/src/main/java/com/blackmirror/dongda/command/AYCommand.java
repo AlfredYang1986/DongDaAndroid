@@ -15,7 +15,7 @@ public abstract class AYCommand extends AYSysNotifier {
     public static OkHttpClient httpClient = new OkHttpClient().newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
             .addNetworkInterceptor(new StethoInterceptor())
-            .readTimeout(60,TimeUnit.SECONDS)
+            .readTimeout(15,TimeUnit.SECONDS)
             .writeTimeout(60,TimeUnit.SECONDS)
             .build();
 

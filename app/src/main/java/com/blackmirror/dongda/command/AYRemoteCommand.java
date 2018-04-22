@@ -8,6 +8,7 @@ import com.blackmirror.dongda.AY.AYSysNotificationHandler;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.NetUtils;
 
+import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -144,9 +145,19 @@ public abstract class AYRemoteCommand extends AYCommand {
         if (NetUtils.isNetworkAvailable()) {
             sendRequestData(args);
         }else {//确定所有网络请求发起都在主线程
+            LogUtils.d("flag","network unAvailable");
             if (mNotificationHandler==null) {
                 mNotificationHandler = getTarget();
             }
+            if (mNotificationHandler == null){
+                LogUtils.d("flag","mNotificationHandler null");
+
+            }
+
+            LogUtils.d("flag","getFailedCallBackName "+getFailedCallBackName());
+            LogUtils.d("flag","getErrorNetData "+getErrorNetData().toString());
+
+
             mNotificationHandler.handleNotifications(getFailedCallBackName(),getErrorNetData());
         }
     }
@@ -250,13 +261,20 @@ public abstract class AYRemoteCommand extends AYCommand {
             JSONObject js_result = null;
             js_result = new JSONObject(json.toString());
             return js_result;
+        } catch (ConnectTimeoutException e5){
+            LogUtils.e(AYRemoteCommand.class,"ConnectTimeoutException: ", e5);
+            return getErrorData(e5);
         } catch (SocketTimeoutException e1) {
+            LogUtils.e(AYRemoteCommand.class,"SocketTimeoutException: ",e1);
             return getErrorData(e1);
         } catch (ConnectException e2) {
+            LogUtils.e(AYRemoteCommand.class,"ConnectException: ",e2);
             return getErrorData(e2);
         } catch (JSONException e3) {
+            LogUtils.e(AYRemoteCommand.class,"JSONException: ",e3);
             return getErrorData(e3);
         } catch (Exception e4) {
+            LogUtils.e(AYRemoteCommand.class,"Exception: ",e4);
             return getErrorData(e4);
         }
         /*net_call.enqueue(new Callback() {

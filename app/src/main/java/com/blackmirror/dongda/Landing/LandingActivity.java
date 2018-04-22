@@ -95,7 +95,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
+                Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
                 startActivity(intent);
             }
         });
@@ -156,6 +156,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         LogUtils.d("AYWeChatLoginCmdSuccess " + Thread.currentThread().getName());
 
         closeProcessDialog();
+        unRegisterWeChatListener();
 
         LogUtils.d("LandingActivity wechat login " + arg.toString());
         ToastUtils.showShortToast("登陆成功!");
@@ -171,6 +172,10 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         } else if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);
         }
+
+    }
+
+    private void unRegisterWeChatListener() {
 
     }
 
@@ -201,10 +206,29 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         req.state = "dongda_wx_login";
         AYApplication.weChatApi.sendReq(req);*/
         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
-        wechat.setPlatformActionListener(this);
+        wechat.setPlatformActionListener(new MyPlatformActionListener());
         wechat.SSOSetting(false);
+//        ShareSDK.unregisterPlatform(wechat);
         authorize(wechat, 1);
 
+    }
+
+    public static class MyPlatformActionListener implements PlatformActionListener{
+
+        @Override
+        public void onComplete(Platform platform, int i, HashMap<String, Object> map) {
+
+        }
+
+        @Override
+        public void onError(Platform platform, int i, Throwable throwable) {
+
+        }
+
+        @Override
+        public void onCancel(Platform platform, int i) {
+
+        }
     }
 
     //授权
@@ -273,13 +297,6 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
     @Override
     public void onComplete(Platform platform, int i, final HashMap<String, Object> map) {
         LogUtils.d("onComplete " + Thread.currentThread().getName());
-        /*WeChatInfoServerBean bean = new WeChatInfoServerBean();
-        //获取用户资料
-        bean.userId = platform.getDb().getUserId();//获取用户账号
-        bean.userName = platform.getDb().getUserName();//获取用户名字
-        bean.userIcon = platform.getDb().getUserIcon();//获取用户头像
-        bean.userGender = platform.getDb().getUserGender(); //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
-        bean.token = platform.getDb().getToken();*/
 
         String userId = platform.getDb().getUserId();//获取用户账号
         String userName = platform.getDb().getUserName();//获取用户名字

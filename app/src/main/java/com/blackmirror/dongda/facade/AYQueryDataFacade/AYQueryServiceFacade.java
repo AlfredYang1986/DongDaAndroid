@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.facade.AYQueryDataFacade;
 
+import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.facade.AYFacade;
 
 import org.json.JSONObject;
@@ -48,6 +49,7 @@ public class AYQueryServiceFacade extends AYFacade {
     }
 
     public void AYSubjectMoreCommandFailed(JSONObject args) {
+        LogUtils.d("zhe li zoule ");
         broadcastingNotification("AYSubjectMoreCommandFailed", args);
     }
 

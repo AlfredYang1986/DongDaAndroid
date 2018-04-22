@@ -121,6 +121,7 @@ public class ArtListActivity extends AYActivity {
     }
 
     public void AYSubjectMoreCommandFailed(JSONObject args) {
+        LogUtils.d("flag","AYSubjectMoreCommandFailed");
         closeProcessDialog();
         if (sl_art_list.getState().opening) {
             sl_art_list.finishLoadMore(false);

@@ -698,8 +698,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                         }
                     }).show();
         }else {
-            ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
-                    .refreshOrLoadMoreComplete();
+           /* ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
+                    .refreshOrLoadMoreComplete();*/
             Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
         }
 
