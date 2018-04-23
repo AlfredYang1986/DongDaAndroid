@@ -15,8 +15,14 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
+            zipAlignEnabled true     //Zipalign优化
+            shrinkResources true    // 移除无用的resource文件
+            minifyEnabled true     //混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        dexOptions {
+            javaMaxHeapSize "4g"
         }
     }
 }
@@ -64,7 +70,8 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     //1.0.5 当1.1.0出现问题可以回退到1.0.5.1
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'//没有使用特殊Header，可以不加这行
+    //没有使用特殊Header，可以不加这行
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 }

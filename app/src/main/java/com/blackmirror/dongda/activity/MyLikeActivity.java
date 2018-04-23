@@ -1,5 +1,8 @@
 package com.blackmirror.dongda.activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +40,7 @@ public class MyLikeActivity extends AYActivity {
     private TextView tv_home_head_title;
     private MyLikeListAdapter adapter;
     private int clickLikePos;
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,6 @@ public class MyLikeActivity extends AYActivity {
     private void initData() {
         getLikeData();
     }
-
-
 
     private void initListener() {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
@@ -98,21 +100,23 @@ public class MyLikeActivity extends AYActivity {
             adapter.setOnLikeListClickListener(new MyLikeListAdapter.OnLikeListClickListener() {
                 @Override
                 public void onItemLikeListClick(View view, int position, String service_id) {
-
+                    Intent intent = new Intent(MyLikeActivity.this, ServiceDetailInfoActivity.class);
+                    intent.putExtra("service_id",service_id);
+                    startActivity(intent);
                 }
 
                 @Override
                 public void onItemLikeClick(View view, int position, QueryLikeServerBean
                         .ResultBean.ServicesBean likeBean) {
                     clickLikePos=position;
-                    sendLikeData(likeBean);
+                    showConfirmUnLikeDialog(position, likeBean);
+//                    sendLikeData(likeBean);
                 }
             });
         }else {
             ToastUtils.showShortToast(bean.message+"("+bean.code+")");
         }
     }
-
 
     public void AYLikeQueryCommandFailed(JSONObject args) {
 
@@ -124,6 +128,28 @@ public class MyLikeActivity extends AYActivity {
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
+    }
+
+    private void showConfirmUnLikeDialog(int position, final QueryLikeServerBean.ResultBean.ServicesBean bean) {
+        dialog = new AlertDialog.Builder(MyLikeActivity.this)
+                .setCancelable(false)
+                .setTitle("提示")
+                .setMessage("确定取消收藏吗?")
+                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        sendLikeData(bean);
+                    }
+                })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
+
     }
 
     private void sendLikeData(QueryLikeServerBean.ResultBean.ServicesBean bean) {
@@ -203,8 +229,6 @@ public class MyLikeActivity extends AYActivity {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
-
-
 
     @Override
     protected void bindingFragments() {

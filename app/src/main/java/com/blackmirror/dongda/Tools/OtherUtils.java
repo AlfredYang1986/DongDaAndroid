@@ -24,8 +24,8 @@ import java.util.Date;
  * Created by Ruge on 2018-04-04 下午12:19
  */
 public class OtherUtils {
-    public static final String ANDROID_RESOURCE = "android.resource://";
-    public static final String FOREWARD_SLASH = "/";
+    private static final String ANDROID_RESOURCE = "android.resource://";
+    private static final String FOREWARD_SLASH = "/";
 
     public static Uri resourceIdToUri(Context context,int resourceId){
         return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
@@ -191,6 +191,7 @@ public class OtherUtils {
     }
 
 
+
     public static float px2dp(float pxVal) {
         final float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
@@ -240,8 +241,16 @@ public class OtherUtils {
         return false;
     }
 
+    public static long getRefreshTime(int second){
+        return second;
+    }
+
     public static long getRefreshTime(String expirate_time){
-        return (getExpirateTime(expirate_time)-System.currentTimeMillis()/1000)/2;
+        long l = getExpirateTime(expirate_time) - System.currentTimeMillis() / 1000;
+        if (l<=0){
+            return 0;
+        }
+        return l/2;
     }
 
     public static long getExpirateTime(String expirate_time){

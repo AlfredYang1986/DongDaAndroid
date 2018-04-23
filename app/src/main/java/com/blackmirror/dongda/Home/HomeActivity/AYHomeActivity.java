@@ -94,7 +94,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private TextView tv_home_sport_more;
     private TextView tv_home_science_more;
     private ImageView iv_home_like;
-    private boolean isFirstLoad;
     private HomeCareAdapter careAdapter;
     private HomeArtAdapter artAdapter;
     private HomeSportAdapter sportAdapter;
@@ -103,6 +102,11 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private int clickLikePos;
     private int clickAdapter=0;//1 art 2 sport 3 science
     private Disposable disposable;
+    private Disposable timeDisposable;
+    private int repeatTime;
+    private boolean isFirstLoad;
+    private boolean isFirstSetRepeat = true;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,7 +149,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private void initData() {
         isFirstLoad=true;
         showProcessDialog();
-        sl_home_refresh.setEnabled(false);
+//        sl_home_refresh.setEnabled(false);
         AYFacade facade = facades.get("QueryServiceFacade");
         try {
             JSONObject object = new JSONObject();
@@ -154,11 +158,22 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 //        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
         //精选主题
         initSubject();
+        getImgToken();
 
+    }
+
+    private void getImgToken() {
+        AYFacade facade = facades.get("QueryServiceFacade");
+        try {
+            JSONObject object = new JSONObject();
+            object.put("token",BasePrefUtils.getAuthToken());
+            facade.execute("getImgToken",object);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initHomeData() {
@@ -473,30 +488,59 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
      * @param args
      */
     public void AYGetImgTokenCommandSuccess(JSONObject args){
-        sl_home_refresh.setEnabled(true);
+//        sl_home_refresh.setEnabled(true);
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
         BasePrefUtils.setAccesskeyId(bean.accessKeyId);
         BasePrefUtils.setSecurityToken(bean.SecurityToken);
         BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
         BasePrefUtils.setExpiration(bean.Expiration);
-        refreshToken();
 //        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
+        if (isFirstSetRepeat){
+            isFirstSetRepeat = false;
+            refreshToken();
+        }
         if (isFirstLoad) {
             isFirstLoad=false;
             initHomeData();
         }
+        unSubscribeTimer();
+        repeatTime = 0;
     }
 
     public void AYGetImgTokenCommandFailed(JSONObject args) {
-        sl_home_refresh.setEnabled(false);
+//        sl_home_refresh.setEnabled(false);
         if (isFirstLoad) {
             isFirstLoad=false;
             initHomeData();
         }
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message);
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            if (repeatTime<3) {
+                tryRepeatGetImgToken();
+            }
+        }
+    }
+
+    private void tryRepeatGetImgToken() {
+        timeDisposable = Observable.timer(10, TimeUnit.SECONDS, Schedulers.io())
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        repeatTime++;
+                        unSubscribeTimer();
+                        getImgToken();
+                    }
+                });
+    }
+
+    private void unSubscribeTimer() {
+        if (timeDisposable != null && !timeDisposable.isDisposed()){
+            timeDisposable.dispose();
+            timeDisposable = null;
         }
     }
 
@@ -566,20 +610,15 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     }
 
     private void refreshToken() {
-        disposable = Observable.interval(OtherUtils.getRefreshTime(BasePrefUtils
-                .getExpiration()), OtherUtils.getRefreshTime(BasePrefUtils.getExpiration()),
+        disposable = Observable.interval(OtherUtils.getRefreshTime(BasePrefUtils.getExpiration()), OtherUtils.getExpirateTime(BasePrefUtils.getExpiration()),
                 TimeUnit.SECONDS, Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        AYFacade facade = facades.get("QueryServiceFacade");
-                        try {
-                            JSONObject object = new JSONObject();
-                            object.put("token", BasePrefUtils.getAuthToken());
-                            facade.execute("getImgToken", object);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        if (!isViewValid()){
+                            return;
                         }
+                        getImgToken();
                     }
                 });
 

@@ -61,6 +61,8 @@
         factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
 
         <command short="AYGetDetailInfoCmd" />
+        <command short="AYLikePushCommand" />
+        <command short="AYLikePopCommand" />
     </facade>
 
     <facade

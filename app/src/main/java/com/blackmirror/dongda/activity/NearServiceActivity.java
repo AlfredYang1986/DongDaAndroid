@@ -1,9 +1,9 @@
 package com.blackmirror.dongda.activity;
 
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -29,14 +29,17 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.NearServiceServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.NearServiceUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -69,6 +72,7 @@ public class NearServiceActivity extends AYActivity {
     private View view;
     private String lastClickMarker;
     private AlertDialog dialog;
+    private String locMarkerId;
 
     //设置定位回调监听
 //mLocationClient.setLocationListener(mLocationListener);
@@ -144,8 +148,10 @@ public class NearServiceActivity extends AYActivity {
         iv_current_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                closeProcessDialog();
+                aMap.clear();
                 showProcessDialog("正在定位...");
-                popupWindow.dismiss();
+                closePopUpWindow();
                 stopLocation();
                 if (locationClient != null) {
                     locationClient.startLocation();
@@ -161,10 +167,18 @@ public class NearServiceActivity extends AYActivity {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LogUtils.d("onclick "+marker.getId());
-                refreshPopUpWindow(marker);
+                if (!marker.getId().equals(locMarkerId)) {
+                    refreshPopUpWindow(marker);
+                }
                 return true;
             }
         });
+    }
+
+    private void closePopUpWindow() {
+        if (popupWindow!=null && popupWindow.isShowing()){
+            popupWindow.dismiss();
+        }
     }
 
     private void refreshPopUpWindow(Marker marker) {
@@ -183,9 +197,7 @@ public class NearServiceActivity extends AYActivity {
         LogUtils.d("marker == "+b1);
 
         view.clearAnimation();
-        if (popupWindow.isShowing()){
-            popupWindow.dismiss();
-        }
+        closePopUpWindow();
         showPopUpWindow();
 
         NearServiceServerBean.ResultBean.ServicesBean b= (NearServiceServerBean.ResultBean.ServicesBean) marker.getObject();
@@ -218,7 +230,6 @@ public class NearServiceActivity extends AYActivity {
         return R.drawable.map_icon_day_care_normal;
     }
 
-
     /**
      * 定位监听
      */
@@ -247,6 +258,7 @@ public class NearServiceActivity extends AYActivity {
                         .fromResource(R.drawable.location_icon));
                 markerOption.anchor(0.5f,0.5f);
                 Marker marker = aMap.addMarker(markerOption);
+                locMarkerId = marker.getId();
                 try {
                     String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"," +
                             "\"pin\":{\"latitude\":"+latitude+",\"longitude\":"+longitude+"}}}";
@@ -265,13 +277,13 @@ public class NearServiceActivity extends AYActivity {
                 sb.append("错误信息:" + location.getErrorInfo() + "\n");
                 sb.append("错误描述:" + location.getLocationDetail() + "\n");
 
+                LogUtils.d(sb.toString());
+
                 showLocationDialog(location.getErrorCode());
 
             }
         }
     };
-
-
 
     public void AYGetNearServiceCmdSuccess(JSONObject args) {
         closeProcessDialog();
@@ -287,12 +299,14 @@ public class NearServiceActivity extends AYActivity {
 
     public void AYGetNearServiceCmdFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(iv_current_location,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
-
 
     private void addMarkers(NearServiceUiBean uiBean) {
 
@@ -367,9 +381,6 @@ public class NearServiceActivity extends AYActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dialog!=null && dialog.isShowing()){
-            dialog.dismiss();
-        }
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
         mv_near_map.onDestroy();
         stopLocation();
@@ -413,7 +424,6 @@ public class NearServiceActivity extends AYActivity {
     protected void bindingFragments() {
 
     }
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -462,10 +472,12 @@ public class NearServiceActivity extends AYActivity {
                 ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION:
+            case AppConstant.NO_GPS_PERMISSION:
                 str = "没有GPS定位权限，建议开启gps定位权限";
                 showGoSettingDialog();
                 break;
         }
+        LogUtils.d(str);
     }
 
     private void showGoSettingDialog() {

@@ -175,6 +175,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         req.scope = "snsapi_userinfo";
         req.state = "dongda_wx_login";
         AYApplication.weChatApi.sendReq(req);*/
+        showProcessDialog("正在登陆...");
         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
         if (reference.get()!=null) {
             wechat.setPlatformActionListener(new PlatformActionListener() {
@@ -221,7 +222,10 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
 
                                 @Override
                                 public void onComplete() {
-                                    showProcessDialog("正在登陆...");
+                                    if (!isViewValid()) {
+                                        return;
+                                    }
+//                                    showProcessDialog("正在登陆...");
                                     unSubscribe();
                                     LogUtils.d("Observable " + Thread.currentThread().getName());
                                     login(m);
@@ -239,6 +243,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
                                     if (!isViewValid()) {
                                         return;
                                     }
+                                    closeProcessDialog();
                                     if (!TextUtils.isEmpty(s))
                                         ToastUtils.showShortToast(s);
                                 }
@@ -255,6 +260,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
                                     if (!isViewValid()) {
                                         return;
                                     }
+                                    closeProcessDialog();
                                     ToastUtils.showShortToast("授权已取消");
                                 }
                             });

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
+import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
@@ -262,6 +263,8 @@ public class PhoneInputActivity extends AYActivity {
             return false;
         }
 
+
+
         if (TextUtils.isEmpty(uiBean.screen_name)) {
 
             Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
@@ -269,13 +272,16 @@ public class PhoneInputActivity extends AYActivity {
             intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
             startActivity(intent);
 
-        } else {
+        } else if (TextUtils.isEmpty(uiBean.screen_photo)){
 
             Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
             intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
             AYDaoUserProfile p = new AYDaoUserProfile(args);
             intent.putExtra("current_user", p);
             intent.putExtra("name", uiBean.screen_name);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
             startActivity(intent);
         }
 

@@ -1,5 +1,8 @@
 package com.blackmirror.dongda.model.serverbean;
 
+import android.support.annotation.NonNull;
+
+import com.blackmirror.dongda.Tools.StringUtils;
 import com.blackmirror.dongda.model.BaseServerBean;
 
 import java.util.List;
@@ -113,7 +116,7 @@ public class ServiceDetailInfoServerBean extends BaseServerBean {
                 public String about_brand;
             }
 
-            public static class ServiceImagesBean {
+            public static class ServiceImagesBean implements Comparable<ServiceImagesBean>{
                 /**
                  * tag : 8
                  * image : 597ec6a9-79c6-4a6f-806f-f5a58f9629f5
@@ -121,6 +124,18 @@ public class ServiceDetailInfoServerBean extends BaseServerBean {
 
                 public String tag;
                 public String image;
+
+                @Override
+                public int compareTo(@NonNull ServiceImagesBean o) {
+                    if (!StringUtils.isNumber(this.tag) || !StringUtils.isNumber(o.tag)){
+                        return -1;
+                    }
+                    if (Integer.parseInt(this.tag)>=Integer.parseInt(o.tag)){
+                        return 1;
+                    }else {
+                        return -1;
+                    }
+                }
             }
         }
     }

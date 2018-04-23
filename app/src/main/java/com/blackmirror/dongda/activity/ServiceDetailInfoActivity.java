@@ -2,6 +2,7 @@ package com.blackmirror.dongda.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,8 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.CalUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
+import com.blackmirror.dongda.Tools.StringUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
@@ -31,6 +34,7 @@ import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.serverbean.ServiceDetailInfoServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.SafeUiBean;
@@ -40,6 +44,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ServiceDetailInfoActivity extends AYActivity {
@@ -74,6 +79,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
     private MarkerOptions markerOption;
     private ServiceDetailInfoUiBean uiBean;
     private boolean isNeedRefresh;
+    private CoordinatorLayout ctl_root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +96,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
 
     private void initView(Bundle savedInstanceState) {
+        ctl_root = findViewById(R.id.ctl_root);
         vp_detail_photo = findViewById(R.id.vp_detail_photo);
         tl_detail_tab = findViewById(R.id.tl_detail_tab);
         rv_addr_safe = findViewById(R.id.rv_addr_safe);
@@ -220,9 +227,23 @@ public class ServiceDetailInfoActivity extends AYActivity {
             tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
         }
 
+        List<ServiceDetailInfoServerBean.ResultBean.ServiceBean.ServiceImagesBean> array = new ArrayList<>();
+
         for (ServiceDetailInfoServerBean.ResultBean.ServiceBean.ServiceImagesBean image : bean.service.service_images) {
-            tabList.add(new ServiceDetailPhotoBean(image.tag,image.image));
-            tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
+
+            if (StringUtils.isNumber(image.tag)){
+                array.add(image);
+            }else {
+                tabList.add(new ServiceDetailPhotoBean(image.tag,image.image));
+                tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
+            }
+        }
+
+        Collections.sort(array);
+
+        for (int i = 0; i < array.size(); i++) {
+            tabList.add(new ServiceDetailPhotoBean(array.get(i).tag,array.get(i).image));
+            tl_detail_tab.addTab(tl_detail_tab.newTab().setText(array.get(i).tag));
         }
 
         PhotoDetailAdapter adapter = new PhotoDetailAdapter(tabList);
@@ -357,13 +378,14 @@ public class ServiceDetailInfoActivity extends AYActivity {
         }
     }
 
-
-
     public void AYGetDetailInfoCmdFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -378,7 +400,7 @@ public class ServiceDetailInfoActivity extends AYActivity {
         LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
         if (pushUiBean.isSuccess){
            uiBean.service.is_collected=true;
-           iv_detail_like.setBackgroundResource(R.drawable.home_icon_love_select);
+           iv_detail_like.setBackgroundResource(R.drawable.like_selected);
         }else {
             ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
         }
@@ -386,9 +408,12 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -411,9 +436,12 @@ public class ServiceDetailInfoActivity extends AYActivity {
 
     public void AYLikePopCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -426,8 +454,8 @@ public class ServiceDetailInfoActivity extends AYActivity {
                     "\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+service_id+"\"}}";
             try {
                 JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
-            } catch (JSONException e) {
+                facades.get("AYDetailInfoFacade").execute("AYLikePopCommand",object);
+            } catch (Exception e) {
                 e.printStackTrace();
                 closeProcessDialog();
             }
@@ -436,8 +464,8 @@ public class ServiceDetailInfoActivity extends AYActivity {
                     "\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+service_id+"\"}}";
             try {
                 JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
-            } catch (JSONException e) {
+                facades.get("AYDetailInfoFacade").execute("AYLikePushCommand",object);
+            } catch (Exception e) {
                 e.printStackTrace();
                 closeProcessDialog();
             }

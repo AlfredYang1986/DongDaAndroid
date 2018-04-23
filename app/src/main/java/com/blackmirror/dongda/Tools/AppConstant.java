@@ -18,4 +18,6 @@ public class AppConstant {
     public static final int SCIENCE_REQUEST_CODE=103;
     public static final int MY_LIKE_REQUEST_CODE =114;
 
+    public static final int NO_GPS_PERMISSION =12;
+
 }
