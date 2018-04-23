@@ -282,6 +282,7 @@ public class PhoneInputActivity extends AYActivity {
             startActivity(intent);
         }else {
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
+            AYApplication.finishAllActivity();
             startActivity(intent);
         }
 

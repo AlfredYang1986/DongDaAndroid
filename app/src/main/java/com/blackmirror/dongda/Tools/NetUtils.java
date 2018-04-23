@@ -16,7 +16,7 @@ public class NetUtils {
      * @return
      */
     public static boolean isNetworkAvailable() {
-        return isNetworkAvailable(AYApplication.getAppConext());
+        return isNetworkAvailable(AYApplication.getAppContext());
     }
 
     /**

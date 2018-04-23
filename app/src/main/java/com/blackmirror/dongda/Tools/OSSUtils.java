@@ -75,7 +75,7 @@ public class OSSUtils {
 
     public static OSS getOSS(){
         if (oss==null){
-            initOSS(AYApplication.getAppConext(),BasePrefUtils.getAccesskeyId(),BasePrefUtils.getAccesskeySecret(),BasePrefUtils.getSecurityToken());
+            initOSS(AYApplication.getAppContext(),BasePrefUtils.getAccesskeyId(),BasePrefUtils.getAccesskeySecret(),BasePrefUtils.getSecurityToken());
         }
         return oss;
     }

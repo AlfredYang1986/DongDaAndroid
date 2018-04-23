@@ -18,7 +18,7 @@ public class SnackbarUtils {
 
             }
         });
-        snackbar.getView().setBackgroundColor(AYApplication.getAppConext().getResources().getColor(R.color.colorPrimary));
+        snackbar.getView().setBackgroundColor(AYApplication.getAppContext().getResources().getColor(R.color.colorPrimary));
         snackbar.show();
     }
 
@@ -30,9 +30,9 @@ public class SnackbarUtils {
 
             }
         });
-        snackbar.getView().setBackgroundColor(AYApplication.getAppConext().getResources().getColor(R.color.sys_bar_white));
+        snackbar.getView().setBackgroundColor(AYApplication.getAppContext().getResources().getColor(R.color.sys_bar_white));
         View v = snackbar.getView();
-        ((TextView) v.findViewById(R.id.snackbar_text)).setTextColor(AYApplication.getAppConext().getResources().getColor(R.color.text_black));
+        ((TextView) v.findViewById(R.id.snackbar_text)).setTextColor(AYApplication.getAppContext().getResources().getColor(R.color.text_black));
         snackbar.show();
     }
 }

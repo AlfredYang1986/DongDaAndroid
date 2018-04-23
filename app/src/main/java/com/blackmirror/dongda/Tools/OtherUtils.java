@@ -193,7 +193,7 @@ public class OtherUtils {
 
 
     public static float px2dp(float pxVal) {
-        final float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
+        final float scale = AYApplication.appContext.getResources().getDisplayMetrics().density;
         return (pxVal / scale);
     }
 
@@ -203,13 +203,13 @@ public class OtherUtils {
      * @return
      */
     public static int dp2px(int dp) {
-        float scale = AYApplication.appConext.getResources().getDisplayMetrics().density;
+        float scale = AYApplication.appContext.getResources().getDisplayMetrics().density;
         return (int) (dp * scale + 0.5f);
     }
 
     public static int getScreenWidthDp(){
         //2、通过Resources获取
-        DisplayMetrics dm = AYApplication.appConext.getResources().getDisplayMetrics();
+        DisplayMetrics dm = AYApplication.appContext.getResources().getDisplayMetrics();
 
         float density = dm.density;
         int width = (int) (dm.widthPixels/density);
@@ -223,7 +223,7 @@ public class OtherUtils {
 
     public static int getScreenHeightDp(){
         //2、通过Resources获取
-        DisplayMetrics dm = AYApplication.appConext.getResources().getDisplayMetrics();
+        DisplayMetrics dm = AYApplication.appContext.getResources().getDisplayMetrics();
 
         float density = dm.density;
         int height = (int) (dm.heightPixels/density);
@@ -241,16 +241,17 @@ public class OtherUtils {
         return false;
     }
 
-    public static long getRefreshTime(int second){
+    public static long getInitRefreshTime(int second){
         return second;
     }
 
-    public static long getRefreshTime(String expirate_time){
-        long l = getExpirateTime(expirate_time) - System.currentTimeMillis() / 1000;
+    public static long getInitRefreshTime(String init_time){
+        /*long l = getExpirateTime(expirate_time) - System.currentTimeMillis() / 1000;
         if (l<=0){
-            return 0;
+            return 30*60;
         }
-        return l/2;
+        return l/2;*/
+        return 30*60;
     }
 
     public static long getExpirateTime(String expirate_time){
@@ -259,12 +260,19 @@ public class OtherUtils {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z");//注意格式化的表达式
         try {
             Date d = format.parse(date);
-            time = d.getTime()/1000;
+            time = d.getTime()/1000-System.currentTimeMillis()/1000;
+            if (time<=0){
+                return 30*60;
+            }
         } catch (ParseException e) {
             e.printStackTrace();
             time=System.currentTimeMillis()/1000+300;
         }
         return time;
+    }
+
+    public static long getExpirateTime(int second){
+        return second;
     }
 
     /**

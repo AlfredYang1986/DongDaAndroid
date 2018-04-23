@@ -32,7 +32,7 @@ public class GetOSSClient {
         conf.setMaxConcurrentRequest(5); // 最大并发请求书，默认5个
         conf.setMaxErrorRetry(2); // 失败后最大重试次数，默认2次
         OSSLog.enableLog();
-        oss = new OSSClient(AYApplication.getAppConext(), endpoint, credentialProvider, conf);*/
+        oss = new OSSClient(AYApplication.getAppContext(), endpoint, credentialProvider, conf);*/
 
     }
 
