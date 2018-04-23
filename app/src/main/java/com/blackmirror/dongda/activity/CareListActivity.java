@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.CareListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
@@ -24,6 +26,7 @@ import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -42,6 +45,7 @@ public class CareListActivity extends AYActivity {
 
     private final String TAG = "CareListActivity";
 
+    private CoordinatorLayout ctl_root;
     private ImageView iv_home_head_back;
     private TextView tv_home_head_title;
     private RecyclerView rv_care_list;
@@ -70,6 +74,7 @@ public class CareListActivity extends AYActivity {
     }
 
     private void initView() {
+        ctl_root = findViewById(R.id.ctl_root);
         iv_home_head_back = findViewById(R.id.iv_home_head_back);
         tv_home_head_title = findViewById(R.id.tv_home_head_title);
         rv_care_list = findViewById(R.id.rv_care_list);
@@ -156,9 +161,12 @@ public class CareListActivity extends AYActivity {
             sl_care_list.finishLoadMore(false);
             sl_care_list.finishRefresh(false);
         }
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message + "(" + bean.error.code + ")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -248,9 +256,12 @@ public class CareListActivity extends AYActivity {
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message + "(" + bean.error.code + ")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -273,9 +284,12 @@ public class CareListActivity extends AYActivity {
 
     public void AYLikePopCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message + "(" + bean.error.code + ")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 

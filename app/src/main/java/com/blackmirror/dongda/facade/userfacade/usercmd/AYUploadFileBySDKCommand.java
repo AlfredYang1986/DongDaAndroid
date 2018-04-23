@@ -11,6 +11,7 @@ import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.NetUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.command.AYCommand;
 
@@ -34,11 +35,23 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
 
     public <Args, Result> Result excute(Args ... args) {
 
-        executeImpl(null);
+        if (NetUtils.isNetworkAvailable()) {
+            executeImpl(null);
+        }else {//确定所有网络请求发起都在主线程
+            LogUtils.d("flag","network unAvailable");
+            if (notificationHandler==null) {
+                notificationHandler = getTarget();
+            }
+            if (notificationHandler!=null) {
+                notificationHandler.handleNotifications(getFailedCallBackName(), getErrorNetData());
+            }
+        }
+
         return null;
     }
 
     public void executeImpl(JSONObject args) {
+
         // 构造上传请求
         // 创建File对象，用于存储裁剪后的图片，避免更改原图
         File file = new File(AYApplication.getAppConext().getExternalCacheDir(), "crop_image.jpg");
@@ -74,6 +87,9 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
                 if (clientException != null) {
                     // 本地异常如网络异常等
                     clientException.printStackTrace();
+                    if (notificationHandler!=null){
+                        notificationHandler.handleNotifications(getSuccessCallBackName(),getErrorNetData());
+                    }
                 }
                 if (serviceException != null) {
                     // 服务异常
@@ -81,6 +97,9 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
                     LogUtils.d("flag","RequestId "+serviceException.getRequestId());
                     LogUtils.d("flag","HostId "+serviceException.getHostId());
                     LogUtils.d("flag","RawMessage "+serviceException.getRawMessage());
+                    if (notificationHandler!=null){
+                        notificationHandler.handleNotifications(getSuccessCallBackName(),getErrorData(serviceException.getErrorCode(),serviceException.getMessage()));
+                    }
                 }
             }
         });
@@ -104,16 +123,17 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
     }
 
 
-    private JSONObject getErrorData(Exception e) {
+    private JSONObject getErrorData(String errorCode, String errorMessage) {
 
 
         StringBuilder sb = new StringBuilder();
         sb.append("{\"status\":\"error\",")
                 .append("\"error\":{")
                 .append("\"code\":")
-                .append("-9999,")
+                .append(errorCode)
+                .append(",")
                 .append("\"message\":\"")
-                .append(e.getMessage())
+                .append(errorMessage)
                 .append("\"}}");
         JSONObject object = null;
         try {

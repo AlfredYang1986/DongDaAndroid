@@ -14,11 +14,14 @@ import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
 
 import org.json.JSONException;
@@ -124,7 +127,14 @@ public class NameInputActivity extends AYActivity {
 
     public void AYUpdateProfileCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ToastUtils.showShortToast("修改失败!");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(btn_next,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
+//        ToastUtils.showShortToast("修改失败!");
     }
 
     @Override

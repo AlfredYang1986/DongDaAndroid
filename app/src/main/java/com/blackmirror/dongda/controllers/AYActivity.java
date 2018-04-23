@@ -31,6 +31,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     public Map<String, Object> fragments;
     protected FragmentManager mFragmentManage;
     protected ProgressDialog pb;
+    private boolean isRegisterOnCreate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,19 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
         mFragmentManage = getSupportFragmentManager();
 
         isViewValid = true;
+        isRegisterOnCreate = true;
 
         bindingFragments();
         setStatusBarColor();
+        registerCallback();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (!isRegisterOnCreate) {
+            registerCallback();
+        }
     }
 
     protected void setStatusBarColor() {
@@ -57,13 +68,13 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     @Override
     protected void onPause() {
         super.onPause();
-        unRegisterCallback();
+        isRegisterOnCreate = false;
+//        unRegisterCallback();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerCallback();
     }
 
     @Override
@@ -119,6 +130,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
 
     @Override
     protected void onDestroy() {
+        unRegisterCallback();
         closeProcessDialog();
         pb = null;
         isViewValid = false;

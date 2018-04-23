@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.adapter.MyLikeListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
@@ -19,6 +21,7 @@ import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.QueryLikeUiBean;
@@ -28,6 +31,7 @@ import org.json.JSONObject;
 
 public class MyLikeActivity extends AYActivity {
 
+    private CoordinatorLayout ctl_root;
     private RecyclerView rv_my_like;
     private ImageView iv_home_head_back;
     private TextView tv_home_head_title;
@@ -44,6 +48,7 @@ public class MyLikeActivity extends AYActivity {
     }
 
     private void initView() {
+        ctl_root = findViewById(R.id.ctl_root);
         rv_my_like = findViewById(R.id.rv_my_like);
         iv_home_head_back = findViewById(R.id.iv_home_head_back);
         tv_home_head_title = findViewById(R.id.tv_home_head_title);
@@ -66,8 +71,9 @@ public class MyLikeActivity extends AYActivity {
     }
 
     private void getLikeData() {
-        AYFacade facade = facades.get("QueryServiceFacade");
         try {
+            showProcessDialog();
+            AYFacade facade = facades.get("QueryServiceFacade");
             String json="{\"token\":\""+BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"}}";
             JSONObject object = new JSONObject(json);
             facade.execute("AYLikeQueryCommand",object);
@@ -81,7 +87,7 @@ public class MyLikeActivity extends AYActivity {
      * @param args
      */
     public void AYLikeQueryCommandSuccess(JSONObject args){
-
+        closeProcessDialog();
         final QueryLikeServerBean serverBean = JSON.parseObject(args.toString(), QueryLikeServerBean.class);
         QueryLikeUiBean bean = new QueryLikeUiBean(serverBean);
         if (bean.isSuccess){
@@ -110,11 +116,13 @@ public class MyLikeActivity extends AYActivity {
 
     public void AYLikeQueryCommandFailed(JSONObject args) {
 
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            if (bean != null && bean.error != null) {
-                ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
-            }
+        closeProcessDialog();
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -160,9 +168,12 @@ public class MyLikeActivity extends AYActivity {
 
     public void AYLikePushCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 
@@ -184,9 +195,12 @@ public class MyLikeActivity extends AYActivity {
 
     public void AYLikePopCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message+"("+bean.error.code+")");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
     }
 

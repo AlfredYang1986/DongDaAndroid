@@ -32,5 +32,6 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="sys_bar_white">#FFFFFFFF</color>
+    <color name="text_black">#000000</color>
 
 </resources>

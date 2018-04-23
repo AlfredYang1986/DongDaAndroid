@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
@@ -24,6 +22,7 @@ import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.activity.ArtListActivity;
 import com.blackmirror.dongda.activity.CareListActivity;
@@ -443,6 +442,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 break;
             case R.id.iv_home_location:
                 startActivity(new Intent(AYHomeActivity.this,NearServiceActivity.class));
+//                SnackbarUtils.show(ctl_root,"hahaha ");
                 break;
             case R.id.iv_home_like:
                 startActivityForResult(new Intent(AYHomeActivity.this,MyLikeActivity.class), AppConstant.MY_LIKE_REQUEST_CODE);
@@ -526,13 +526,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         if (uiBean.code==10010){
-            Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("关闭", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    }).show();
+            SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
@@ -564,13 +558,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         if (uiBean.code==10010){
-            Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("关闭", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    }).show();
+            SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
@@ -652,7 +640,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-
     public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
         /*((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
                 .refreshOrLoadMoreComplete();
@@ -690,6 +677,11 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         sl_home_refresh.setRefreshing(false);
         if (uiBean.code==10010){
+            SnackbarUtils.show(ctl_root,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
+        /*if (uiBean.code==10010){
             Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
                     .setAction("关闭", new View.OnClickListener() {
                         @Override
@@ -698,10 +690,10 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                         }
                     }).show();
         }else {
-            ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
-                    .refreshOrLoadMoreComplete();
+           *//* ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
+                    .refreshOrLoadMoreComplete();*//*
             Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
         return true;
     }

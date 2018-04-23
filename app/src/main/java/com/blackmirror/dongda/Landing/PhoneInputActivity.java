@@ -15,6 +15,7 @@ import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
@@ -23,6 +24,7 @@ import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUse
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.PhoneLoginServerBean;
 import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
 import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
 
@@ -208,9 +210,13 @@ public class PhoneInputActivity extends AYActivity {
         Log.i(TAG, "send sms code error is " + arg.toString());
 //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
 //        sms_result = new SendSMSCodeResult(arg);
-        SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
-        sendSmsUiBean = new SendSmsUiBean(bean);
-        ToastUtils.showShortToast(sendSmsUiBean.message);
+        ErrorInfoServerBean serverBean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(sms_code,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
         return true;
     }
 
@@ -276,6 +282,24 @@ public class PhoneInputActivity extends AYActivity {
         return true;
     }
 
+    public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        /*ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast("登陆失败("+bean.error.code+")");
+        }else {
+            ToastUtils.showShortToast("登陆失败");
+        }*/
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(sms_code,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
+        return true;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -283,17 +307,6 @@ public class PhoneInputActivity extends AYActivity {
             mSms_disposable.dispose();
             mSms_disposable = null;
         }
-    }
-
-    public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast("登陆失败("+bean.error.code+")");
-        }else {
-            ToastUtils.showShortToast("登陆失败");
-        }
-        return true;
     }
 
     @Override

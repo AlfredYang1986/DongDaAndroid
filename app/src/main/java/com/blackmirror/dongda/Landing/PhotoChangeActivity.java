@@ -39,6 +39,7 @@ import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
@@ -48,6 +49,7 @@ import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
 import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
 
@@ -273,7 +275,14 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
 
     public void AYUploadFileBySDKCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ToastUtils.showShortToast("上传失败!");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(iv_head_photo,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
+//        ToastUtils.showShortToast("上传失败!");
     }
 
     /**
@@ -310,7 +319,14 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
 
     public void AYUpdateProfileCommandFailed(JSONObject args) {
         closeProcessDialog();
-        ToastUtils.showShortToast("修改失败!");
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code==10010){
+            SnackbarUtils.show(iv_head_photo,uiBean.message);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
+//        ToastUtils.showShortToast("修改失败!");
     }
 
     private void senDataToServer() {
@@ -572,8 +588,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
 
     }
 
-    public  int calculateInSampleSize(
-            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public  int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;

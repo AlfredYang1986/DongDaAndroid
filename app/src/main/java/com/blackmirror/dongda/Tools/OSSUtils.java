@@ -59,13 +59,13 @@ public class OSSUtils {
      */
     public static String sign(String screctKey, String content) {
 
-        String signature;
+        String signature="";
 
         try {
             signature = new HmacSHA1Signature().computeSignature(screctKey, content);
             signature = signature.trim();
         } catch (Exception e) {
-            throw new IllegalStateException("Compute signature failed!", e);
+//            throw new IllegalStateException("Compute signature failed!", e);
         }
 //        Log.d("xcx","signature "+signature);
 
