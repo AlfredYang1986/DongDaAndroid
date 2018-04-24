@@ -358,7 +358,7 @@ public class LandingActivity extends AYActivity {
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
-                        showProcessDialog("正在登陆...");
+                        showProcessDialog("正在登陆...",true);
                         LogUtils.d("Observable " + Thread.currentThread().getName());
                         login(m);
                     }

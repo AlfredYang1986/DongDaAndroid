@@ -8,7 +8,9 @@ import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 
 import com.facebook.cache.disk.DiskCacheConfig;
-import com.facebook.common.util.ByteConstants;
+import com.facebook.common.memory.MemoryTrimType;
+import com.facebook.common.memory.MemoryTrimmable;
+import com.facebook.common.memory.NoOpMemoryTrimmableRegistry;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
@@ -95,9 +97,6 @@ public class AYApplication extends Application {
         DiskCacheConfig diskCacheConfig = DiskCacheConfig.newBuilder(this)
                 .setBaseDirectoryPath(this.getExternalCacheDir())
                 .setBaseDirectoryName("/image")
-                .setMaxCacheSizeOnLowDiskSpace(100 * ByteConstants.MB)
-                .setMaxCacheSizeOnVeryLowDiskSpace(50 * ByteConstants.MB)
-                .setMaxCacheSize(80 * ByteConstants.MB)
                 .build();
 
         ActivityManager activityManager= (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -110,26 +109,76 @@ public class AYApplication extends Application {
                 .setBitmapMemoryCacheParamsSupplier(new MyBitmapMemoryCacheParamsSupplier(activityManager))
                 .setResizeAndRotateEnabledForNetwork(true)
                 .setBitmapsConfig(Bitmap.Config.RGB_565)
+                .setMemoryTrimmableRegistry(NoOpMemoryTrimmableRegistry.getInstance())
                 .build();
         Fresco.initialize(this,config);
+
+        NoOpMemoryTrimmableRegistry.getInstance().registerMemoryTrimmable(new MemoryTrimmable() {
+            @Override
+            public void trim(MemoryTrimType trimType) {
+                double ratio = trimType.getSuggestedTrimRatio();
+                LogUtils.d("trimType "+ratio);
+
+                if (MemoryTrimType.OnCloseToDalvikHeapLimit.getSuggestedTrimRatio() == ratio
+                        || MemoryTrimType.OnSystemLowMemoryWhileAppInBackground.getSuggestedTrimRatio() == ratio
+                        || MemoryTrimType.OnSystemLowMemoryWhileAppInForeground.getSuggestedTrimRatio() == ratio) {
+                    Fresco.getImagePipeline().clearMemoryCaches();
+                    LogUtils.d("registerMemoryTrimmable "+ratio);
+                }
+            }
+        });
     }
 
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        try {
-            if (level >= ComponentCallbacks2.TRIM_MEMORY_MODERATE) { // 60
+        // Determine which lifecycle or system event was raised.
+        switch (level) {
+
+            case ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN://应用不可见 进入后台等
+                Fresco.getImagePipeline().clearMemoryCaches();
+                break;
+
+            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE:
+            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW:
+            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL:
+                Fresco.getImagePipeline().clearMemoryCaches();
+
+
+                break;
+
+            case ComponentCallbacks2.TRIM_MEMORY_BACKGROUND:
+//            case ComponentCallbacks2.TRIM_MEMORY_MODERATE:
+//            case ComponentCallbacks2.TRIM_MEMORY_COMPLETE:
+
+
+                break;
+
+            default:
+                /*
+                  Release any non-critical data structures.
+
+                  The app received an unrecognized memory level value
+                  from the system. Treat this as a generic low-memory message.
+                */
+                break;
+        }
+        LogUtils.d("onTrimMemory level="+level);
+        /*try {
+            if (level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) { // 60
                 ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();
             }
         } catch (Exception e) {
 
-        }
+        }*/
     }
 
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
+        LogUtils.d("onLowMemory ");
+
         try {
             ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();
         } catch (Exception e) {
