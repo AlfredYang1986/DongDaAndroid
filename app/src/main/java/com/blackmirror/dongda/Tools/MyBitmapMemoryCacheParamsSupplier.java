@@ -30,7 +30,7 @@ public class MyBitmapMemoryCacheParamsSupplier implements Supplier<MemoryCachePa
                     getMaxCacheSize(),// 可用最大内存数，以字节为单位
                     10,// 内存中允许的最多图片数量
                     1*ByteConstants.MB,// 内存中准备清理但是尚未删除的总图片所可用的最大内存数，以字节为单位
-                    1,//内存中准备清除的图片最大数量
+                    Integer.MAX_VALUE,//内存中准备清除的图片最大数量
                     500*ByteConstants.KB);// 内存中单图片的最大大小
         } else {
             return new MemoryCacheParams(
