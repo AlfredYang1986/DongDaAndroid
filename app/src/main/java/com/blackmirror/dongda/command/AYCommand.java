@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.command;
 
 import com.blackmirror.dongda.AY.AYSysNotifier;
+import com.blackmirror.dongda.Tools.AppConstant;
 import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.json.JSONException;
@@ -43,7 +44,8 @@ public abstract class AYCommand extends AYSysNotifier {
         sb.append("{\"status\":\"error\",")
                 .append("\"error\":{")
                 .append("\"code\":")
-                .append("10010,")
+                .append(AppConstant.NET_WORK_UNAVAILABLE)
+                .append(",")
                 .append("\"message\":\"")
                 .append("网络异常,请改善网络环境并重试")
                 .append("\"}}");

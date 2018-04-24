@@ -147,13 +147,22 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
         showProcessDialog("提示", message);
     }
 
+    protected void showProcessDialog(String message, boolean cancelable) {
+        showProcessDialog("提示", message, cancelable);
+    }
+
     protected void showProcessDialog(String title, String message) {
+        showProcessDialog(title, message, false);
+    }
+
+    protected void showProcessDialog(String title, String message,boolean cancelable) {
         if (!isViewValid()) {
             return;
         }
         if (pb == null) {
             pb = new ProgressDialog(this);
         }
+        pb.setCanceledOnTouchOutside(cancelable);//设置是否可以点击Dialog外部消失
         pb.setProgressStyle(ProgressDialog.STYLE_SPINNER);// 设置进度条的形式为圆形转动的进度条
         pb.setCancelable(false);// 设置是否可以通过点击Back键取消
         pb.setCanceledOnTouchOutside(false);// 设置在点击Dialog外是否取消Dialog进度条

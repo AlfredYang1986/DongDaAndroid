@@ -17,9 +17,12 @@ public class AppConstant {
     public static final int SPORT_MORE_REQUEST_CODE=102;
     public static final int SCIENCE_REQUEST_CODE=103;
     public static final int MY_LIKE_REQUEST_CODE =114;
+    public static final int SERVICE_DETAIL_REQUEST_CODE =115;
+    public static final int FEATURE_DETAIL_REQUEST_CODE =116;
 
     public static final int NO_GPS_PERMISSION =12;
 
     public static final int IMAGE_TOKEN_ERROR=10;
+    public static final int NET_WORK_UNAVAILABLE=10;
 
 }

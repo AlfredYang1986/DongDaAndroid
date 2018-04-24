@@ -25,22 +25,29 @@
         android:id="@+id/sv_featured_detail_photo"
         android:layout_width="match_parent"
         android:layout_height="211dp"
-        android:background="@drawable/home_cover_00"
         app:actualImageScaleType="focusCrop"
         app:layout_constraintLeft_toLeftOf="@id/cl_root"
         app:layout_constraintRight_toRightOf="@id/cl_root"
         app:layout_constraintTop_toTopOf="@id/cl_root"
         />
 
-    <ImageView
-        android:layout_marginRight="13dp"
-        android:layout_marginTop="13dp"
+    <FrameLayout
+         android:id="@+id/fl_featured_detail_like"
         app:layout_constraintTop_toTopOf="@id/sv_featured_detail_photo"
         app:layout_constraintRight_toRightOf="@id/cl_root"
-         android:id="@+id/iv_featured_detail_like"
-        android:background="@drawable/home_art_like"
+        android:padding="13dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_featured_detail_like"
+            android:background="@drawable/home_art_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </FrameLayout>
+
+
 
     <TextView
         android:lines="2"
