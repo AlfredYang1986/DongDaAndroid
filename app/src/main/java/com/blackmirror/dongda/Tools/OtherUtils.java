@@ -27,10 +27,9 @@ public class OtherUtils {
     private static final String ANDROID_RESOURCE = "android.resource://";
     private static final String FOREWARD_SLASH = "/";
 
-    public static Uri resourceIdToUri(Context context,int resourceId){
+    public static Uri resourceIdToUri(Context context, int resourceId) {
         return Uri.parse(ANDROID_RESOURCE + context.getPackageName() + FOREWARD_SLASH + resourceId);
     }
-
 
 
     public static void initSystemBarColor(AppCompatActivity activity) {
@@ -47,17 +46,18 @@ public class OtherUtils {
 
     /**
      * 修改状态栏颜色，支持4.4以上版本
+     *
      * @param activity
      */
     public static void setStatusBarColor(Activity activity) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (DeviceUtils.isMIUI()){
+            if (DeviceUtils.isMIUI()) {
                 activity.getWindow().setStatusBarColor(Color.WHITE);
                 MIUISetStatusBarLightMode(activity, true);
                 return;
             }
-            if (DeviceUtils.isFlyme()){
+            if (DeviceUtils.isFlyme()) {
                 activity.getWindow().setStatusBarColor(Color.WHITE);
                 //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
                 FlymeSetStatusBarLightMode(activity.getWindow(), true);
@@ -78,17 +78,18 @@ public class OtherUtils {
 
     /**
      * 修改状态栏颜色，支持4.4以上版本
+     *
      * @param activity
      */
-    public static void setStatusBarColor(Activity activity,@ColorInt int color) {
+    public static void setStatusBarColor(Activity activity, @ColorInt int color) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (DeviceUtils.isMIUI()){
+            if (DeviceUtils.isMIUI()) {
                 activity.getWindow().setStatusBarColor(color);
                 MIUISetStatusBarLightMode(activity, false);
                 return;
             }
-            if (DeviceUtils.isFlyme()){
+            if (DeviceUtils.isFlyme()) {
                 activity.getWindow().setStatusBarColor(color);
                 //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
                 FlymeSetStatusBarLightMode(activity.getWindow(), false);
@@ -108,14 +109,13 @@ public class OtherUtils {
     }
 
 
-
     /**
      * 设置状态栏图标为深色和魅族特定的文字风格
      * 可以用来判断是否为Flyme用户
-     * @param window 需要设置的窗口
-     * @param dark 是否把状态栏文字及图标颜色设置为深色
-     * @return  boolean 成功执行返回true
      *
+     * @param window 需要设置的窗口
+     * @param dark   是否把状态栏文字及图标颜色设置为深色
+     * @return boolean 成功执行返回true
      */
     public static boolean FlymeSetStatusBarLightMode(Window window, boolean dark) {
         boolean result = false;
@@ -147,14 +147,14 @@ public class OtherUtils {
 
     /**
      * 需要MIUIV6以上
-     * @param activity
-     * @param dark 是否把状态栏文字及图标颜色设置为深色
-     * @return  boolean 成功执行返回true
      *
+     * @param activity
+     * @param dark     是否把状态栏文字及图标颜色设置为深色
+     * @return boolean 成功执行返回true
      */
     public static boolean MIUISetStatusBarLightMode(Activity activity, boolean dark) {
         boolean result = false;
-        Window window=activity.getWindow();
+        Window window = activity.getWindow();
         if (window != null) {
             Class clazz = window.getClass();
             try {
@@ -163,33 +163,32 @@ public class OtherUtils {
                 Field field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE");
                 darkModeFlag = field.getInt(layoutParams);
                 Method extraFlagField = clazz.getMethod("setExtraFlags", int.class, int.class);
-                if(dark){
-                    extraFlagField.invoke(window,darkModeFlag,darkModeFlag);//状态栏透明且黑色字体
-                }else{
+                if (dark) {
+                    extraFlagField.invoke(window, darkModeFlag, darkModeFlag);//状态栏透明且黑色字体
+                } else {
                     extraFlagField.invoke(window, 0, darkModeFlag);//清除黑色字体
                 }
-                result=true;
+                result = true;
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     //开发版 7.7.13 及以后版本采用了系统API，旧方法无效但不会报错，所以两个方式都要加上
-                    if(dark){
+                    if (dark) {
                         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
                         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
                         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-//                        activity.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN| View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-                    }else {
+                        //                        activity.getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN| View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+                    } else {
                         activity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
                         int flag = window.getDecorView().getSystemUiVisibility() & ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
                         window.getDecorView().setSystemUiVisibility(flag);
                     }
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
         return result;
     }
-
 
 
     public static float px2dp(float pxVal) {
@@ -199,6 +198,7 @@ public class OtherUtils {
 
     /**
      * dp转px
+     *
      * @param dp
      * @return
      */
@@ -207,12 +207,12 @@ public class OtherUtils {
         return (int) (dp * scale + 0.5f);
     }
 
-    public static int getScreenWidthDp(){
+    public static int getScreenWidthDp() {
         //2、通过Resources获取
         DisplayMetrics dm = AYApplication.appContext.getResources().getDisplayMetrics();
 
         float density = dm.density;
-        int width = (int) (dm.widthPixels/density);
+        int width = (int) (dm.widthPixels / density);
 
         /*// 屏幕宽度:屏幕宽度（像素）/屏幕密度
         screenWidth = width / density;  // 屏幕宽度(dp)
@@ -221,12 +221,12 @@ public class OtherUtils {
         return width;
     }
 
-    public static int getScreenHeightDp(){
+    public static int getScreenHeightDp() {
         //2、通过Resources获取
         DisplayMetrics dm = AYApplication.appContext.getResources().getDisplayMetrics();
 
         float density = dm.density;
-        int height = (int) (dm.heightPixels/density);
+        int height = (int) (dm.heightPixels / density);
 
         /*// 屏幕宽度:屏幕宽度（像素）/屏幕密度
         screenWidth = width / density;  // 屏幕宽度(dp)
@@ -236,42 +236,54 @@ public class OtherUtils {
     }
 
 
-
-    public static boolean isNeedRefreshToken(String token_time){
-        return false;
-    }
-
-    public static long getInitRefreshTime(int second){
-        return second;
-    }
-
-    public static long getInitRefreshTime(String init_time){
-        /*long l = getExpirateTime(expirate_time) - System.currentTimeMillis() / 1000;
-        if (l<=0){
-            return 30*60;
-        }
-        return l/2;*/
-        return 30*60;
-    }
-
-    public static long getExpirateTime(String expirate_time){
+    public static boolean isNeedRefreshToken(String expirate_time) {
         long time;
         String date = expirate_time.replace("Z", " UTC");//注意是空格+UTC
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z");//注意格式化的表达式
         try {
             Date d = format.parse(date);
-            time = d.getTime()/1000-System.currentTimeMillis()/1000;
-            if (time<=0){
-                return 30*60;
+            time = d.getTime() / 1000 - System.currentTimeMillis() / 1000;
+            if (time <= 300) {
+                return true;
+            }
+            return false;
+        } catch (ParseException e) {
+
+        }
+        return true;
+    }
+
+    public static long getInitRefreshTime(int second) {
+        return second;
+    }
+
+    public static long getInitRefreshTime(String init_time) {
+        /*long l = getExpirateTime(expirate_time) - System.currentTimeMillis() / 1000;
+        if (l<=0){
+            return 30*60;
+        }
+        return l/2;*/
+        return 30 * 60;
+    }
+
+    public static long getExpirateTime(String expirate_time) {
+        long time;
+        String date = expirate_time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z");//注意格式化的表达式
+        try {
+            Date d = format.parse(date);
+            time = d.getTime() / 1000 - System.currentTimeMillis() / 1000;
+            if (time <= 0) {
+                return 30 * 60;
             }
         } catch (ParseException e) {
             e.printStackTrace();
-            time=System.currentTimeMillis()/1000+300;
+            time = System.currentTimeMillis() / 1000 + 300;
         }
         return time;
     }
 
-    public static long getExpirateTime(int second){
+    public static long getExpirateTime(int second) {
         return second;
     }
 
@@ -307,7 +319,6 @@ public class OtherUtils {
     }
 
 
-
     public static void changeSysBarToTranslucent(AppCompatActivity activity) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window window = activity.getWindow();
@@ -319,7 +330,6 @@ public class OtherUtils {
             }
         }
     }
-
 
 
 }

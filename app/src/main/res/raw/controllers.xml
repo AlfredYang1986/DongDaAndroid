@@ -114,7 +114,7 @@
                 name="com.blackmirror.dongda.activity.FeaturedDetailActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
-        <facade short="AYDetailInfoFacade" />
+        <facade short="QueryServiceFacade" />
     </controller>
 
     <controller short="ServiceDetailInfoActivity"

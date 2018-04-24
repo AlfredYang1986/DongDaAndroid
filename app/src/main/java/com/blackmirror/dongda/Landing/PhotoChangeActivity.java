@@ -96,13 +96,14 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         initView();
         initData();
         initListener();
-        AYFacade facade = facades.get("LoginFacade");
+        showProcessDialog();
         try {
+            AYFacade facade = facades.get("LoginFacade");
             JSONObject object = new JSONObject();
             object.put("token",BasePrefUtils.getAuthToken());
             facade.execute("getImgToken",object);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            closeProcessDialog();
         }
     }
 
@@ -243,7 +244,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      * @param args
      */
     public void AYGetImgTokenCommandSuccess(JSONObject args){
-
+        showProcessDialog();
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
         if (bean.isSuccess){
@@ -256,6 +257,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     }
 
     public void AYGetImgTokenCommandFailed(JSONObject args) {
+        showProcessDialog();
         ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);
@@ -291,7 +293,6 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      * @return
      */
     public void AYUpdateProfileCommandSuccess(JSONObject args) {
-        closeProcessDialog();
         UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
         UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
 
@@ -696,5 +697,11 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     @Override
     protected void setStatusBarColor() {
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        OSSUtils.destoryOSS();
     }
 }

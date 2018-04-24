@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
+     android:id="@+id/ctl_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -26,15 +27,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <FrameLayout
+                     android:id="@+id/fl_featured_detail_back"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_featured_tb_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tv_featured_tb_title"
+                    android:paddingLeft="12dp"
+                    android:paddingRight="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
                 <ImageView
+                    android:layout_gravity="center"
                      android:id="@+id/iv_featured_detail_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="9dp"
                     android:background="@drawable/icon_back_black"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_featured_tb_title"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tv_featured_tb_title"/>
+                    />
+                </FrameLayout>
 
                 <TextView
                     app:layout_constraintTop_toTopOf="parent"

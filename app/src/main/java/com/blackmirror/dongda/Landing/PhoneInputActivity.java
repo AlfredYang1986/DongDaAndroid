@@ -104,7 +104,12 @@ public class PhoneInputActivity extends AYActivity {
                 Map<String, Object> m = new HashMap<>();
                 m.put("phone", input_phone);
                 JSONObject args = new JSONObject(m);
-                facade.execute("SendSMSCode",args);
+
+                Map<String, Object> m1 = new HashMap<>();
+                m1.put("login", "login");
+                JSONObject login = new JSONObject(m1);
+
+                facade.execute("SendSMSCode",args,login);
                 getSmsMsg();
 
             }
@@ -243,7 +248,13 @@ public class PhoneInputActivity extends AYActivity {
             m.put("code", code);
             JSONObject args = new JSONObject(m);
 //            cmd.excute(args);
-            facade.execute("LoginWithPhone",args);
+
+            //登陆不刷新ImageToken
+            Map<String, Object> m1 = new HashMap<>();
+            m1.put("login", "login");
+            JSONObject login = new JSONObject(m1);
+
+            facade.execute("LoginWithPhone",args, login);
 
         } else {
             Toast.makeText(this, R.string.phone_input_next_step_error, LENGTH_LONG).show();
@@ -262,8 +273,6 @@ public class PhoneInputActivity extends AYActivity {
             ToastUtils.showShortToast("登陆失败");
             return false;
         }
-
-
 
         if (TextUtils.isEmpty(uiBean.screen_name)) {
 

@@ -1,20 +1,28 @@
 package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
-import com.blackmirror.dongda.model.TestFeaturedDetailBean;
+import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.generic.GenericDraweeHierarchy;
 import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
 import com.facebook.drawee.generic.RoundingParams;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
 import java.util.List;
 
@@ -23,20 +31,28 @@ import java.util.List;
  */
 public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<Integer> list;
+    private List<CareMoreServerBean.ResultBean.ServicesBean> list;
     protected Context context;
-    public int title;
-
-    public TestFeaturedDetailBean bean;
-
-    public FeaturedDetailAdapter(Context context, List<Integer> list) {
-        this.context = context;
-        this.list = list;
-    }
+    public String title;
+    public String content;
+    public int bg_resId;
 
     private static final int HEAD_TYPE = 1;
     private static final int NORMAL_TYPE = 2;
     private static final int FOOT_TYPE = 3;
+
+    private OnDetailListClickListener listener;
+
+
+
+    public void setOnDetailListClickListener(OnDetailListClickListener listener) {
+        this.listener = listener;
+    }
+
+    public FeaturedDetailAdapter(Context context, List<CareMoreServerBean.ResultBean.ServicesBean> list) {
+        this.context = context;
+        this.list = list;
+    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,9 +72,9 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof HeadViewHolder){
             HeadViewHolder vh= (HeadViewHolder) holder;
-            vh.iv_featured_detail_bg.setBackgroundResource(bean.bg_redId);
-            vh.tv_featured_detail_content.setText(bean.title);
-            vh.tv_item_head_content.setText(bean.content);
+            vh.iv_featured_detail_bg.setBackgroundResource(bg_resId);
+            vh.tv_featured_detail_content.setText(title);
+            vh.tv_item_head_content.setText(content);
         }
         if (holder instanceof NormalViewHolder){
             //设置圆角
@@ -69,7 +85,82 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             hierarchy.setRoundingParams(roundingParams);
             NormalViewHolder vh = (NormalViewHolder) holder;
             vh.sv_featured_detail_photo.setHierarchy(hierarchy);
+
+            CareMoreServerBean.ResultBean.ServicesBean servicesBean = list.get(position-1);
+
+
+            String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
+            //        holder.sv_care_list_photo.setImageURI(url);
+//            urlSet.add(getCacheUrl(url));
+
+
+            displayImage(Uri.parse(url),vh.sv_featured_detail_photo);
+
+            if (servicesBean.is_collected){
+                vh.iv_featured_detail_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                vh.iv_featured_detail_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+
+            if (servicesBean.service_type.contains("看顾")){
+                vh.tv_featured_detail_type.setText(servicesBean.service_leaf);
+            }else {
+                StringBuilder sb = new StringBuilder();
+                sb.append(servicesBean.service_type)
+                        .append("·")
+                        .append(servicesBean.service_leaf)
+                        .append(servicesBean.category);
+                vh.tv_featured_detail_type.setText(sb.toString());
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append(servicesBean.brand_name)
+                    .append("\"")
+                    .append(servicesBean.punchline)
+                    .append("\"");
+            vh.tv_featured_detail_content.setText(sb.toString());
+            vh.tv_featured_detail_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
+            initListener(vh, position,servicesBean);
+
         }
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position, List<Object> payloads) {
+
+        if (payloads.isEmpty()) {
+            onBindViewHolder(holder, position);
+        } else if (holder instanceof NormalViewHolder){
+            NormalViewHolder vh = (NormalViewHolder) holder;
+            boolean isLike= (boolean) payloads.get(0);
+            list.get(position-1).is_collected= isLike;
+            if (isLike){
+                vh.iv_featured_detail_like.setBackgroundResource(R.drawable.like_selected);
+            }else {
+                vh.iv_featured_detail_like.setBackgroundResource(R.drawable.home_art_like);
+            }
+        }
+    }
+
+    private void initListener(final NormalViewHolder holder, int position, final CareMoreServerBean.ResultBean.ServicesBean servicesBean) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    int pos = holder.getAdapterPosition();
+                    listener.onItemDetailListClick(holder.itemView, pos, servicesBean.service_id);
+                }
+            }
+        });
+        holder.fl_featured_detail_like.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onItemDetailLikeClick(holder.fl_featured_detail_like, holder
+                            .getAdapterPosition(),servicesBean);
+                }
+            }
+        });
     }
 
     @Override
@@ -86,6 +177,19 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }else {
             return NORMAL_TYPE;
         }
+    }
+
+    public void displayImage(Uri uri, SimpleDraweeView draweeView){
+
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(OtherUtils.dp2px(OtherUtils.getScreenWidthDp()-32), OtherUtils.dp2px(211)))
+                .build();
+
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setOldController(draweeView.getController())
+                .build();
+        draweeView.setController(controller);
     }
 
     public static class HeadViewHolder extends RecyclerView.ViewHolder {
@@ -105,6 +209,8 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public static class NormalViewHolder extends RecyclerView.ViewHolder {
 
         public SimpleDraweeView sv_featured_detail_photo;
+        public ImageView iv_featured_detail_like;
+        public FrameLayout fl_featured_detail_like;
         public TextView tv_featured_detail_content;
         public TextView tv_featured_detail_type;
         public TextView tv_featured_detail_location;
@@ -112,6 +218,8 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         public NormalViewHolder(View itemView) {
             super(itemView);
             sv_featured_detail_photo = itemView.findViewById(R.id.sv_featured_detail_photo);
+            fl_featured_detail_like = itemView.findViewById(R.id.fl_featured_detail_like);
+            iv_featured_detail_like = itemView.findViewById(R.id.iv_featured_detail_like);
             tv_featured_detail_content = itemView.findViewById(R.id.tv_featured_detail_content);
             tv_featured_detail_type = itemView.findViewById(R.id.tv_featured_detail_type);
             tv_featured_detail_location = itemView.findViewById(R.id.tv_featured_detail_location);
@@ -126,6 +234,13 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             super(itemView);
             iv_featured_detail_end = itemView.findViewById(R.id.iv_featured_detail_end);
         }
+    }
+
+    public interface OnDetailListClickListener {
+        void onItemDetailListClick(View view, int position, String service_id);
+
+        void onItemDetailLikeClick(View view, int position, CareMoreServerBean.ResultBean
+                .ServicesBean servicesBean);
     }
 
 }

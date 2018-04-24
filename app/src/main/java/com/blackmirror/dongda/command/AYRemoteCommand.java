@@ -4,9 +4,15 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.Tools.AppConstant;
+import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.NetUtils;
+import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
+import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
@@ -40,9 +46,12 @@ import okhttp3.Response;
  */
 public abstract class AYRemoteCommand extends AYCommand {
 
+    private static final String imageUrl="http://192.168.100.174:9000/al/oss/gst";
     private AYSysNotificationHandler mNotificationHandler;
     private Call net_call;
     private Disposable disposable;
+    private Disposable muliteDisposable;
+    private JSONObject o;
 
     protected class AYAsyncTask extends AsyncTask<JSONObject, Integer, JSONObject> {
         @Override
@@ -143,7 +152,7 @@ public abstract class AYRemoteCommand extends AYCommand {
         /*AYAsyncTask tk = new AYAsyncTask();
         tk.execute(args);*/
         if (NetUtils.isNetworkAvailable()) {
-            sendRequestData(args);
+            getServerData(args);
         }else {//确定所有网络请求发起都在主线程
             LogUtils.d("flag","network unAvailable");
             if (mNotificationHandler==null) {
@@ -162,28 +171,89 @@ public abstract class AYRemoteCommand extends AYCommand {
         }
     }
 
-   /* private JSONObject getErrorNetData() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("{\"status\":\"error\",")
-                .append("\"error\":{")
-                .append("\"code\":")
-                .append("10010,")
-                .append("\"message\":\"")
-                .append("网络异常,请改善网络环境并重试")
-                .append("\"}}");
-        JSONObject object = null;
-        try {
-            return new JSONObject(sb.toString());
-        } catch (JSONException e1) {
+    private void getServerData(JSONObject[] args) {
 
-        }
-        return object;
-    }*/
-
-    private void sendRequestData(JSONObject[] args) {
         if (args == null || args.length <= 0) {
             return;
         }
+
+        if (args.length>=2 || !OtherUtils.isNeedRefreshToken(BasePrefUtils.getExpiration())){
+            sendRequestData(args);
+        }else {
+            //先获取ImgToken再请求其他数据
+            sendMuliteRequestData(args);
+        }
+
+    }
+
+    private void sendMuliteRequestData(final JSONObject[] args) {
+
+        Observable.just(args[0]).map(new Function<JSONObject, JSONObject>() {
+            @Override
+            public JSONObject apply(JSONObject object) throws Exception {
+                JSONObject o = new JSONObject();
+                o.put("token",BasePrefUtils.getAuthToken());
+                return executeRequest(o,imageUrl);
+            }
+        }).map(new Function<JSONObject, JSONObject>() {
+            @Override
+            public JSONObject apply(JSONObject object) throws Exception {
+                ImgTokenServerBean serverBean = JSON.parseObject(object.toString(), ImgTokenServerBean.class);
+                ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
+                if (bean.code == AppConstant.IMAGE_TOKEN_ERROR){
+                    return object;
+                }
+                if (bean.isSuccess){
+                    BasePrefUtils.setAccesskeyId(bean.accessKeyId);
+                    BasePrefUtils.setSecurityToken(bean.SecurityToken);
+                    BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
+                    BasePrefUtils.setExpiration(bean.Expiration);
+                }
+                return executeRequest(args[0]);
+            }
+        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<JSONObject>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        muliteDisposable = d;
+                        if (mNotificationHandler==null) {
+                            mNotificationHandler = getTarget();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(JSONObject o) {
+                        unSubscribe();
+                        try {
+                            if (o == null || !o.getString("status").equals("ok")) {
+                                if (mNotificationHandler != null) {
+                                    mNotificationHandler.handleNotifications(getFailedCallBackName(), o);
+                                }
+                            } else {
+                                if (mNotificationHandler != null) {
+                                    mNotificationHandler.handleNotifications(getSuccessCallBackName(), o);
+                                }
+                            }
+                        } catch (JSONException e) {
+
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.d("flag","onError "+e.getMessage());
+                        unSubscribe();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        LogUtils.d("flag","onComplete ");
+                        unSubscribe();
+                    }
+                });
+    }
+
+    private void sendRequestData(JSONObject[] args) {
         Observable.just(args[0]).map(new Function<JSONObject, JSONObject>() {
             @Override
             public JSONObject apply(JSONObject object) throws Exception {
@@ -201,7 +271,6 @@ public abstract class AYRemoteCommand extends AYCommand {
 
                     @Override
                     public void onNext(JSONObject o) {
-                        LogUtils.d("flag","onNext "+o.toString());
                         unSubscribe();
                         try {
                             if (o == null || !o.getString("status").equals("ok")) {
@@ -237,13 +306,20 @@ public abstract class AYRemoteCommand extends AYCommand {
             disposable.dispose();
             disposable = null;
         }
+        if (muliteDisposable != null && !muliteDisposable.isDisposed()) {
+            muliteDisposable.dispose();
+            muliteDisposable = null;
+        }
     }
 
-
     private JSONObject executeRequest(JSONObject args) {
+        return executeRequest(args,getUrl());
+    }
+
+    private JSONObject executeRequest(JSONObject args, String url) {
         LogUtils.d("flag","做网络请求前的json数据: "+args.toString());
         Request request = new Request.Builder()
-                .url(getUrl()).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), args.toString())).build();
+                .url(url).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), args.toString())).build();
         try {
             Response response = httpClient.newCall(request).execute();
             InputStream in = inputStreamAfterCheck(response);
@@ -277,48 +353,6 @@ public abstract class AYRemoteCommand extends AYCommand {
             LogUtils.e(AYRemoteCommand.class,"Exception: ",e4);
             return getErrorData(e4);
         }
-        /*net_call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                LogUtils.d("onResponse " + Thread.currentThread().getName());
-                InputStream in = inputStreamAfterCheck(response);
-                InputStreamReader iReader = new InputStreamReader(in);
-                BufferedReader bReader = new BufferedReader(iReader);
-                StringBuilder json = new StringBuilder();
-                String line = null;
-                while ((line = bReader.readLine()) != null) {
-                    json.append(line).append('\n');
-                }
-                bReader.close();
-                iReader.close();
-                in.close();
-                //            T obj = (T)JSON.parseObject(json.toString(), myClass);
-                LogUtils.d("xcx", "返回的数据：" + json.toString());
-                JSONObject js_result = null;
-                try {
-                    js_result = new JSONObject(json.toString());
-                    if (js_result == null || !js_result.getString("status").equals("ok")) {
-                        if (mNotificationHandler != null) {
-                            mNotificationHandler.handleNotifications(getFailedCallBackName(), js_result);
-                        }
-                    } else {
-                        if (mNotificationHandler != null) {
-                            mNotificationHandler.handleNotifications(getSuccessCallBackName(), js_result);
-                        }
-                    }
-
-                } catch (JSONException e) {
-
-                }
-
-            }
-        });*/
-
     }
 
     private JSONObject getErrorData(Exception e) {

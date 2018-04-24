@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.Tools;
 
+import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
@@ -99,10 +100,15 @@ public class AYApplication extends Application {
                 .setMaxCacheSize(80 * ByteConstants.MB)
                 .build();
 
+        ActivityManager activityManager= (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+
         ImagePipelineConfig config = ImagePipelineConfig.newBuilder(this)
                 .setCacheKeyFactory(MyCacheKeyFactory.getInstance())
                 .setMainDiskCacheConfig(diskCacheConfig)
                 .setDownsampleEnabled(true)
+//                .setEncodedMemoryCacheParamsSupplier(new MyEncodeBitmapMemoryCacheParamsSupplier(activityManager))
+                .setBitmapMemoryCacheParamsSupplier(new MyBitmapMemoryCacheParamsSupplier(activityManager))
+                .setResizeAndRotateEnabledForNetwork(true)
                 .setBitmapsConfig(Bitmap.Config.RGB_565)
                 .build();
         Fresco.initialize(this,config);
@@ -119,6 +125,7 @@ public class AYApplication extends Application {
 
         }
     }
+
 
     @Override
     public void onLowMemory() {

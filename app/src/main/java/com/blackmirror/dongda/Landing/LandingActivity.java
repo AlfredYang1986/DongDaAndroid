@@ -49,7 +49,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
-public class LandingActivity extends AYActivity implements PlatformActionListener {
+public class LandingActivity extends AYActivity {
 
     final static String TAG = "Landing Activity";
     private RelativeLayout rl_phone_login;
@@ -174,12 +174,13 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         req.scope = "snsapi_userinfo";
         req.state = "dongda_wx_login";
         AYApplication.weChatApi.sendReq(req);*/
-        showProcessDialog("正在登陆...");
+        showProcessDialog("正在登陆...", true);
         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
         if (reference.get()!=null) {
             wechat.setPlatformActionListener(new PlatformActionListener() {
                 @Override
                 public void onComplete(Platform platform, int i, HashMap<String, Object> map) {
+                    platform.setPlatformActionListener(null);
                     String userId = platform.getDb().getUserId();//获取用户账号
                     String userName = platform.getDb().getUserName();//获取用户名字
                     String userIcon = platform.getDb().getUserIcon();//获取用户头像
@@ -327,7 +328,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         }
     }
 
-    @Override
+
     public void onComplete(Platform platform, int i, final HashMap<String, Object> map) {
         LogUtils.d("onComplete " + Thread.currentThread().getName());
 
@@ -373,10 +374,12 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
             JSONObject o = new JSONObject(map);
             JSONObject object = new JSONObject();
             object.put("third", o);
-            AYFacade facade = facades.get("LoginFacade");
 
-            LogUtils.d("wechat " + object.toString());
-            facade.execute("LoginWithWeChat", object);
+            String json="{\"login\":\"login\"}";
+            JSONObject login = new JSONObject(json);
+
+            AYFacade facade = facades.get("LoginFacade");
+            facade.execute("LoginWithWeChat", object,login);
 
         } catch (Exception e) {
             LogUtils.e(LandingActivity.class,"login Exception: ",e);
@@ -384,7 +387,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
         }
     }
 
-    @Override
+
     public void onError(Platform platform, int i, Throwable throwable) {
         errorDb = Observable.just(throwable.getMessage())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -400,7 +403,7 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
                 });
     }
 
-    @Override
+
     public void onCancel(Platform platform, int i) {
         cancelDb = Observable.just("")
                 .observeOn(AndroidSchedulers.mainThread())
