@@ -24,8 +24,9 @@ import java.util.List;
 
 public class AYApplication extends Application {
 
-    public static Context appConext;
+    public static Context appContext;
     private static Application me;
+
 
     public static List<AppCompatActivity> activityList;
     //    public static IWXAPI weChatApi;
@@ -40,7 +41,7 @@ public class AYApplication extends Application {
         }
         LeakCanary.install(this);
         me=this;
-        appConext=this.getApplicationContext();
+        appContext =this.getApplicationContext();
         Stetho.initializeWithDefaults(this);
         initFresco();
 //        initWeChat();
@@ -53,7 +54,7 @@ public class AYApplication extends Application {
     /**
      * 初始化高德地图
      */
-    private void initAMap() {
+    public static void initAMap() {
     }
 
     public static void addActivity(AppCompatActivity activity){
@@ -129,12 +130,16 @@ public class AYApplication extends Application {
         }
     }
 
-    public static Context getAppConext(){
-        return appConext;
+    public static Context getAppContext(){
+        return appContext;
     }
 
     public static Application getApplication(){
         return me;
+    }
+
+    public static void getImgTokenByRepeat(){
+
     }
 
 }

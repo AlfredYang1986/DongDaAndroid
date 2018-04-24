@@ -20,87 +20,87 @@ public class BasePrefUtils {
     private static final String EXPIRATION="Expiration";//
 
     public static void setAccesskeyId(String accessKeyId){
-        setStringPref(AYApplication.appConext, USER_INFO,ACCESSKEYID,accessKeyId);
+        setStringPref(AYApplication.appContext, USER_INFO,ACCESSKEYID,accessKeyId);
     }
 
     public static String getAccesskeyId(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(ACCESSKEYID,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(ACCESSKEYID,"");
     }
 
     public static void setSecurityToken(String SecurityToken){
-        setStringPref(AYApplication.appConext, USER_INFO,SECURITYTOKEN,SecurityToken);
+        setStringPref(AYApplication.appContext, USER_INFO,SECURITYTOKEN,SecurityToken);
     }
 
     public static String getSecurityToken(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(SECURITYTOKEN,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(SECURITYTOKEN,"");
     }
 
     public static void setAccesskeySecret(String accessKeySecret){
-        setStringPref(AYApplication.appConext, USER_INFO,ACCESSKEYSECRET,accessKeySecret);
+        setStringPref(AYApplication.appContext, USER_INFO,ACCESSKEYSECRET,accessKeySecret);
     }
 
     public static String getAccesskeySecret(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(ACCESSKEYSECRET,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(ACCESSKEYSECRET,"");
     }
 
     public static void setExpiration(String Expiration){
-        setStringPref(AYApplication.appConext, USER_INFO,EXPIRATION,Expiration);
+        setStringPref(AYApplication.appContext, USER_INFO,EXPIRATION,Expiration);
     }
 
     public static String getExpiration(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(EXPIRATION,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(EXPIRATION,"");
     }
 
     public static void setAuthToken(String auth_token){
-        setStringPref(AYApplication.appConext, USER_INFO,AUTH_TOKEN,auth_token);
+        setStringPref(AYApplication.appContext, USER_INFO,AUTH_TOKEN,auth_token);
     }
 
     public static String getAuthToken(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(AUTH_TOKEN,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(AUTH_TOKEN,"");
     }
 
     public static void setUserId(String user_id){
-        setStringPref(AYApplication.appConext, USER_INFO,USER_ID,user_id);
+        setStringPref(AYApplication.appContext, USER_INFO,USER_ID,user_id);
     }
 
     public static String getUserId(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(USER_ID,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(USER_ID,"");
     }
 
     public static void setWeChatAccessToken(String access_token){
-        setStringPref(AYApplication.appConext, USER_INFO,WECHAT_ACCESSTOKEN,access_token);
+        setStringPref(AYApplication.appContext, USER_INFO,WECHAT_ACCESSTOKEN,access_token);
     }
 
     public static void setWeChatAppId(String appId){
-        setStringPref(AYApplication.appConext, USER_INFO,WECHAT_ACCESSTOKEN,appId);
+        setStringPref(AYApplication.appContext, USER_INFO,WECHAT_ACCESSTOKEN,appId);
     }
 
     public static void setWeChatSecret(String secret){
-        setStringPref(AYApplication.appConext, USER_INFO,WECHAT_ACCESSTOKEN,secret);
+        setStringPref(AYApplication.appContext, USER_INFO,WECHAT_ACCESSTOKEN,secret);
     }
 
     public static void setWeChatExpiresIn(String expiresIn){
-        setStringPref(AYApplication.appConext, USER_INFO,WECHAT_ACCESSTOKEN,expiresIn);
+        setStringPref(AYApplication.appContext, USER_INFO,WECHAT_ACCESSTOKEN,expiresIn);
     }
 
     public static void setWeChatRefreshToken(String refresh_token){
-        setStringPref(AYApplication.appConext, USER_INFO,WECHAT_ACCESSTOKEN,refresh_token);
+        setStringPref(AYApplication.appContext, USER_INFO,WECHAT_ACCESSTOKEN,refresh_token);
     }
 
     public static void setWechatOpenId(String openId){
-        setStringPref(AYApplication.appConext, USER_INFO,WECHAT_ACCESSTOKEN,openId);
+        setStringPref(AYApplication.appContext, USER_INFO,WECHAT_ACCESSTOKEN,openId);
     }
 
     public static String getWechatAccessToken(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(WECHAT_ACCESSTOKEN,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(WECHAT_ACCESSTOKEN,"");
     }
 
     public static String getWechatRefreshToken(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(WECHAT_REFRESH_TOKEN,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(WECHAT_REFRESH_TOKEN,"");
     }
 
     public static String getWechatOpenId(){
-        return getSharedPreferences(AYApplication.appConext, USER_INFO).getString(WECHAT_OPENID,"");
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(WECHAT_OPENID,"");
     }
 
 

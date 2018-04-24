@@ -13,7 +13,7 @@ import java.util.Map;
 public abstract class AYFactory implements AYSysObject {
 
     protected String instance_name;//activity传入的是activity全名 com.xcx.xcx.testactivity
-    protected Map<String, List<String> > sub_instance_name = new HashMap<>();
+    protected Map<String, List<String> > sub_instance_name = new HashMap<>();//activity对应的facade集合
 
 
     /**

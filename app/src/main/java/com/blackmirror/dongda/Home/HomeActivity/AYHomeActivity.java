@@ -20,6 +20,7 @@ import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.NetUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
@@ -149,19 +150,11 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private void initData() {
         isFirstLoad=true;
         showProcessDialog();
-//        sl_home_refresh.setEnabled(false);
-        AYFacade facade = facades.get("QueryServiceFacade");
-        try {
-            JSONObject object = new JSONObject();
-            object.put("token",BasePrefUtils.getAuthToken());
-            facade.execute("getImgToken",object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-//        sv_head_pic.setImageURI(OtherUtils.resourceIdToUri(AYHomeActivity.this, R.mipmap.dongda_logo));
         //精选主题
         initSubject();
+
         getImgToken();
+        refreshToken();
 
     }
 
@@ -178,21 +171,21 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     private void initHomeData() {
 //        showProcessDialog();
-        String url = OSSUtils.getSignedUrl(CalUtils.md5(BasePrefUtils.getUserId()));
-        LogUtils.d("pic url "+url);
-        sv_head_pic.setImageURI(url);
-        AYFacade facade = facades.get("QueryServiceFacade");
 
-        String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
         try {
+            String url = OSSUtils.getSignedUrl(CalUtils.md5(BasePrefUtils.getUserId()));
+            LogUtils.d("pic url "+url);
+            sv_head_pic.setImageURI(url);
+            AYFacade facade = facades.get("QueryServiceFacade");
+            String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
             JSONObject root = new JSONObject(json);
             facade.execute("SearchService", root);
 
-        } catch (JSONException e) {
-
+        } catch (Exception e) {
+            LogUtils.e(AYHomeActivity.class,"homeData Exception: ",e);
+            closeProcessDialog();
         }
     }
-
 
     private void initListener() {
         tv_home_care_more.setOnClickListener(this);
@@ -496,10 +489,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
         BasePrefUtils.setExpiration(bean.Expiration);
 //        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
-        if (isFirstSetRepeat){
-            isFirstSetRepeat = false;
-            refreshToken();
-        }
         if (isFirstLoad) {
             isFirstLoad=false;
             initHomeData();
@@ -519,14 +508,15 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         if (uiBean.code==10010){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
-            if (repeatTime<3) {
+            if (repeatTime<3 && NetUtils.isNetworkAvailable()) {
                 tryRepeatGetImgToken();
             }
         }
     }
 
     private void tryRepeatGetImgToken() {
-        timeDisposable = Observable.timer(10, TimeUnit.SECONDS, Schedulers.io())
+        int m=(repeatTime+1)*5;
+        timeDisposable = Observable.timer(m, TimeUnit.SECONDS, Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
@@ -610,7 +600,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     }
 
     private void refreshToken() {
-        disposable = Observable.interval(OtherUtils.getRefreshTime(BasePrefUtils.getExpiration()), OtherUtils.getExpirateTime(BasePrefUtils.getExpiration()),
+        disposable = Observable.interval(OtherUtils.getInitRefreshTime(30*60), OtherUtils.getExpirateTime(30*60),
                 TimeUnit.SECONDS, Schedulers.io())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -680,20 +670,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     }
 
     public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
-        /*((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
-                .refreshOrLoadMoreComplete();
-
-        JSONArray data = null;
-        try {
-            data = args.getJSONArray("result");
-            serviceData = data;
-            skipedCount += data.length();
-
-            serviceListAdapter.setQueryData(data);
-            serviceListAdapter.refreshList();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
         closeProcessDialog();
         sl_home_refresh.setRefreshing(false);
         bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
@@ -720,19 +696,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
         }
-        /*if (uiBean.code==10010){
-            Snackbar.make(ctl_root, uiBean.message, Snackbar.LENGTH_INDEFINITE)
-                    .setAction("关闭", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    }).show();
-        }else {
-           *//* ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv"))
-                    .refreshOrLoadMoreComplete();*//*
-            Toast.makeText(this, "请改善网络环境并重试", Toast.LENGTH_SHORT).show();
-        }*/
 
         return true;
     }
@@ -744,6 +707,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             disposable.dispose();
             disposable=null;
         }
+        unSubscribeTimer();
     }
 
     @Override

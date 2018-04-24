@@ -54,9 +54,9 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
 
         // 构造上传请求
         // 创建File对象，用于存储裁剪后的图片，避免更改原图
-        File file = new File(AYApplication.getAppConext().getExternalCacheDir(), "crop_image.jpg");
+        File file = new File(AYApplication.getAppContext().getExternalCacheDir(), "crop_image.jpg");
 
-        String path=AYApplication.getAppConext().getExternalCacheDir()+"/crop_image.jpg";
+        String path=AYApplication.getAppContext().getExternalCacheDir()+"/crop_image.jpg";
 
 
         if (!file.exists()){

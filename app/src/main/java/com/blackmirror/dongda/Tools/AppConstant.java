@@ -20,4 +20,6 @@ public class AppConstant {
 
     public static final int NO_GPS_PERMISSION =12;
 
+    public static final int IMAGE_TOKEN_ERROR=10;
+
 }

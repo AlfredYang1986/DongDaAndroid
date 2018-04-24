@@ -30,7 +30,6 @@ import com.blackmirror.dongda.model.serverbean.WeChatLoginServerBean;
 import com.blackmirror.dongda.model.serverbean.WeChatUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
@@ -379,10 +378,9 @@ public class LandingActivity extends AYActivity implements PlatformActionListene
             LogUtils.d("wechat " + object.toString());
             facade.execute("LoginWithWeChat", object);
 
-
-        } catch (JSONException e) {
+        } catch (Exception e) {
+            LogUtils.e(LandingActivity.class,"login Exception: ",e);
             closeProcessDialog();
-            e.printStackTrace();
         }
     }
 
