@@ -53,6 +53,7 @@ import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.mob.MobSDK;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -128,6 +129,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         initView();
         initData();
         initListener();
+        MobSDK.init(this);
     }
 
 
