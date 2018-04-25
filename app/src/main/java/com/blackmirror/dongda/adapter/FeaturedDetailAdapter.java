@@ -2,6 +2,7 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +16,6 @@ import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.drawee.generic.GenericDraweeHierarchy;
-import com.facebook.drawee.generic.GenericDraweeHierarchyBuilder;
-import com.facebook.drawee.generic.RoundingParams;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.common.ResizeOptions;
@@ -77,14 +75,14 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             vh.tv_item_head_content.setText(content);
         }
         if (holder instanceof NormalViewHolder){
-            //设置圆角
+            NormalViewHolder vh = (NormalViewHolder) holder;
+           /* //设置圆角
             RoundingParams roundingParams = new RoundingParams();
             roundingParams.setCornersRadii(OtherUtils.dp2px(4), OtherUtils.dp2px(4), 0, 0);
             GenericDraweeHierarchyBuilder builder = new GenericDraweeHierarchyBuilder(context.getResources());
             GenericDraweeHierarchy hierarchy = builder.build();
             hierarchy.setRoundingParams(roundingParams);
-            NormalViewHolder vh = (NormalViewHolder) holder;
-            vh.sv_featured_detail_photo.setHierarchy(hierarchy);
+            vh.sv_featured_detail_photo.setHierarchy(hierarchy);*/
 
             CareMoreServerBean.ResultBean.ServicesBean servicesBean = list.get(position-1);
 
@@ -208,6 +206,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public static class NormalViewHolder extends RecyclerView.ViewHolder {
 
+        public CardView cv_root;
         public SimpleDraweeView sv_featured_detail_photo;
         public ImageView iv_featured_detail_like;
         public FrameLayout fl_featured_detail_like;
@@ -217,6 +216,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
         public NormalViewHolder(View itemView) {
             super(itemView);
+            cv_root = itemView.findViewById(R.id.cv_root);
             sv_featured_detail_photo = itemView.findViewById(R.id.sv_featured_detail_photo);
             fl_featured_detail_like = itemView.findViewById(R.id.fl_featured_detail_like);
             iv_featured_detail_like = itemView.findViewById(R.id.iv_featured_detail_like);

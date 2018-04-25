@@ -27,6 +27,9 @@ import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NameInputActivity extends AYActivity {
 
     final static String TAG = "Name Input Activity";
@@ -39,7 +42,6 @@ public class NameInputActivity extends AYActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name_input);
-        AYApplication.addActivity(this);
         OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
         has_photo = getIntent().getBooleanExtra("has_photo", true);
         initView();
@@ -68,6 +70,7 @@ public class NameInputActivity extends AYActivity {
                 if (has_photo){
                     changeName();
                 }else {
+                    AYApplication.addActivity(NameInputActivity.this);
                     enterPhotoChangeActivity();
                 }
             }
@@ -77,9 +80,12 @@ public class NameInputActivity extends AYActivity {
     private void changeName() {
         try {
             showProcessDialog();
-            String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"},\"profile\":{\"screen_name\":\""+name+"\",}}";
+            String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"},\"profile\":{\"screen_name\":\""+name+"\"}}";
             JSONObject object = new JSONObject(json);
-            facades.get("LoginFacade").execute("UpdateProfile",object);
+            Map<String, Object> m1 = new HashMap<>();
+            m1.put("login", "login");
+            JSONObject login = new JSONObject(m1);
+            facades.get("LoginFacade").execute("UpdateProfile",object,login);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -111,7 +117,7 @@ public class NameInputActivity extends AYActivity {
             profile.screen_name = uiBean.screen_name;
             profile.screen_photo = uiBean.screen_photo;
             profile.is_current=1;
-            AYCommand cmd = facades.get("DongdaCommanFacade").cmds.get("UpdateLocalProfile");
+            AYCommand cmd = facades.get("LoginFacade").cmds.get("UpdateLocalProfile");
             long result = cmd.excute(profile);
             if (result>0){
                 closeProcessDialog();

@@ -36,6 +36,11 @@ public class LogUtils {
         }
     }
 
+    public static void e(Class<?> c, String message){
+        String tag = (c == null ? DEFAULT_TAG : c.getSimpleName());
+        e(tag, "Exception: "+message, null);
+    }
+
     public static void e(Class<?> c, Throwable t){
         String tag = (c == null ? DEFAULT_TAG : c.getSimpleName());
         e(tag, DEFAULT_ERROR_MSG, t);

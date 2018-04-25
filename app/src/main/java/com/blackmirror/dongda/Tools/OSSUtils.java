@@ -73,7 +73,7 @@ public class OSSUtils {
         return  signature;
     }
 
-    public static OSS getOSS(){
+    public static synchronized OSS getOSS(){
         if (oss==null){
             initOSS(AYApplication.getAppContext(),BasePrefUtils.getAccesskeyId(),BasePrefUtils.getAccesskeySecret(),BasePrefUtils.getSecurityToken());
         }

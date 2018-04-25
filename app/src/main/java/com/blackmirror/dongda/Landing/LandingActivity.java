@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.CalUtils;
@@ -75,6 +76,7 @@ public class LandingActivity extends AYActivity {
         initView();
         //        requestPermissions();
         initData();
+        AYApplication.addActivity(this);
         initListener();
     }
 

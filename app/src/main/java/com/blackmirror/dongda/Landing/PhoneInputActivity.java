@@ -14,11 +14,11 @@ import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
+import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
-import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
@@ -62,7 +62,6 @@ public class PhoneInputActivity extends AYActivity {
         initView();
         initData();
         initListener();
-        AYApplication.addActivity(this);
         OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
     }
 
@@ -241,7 +240,6 @@ public class PhoneInputActivity extends AYActivity {
         if (sendSmsUiBean!=null && sendSmsUiBean.isSuccess) {
             showProcessDialog("正在登陆...");
             AYFacade facade = facades.get("LoginFacade");
-            AYCommand cmd = facade.cmds.get("LoginWithPhone");
             Map<String, Object> m = new HashMap<>();
             m.put("phone", phone);
             m.put("reg_token", sendSmsUiBean.reg_token);
@@ -250,6 +248,7 @@ public class PhoneInputActivity extends AYActivity {
 //            cmd.excute(args);
 
             //登陆不刷新ImageToken
+
             Map<String, Object> m1 = new HashMap<>();
             m1.put("login", "login");
             JSONObject login = new JSONObject(m1);
@@ -274,12 +273,17 @@ public class PhoneInputActivity extends AYActivity {
             return false;
         }
 
+
+        BasePrefUtils.setUserId(uiBean.user_id);
+        BasePrefUtils.setAuthToken(uiBean.auth_token);
+
         if (TextUtils.isEmpty(uiBean.screen_name)) {
 
             Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
             AYDaoUserProfile p = new AYDaoUserProfile(args);
             intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
             startActivity(intent);
+            AYApplication.addActivity(this);
 
         } else if (TextUtils.isEmpty(uiBean.screen_photo)){
 
@@ -289,6 +293,7 @@ public class PhoneInputActivity extends AYActivity {
             intent.putExtra("current_user", p);
             intent.putExtra("name", uiBean.screen_name);
             startActivity(intent);
+            AYApplication.addActivity(this);
         }else {
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
             AYApplication.finishAllActivity();

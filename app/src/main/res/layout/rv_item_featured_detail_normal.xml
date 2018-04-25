@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    android:background="#33ADBADE"
+<android.support.v7.widget.CardView
+     android:id="@+id/cv_root"
+    android:foreground="?attr/selectableItemBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    app:cardPreventCornerOverlap="false"
+     app:cardCornerRadius="4dp"
+     app:cardElevation="6dp"
+    app:cardUseCompatPadding="true"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginBottom="40dp"
     android:layout_height="wrap_content">
 <android.support.constraint.ConstraintLayout
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
-     android:id="@+id/cl_root"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:layout_marginBottom="40dp"
+    android:id="@+id/cl_root"
     android:layout_width="match_parent"
     android:background="@color/sys_bar_white"
     android:layout_height="wrap_content">
@@ -96,4 +101,4 @@
 
 
 </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

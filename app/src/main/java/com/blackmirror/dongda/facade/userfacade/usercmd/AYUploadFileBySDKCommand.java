@@ -2,8 +2,6 @@ package com.blackmirror.dongda.facade.userfacade.usercmd;
 
 import com.alibaba.sdk.android.oss.ClientException;
 import com.alibaba.sdk.android.oss.ServiceException;
-import com.alibaba.sdk.android.oss.callback.OSSCompletedCallback;
-import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.PutObjectRequest;
 import com.alibaba.sdk.android.oss.model.PutObjectResult;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
@@ -35,6 +33,10 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
 
     public <Args, Result> Result excute(Args ... args) {
 
+        if (args==null || args.length<=0){
+            return null;
+        }
+
         if (NetUtils.isNetworkAvailable()) {
             executeImpl(null);
         }else {//确定所有网络请求发起都在主线程
@@ -50,7 +52,8 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
         return null;
     }
 
-    public void executeImpl(JSONObject args) {
+    public void executeImpl(byte[] data) {
+
 
         // 构造上传请求
         // 创建File对象，用于存储裁剪后的图片，避免更改原图
@@ -63,12 +66,64 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
             return;
         }
 
+
+
         notificationHandler=getTarget();
 
+        /*byte[] buffer = null;
+        try {
+             file = new File(path);
+            FileInputStream fis = new FileInputStream(file);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream(1000);
+            byte[] b = new byte[1000];
+            int n;
+            while ((n = fis.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+            fis.close();
+            bos.close();
+            buffer = bos.toByteArray();
+        } catch (FileNotFoundException e) {
+            LogUtils.e(AYUploadFileBySDKCommand.class,"FileNotFoundException: ",e);
+        } catch (IOException e) {
+            LogUtils.e(AYUploadFileBySDKCommand.class,"IOException: ",e);
+        }
+
+        if (buffer == null){
+            LogUtils.d("mmp===========");
+        }*/
 
         PutObjectRequest put = new PutObjectRequest("bm-dongda", CalUtils.md5(BasePrefUtils.getUserId())+".jpg", path);
 
-        OSSAsyncTask task = OSSUtils.getOSS().asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
+        try {
+            PutObjectResult result = OSSUtils.getOSS().putObject(put);
+            LogUtils.d("flag","PutObject "+"UploadSuccess");
+            LogUtils.d("flag","ETag "+result.getETag());
+            LogUtils.d("flag","RequestId "+result.getRequestId());
+            if (notificationHandler!=null){
+                notificationHandler.handleNotifications(getSuccessCallBackName(),null);
+            }
+        } catch (ClientException e) {
+            // 请求异常
+            if (e != null) {
+                // 本地异常如网络异常等
+                LogUtils.e(AYUploadFileBySDKCommand.class,e);
+
+                if (notificationHandler!=null){
+                    notificationHandler.handleNotifications(getFailedCallBackName(),getErrorNetData());
+                }
+            }
+        } catch (ServiceException e) {
+            if (e != null) {
+                // 服务异常
+                LogUtils.e(AYUploadFileBySDKCommand.class,e.toString());
+                if (notificationHandler!=null){
+                    notificationHandler.handleNotifications(getFailedCallBackName(),getErrorData(e.getErrorCode(),e.getMessage()));
+                }
+            }
+        }
+
+        /*OSSAsyncTask task = OSSUtils.getOSS().asyncPutObject(put, new OSSCompletedCallback<PutObjectRequest, PutObjectResult>() {
             @Override
             public void onSuccess(PutObjectRequest request, PutObjectResult result) {
                 LogUtils.d("flag","PutObject "+"UploadSuccess");
@@ -80,29 +135,27 @@ public  class AYUploadFileBySDKCommand extends AYCommand {
             }
             @Override
             public void onFailure(PutObjectRequest request, ClientException clientException, ServiceException serviceException) {
-                if (notificationHandler!=null){
+                *//*if (notificationHandler!=null){
                     notificationHandler.handleNotifications(getFailedCallBackName(),null);
-                }
+                }*//*
                 // 请求异常
                 if (clientException != null) {
                     // 本地异常如网络异常等
-                    clientException.printStackTrace();
+                    LogUtils.e(AYUploadFileBySDKCommand.class,clientException);
+
                     if (notificationHandler!=null){
-                        notificationHandler.handleNotifications(getSuccessCallBackName(),getErrorNetData());
+                        notificationHandler.handleNotifications(getFailedCallBackName(),getErrorNetData());
                     }
                 }
                 if (serviceException != null) {
                     // 服务异常
-                    LogUtils.d("flag","ErrorCode "+serviceException.getErrorCode());
-                    LogUtils.d("flag","RequestId "+serviceException.getRequestId());
-                    LogUtils.d("flag","HostId "+serviceException.getHostId());
-                    LogUtils.d("flag","RawMessage "+serviceException.getRawMessage());
+                    LogUtils.e(AYUploadFileBySDKCommand.class,serviceException.toString());
                     if (notificationHandler!=null){
-                        notificationHandler.handleNotifications(getSuccessCallBackName(),getErrorData(serviceException.getErrorCode(),serviceException.getMessage()));
+                        notificationHandler.handleNotifications(getFailedCallBackName(),getErrorData(serviceException.getErrorCode(),serviceException.getMessage()));
                     }
                 }
             }
-        });
+        });*/
     }
 
 

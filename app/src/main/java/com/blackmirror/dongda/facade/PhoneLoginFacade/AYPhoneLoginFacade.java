@@ -104,6 +104,6 @@ public class AYPhoneLoginFacade extends AYFacade {
     }
 
     public void AYUploadFileBySDKCommandFailed(JSONObject args) {
-        broadcastingNotification("AYUploadFileBySDKCommandSuccess", args);
+        broadcastingNotification("AYUploadFileBySDKCommandFailed", args);
     }
 }

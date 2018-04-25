@@ -21,6 +21,7 @@ public abstract class AYCommand extends AYSysNotifier {
             .addNetworkInterceptor(new StethoInterceptor())
             .readTimeout(15,TimeUnit.SECONDS)
             .writeTimeout(60,TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
             .build();
 
     public abstract <Args, Result> Result excute(Args ... defaultArgs);

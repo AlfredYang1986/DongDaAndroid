@@ -21,7 +21,6 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/sys_bar_white"
             app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <android.support.constraint.ConstraintLayout
@@ -31,6 +30,7 @@
 
 
                 <com.facebook.drawee.view.SimpleDraweeView
+                    app:placeholderImage="@drawable/default_avatar"
                     android:id="@+id/sv_head_pic"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
@@ -50,7 +50,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/home_act_logo"
                     app:layout_constraintBottom_toBottomOf="@id/sv_head_pic"
-                    app:layout_constraintHorizontal_bias="0.4"
+                    app:layout_constraintHorizontal_bias="0.451"
                     app:layout_constraintLeft_toLeftOf="@id/cl_tb_root"
                     app:layout_constraintRight_toRightOf="@id/cl_tb_root"
                     app:layout_constraintTop_toTopOf="@id/sv_head_pic"
@@ -109,7 +109,11 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.042667"/>
 
+                <!--android:typeface="sans"
+                    android:textStyle="bold"-->
                 <TextView
+                    android:typeface="sans"
+                    android:textStyle="bold"
                     android:id="@+id/tv_featured_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -131,6 +135,8 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_featured_title"/>
 
                 <TextView
+                    android:typeface="sans"
+                    android:textStyle="bold"
                     android:id="@+id/tv_home_care"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -180,6 +186,8 @@
 
 
                 <TextView
+                    android:typeface="sans"
+                    android:textStyle="bold"
                     android:id="@+id/tv_home_art"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -228,6 +236,8 @@
 
 
                 <TextView
+                    android:typeface="sans"
+                    android:textStyle="bold"
                     android:id="@+id/tv_home_sport"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -279,6 +289,8 @@
 
 
                 <TextView
+                    android:typeface="sans"
+                    android:textStyle="bold"
                     android:id="@+id/tv_home_science"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
