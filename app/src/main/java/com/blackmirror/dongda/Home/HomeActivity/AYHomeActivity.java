@@ -221,7 +221,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         rv_featured_theme.setNestedScrollingEnabled(false);
         rv_featured_theme.setLayoutManager(manager);
         rv_featured_theme.setAdapter(adapter);
-        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(28));
+        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(16));
 
 
         adapter.setOnItemClickListener(new FeaturedThemeAdapter.OnItemClickListener() {

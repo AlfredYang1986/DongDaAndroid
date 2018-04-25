@@ -29,6 +29,7 @@ public class AYApplication extends Application {
 
     public static Context appContext;
     private static Application me;
+    public static boolean isLoginSuccess;
 
 
     public static List<AppCompatActivity> activityList;
@@ -68,7 +69,9 @@ public class AYApplication extends Application {
 
     public static void finishAllActivity(){
         for (int i = 0; i < activityList.size(); i++) {
-            activityList.get(i).finish();
+            if (activityList.get(i)!=null) {
+                activityList.get(i).finish();
+            }
         }
         activityList.clear();
     }
@@ -136,7 +139,9 @@ public class AYApplication extends Application {
         switch (level) {
 
             case ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN://应用不可见 进入后台等
-                Fresco.getImagePipeline().clearMemoryCaches();
+                if (isLoginSuccess) {
+                    Fresco.getImagePipeline().clearMemoryCaches();
+                }
                 break;
 
             case ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE:

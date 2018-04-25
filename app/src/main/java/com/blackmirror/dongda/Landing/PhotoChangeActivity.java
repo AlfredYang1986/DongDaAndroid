@@ -82,6 +82,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private Button btn_enter_cancel;
     private boolean isFromNameInput;
     private String name;
+    private Bitmap bitmap;
 
 
     @Override
@@ -92,19 +93,11 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
         name = getIntent().getStringExtra("name");
-        isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_PHONE_INPUT;
+        isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_NAME_INPUT;
         initView();
         initData();
         initListener();
-        showProcessDialog();
-        try {
-            AYFacade facade = facades.get("LoginFacade");
-            JSONObject object = new JSONObject();
-            object.put("token",BasePrefUtils.getAuthToken());
-            facade.execute("getImgToken",object);
-        } catch (Exception e) {
-            closeProcessDialog();
-        }
+        getImageToken();
     }
 
     private void initView() {
@@ -127,6 +120,23 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         btn_enter_cancel.setOnClickListener(this);
     }
 
+    private void getImageToken() {
+//        showProcessDialog();
+        try {
+            AYFacade facade = facades.get("LoginFacade");
+            JSONObject object = new JSONObject();
+            object.put("token",BasePrefUtils.getAuthToken());
+
+            Map<String, Object> m1 = new HashMap<>();
+            m1.put("login", "login");
+            JSONObject login = new JSONObject(m1);
+
+            facade.execute("getImgToken",object,login);
+        } catch (Exception e) {
+            closeProcessDialog();
+        }
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -141,14 +151,15 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
 
                 if (isChangeScreenPhoto){
                     showProcessDialog("正在上传头像...");
-                    facades.get("LoginFacade").execute("AYUploadFileBySDKCommand",new JSONObject());
+                    facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());
+
                 }else {
                     ToastUtils.showShortToast("请选择头像!");
                 }
 
                 break;
             case R.id.btn_enter_cancel:
-                AYApplication.finishAllActivity();
+                finish();
                 break;
         }
     }
@@ -244,7 +255,10 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      * @param args
      */
     public void AYGetImgTokenCommandSuccess(JSONObject args){
-        showProcessDialog();
+
+        LogUtils.d("PhotoChangeActivity AYGetImgTokenCommandSuccess");
+
+//        closeProcessDialog();
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
         if (bean.isSuccess){
@@ -253,14 +267,22 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
             BasePrefUtils.setExpiration(bean.Expiration);
             OSSUtils.initOSS(this,bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
+
+
+        }else {
+            ToastUtils.showShortToast( "上传失败(" + bean.code + ")");
         }
     }
 
     public void AYGetImgTokenCommandFailed(JSONObject args) {
-        showProcessDialog();
-        ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message);
+        LogUtils.d("PhotoChangeActivity AYGetImgTokenCommandSuccess");
+        closeProcessDialog();
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code == 10010) {
+            SnackbarUtils.show(btn_enter_home, uiBean.message);
+        } else {
+            ToastUtils.showShortToast( "上传失败("+uiBean.message+"," + uiBean.code + ")");
         }
     }
 
@@ -270,21 +292,26 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      */
     public void AYUploadFileBySDKCommandSuccess(JSONObject args){
 //        ToastUtils.showShortToast("上传成功!");
+        LogUtils.d("PhotoChangeActivity AYUploadFileBySDKCommandSuccess");
+
         senDataToServer();
     }
 
 
 
     public void AYUploadFileBySDKCommandFailed(JSONObject args) {
+        LogUtils.d("PhotoChangeActivity AYUploadFileBySDKCommandFailed");
+
         closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+       /* ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         if (uiBean.code==10010){
             SnackbarUtils.show(iv_head_photo,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-//        ToastUtils.showShortToast("上传失败!");
+        }*/
+
+        ToastUtils.showShortToast("上传失败!");
     }
 
     /**
@@ -293,9 +320,11 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      * @return
      */
     public void AYUpdateProfileCommandSuccess(JSONObject args) {
+        LogUtils.d("PhotoChangeActivity AYUpdateProfileCommandSuccess");
+
         UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
         UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
-
+        closeProcessDialog();
         if (uiBean.isSuccess){
             AYDaoUserProfile profile = new AYDaoUserProfile();
             profile.auth_token = uiBean.token;
@@ -314,11 +343,13 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             }else {
                 ToastUtils.showShortToast("系统异常(SQL)");
             }
-            closeProcessDialog();
         }
+
     }
 
     public void AYUpdateProfileCommandFailed(JSONObject args) {
+        LogUtils.d("PhotoChangeActivity AYUpdateProfileCommandFailed");
+
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
@@ -331,6 +362,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     }
 
     private void senDataToServer() {
+        LogUtils.d("PhotoChangeActivity senDataToServer");
 
         String json;
         try {
@@ -340,7 +372,10 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 json="{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + BasePrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + CalUtils.md5(BasePrefUtils.getUserId()) + "\"}}";
             }
             JSONObject object = new JSONObject(json);
-            facades.get("LoginFacade").execute("UpdateProfile",object);
+            Map<String, Object> m1 = new HashMap<>();
+            m1.put("login", "login");
+            JSONObject login = new JSONObject(m1);
+            facades.get("LoginFacade").execute("UpdateProfile",object,login);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -515,18 +550,18 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                     }
                     break;
                 case AppConstant.PICTURE_CUT:
-                    Bitmap bitmap;
                     try {
-                        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
-                                (outputUri));
-                        if (bitmap!=null) {
+                        bitmap =BitmapFactory.decodeFile(getExternalCacheDir()+"/crop_image.jpg");
+                        /*bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
+                                (outputUri));*/
+                        if (bitmap !=null) {
                             isChangeScreenPhoto = true;
                             LogUtils.d("xcx", "压缩前图片的大小" + (bitmap.getByteCount() / 1024)
                                     + "k宽度为" + bitmap.getWidth() + "高度为" + bitmap.getHeight());
                             //                        scaleBitmap(bitmap,outputUri);
                             iv_head_photo.setImageBitmap(bitmap);
                         }
-                    } catch (FileNotFoundException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                     break;

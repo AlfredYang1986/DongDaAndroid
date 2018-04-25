@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,7 +44,6 @@ public class FeaturedDetailActivity extends AYActivity {
     private TextView tv_featured_tb_title;
     private RecyclerView rv_featured_detail;
     private Toolbar toolbar;
-    private FrameLayout fl_featured_detail_back;
     private CoordinatorLayout ctl_root;
     private int pos;
     private String title;
@@ -74,7 +72,6 @@ public class FeaturedDetailActivity extends AYActivity {
         iv_featured_detail_back = findViewById(R.id.iv_featured_detail_back);
         tv_featured_tb_title = findViewById(R.id.tv_featured_tb_title);
         rv_featured_detail = findViewById(R.id.rv_featured_detail);
-        fl_featured_detail_back = findViewById(R.id.fl_featured_detail_back);
         ctl_root = findViewById(R.id.ctl_root);
     }
 
@@ -134,7 +131,7 @@ public class FeaturedDetailActivity extends AYActivity {
     }
 
     private void initListener() {
-        fl_featured_detail_back.setOnClickListener(new View.OnClickListener() {
+        iv_featured_detail_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
