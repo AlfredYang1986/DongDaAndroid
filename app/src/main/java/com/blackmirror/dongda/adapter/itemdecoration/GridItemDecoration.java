@@ -5,7 +5,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 
 /**
@@ -40,15 +39,18 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         int pos = parent.getChildAdapterPosition(view);
         int count = parent.getAdapter().getItemCount();
 
+        /*if (pos == 2 || pos == 3){
+            outRect.top = OtherUtils.dp2px(55);
+        }else if (pos >= 0 && pos < column) {
+            outRect.top = top;
+        } else {
+            outRect.top = OtherUtils.dp2px(32);
+        }*/
         if (pos >= 0 && pos < column) {
             outRect.top = top;
         } else {
-            outRect.top = space;
+            outRect.top = OtherUtils.dp2px(55);
         }
-
-        LogUtils.d("pos== "+pos);
-        LogUtils.d("count== "+count);
-
 
         if (pos % column == 0) {//最左列元素
             outRect.left = space;

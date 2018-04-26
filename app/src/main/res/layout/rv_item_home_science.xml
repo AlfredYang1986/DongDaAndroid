@@ -35,6 +35,7 @@
         />
 
     <TextView
+        app:layout_goneMarginTop="13dp"
         android:id="@+id/tv_item_science_detail"
         android:layout_width="144dp"
         android:layout_height="wrap_content"

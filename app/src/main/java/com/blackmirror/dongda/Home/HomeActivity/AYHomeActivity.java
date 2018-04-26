@@ -257,7 +257,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                     //                    startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
             });
         } else {
@@ -288,7 +288,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onItemClick(View view, int position, String service_id) {
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
 
                 @Override
@@ -323,7 +323,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onSportItemClick(View view, int position, String service_id) {
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
             });
         } else {
@@ -353,7 +353,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onScienceItemClick(View view, int position, String service_id) {
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
             });
         } else {
@@ -738,6 +738,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     }
 
     private void needsRefreshHomeData(int requestCode, int resultCode, Intent data) {
+        LogUtils.d("code=="+requestCode+" "+resultCode);
         switch (requestCode) {
             case AppConstant.CARE_MORE_REQUEST_CODE:
             case AppConstant.ART_MORE_REQUEST_CODE:
@@ -745,8 +746,10 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
             case AppConstant.SCIENCE_REQUEST_CODE:
             case AppConstant.MY_LIKE_REQUEST_CODE:
             case AppConstant.FEATURE_DETAIL_REQUEST_CODE:
+            case AppConstant.SERVICE_DETAIL_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    sl_home_refresh.setRefreshing(false);
+//                    sl_home_refresh.setRefreshing(false);
+                    sl_home_refresh.setRefreshing(true);
                     initHomeData();
                 }
                 break;

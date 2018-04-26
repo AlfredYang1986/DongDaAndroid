@@ -36,7 +36,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
-         android:layout_marginBottom="32dp"
+         android:layout_marginBottom="26dp"
         app:layout_constraintTop_toBottomOf="@id/iv_featured_detail_bg"
          app:layout_constraintBottom_toBottomOf="parent"
         android:inputType="textMultiLine"

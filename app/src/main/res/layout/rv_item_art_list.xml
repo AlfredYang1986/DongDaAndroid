@@ -38,7 +38,7 @@
         />
 
     <TextView
-        android:lines="2"
+        app:layout_goneMarginTop="13dp"
         android:maxLines="2"
         android:inputType="textMultiLine"
         android:ellipsize="end"
@@ -55,12 +55,11 @@
         />
 
     <TextView
-
         app:layout_constraintLeft_toLeftOf="@id/sv_art_list_photo"
         android:id="@+id/tv_art_list_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="9dp"
         android:text="大兴区"
         android:textColor="#FF737373"
         android:textSize="13sp"

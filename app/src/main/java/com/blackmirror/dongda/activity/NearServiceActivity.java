@@ -149,6 +149,7 @@ public class NearServiceActivity extends AYActivity {
             @Override
             public void onClick(View v) {
                 closeProcessDialog();
+                markers.clear();
                 aMap.clear();
                 showProcessDialog("正在定位...");
                 closePopUpWindow();
@@ -205,7 +206,18 @@ public class NearServiceActivity extends AYActivity {
         marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(b.service_type,true)));
         sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image));
         tv_near_title.setText(b.service_leaf);
-        tv_near_dec.setText(b.punchline);
+        StringBuilder s = new StringBuilder();
+        if (b.service_leaf.contains("看顾")){
+            s.append(b.brand_name)
+                    .append("的")
+                    .append(b.service_leaf);
+        }else {
+            s.append(b.brand_name)
+                    .append("的")
+                    .append(b.service_leaf)
+                    .append(b.category);
+        }
+        tv_near_dec.setText(s.toString());
         tv_near_location.setText(b.address);
         NearServiceServerBean.ResultBean.ServicesBean l= (NearServiceServerBean.ResultBean.ServicesBean) markers.get(lastClickMarker).getObject();
         markers.get(lastClickMarker).setIcon(BitmapDescriptorFactory.fromResource(getImageResId(l.service_type,false)));
@@ -326,7 +338,18 @@ public class NearServiceActivity extends AYActivity {
                 marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(sb.service_type,true)));
                 sv_near_photo.setImageURI(OSSUtils.getSignedUrl(sb.service_image));
                 tv_near_title.setText(sb.service_leaf);
-                tv_near_dec.setText(sb.punchline);
+                StringBuilder s = new StringBuilder();
+                if (sb.service_leaf.contains("看顾")){
+                    s.append(sb.brand_name)
+                            .append("的")
+                            .append(sb.service_leaf);
+                }else {
+                    s.append(sb.brand_name)
+                            .append("的")
+                            .append(sb.service_leaf)
+                            .append(sb.category);
+                }
+                tv_near_dec.setText(s.toString());
                 tv_near_location.setText(sb.address);
             }else {
                 marker.setIcon(BitmapDescriptorFactory
