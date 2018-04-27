@@ -2,6 +2,7 @@ package com.blackmirror.dongda.Home.HomeActivity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -18,7 +19,6 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
-import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.NetUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
@@ -109,6 +109,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     private int repeatTime;
     private boolean isFirstLoad;
     private boolean isFirstSetRepeat = true;
+    private String img_uuid;
 
 
     @Override
@@ -120,7 +121,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
 
         skipedCount = 0;
         timeSpan = new Date().getTime();
-
+        img_uuid=getIntent().getStringExtra("img_uuid");
         AYApplication.finishAllActivity();
 
         serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
@@ -151,6 +152,9 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     }
 
     private void initData() {
+        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            iv_home_location.setElevation(OtherUtils.dp2px(10));
+        }
         isFirstLoad = true;
         showProcessDialog();
         //精选主题
@@ -177,7 +181,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         //        showProcessDialog();
 
         try {
-            String url = OSSUtils.getSignedUrl(CalUtils.md5(BasePrefUtils.getUserId()));
+            String url = OSSUtils.getSignedUrl(img_uuid);
             LogUtils.d("pic url " + url);
             sv_head_pic.setImageURI(url);
             AYFacade facade = facades.get("QueryServiceFacade");
@@ -221,7 +225,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         rv_featured_theme.setNestedScrollingEnabled(false);
         rv_featured_theme.setLayoutManager(manager);
         rv_featured_theme.setAdapter(adapter);
-        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(16));
+        rv_featured_theme.addItemDecoration(new SpacesItemDecoration(10));
 
 
         adapter.setOnItemClickListener(new FeaturedThemeAdapter.OnItemClickListener() {
@@ -257,7 +261,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                     //                    startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
             });
         } else {
@@ -288,7 +292,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onItemClick(View view, int position, String service_id) {
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
 
                 @Override
@@ -323,7 +327,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onSportItemClick(View view, int position, String service_id) {
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
             });
         } else {
@@ -353,7 +357,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onScienceItemClick(View view, int position, String service_id) {
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
                 }
             });
         } else {
@@ -738,6 +742,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     }
 
     private void needsRefreshHomeData(int requestCode, int resultCode, Intent data) {
+        LogUtils.d("code=="+requestCode+" "+resultCode);
         switch (requestCode) {
             case AppConstant.CARE_MORE_REQUEST_CODE:
             case AppConstant.ART_MORE_REQUEST_CODE:
@@ -745,8 +750,10 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
             case AppConstant.SCIENCE_REQUEST_CODE:
             case AppConstant.MY_LIKE_REQUEST_CODE:
             case AppConstant.FEATURE_DETAIL_REQUEST_CODE:
+            case AppConstant.SERVICE_DETAIL_REQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {
-                    sl_home_refresh.setRefreshing(false);
+//                    sl_home_refresh.setRefreshing(false);
+                    sl_home_refresh.setRefreshing(true);
                     initHomeData();
                 }
                 break;

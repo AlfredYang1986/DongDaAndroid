@@ -35,8 +35,12 @@
         />
 
     <TextView
+        app:layout_goneMarginTop="13dp"
         android:id="@+id/tv_item_science_detail"
-        android:layout_width="144dp"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="13dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"

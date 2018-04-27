@@ -296,6 +296,7 @@ public class PhoneInputActivity extends AYActivity {
             AYApplication.addActivity(this);
         }else {
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
+            intent.putExtra("img_uuid",uiBean.screen_photo);
             AYApplication.finishAllActivity();
             startActivity(intent);
         }

@@ -15,18 +15,15 @@
             <!--android:divider="@null"/>-->
 
 <!--</LinearLayout>-->
-<in.srain.cube.views.ptr.PtrClassicFrameLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     android:id="@+id/prtframelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_marginBottom="49dp"
     android:layout_marginTop="88dp"
-    cube_ptr:ptr_duration_to_close_header="500"
-    cube_ptr:ptr_resistance="1.7"
-    cube_ptr:ptr_ratio_of_header_height_to_refresh="1.2">
+    >
 
     <ListView
         android:id="@id/android:list"
@@ -39,4 +36,4 @@
     </ListView>
 
 
-</in.srain.cube.views.ptr.PtrClassicFrameLayout>
+</FrameLayout>

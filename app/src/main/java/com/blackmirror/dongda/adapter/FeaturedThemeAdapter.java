@@ -50,7 +50,9 @@ public class FeaturedThemeAdapter extends RecyclerView.Adapter<FeaturedThemeAdap
         //        LogUtils.d("xcx",OtherUtils.getUriFromDrawableRes(context,list.get(position)).toString());
 
 
-
+        /*if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            holder.cl_featured_root.set
+        }*/
         displayImage(OtherUtils.resourceIdToUri(context, list.get(position)),holder.sv_featured);
 
 //        holder.sv_featured.setImageURI();

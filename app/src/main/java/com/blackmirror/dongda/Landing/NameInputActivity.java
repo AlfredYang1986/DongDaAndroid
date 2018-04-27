@@ -122,7 +122,9 @@ public class NameInputActivity extends AYActivity {
             if (result>0){
                 closeProcessDialog();
                 ToastUtils.showShortToast("修改成功!");
-                startActivity(new Intent(NameInputActivity.this, AYHomeActivity.class));
+                Intent intent = new Intent(NameInputActivity.this, AYHomeActivity.class);
+                intent.putExtra("img_uuid",uiBean.screen_photo);
+                startActivity(intent);
                 AYApplication.finishAllActivity();
             }else {
                 closeProcessDialog();

@@ -2,7 +2,6 @@ package com.blackmirror.dongda.command;
 
 import com.blackmirror.dongda.AY.AYSysNotifier;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.facebook.stetho.okhttp3.StethoInterceptor;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,10 +17,9 @@ public abstract class AYCommand extends AYSysNotifier {
 
     public static OkHttpClient httpClient = new OkHttpClient().newBuilder()
             .connectTimeout(15, TimeUnit.SECONDS)
-            .addNetworkInterceptor(new StethoInterceptor())
+//            .addNetworkInterceptor(new StethoInterceptor())
             .readTimeout(15,TimeUnit.SECONDS)
             .writeTimeout(60,TimeUnit.SECONDS)
-            .retryOnConnectionFailure(true)
             .build();
 
     public abstract <Args, Result> Result excute(Args ... defaultArgs);

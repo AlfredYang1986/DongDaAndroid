@@ -2,6 +2,7 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,13 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
             holder.iv_item_art_like.setBackgroundResource(R.drawable.home_art_like);
         }
 
-        holder.tv_item_art_name.setText(this.bean.services.get(position).service_tags.get(0));
+        if (TextUtils.isEmpty(bean.services.get(position).service_tags.get(0))){
+            holder.tv_item_art_name.setVisibility(View.GONE);
+        }else {
+            holder.tv_item_art_name.setVisibility(View.VISIBLE);
+            holder.tv_item_art_name.setText(bean.services.get(position).service_tags.get(0));
+        }
+
         StringBuilder sb = new StringBuilder();
         sb.append(servicesBean.brand_name)
                 .append("的")

@@ -52,7 +52,7 @@
         android:ellipsize="end"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="花瓣点金贝贝的早教日间看顾发的撒地方"
+        android:text="日渐看顾"
         android:textColor="#FF404040"
         android:textSize="17sp"
         />

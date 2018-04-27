@@ -3,6 +3,7 @@ package com.blackmirror.dongda.Tools;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 /**
  * Created by Ruge on 2018-04-17 下午2:33
@@ -63,5 +64,13 @@ public class CalUtils {
         }
 
         return hex.toString();
+    }
+
+    /**
+     * 获取32位UUID
+     * @return
+     */
+    public static String getUUID32(){
+        return UUID.randomUUID().toString().toLowerCase();
     }
 }
