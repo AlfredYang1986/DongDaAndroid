@@ -106,6 +106,10 @@ public class LandingActivity extends AYActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
                 startActivity(intent);
+                /*OSSUtils.initOSS(LandingActivity.this,BasePrefUtils.getAccesskeyId(),BasePrefUtils.getAccesskeySecret(),BasePrefUtils.getSecurityToken());
+                facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());*/
+//                upload();
+
             }
         });
 
@@ -139,7 +143,9 @@ public class LandingActivity extends AYActivity {
                 BasePrefUtils.setUserId(bean.result.user.user_id);
             }
             BasePrefUtils.setAuthToken(bean.result.auth_token);
-            startActivity(new Intent(LandingActivity.this, AYHomeActivity.class));
+            Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
+            intent.putExtra("img_uuid",bean.result.user.screen_photo);
+            startActivity(intent);
             finish();
         } else if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);

@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.Tools;
 
 import android.net.Uri;
+import android.support.annotation.Nullable;
 
 import com.facebook.cache.common.CacheKey;
 import com.facebook.cache.common.SimpleCacheKey;
@@ -9,7 +10,7 @@ import com.facebook.imagepipeline.cache.CacheKeyFactory;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.Postprocessor;
 
-import javax.annotation.Nullable;
+
 
 /**
  * Created by Ruge on 2018-04-13 上午11:11

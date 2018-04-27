@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,10 +33,8 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
 import com.blackmirror.dongda.Tools.BasePrefUtils;
-import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
-import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
@@ -45,12 +42,13 @@ import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
+import com.blackmirror.dongda.model.serverbean.UpLoadFileServerBean;
 import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
+import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
 
 import org.json.JSONException;
@@ -70,11 +68,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private Button btn_enter_album;
     private Button btn_open_camera;
     private TextView tv_screen_name;
-    private Bitmap bm;
     private AYDaoUserProfile p = null;
     private Boolean isChangeScreenPhoto = false;
-    private String path = null;
-    private String post_upload_uuid = null;
     private String imagePath;//打开相册选择照片的路径
     private Uri outputUri;//裁剪万照片保存地址
     private Uri imageUri;//相机拍照图片保存地址
@@ -90,14 +85,14 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
         AYApplication.addActivity(this);
-        OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
+        OtherUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
         name = getIntent().getStringExtra("name");
         isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_NAME_INPUT;
         initView();
         initData();
         initListener();
-        getImageToken();
+        //        getImageToken();
     }
 
     private void initView() {
@@ -120,22 +115,6 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         btn_enter_cancel.setOnClickListener(this);
     }
 
-    private void getImageToken() {
-//        showProcessDialog();
-        try {
-            AYFacade facade = facades.get("LoginFacade");
-            JSONObject object = new JSONObject();
-            object.put("token",BasePrefUtils.getAuthToken());
-
-            Map<String, Object> m1 = new HashMap<>();
-            m1.put("login", "login");
-            JSONObject login = new JSONObject(m1);
-
-            facade.execute("getImgToken",object,login);
-        } catch (Exception e) {
-            closeProcessDialog();
-        }
-    }
 
     @Override
     public void onClick(View v) {
@@ -148,20 +127,42 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 checkCameraPermission();
                 break;
             case R.id.btn_enter_home:
-
-                if (isChangeScreenPhoto){
+                if (isChangeScreenPhoto) {
                     showProcessDialog("正在上传头像...");
-                    facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());
+                    if (OtherUtils.isNeedRefreshToken(BasePrefUtils.getExpiration())) {
+                        getImageToken();
+                    } else {
+                        uploadImage();
+                    }
 
-                }else {
+                } else {
                     ToastUtils.showShortToast("请选择头像!");
                 }
-
                 break;
             case R.id.btn_enter_cancel:
                 finish();
                 break;
         }
+    }
+
+    private void getImageToken() {
+        try {
+            AYFacade facade = facades.get("LoginFacade");
+            JSONObject object = new JSONObject();
+            object.put("token", BasePrefUtils.getAuthToken());
+
+            Map<String, Object> m1 = new HashMap<>();
+            m1.put("login", "login");
+            JSONObject login = new JSONObject(m1);
+
+            facade.execute("getImgToken", object, login);
+        } catch (Exception e) {
+            closeProcessDialog();
+        }
+    }
+
+    public void uploadImage(){
+        facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());
     }
 
     private void checkCameraPermission() {
@@ -240,82 +241,75 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     }
 
 
-    @Override
-    public String getClassTag() {
-        return TAG;
-    }
-
-    @Override
-    protected void bindingFragments() {
-
-    }
-
     /**
      * 获取图片token 用于生成url签名
+     *
      * @param args
      */
-    public void AYGetImgTokenCommandSuccess(JSONObject args){
+    public void AYGetImgTokenCommandSuccess(JSONObject args) {
 
         LogUtils.d("PhotoChangeActivity AYGetImgTokenCommandSuccess");
 
-//        closeProcessDialog();
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
-        if (bean.isSuccess){
+        if (bean.isSuccess) {
             BasePrefUtils.setAccesskeyId(bean.accessKeyId);
             BasePrefUtils.setSecurityToken(bean.SecurityToken);
             BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
             BasePrefUtils.setExpiration(bean.Expiration);
-            OSSUtils.initOSS(this,bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
-
-
-        }else {
-            ToastUtils.showShortToast( "上传失败(" + bean.code + ")");
+            uploadImage();
+        } else {
+            ToastUtils.showShortToast("数据异常("+bean.message+"," + bean.code + ")");
         }
     }
 
     public void AYGetImgTokenCommandFailed(JSONObject args) {
-        LogUtils.d("PhotoChangeActivity AYGetImgTokenCommandSuccess");
+        LogUtils.d("PhotoChangeActivity AYGetImgTokenCommandFailed");
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         if (uiBean.code == 10010) {
             SnackbarUtils.show(btn_enter_home, uiBean.message);
         } else {
-            ToastUtils.showShortToast( "上传失败("+uiBean.message+"," + uiBean.code + ")");
+            ToastUtils.showShortToast("上传失败(" + uiBean.message + "," + uiBean.code + ")");
         }
     }
 
     /**
      * 上传文件回调
+     *
      * @param args
      */
-    public void AYUploadFileBySDKCommandSuccess(JSONObject args){
-//        ToastUtils.showShortToast("上传成功!");
+    public void AYUploadFileBySDKCommandSuccess(JSONObject args) {
+        //        ToastUtils.showShortToast("上传成功!");
         LogUtils.d("PhotoChangeActivity AYUploadFileBySDKCommandSuccess");
-
-        senDataToServer();
+        UpLoadFileServerBean serverBean = JSON.parseObject(args.toString(), UpLoadFileServerBean.class);
+        UpLoadFileUiBean uiBean = new UpLoadFileUiBean(serverBean);
+        if (uiBean.isSuccess){
+            senDataToServer(uiBean);
+        }else {
+            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        }
     }
-
 
 
     public void AYUploadFileBySDKCommandFailed(JSONObject args) {
         LogUtils.d("PhotoChangeActivity AYUploadFileBySDKCommandFailed");
 
         closeProcessDialog();
-       /* ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         if (uiBean.code==10010){
             SnackbarUtils.show(iv_head_photo,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }*/
+        }
 
-        ToastUtils.showShortToast("上传失败!");
     }
 
     /**
      * 修改用户信息回调
+     *
      * @param args
      * @return
      */
@@ -325,22 +319,23 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
         UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
         closeProcessDialog();
-        if (uiBean.isSuccess){
+        if (uiBean.isSuccess) {
             AYDaoUserProfile profile = new AYDaoUserProfile();
             profile.auth_token = uiBean.token;
             profile.user_id = uiBean.user_id;
             profile.screen_name = uiBean.screen_name;
             profile.screen_photo = uiBean.screen_photo;
-            profile.is_current=1;
+            profile.is_current = 1;
 
             AYCommand cmd = facades.get("LoginFacade").cmds.get("UpdateLocalProfile");
             long result = cmd.excute(profile);
-            if (result>0){
-
+            if (result > 0) {
                 ToastUtils.showShortToast("修改成功!");
-                startActivity(new Intent(PhotoChangeActivity.this, AYHomeActivity.class));
+                Intent intent = new Intent(PhotoChangeActivity.this, AYHomeActivity.class);
+                intent.putExtra("img_uuid",uiBean.screen_photo);
+                startActivity(intent);
                 AYApplication.finishAllActivity();
-            }else {
+            } else {
                 ToastUtils.showShortToast("系统异常(SQL)");
             }
         }
@@ -353,150 +348,33 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
-            SnackbarUtils.show(iv_head_photo,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        if (uiBean.code == 10010) {
+            SnackbarUtils.show(iv_head_photo, uiBean.message);
+        } else {
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
         }
-//        ToastUtils.showShortToast("修改失败!");
     }
 
-    private void senDataToServer() {
+    private void senDataToServer(UpLoadFileUiBean uiBean) {
         LogUtils.d("PhotoChangeActivity senDataToServer");
 
         String json;
         try {
-            if (isFromNameInput){
-                json="{\"token\":\""+BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"},\"profile\":{\"screen_name\":\""+name+"\",\"screen_photo\":\""+ CalUtils.md5(BasePrefUtils.getUserId())+"\"}}";
-            }else {
-                json="{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + BasePrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + CalUtils.md5(BasePrefUtils.getUserId()) + "\"}}";
+            if (isFromNameInput) {
+                json = "{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + BasePrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + name + "\",\"screen_photo\":\"" + uiBean.img_uuid + "\"}}";
+            } else {
+                json = "{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + BasePrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + uiBean.img_uuid + "\"}}";
             }
             JSONObject object = new JSONObject(json);
             Map<String, Object> m1 = new HashMap<>();
             m1.put("login", "login");
             JSONObject login = new JSONObject(m1);
-            facades.get("LoginFacade").execute("UpdateProfile",object,login);
+            facades.get("LoginFacade").execute("UpdateProfile", object, login);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public Boolean downloadSuccess(JSONObject arg) {
-
-        Log.i(TAG, "send sms code result is " + arg.toString());
-
-        try {
-            int rid = arg.getInt("resource_id");
-            ImageView tmp = (ImageView) findViewById(rid);
-            String file_path = arg.getString("path");
-            Uri originalUri = Uri.fromFile(new File(file_path));
-            ContentResolver resolver = getContentResolver();
-            bm = MediaStore.Images.Media.getBitmap(resolver, originalUri);        //显得到bitmap图片
-            tmp.setImageBitmap(bm);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return true;
-    }
-
-    public Boolean downloadFailed(JSONObject arg) {
-        Log.i(TAG, "send sms code error is " + arg.toString());
-        return true;
-    }
-
-    protected void setOriginScreenPhoto() {
-        path = null;
-        bm = null;
-        isChangeScreenPhoto = false;
-        post_upload_uuid = null;
-
-        String screen_photo = p.getScreen_photo();
-
-        AYCommand cmd = (AYCommand) AYFactoryManager.
-                getInstance(this.getApplicationContext()).
-                queryInstance("command", "DownloadFile");
-
-        Map<String, Object> m = new HashMap<>();
-        m.put("file", screen_photo);
-        m.put("resource_id", R.id.iv_head_photo);
-        m.put("resource_index", 0);
-        JSONObject args = new JSONObject(m);
-        cmd.excute(args, this);
-    }
-
-    protected void setOriginScreenName() {
-        String screen_name = p.getScreen_name();
-
-        TextView tv = (TextView) findViewById(R.id.tv_screen_name);
-        tv.setText(screen_name);
-    }
-
-
-    protected void uploadUserScreenPhoto(String file_name) {
-        AYCommand cmd = (AYCommand) AYFactoryManager.
-                getInstance(null).
-                queryInstance("command", "uploadFile");
-
-        Map<String, Object> m = new HashMap<>();
-        m.put("file", file_name);
-        m.put("resource_id", R.id.iv_head_photo);
-        m.put("resource_index", 0);
-        JSONObject args = new JSONObject(m);
-        cmd.excute(args, this);
-    }
-
-    public Boolean uploadSuccess(JSONObject arg) {
-
-        Log.i(TAG, "send sms code result is " + arg.toString());
-
-        try {
-            post_upload_uuid = arg.getString("uuid");
-            Log.i(TAG, "upload uuid is " + post_upload_uuid);
-
-            /**
-             * 2. 如果修改照片修改用户Profile
-             */
-            String ori_photo = p.getScreen_photo();
-
-            if (!post_upload_uuid.equals(ori_photo)) {
-                AYFacade facade = this.facades.get("LoginFacade");
-                AYCommand cmd = facade.cmds.get("UpdateProfile");
-
-                Map<String, Object> m = new HashMap<>();
-                m.put("user_id", p.getUser_id());
-                m.put("auth_token", p.getAuth_token());
-                m.put("screen_photo", post_upload_uuid);
-                JSONObject args = new JSONObject(m);
-                cmd.excute(args);
-            } else {
-                loginSuccess();
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return true;
-    }
-
-    public Boolean uploadFailed(JSONObject arg) {
-        Log.i(TAG, "send sms code error is " + arg.toString());
-        return true;
-    }
-
-    protected void loginSuccess() {
-        /**
-         * 3. 登陆成功
-         */
-        Intent intent = new Intent(this, AYHomeActivity.class);
-        startActivity(intent);
-    }
 
     /**
      * 进入相机拍照获取图片
@@ -551,10 +429,10 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                     break;
                 case AppConstant.PICTURE_CUT:
                     try {
-                        bitmap =BitmapFactory.decodeFile(getExternalCacheDir()+"/crop_image.jpg");
+                        bitmap = BitmapFactory.decodeFile(getExternalCacheDir() + "/crop_image.jpg");
                         /*bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
                                 (outputUri));*/
-                        if (bitmap !=null) {
+                        if (bitmap != null) {
                             isChangeScreenPhoto = true;
                             LogUtils.d("xcx", "压缩前图片的大小" + (bitmap.getByteCount() / 1024)
                                     + "k宽度为" + bitmap.getWidth() + "高度为" + bitmap.getHeight());
@@ -586,17 +464,15 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         bm2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
                 bitmap.getHeight(), matrix, true);
 
-        LogUtils.d("xcx", "Matrix 压缩后图片的大小" + (bm2.getByteCount() / 1024 )
+        LogUtils.d("xcx", "Matrix 压缩后图片的大小" + (bm2.getByteCount() / 1024)
                 + "k 宽度为 " + bm2.getWidth() + ",高度为 " + bm2.getHeight());
 
 
+        bm1 = Bitmap.createBitmap(bm2.getWidth(), bm2.getHeight(), Bitmap.Config.RGB_565);
 
-        bm1 = Bitmap.createBitmap(bm2.getWidth(),bm2.getHeight(), Bitmap.Config.RGB_565);
 
-
-        LogUtils.d("xcx", "rgb 565 压缩后图片的大小" + (bm1.getByteCount() / 1024 )
+        LogUtils.d("xcx", "rgb 565 压缩后图片的大小" + (bm1.getByteCount() / 1024)
                 + "k 宽度为 " + bm1.getWidth() + ",高度为 " + bm1.getHeight());
-
 
 
         // First decode with inJustDecodeBounds=true to check dimensions
@@ -604,7 +480,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         Bitmap bm3 = null;
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeStream(getContentResolver().openInputStream
-                (outputUri),null,options);
+                (outputUri), null, options);
 
         // Calculate inSampleSize
         options.inSampleSize = calculateInSampleSize(options, 300, 300);
@@ -612,8 +488,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
 
-        bm3=BitmapFactory.decodeStream(getContentResolver().openInputStream
-                (outputUri),null,options);
+        bm3 = BitmapFactory.decodeStream(getContentResolver().openInputStream
+                (outputUri), null, options);
 
         LogUtils.d("xcx", "inSampleSize 压缩后图片的大小" + (bm3.getByteCount() / 1024)
                 + "k 宽度为 " + bm3.getWidth() + ",高度为 " + bm3.getHeight());
@@ -621,10 +497,9 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         iv_head_photo.setImageBitmap(bm3);
 
 
-
     }
 
-    public  int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -642,7 +517,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 inSampleSize *= 2;
             }
         }
-        LogUtils.d("inSampleSize "+inSampleSize);
+        LogUtils.d("inSampleSize " + inSampleSize);
         return inSampleSize;
     }
 
@@ -737,6 +612,15 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        OSSUtils.destoryOSS();
+    }
+
+    @Override
+    public String getClassTag() {
+        return TAG;
+    }
+
+    @Override
+    protected void bindingFragments() {
+
     }
 }

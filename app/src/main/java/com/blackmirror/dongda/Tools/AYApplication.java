@@ -14,9 +14,7 @@ import com.facebook.common.memory.NoOpMemoryTrimmableRegistry;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
-import com.facebook.stetho.Stetho;
 import com.mob.MobSDK;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,15 +36,15 @@ public class AYApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        LeakCanary.install(this);*/
         me=this;
         appContext =this.getApplicationContext();
-        Stetho.initializeWithDefaults(this);
+//        Stetho.initializeWithDefaults(this);
         initFresco();
 //        initWeChat();
         initShareSDK();
