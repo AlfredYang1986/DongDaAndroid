@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -214,6 +215,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         tv_dec_more.setOnClickListener(this);
         iv_detail_like.setOnClickListener(this);
         iv_detail_tb_like.setOnClickListener(this);
+        sv_teacher_bg.setOnClickListener(this);
         abl_root.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
@@ -275,6 +277,11 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                 if (uiBean != null && uiBean.isSuccess) {
                     sendLikeData();
                 }
+                break;
+            case R.id.sv_teacher_bg:
+                Intent intent = new Intent(ServiceDetailInfoActivity.this, ServiceProfileActivity
+                        .class);
+                startActivity(intent);
                 break;
         }
     }

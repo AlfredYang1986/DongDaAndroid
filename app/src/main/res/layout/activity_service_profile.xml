@@ -14,17 +14,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:background="@drawable/icon_back_black"
+        android:background="@drawable/details_icon_back"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
         <com.facebook.drawee.view.SimpleDraweeView
-            android:background="@drawable/home_cover_00"
+            app:placeholderImage="@drawable/home_cover_00"
+            app:placeholderImageScaleType="focusCrop"
             android:id="@+id/sv_service_photo"
             app:actualImageScaleType="focusCrop"
             android:layout_width="match_parent"
             android:layout_height="250dp"/>
 
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:layout_constraintTop_toTopOf="@id/sv_service_photo"
+        app:layout_constraintBottom_toBottomOf="@id/sv_service_photo"
+        app:layout_constraintLeft_toLeftOf="@id/sv_service_photo"
+        app:layout_constraintRight_toRightOf="@id/sv_service_photo"
+        app:roundAsCircle="true"
+        app:placeholderImage="@drawable/home_cover_00"
+        app:placeholderImageScaleType="focusCrop"
+        android:id="@+id/sv_teacher_bg_photo"
+        app:actualImageScaleType="focusCrop"
+        android:layout_width="72dp"
+        android:layout_height="72dp"/>
 
     <TextView
         app:layout_constraintTop_toTopOf="@id/sv_service_photo"
@@ -75,6 +89,7 @@
         />
 
     <TextView
+        android:maxLines="100"
         android:inputType="textMultiLine"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -84,7 +99,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:layout_width="0dp"
-        android:layout_height="63dp"
+        android:layout_height="wrap_content"
         android:text="德古拉看过拉飞机啊，大咖喱块广联达，得分积分。绿伪，但大连开发骄傲了落地，大连会计法拉克打发发达的打法非法萨芬。"
         android:textColor="#FF737373"
         android:textSize="15sp"

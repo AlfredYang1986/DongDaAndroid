@@ -31,6 +31,7 @@ import com.blackmirror.dongda.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.activity.MyLikeActivity;
 import com.blackmirror.dongda.activity.NearServiceActivity;
 import com.blackmirror.dongda.activity.ServiceDetailInfoActivity;
+import com.blackmirror.dongda.activity.UserAboutMeActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
@@ -202,6 +203,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         tv_home_science_more.setOnClickListener(this);
         iv_home_location.setOnClickListener(this);
         iv_home_like.setOnClickListener(this);
+        sv_head_pic.setOnClickListener(this);
 
         sl_home_refresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -461,6 +463,9 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 break;
             case R.id.iv_home_like:
                 startActivityForResult(new Intent(AYHomeActivity.this, MyLikeActivity.class), AppConstant.MY_LIKE_REQUEST_CODE);
+                break;
+            case R.id.sv_head_pic:
+                startActivity(new Intent(AYHomeActivity.this, UserAboutMeActivity.class));
                 break;
         }
     }

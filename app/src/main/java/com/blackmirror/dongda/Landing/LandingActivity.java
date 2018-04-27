@@ -104,7 +104,7 @@ public class LandingActivity extends AYActivity {
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
+                Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
                 startActivity(intent);
                 /*OSSUtils.initOSS(LandingActivity.this,BasePrefUtils.getAccesskeyId(),BasePrefUtils.getAccesskeySecret(),BasePrefUtils.getSecurityToken());
                 facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());*/

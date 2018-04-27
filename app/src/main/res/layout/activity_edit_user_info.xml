@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:contentInsetStart="0dp"
-            app:layout_scrollFlags="scroll|enterAlways"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
@@ -75,8 +74,9 @@
         android:layout_height="match_parent">
 
         <com.facebook.drawee.view.SimpleDraweeView
-             android:id="@+id/sv_user_photo"
-            android:background="@drawable/home_cover_00"
+            app:placeholderImageScaleType="focusCrop"
+            android:id="@+id/sv_user_photo"
+             app:placeholderImage="@drawable/home_cover_00"
             app:actualImageScaleType="focusCrop"
             android:layout_width="match_parent"
             android:layout_height="250dp"/>
