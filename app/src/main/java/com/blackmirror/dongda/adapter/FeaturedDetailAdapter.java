@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OSSUtils;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.utils.OSSUtils;
+import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;

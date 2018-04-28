@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.utils.OtherUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
