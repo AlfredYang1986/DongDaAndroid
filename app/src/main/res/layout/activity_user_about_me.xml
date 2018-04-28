@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:background="@drawable/icon_back_black"
+        android:src="@drawable/details_icon_back"
         app:layout_constraintLeft_toLeftOf="@id/sv_user_about_photo"
         app:layout_constraintTop_toTopOf="@id/sv_user_about_photo"/>
 
@@ -26,6 +26,7 @@
         android:layout_height="250dp"/>
 
     <TextView
+         android:id="@+id/tv_user_logout"
         app:layout_constraintTop_toTopOf="@id/sv_user_about_photo"
         app:layout_constraintRight_toRightOf="@id/sv_user_about_photo"
         android:layout_marginTop="33dp"
