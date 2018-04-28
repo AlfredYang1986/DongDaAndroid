@@ -86,11 +86,6 @@
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 
     <command
-        short="AYEditUserInfoCmd"
-        name="com.blackmirror.dongda.facade.userfacade.usercmd.AYEditUserInfoCmd"
-        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
-
-    <command
         short="AYGetDetailInfoCmd"
         name="com.blackmirror.dongda.facade.detailfacade.detailcmd.AYGetDetailInfoCmd"
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
@@ -103,5 +98,15 @@
     <command
         short="AYUploadFileBySDKCommand"
         name="com.blackmirror.dongda.facade.userfacade.usercmd.AYUploadFileBySDKCommand"
+        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+        short="AYEditUserInfoCmd"
+        name="com.blackmirror.dongda.facade.userfacade.usercmd.AYEditUserInfoCmd"
+        factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
+
+    <command
+        short="AYQueryUserInfoCmd"
+        name="com.blackmirror.dongda.facade.userfacade.usercmd.AYQueryUserInfoCmd"
         factory="com.blackmirror.dongda.factory.commandFactory.AYCmdFactory" />
 </commands>

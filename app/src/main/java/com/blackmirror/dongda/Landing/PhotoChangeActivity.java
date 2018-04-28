@@ -31,8 +31,8 @@ import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
@@ -129,7 +129,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             case R.id.btn_enter_home:
                 if (isChangeScreenPhoto) {
                     showProcessDialog("正在上传头像...");
-                    if (OtherUtils.isNeedRefreshToken(BasePrefUtils.getExpiration())) {
+                    if (OtherUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
                         getImageToken();
                     } else {
                         uploadImage();
@@ -140,6 +140,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 }
                 break;
             case R.id.btn_enter_cancel:
+                AYApplication.removeActivity(this);
                 finish();
                 break;
         }
@@ -149,7 +150,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         try {
             AYFacade facade = facades.get("LoginFacade");
             JSONObject object = new JSONObject();
-            object.put("token", BasePrefUtils.getAuthToken());
+            object.put("token", AYPrefUtils.getAuthToken());
 
             Map<String, Object> m1 = new HashMap<>();
             m1.put("login", "login");
@@ -253,10 +254,10 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
         ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
         if (bean.isSuccess) {
-            BasePrefUtils.setAccesskeyId(bean.accessKeyId);
-            BasePrefUtils.setSecurityToken(bean.SecurityToken);
-            BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
-            BasePrefUtils.setExpiration(bean.Expiration);
+            AYPrefUtils.setAccesskeyId(bean.accessKeyId);
+            AYPrefUtils.setSecurityToken(bean.SecurityToken);
+            AYPrefUtils.setAccesskeySecret(bean.accessKeySecret);
+            AYPrefUtils.setExpiration(bean.Expiration);
             uploadImage();
         } else {
             ToastUtils.showShortToast("数据异常("+bean.message+"," + bean.code + ")");
@@ -361,9 +362,9 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         String json;
         try {
             if (isFromNameInput) {
-                json = "{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + BasePrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + name + "\",\"screen_photo\":\"" + uiBean.img_uuid + "\"}}";
+                json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + name + "\",\"screen_photo\":\"" + uiBean.img_uuid + "\"}}";
             } else {
-                json = "{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + BasePrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + uiBean.img_uuid + "\"}}";
+                json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + uiBean.img_uuid + "\"}}";
             }
             JSONObject object = new JSONObject(json);
             Map<String, Object> m1 = new HashMap<>();
@@ -581,8 +582,8 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         intent.putExtra("aspectY", 1);
         intent.putExtra("crop", "true");//可裁剪
         // 裁剪后输出图片的尺寸大小
-        intent.putExtra("outputX", 300);
-        intent.putExtra("outputY", 300);
+        intent.putExtra("outputX", 800);
+        intent.putExtra("outputY", 800);
         intent.putExtra("scale", true);//支持缩放
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
@@ -612,6 +613,12 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        AYApplication.removeActivity(this);
+        super.onBackPressed();
     }
 
     @Override

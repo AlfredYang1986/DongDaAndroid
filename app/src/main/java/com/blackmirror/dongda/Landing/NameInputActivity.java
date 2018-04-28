@@ -12,7 +12,7 @@ import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
@@ -42,6 +42,7 @@ public class NameInputActivity extends AYActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name_input);
+        AYApplication.addActivity(this);
         OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
         has_photo = getIntent().getBooleanExtra("has_photo", true);
         initView();
@@ -80,7 +81,7 @@ public class NameInputActivity extends AYActivity {
     private void changeName() {
         try {
             showProcessDialog();
-            String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"},\"profile\":{\"screen_name\":\""+name+"\"}}";
+            String json="{\"token\":\""+ AYPrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+ AYPrefUtils.getUserId()+"\"},\"profile\":{\"screen_name\":\""+name+"\"}}";
             JSONObject object = new JSONObject(json);
             Map<String, Object> m1 = new HashMap<>();
             m1.put("login", "login");
@@ -148,6 +149,12 @@ public class NameInputActivity extends AYActivity {
     @Override
     public String getClassTag() {
         return TAG;
+    }
+
+    @Override
+    public void onBackPressed() {
+        AYApplication.removeActivity(this);
+        super.onBackPressed();
     }
 
     @Override

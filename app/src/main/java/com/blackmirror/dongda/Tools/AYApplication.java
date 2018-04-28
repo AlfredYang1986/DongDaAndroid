@@ -15,6 +15,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.mob.MobSDK;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,26 +28,21 @@ public class AYApplication extends Application {
 
     public static Context appContext;
     private static Application me;
-    public static boolean isLoginSuccess;
-
-
     public static List<AppCompatActivity> activityList;
-    //    public static IWXAPI weChatApi;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        /*if (LeakCanary.isInAnalyzerProcess(this)) {
+        if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);*/
+        LeakCanary.install(this);
         me=this;
         appContext =this.getApplicationContext();
 //        Stetho.initializeWithDefaults(this);
         initFresco();
-//        initWeChat();
         initShareSDK();
         activityList= new ArrayList<>();
         initAMap();
@@ -65,6 +61,19 @@ public class AYApplication extends Application {
         }
     }
 
+    public static void removeActivity(AppCompatActivity activity){
+        if (activityList.contains(activity)){
+            activityList.remove(activity);
+        }
+    }
+
+    public static void finishActivity(AppCompatActivity activity){
+        if (activityList.contains(activity)){
+            activityList.remove(activity);
+            activity.finish();
+        }
+    }
+
     public static void finishAllActivity(){
         for (int i = 0; i < activityList.size(); i++) {
             if (activityList.get(i)!=null) {
@@ -74,22 +83,9 @@ public class AYApplication extends Application {
         activityList.clear();
     }
 
-
-
     private void initShareSDK() {
         MobSDK.init(this);
     }
-
-    /**
-     * 初始化微信登录相关参数
-     */
-    private void initWeChat() {
-        /*//第二个参数是指你应用在微信开放平台上的AppID
-        weChatApi = WXAPIFactory.createWXAPI(this, AppConstant.WECHAT_APP_ID, false);
-        // 将该app注册到微信
-        weChatApi.registerApp(AppConstant.WECHAT_APP_ID);*/
-    }
-
 
     /**
      * 初始化Fresco相关参数
@@ -134,46 +130,11 @@ public class AYApplication extends Application {
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
         // Determine which lifecycle or system event was raised.
-        switch (level) {
 
-            case ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN://应用不可见 进入后台等
-                if (isLoginSuccess) {
-                    Fresco.getImagePipeline().clearMemoryCaches();
-                }
-                break;
-
-            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_MODERATE:
-            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_LOW:
-            case ComponentCallbacks2.TRIM_MEMORY_RUNNING_CRITICAL:
-                Fresco.getImagePipeline().clearMemoryCaches();
-
-
-                break;
-
-            case ComponentCallbacks2.TRIM_MEMORY_BACKGROUND:
-//            case ComponentCallbacks2.TRIM_MEMORY_MODERATE:
-//            case ComponentCallbacks2.TRIM_MEMORY_COMPLETE:
-
-
-                break;
-
-            default:
-                /*
-                  Release any non-critical data structures.
-
-                  The app received an unrecognized memory level value
-                  from the system. Treat this as a generic low-memory message.
-                */
-                break;
+        if (level >=ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN){
+            Fresco.getImagePipeline().clearMemoryCaches();
         }
         LogUtils.d("onTrimMemory level="+level);
-        /*try {
-            if (level >= ComponentCallbacks2.TRIM_MEMORY_UI_HIDDEN) { // 60
-                ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();
-            }
-        } catch (Exception e) {
-
-        }*/
     }
 
 
@@ -181,7 +142,6 @@ public class AYApplication extends Application {
     public void onLowMemory() {
         super.onLowMemory();
         LogUtils.d("onLowMemory ");
-
         try {
             ImagePipelineFactory.getInstance().getImagePipeline().clearMemoryCaches();
         } catch (Exception e) {
@@ -197,8 +157,5 @@ public class AYApplication extends Application {
         return me;
     }
 
-    public static void getImgTokenByRepeat(){
-
-    }
 
 }

@@ -67,7 +67,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void accept(Long aLong) throws Exception {
                         unSubscribe();
-//                        startActivity(new Intent(SplashActivity.this, LandingActivity.class));
+//                        startActivityForResult(new Intent(SplashActivity.this, LandingActivity.class));
                         startActivity(new Intent(SplashActivity.this, LandingActivity.class));
                         finish();
                     }

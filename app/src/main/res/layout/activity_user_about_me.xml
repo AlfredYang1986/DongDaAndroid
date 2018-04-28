@@ -8,6 +8,13 @@
     tools:context="com.blackmirror.dongda.activity.EditUserInfoActivity">
 
 
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_user_about_photo"
+        app:actualImageScaleType="focusCrop"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"/>
+
     <ImageView
         android:layout_marginTop="32dp"
         android:id="@+id/iv_service_back"
@@ -17,13 +24,6 @@
         android:src="@drawable/details_icon_back"
         app:layout_constraintLeft_toLeftOf="@id/sv_user_about_photo"
         app:layout_constraintTop_toTopOf="@id/sv_user_about_photo"/>
-
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:background="@drawable/home_cover_00"
-        android:id="@+id/sv_user_about_photo"
-        app:actualImageScaleType="focusCrop"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"/>
 
     <TextView
          android:id="@+id/tv_user_logout"
@@ -85,7 +85,6 @@
         android:layout_marginTop="8dp"
         android:layout_width="0dp"
         android:layout_height="63dp"
-        android:text="德古拉看过拉飞机啊，大咖喱块广联达，得分积分。绿伪，但大连开发骄傲了落地，大连会计法拉克打发发达的打法非法萨芬。"
         android:textColor="#FF737373"
         android:textSize="15sp"
         />

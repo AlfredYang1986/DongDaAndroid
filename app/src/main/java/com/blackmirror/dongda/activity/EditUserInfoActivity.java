@@ -17,27 +17,55 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.Tools.SnackbarUtils;
+import com.blackmirror.dongda.Tools.ToastUtils;
+import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.controllers.AYActivity;
+import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
+import com.blackmirror.dongda.model.serverbean.UpLoadFileServerBean;
+import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
+import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
+import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
+import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.common.ResizeOptions;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 
-public class EditUserInfoActivity extends AppCompatActivity implements View.OnClickListener {
+public class EditUserInfoActivity extends AYActivity implements View.OnClickListener {
 
+    private CoordinatorLayout ctl_edit_root;
     private ImageView iv_edit_user_back;
     private TextView tv_save_user_info;
     private ImageView iv_take_photo;
@@ -49,13 +77,28 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
     private Bitmap bitmap;
     private boolean isChangeScreenPhoto;
     private String imagePath;
-
+    private String screen_photo;
+    private String screen_name;
+    private String description;
+    private FrameLayout tl_service_name;
+    private FrameLayout tl_service_dec;
+    private TextInputEditText tet_user_name;
+    private TextInputEditText tet_user_dec;
+    private String input_name;
+    private String input_dec;
+    private Uri scaleUri;
+    private boolean needsRefresh;
+    private String img_url;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_user_info);
+        AYApplication.addActivity(this);
+        screen_photo = getIntent().getStringExtra("screen_photo");
+        screen_name = getIntent().getStringExtra("screen_name");
+        description = getIntent().getStringExtra("description");
         OtherUtils.setStatusBarColor(this);
         initView();
         initData();
@@ -63,16 +106,23 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initView() {
+        ctl_edit_root = findViewById(R.id.ctl_edit_root);
         iv_edit_user_back = findViewById(R.id.iv_edit_user_back);
         tv_save_user_info = findViewById(R.id.tv_save_user_info);
         iv_take_photo = findViewById(R.id.iv_take_photo);
         sv_user_photo = findViewById(R.id.sv_user_photo);
         tv_user_about_name = findViewById(R.id.tv_user_about_name);
         tv_user_about_me = findViewById(R.id.tv_user_about_me);
+        tl_service_name = findViewById(R.id.tl_service_name);
+        tl_service_dec = findViewById(R.id.tl_service_dec);
+        tet_user_name = findViewById(R.id.tet_user_name);
+        tet_user_dec = findViewById(R.id.tet_user_dec);
     }
 
     private void initData() {
-
+        sv_user_photo.setImageURI(OSSUtils.getSignedUrl(screen_photo));
+        tet_user_name.setText(screen_name);
+        tet_user_dec.setText(description);
     }
 
     private void initListener() {
@@ -84,15 +134,145 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()){
+        switch (view.getId()) {
             case R.id.iv_edit_user_back:
-                finish();
+                setResult(needsRefresh ? RESULT_OK : RESULT_CANCELED,getIntent().putExtra("img_url",img_url));
+                AYApplication.finishActivity(this);
                 break;
             case R.id.tv_save_user_info:
+                updateUserInfo();
                 break;
             case R.id.iv_take_photo:
                 checkCameraPermission();
                 break;
+        }
+    }
+
+    private void updateUserInfo() {
+        input_name = tet_user_name.getText().toString().trim();
+        input_dec = tet_user_dec.getText().toString().trim();
+        if (TextUtils.isEmpty(input_name)) {
+            ToastUtils.showShortToast("昵称不能为空!");
+            return;
+        }
+        if (TextUtils.isEmpty(input_dec)) {
+            ToastUtils.showShortToast("关于我不能为空!");
+            return;
+        }
+        upload(input_name, input_dec);
+    }
+
+    private void upload(String name, String dec) {
+        showProcessDialog("正在修改信息...");
+        if (isChangeScreenPhoto) {
+            uploadImage();
+        } else {
+            uploadWithoutImage();
+        }
+    }
+
+    public void uploadImage() {
+        facades.get("UserFacade").execute("AYUploadFileBySDKCommand", new JSONObject());
+    }
+
+    private void uploadWithoutImage() {
+        senDataToServer(null, true);
+    }
+
+    /**
+     * 上传文件回调
+     *
+     * @param args
+     */
+    public void AYUploadFileBySDKCommandSuccess(JSONObject args) {
+        //        ToastUtils.showShortToast("上传成功!");
+        LogUtils.d("EditUserInfoActivity AYUploadFileBySDKCommandSuccess");
+
+        UpLoadFileServerBean serverBean = JSON.parseObject(args.toString(), UpLoadFileServerBean.class);
+        UpLoadFileUiBean uiBean = new UpLoadFileUiBean(serverBean);
+        if (uiBean.isSuccess) {
+            senDataToServer(uiBean, false);
+        } else {
+            closeProcessDialog();
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
+        }
+    }
+
+    public void AYUploadFileBySDKCommandFailed(JSONObject args) {
+        LogUtils.d("EditUserInfoActivity AYUploadFileBySDKCommandFailed");
+
+        closeProcessDialog();
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code == 10010) {
+            SnackbarUtils.show(ctl_edit_root, uiBean.message);
+        } else {
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
+        }
+
+    }
+
+    private void senDataToServer(UpLoadFileUiBean uiBean, boolean notChangePhoto) {
+        String json;
+        if (notChangePhoto) {
+            json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + input_name + "\",\"description\":\"" + input_dec + "\"}}";
+        } else {
+            json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + input_name + "\",\"screen_photo\":\"" + uiBean.img_uuid + "\",\"description\":\"" + input_dec + "\"}}";
+        }
+        try {
+            JSONObject object = new JSONObject(json);
+            facades.get("UserFacade").execute("UpdateProfile", object);
+        } catch (JSONException e) {
+
+        }
+    }
+
+    /**
+     * 修改用户信息回调
+     *
+     * @param args
+     * @return
+     */
+    public void AYUpdateProfileCommandSuccess(JSONObject args) {
+        LogUtils.d("EditUserInfoActivity AYUpdateProfileCommandSuccess");
+
+        UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
+        UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
+        closeProcessDialog();
+        if (uiBean.isSuccess) {
+            AYDaoUserProfile profile = new AYDaoUserProfile();
+            profile.auth_token = uiBean.token;
+            profile.user_id = uiBean.user_id;
+            profile.screen_name = uiBean.screen_name;
+            profile.screen_photo = uiBean.screen_photo;
+            profile.is_current = 1;
+            img_url = uiBean.screen_photo;
+            AYCommand cmd = facades.get("UserFacade").cmds.get("UpdateLocalProfile");
+            long result = cmd.excute(profile);
+            needsRefresh = true;
+            if (result > 0) {
+                ToastUtils.showShortToast("修改成功!");
+                setResult(needsRefresh ? RESULT_OK : RESULT_CANCELED,getIntent().putExtra("img_url",img_url));
+                AYApplication.finishActivity(this);
+            } else {
+                ToastUtils.showShortToast("系统异常(SQL)");
+            }
+        } else {
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
+        }
+
+    }
+
+    public void AYUpdateProfileCommandFailed(JSONObject args) {
+        LogUtils.d("PhotoChangeActivity AYUpdateProfileCommandFailed");
+
+        closeProcessDialog();
+        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
+        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
+        if (uiBean.code == 10010) {
+            SnackbarUtils.show(ctl_edit_root, uiBean.message);
+        } else {
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
         }
     }
 
@@ -178,7 +358,7 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
     private void getPicFromCamera() {
         // 创建File对象，用于存储拍照后的图片
         LogUtils.d(getExternalCacheDir() + "/takePic");
-        File outputImage = new File(getExternalCacheDir(), "edit_output_image.jpg");
+        File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
         try {
             if (outputImage.exists()) {
                 outputImage.delete();
@@ -215,8 +395,8 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
                     }
                     break;
                 case AppConstant.PICTURE_CUT:
-                    sv_user_photo.setImageURI(outputUri);
-                    LogUtils.d("uri "+outputUri);
+                    //                    sv_user_photo.setImageURI(outputUri);
+                    displayImage(outputUri, sv_user_photo);
                     try {
                         bitmap = BitmapFactory.decodeFile(getExternalCacheDir() + "/crop_image.jpg");
                         /*bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
@@ -226,7 +406,6 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
                             LogUtils.d("xcx", "压缩前图片的大小" + (bitmap.getByteCount() / 1024)
                                     + "k宽度为" + bitmap.getWidth() + "高度为" + bitmap.getHeight());
                             //                        scaleBitmap(bitmap,outputUri);
-
 
                         }
                     } catch (Exception e) {
@@ -281,7 +460,7 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
      */
     private void cropPhoto(Uri uri) {
         // 创建File对象，用于存储裁剪后的图片，避免更改原图
-        File file = new File(getExternalCacheDir(), "edit_crop_image.jpg");
+        File file = new File(getExternalCacheDir(), "crop_image.jpg");
         try {
             if (file.exists()) {
                 file.delete();
@@ -302,8 +481,8 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
         intent.putExtra("aspectY", 1);
         intent.putExtra("crop", "true");//可裁剪
         // 裁剪后输出图片的尺寸大小
-        intent.putExtra("outputX", 500);
-        intent.putExtra("outputY", 500);
+        intent.putExtra("outputX", 800);
+        intent.putExtra("outputY", 800);
         intent.putExtra("scale", true);//支持缩放
         intent.putExtra("return-data", false);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputUri);
@@ -325,5 +504,36 @@ public class EditUserInfoActivity extends AppCompatActivity implements View.OnCl
         return path;
     }
 
+    public void displayImage(Uri uri, SimpleDraweeView draweeView) {
 
+        ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
+                .setResizeOptions(new ResizeOptions(OtherUtils.getScreenWidthPx(), OtherUtils.dp2px(250)))
+                .build();
+
+        DraweeController controller = Fresco.newDraweeControllerBuilder()
+                .setImageRequest(request)
+                .setOldController(draweeView.getController())
+                .build();
+        draweeView.setController(controller);
+    }
+
+    public static void startActivityForResult(AppCompatActivity activity, String screen_photo, String screen_name, String description, int requestCode) {
+        Intent intent = new Intent(activity, EditUserInfoActivity.class);
+        intent.putExtra("screen_photo", screen_photo);
+        intent.putExtra("screen_name", screen_name);
+        intent.putExtra("description", description);
+        activity.startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    protected void bindingFragments() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(needsRefresh ? RESULT_OK : RESULT_CANCELED,getIntent().putExtra("img_url",img_url));
+        AYApplication.removeActivity(this);
+        super.onBackPressed();
+    }
 }

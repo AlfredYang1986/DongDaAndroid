@@ -8,19 +8,16 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
-import com.blackmirror.dongda.Tools.NetUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
@@ -38,39 +35,23 @@ import com.blackmirror.dongda.adapter.HomeCareAdapter;
 import com.blackmirror.dongda.adapter.HomeScienceAdapter;
 import com.blackmirror.dongda.adapter.HomeSportAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration;
-import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.mob.MobSDK;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by alfredyang on 29/6/17.
@@ -78,12 +59,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class AYHomeActivity extends AYActivity implements View.OnClickListener {
 
-    final private String TAG = "AYHomeActivity";
-    private AYHomeListServAdapter serviceListAdapter;
-    private JSONArray serviceData;
-
-    private long skipedCount;
-    private long timeSpan;
+    private final String TAG = "AYHomeActivity";
     private CoordinatorLayout ctl_root;
     private RecyclerView rv_featured_theme;
     private RecyclerView rv_home_care;
@@ -105,35 +81,19 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     private HomeInfoServerBean bean;
     private int clickLikePos;
     private int clickAdapter = 0;//1 art 2 sport 3 science
-    private Disposable disposable;
-    private Disposable timeDisposable;
-    private int repeatTime;
-    private boolean isFirstLoad;
-    private boolean isFirstSetRepeat = true;
     private String img_uuid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_home);
-
-        skipedCount = 0;
-        timeSpan = new Date().getTime();
         img_uuid=getIntent().getStringExtra("img_uuid");
-        AYApplication.finishAllActivity();
-
-        serviceListAdapter = new AYHomeListServAdapter(this, serviceData);
-        ((AYHomeListServFragment) this.fragments.get("frag_homelist_serv")).setListAdapter
-                (serviceListAdapter);
+        AYApplication.addActivity(this);
         initView();
         initData();
         initListener();
-        MobSDK.init(this);
     }
-
 
     private void initView() {
         ctl_root = findViewById(R.id.ctl_root);
@@ -154,39 +114,22 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
 
     private void initData() {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            iv_home_location.setElevation(OtherUtils.dp2px(10));
+            iv_home_location.setElevation(OtherUtils.dp2px(6));
         }
-        isFirstLoad = true;
         showProcessDialog();
         //精选主题
         initSubject();
-
-       /* getImgToken();
-        refreshToken();*/
         initHomeData();
-
-    }
-
-    private void getImgToken() {
-        AYFacade facade = facades.get("QueryServiceFacade");
-        try {
-            JSONObject object = new JSONObject();
-            object.put("token", BasePrefUtils.getAuthToken());
-            facade.execute("getImgToken", object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initHomeData() {
         //        showProcessDialog();
-
         try {
             String url = OSSUtils.getSignedUrl(img_uuid);
             LogUtils.d("pic url " + url);
             sv_head_pic.setImageURI(url);
             AYFacade facade = facades.get("QueryServiceFacade");
-            String json = "{ \"token\": \"" + BasePrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + BasePrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
+            String json = "{ \"token\": \"" + AYPrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + AYPrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
             JSONObject root = new JSONObject(json);
             facade.execute("SearchService", root);
 
@@ -260,7 +203,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 @Override
                 public void onItemCareClick(View view, int position, String service_id) {
 
-                    //                    startActivity(new Intent(AYHomeActivity.this, CareListActivity.class));
+                    //                    startActivityForResult(new Intent(AYHomeActivity.this, CareListActivity.class));
                     Intent intent = new Intent(AYHomeActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
                     startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE);
@@ -368,8 +311,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     }
 
     private void sendLikeData(HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
-        String t = BasePrefUtils.getAuthToken();
-        String u = BasePrefUtils.getUserId();
+        String t = AYPrefUtils.getAuthToken();
+        String u = AYPrefUtils.getUserId();
         showProcessDialog();
         if (bean.is_collected) {//已收藏 点击取消
             String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
@@ -390,31 +333,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 closeProcessDialog();
             }
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        /*Method method = context.getClass().getMethod(name, JSONObject.class);
-        method.invoke(context, args);*/
-
-        /*((AYNavBarFragment)this.fragments.get("frag_navbar")).setTitleTextInvisible();
-        ((AYNavBarFragment)this.fragments.get("frag_navbar")).setLeftBtnTextWithString("北京市");
-        ((AYNavBarFragment)this.fragments.get("frag_navbar")).setRightBtnImageWithImageId(R
-        .drawable.home_icon_mapfilter);
-        ((AYTabBarFragment)this.fragments.get("frag_tabbar")).setTabFocusOptionWithIndex(0);*/
-    }
-
-    @Override
-    protected void bindingFragments() {
-
-       /* FragmentTransaction task = mFragmentManage.beginTransaction();
-        task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_navbar"));
-        task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_tabbar"));
-        task.add(R.id.activity_home, (AYFragment)this.fragments.get("frag_homeseg"));
-        task.add(R.id.activity_home, (AYListFragment)this.fragments.get("frag_homelist_serv"));
-        task.commit();*/
     }
 
     @Override
@@ -465,86 +383,44 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 startActivityForResult(new Intent(AYHomeActivity.this, MyLikeActivity.class), AppConstant.MY_LIKE_REQUEST_CODE);
                 break;
             case R.id.sv_head_pic:
-                startActivity(new Intent(AYHomeActivity.this, UserAboutMeActivity.class));
+                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
                 break;
         }
     }
 
-    private void searchServiceRemote() {
-
-        AYFacade f_login = (AYFacade) AYFactoryManager.getInstance(this).queryInstance("facade",
-                "DongdaCommanFacade");
-        AYCommand cmd_profile = f_login.cmds.get("QueryCurrentLoginUser");
-        AYDaoUserProfile user = cmd_profile.excute();
-
-        AYFacade facade = facades.get("QueryServiceFacade");
-        AYCommand cmd = facade.cmds.get("SearchService");
-        Map<String, Object> search_args = new HashMap<>();
-        search_args.put("user_id", user.getUser_id());
-        search_args.put("auth_token", user.getAuth_token());
-        search_args.put("skip", skipedCount);
-        search_args.put("date", timeSpan);
-        JSONObject args = new JSONObject(search_args);
-        cmd.excute(args);
-    }
-
     /**
-     * 获取图片token 用于生成url签名
-     *
+     * 加载首页成功回调
      * @param args
+     * @return
      */
-    public void AYGetImgTokenCommandSuccess(JSONObject args) {
-        //        sl_home_refresh.setEnabled(true);
-        ImgTokenServerBean serverBean = JSON.parseObject(args.toString(), ImgTokenServerBean.class);
-        ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
-        BasePrefUtils.setAccesskeyId(bean.accessKeyId);
-        BasePrefUtils.setSecurityToken(bean.SecurityToken);
-        BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
-        BasePrefUtils.setExpiration(bean.Expiration);
-        //        GetOSSClient.INSTANCE().initOSS(bean.accessKeyId,bean.accessKeySecret,bean.SecurityToken);
-        if (isFirstLoad) {
-            isFirstLoad = false;
-            initHomeData();
+    public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
+        closeProcessDialog();
+        sl_home_refresh.setRefreshing(false);
+        bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
+        if (bean != null && "ok".equals(bean.status)) {
+            initCare(bean.result.homepage_services.get(0));
+            initArt(bean.result.homepage_services.get(1));
+            initSport(bean.result.homepage_services.get(2));
+            initScience(bean.result.homepage_services.get(3));
+        } else if (bean != null && bean.error != null) {
+            ToastUtils.showShortToast(bean.error.message);
         }
-        unSubscribeTimer();
-        repeatTime = 0;
+        return true;
     }
 
-    public void AYGetImgTokenCommandFailed(JSONObject args) {
-        //        sl_home_refresh.setEnabled(false);
-        if (isFirstLoad) {
-            isFirstLoad = false;
-            initHomeData();
-        }
+    public Boolean AYSearchServiceCommandFailed(JSONObject args) {
+        closeProcessDialog();
+        sl_home_refresh.setRefreshing(false);
+        LogUtils.d("AYSearchServiceCommandFailed " + args.toString());
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
         if (uiBean.code == 10010) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
-            if (repeatTime < 3 && NetUtils.isNetworkAvailable()) {
-                tryRepeatGetImgToken();
-            }
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
         }
-    }
 
-    private void tryRepeatGetImgToken() {
-        int m = (repeatTime + 1) * 5;
-        timeDisposable = Observable.timer(m, TimeUnit.SECONDS, Schedulers.io())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        repeatTime++;
-                        unSubscribeTimer();
-                        getImgToken();
-                    }
-                });
-    }
-
-    private void unSubscribeTimer() {
-        if (timeDisposable != null && !timeDisposable.isDisposed()) {
-            timeDisposable.dispose();
-            timeDisposable = null;
-        }
+        return true;
     }
 
     /**
@@ -614,136 +490,12 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
 
     }
 
-    private void refreshToken() {
-        disposable = Observable.interval(OtherUtils.getInitRefreshTime(30 * 60), OtherUtils.getExpirateTime(30 * 60),
-                TimeUnit.SECONDS, Schedulers.io())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        if (!isViewValid()) {
-                            return;
-                        }
-                        getImgToken();
-                    }
-                });
 
-    }
-
-    public void didNavLeftBtnClickNotify(JSONObject args) {
-        Log.d(TAG, "didNavLeftBtnClickNotify: in Activity");
-
-    }
-
-    public void didNavRightBtnClickNotify(JSONObject args) {
-
-        Log.d(TAG, "didNavRightBtnClickNotify: in Activity");
-    }
-
-    public void didSegFristItemClickNotify(JSONObject args) {
-        Log.d(TAG, "didSegFristItemClickNotify: in Activity");
-
-    }
-
-    public void didSegSecondItemClickNotify(JSONObject args) {
-        Log.d(TAG, "didSegSecondItemClickNotify: in Activity");
-
-    }
-
-    public void sendRefreshDataNotify(JSONObject args) {
-        Log.d(TAG, "sendRefreshDataNotify: in Activity");
-        skipedCount = 0;
-        timeSpan = new Date().getTime();
-        //        searchServiceRemote();
-    }
-
-    public void sendLoadMoreDataNotify(JSONObject args) {
-        Log.d(TAG, "sendLoadMoreDataNotify: in Activity");
-        //        searchServiceRemote();
-    }
-
-    public void didSelectedPositionNotify(JSONObject args) {
-        Log.d(TAG, "didSelectedPositionNotify: in Activity");
-
-        int position = 0;
-        try {
-            position = args.getInt("position");
-            Log.d(TAG, "didSelectedPositionNotify: selected-->" + position);
-            if (position == 0) {
-
-            } else {
-                JSONObject js = serviceData.getJSONObject(position - 1);
-                //                Log.d(TAG, "didSelectedPositionNotify: "+js);
-                Intent intent = new Intent(this, AYServicePageActivity.class);
-                intent.putExtra("service_info", js.toString());
-                //        startActivityForResult(intent, requestCode);
-                startActivity(intent);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        sl_home_refresh.setRefreshing(false);
-        bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
-        if (bean != null && "ok".equals(bean.status)) {
-            initCare(bean.result.homepage_services.get(0));
-            initArt(bean.result.homepage_services.get(1));
-            initSport(bean.result.homepage_services.get(2));
-            initScience(bean.result.homepage_services.get(3));
-        } else if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message);
-        }
-
-        return true;
-    }
-
-    public Boolean AYSearchServiceCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        sl_home_refresh.setRefreshing(false);
-        LogUtils.d("AYSearchServiceCommandFailed " + args.toString());
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-
-        return true;
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Fresco.getImagePipeline().clearMemoryCaches();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-            disposable = null;
-        }
-        unSubscribeTimer();
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         needsRefreshHomeData(requestCode, resultCode, data);
-
-        if (requestCode == 0 && resultCode == RESULT_OK) {
-            Bundle bundle = data.getExtras();
-            String text = null;
-            if (bundle != null)
-                text = bundle.getString("second");
-            Log.d("text", text);
-        }
     }
 
     private void needsRefreshHomeData(int requestCode, int resultCode, Intent data) {
@@ -762,8 +514,39 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                     initHomeData();
                 }
                 break;
+            case AppConstant.ABOUT_USER_REQUEST_CODE:
+                refreshHeadPhoto(resultCode,data);
+                break;
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AYApplication.addActivity(this);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Fresco.getImagePipeline().clearMemoryCaches();
+    }
+
+    private void refreshHeadPhoto(int resultCode, Intent data) {
+        if (resultCode == RESULT_OK){
+            String img_url = data.getStringExtra("img_url");
+            sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url));
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AYApplication.removeActivity(this);
+        moveTaskToBack(true);
+    }
+
+    @Override
+    protected void bindingFragments() {
+
+    }
 }

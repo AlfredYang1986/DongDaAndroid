@@ -28,7 +28,7 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
@@ -38,6 +38,7 @@ import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
 import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
+import com.blackmirror.dongda.model.ServiceProfileBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
 import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
@@ -112,6 +113,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     private SimpleDraweeView sv_teacher_bg;
     private TextView tv_addr_safe;
     private View view_line_4;
+    private int randomInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,7 +202,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     private void initData() {
         try {
             showProcessDialog();
-            String json = "{\"token\":\"" + BasePrefUtils.getAuthToken() + "\",\"condition\":{\"service_id\":\"" + service_id + "\"}}";
+            String json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"service_id\":\"" + service_id + "\"}}";
             JSONObject object = new JSONObject(json);
             facades.get("AYDetailInfoFacade").execute("AYGetDetailInfoCmd", object);
         } catch (JSONException e) {
@@ -248,29 +250,16 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                 finish();
                 break;
             case R.id.tv_dec_more:
-                if (tv_dec_more.getText().equals("展开")){
+                if (tv_dec_more.getText().equals("展开")) {
                     tv_dec_more.setText("收起");
                     tv_service_dec_content.setMaxLines(100);
-                    tv_service_dec_content.setText(uiBean.service.description+uiBean.service.brand.about_brand);
-                }else {
+                    tv_service_dec_content.setText(uiBean.service.description);
+                } else {
                     tv_dec_more.setText("展开");
                     tv_service_dec_content.setMaxLines(4);
-                    tv_service_dec_content.setText(uiBean.service.description+"...");
+                    tv_service_dec_content.setText(uiBean.service.description);
                 }
-                /*if (tv_service_dec_content_more.getVisibility() == View.GONE) {
-                    tv_dec_more.setText("收起");
-                    tv_service_dec_content_more.setVisibility(View.VISIBLE);
-                    if (uiBean!=null && uiBean.isSuccess){
-                        tv_service_dec_content.setText(uiBean.service.description);
-                    }
-                    tv_service_dec_content.setMaxLines(100);
-                } else {
-                    tv_service_dec_content_more.setVisibility(View.GONE);
-                    tv_dec_more.setText("展开");
-                    if (uiBean!=null && uiBean.isSuccess){
-                        tv_service_dec_content.setText(uiBean.service.description);
-                    }
-                }*/
+
                 break;
             case R.id.iv_detail_tb_like:
             case R.id.iv_detail_like:
@@ -279,8 +268,18 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                 }
                 break;
             case R.id.sv_teacher_bg:
+                ServiceProfileBean bean = new ServiceProfileBean();
                 Intent intent = new Intent(ServiceDetailInfoActivity.this, ServiceProfileActivity
                         .class);
+                if (uiBean != null && uiBean.isSuccess) {
+
+                    bean.res_id = randomInt;
+                    bean.brand_tag = uiBean.service.brand.brand_tag;
+                    bean.brand_name = uiBean.service.brand.brand_name;
+                    bean.about_brand = uiBean.service.brand.about_brand;
+
+                }
+                intent.putExtra("bean",bean);
                 startActivity(intent);
                 break;
         }
@@ -361,10 +360,10 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
 
         StringBuilder sb = new StringBuilder();
 
-        if (bean.service.service_type.contains("看顾")){
+        if (bean.service.service_type.contains("看顾")) {
             sb.append(bean.service.service_leaf);
             tv_detail_type.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             sb.append(bean.service.service_type)
                     .append("·")
                     .append(bean.service.service_leaf)
@@ -402,18 +401,16 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         }*/
 
         tv_course_name.setText(bean.service.brand.brand_name);//课程名称
-        tv_teacher_name.setText(bean.service.brand.brand_name+"老师");//
+        tv_teacher_name.setText(bean.service.brand.brand_name + "老师");//
 
         Random random = new Random();
-        int r = random.nextInt(10);
-        r = r > 9 || r < 0 ? 0 : r;
-        sv_teacher_bg.setImageURI(OtherUtils.resourceIdToUri(ServiceDetailInfoActivity.this, teacher_bg_res_id[r]));
+        randomInt = random.nextInt(10);
+        randomInt = randomInt > 9 || randomInt < 0 ? 0 : randomInt;
+        sv_teacher_bg.setImageURI(OtherUtils.resourceIdToUri(ServiceDetailInfoActivity.this, teacher_bg_res_id[randomInt]));
 
         tv_brand_tag.setText(bean.service.brand.brand_tag);//
 
-        String dec=bean.service.description+"...";
-
-        tv_service_dec_content.setText(dec);
+        tv_service_dec_content.setText(bean.service.description);
 
         tv_service_dec_content_more.setText(bean.service.brand.about_brand);
 
@@ -456,11 +453,11 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
             }
         }
 
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             tv_addr_safe.setVisibility(View.GONE);
             view_line_4.setVisibility(View.GONE);
             rv_addr_safe.setVisibility(View.GONE);
-        }else {
+        } else {
             tv_addr_safe.setVisibility(View.VISIBLE);
             view_line_4.setVisibility(View.VISIBLE);
             rv_addr_safe.setVisibility(View.VISIBLE);
@@ -580,8 +577,8 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     }
 
     private void sendLikeData() {
-        String t = BasePrefUtils.getAuthToken();
-        String u = BasePrefUtils.getUserId();
+        String t = AYPrefUtils.getAuthToken();
+        String u = AYPrefUtils.getUserId();
         showProcessDialog();
         if (uiBean.service.is_collected) {//已收藏 点击取消
             String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + service_id + "\"}," +

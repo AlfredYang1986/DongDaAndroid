@@ -30,7 +30,7 @@ import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.DeviceUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OSSUtils;
@@ -272,7 +272,7 @@ public class NearServiceActivity extends AYActivity {
                 Marker marker = aMap.addMarker(markerOption);
                 locMarkerId = marker.getId();
                 try {
-                    String json="{\"token\":\""+ BasePrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+BasePrefUtils.getUserId()+"\"," +
+                    String json="{\"token\":\""+ AYPrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+ AYPrefUtils.getUserId()+"\"," +
                             "\"pin\":{\"latitude\":"+latitude+",\"longitude\":"+longitude+"}}}";
 
                     JSONObject object = new JSONObject(json);

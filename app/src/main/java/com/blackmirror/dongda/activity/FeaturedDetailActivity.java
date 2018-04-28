@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
@@ -144,7 +144,7 @@ public class FeaturedDetailActivity extends AYActivity {
         showProcessDialog();
         try {
             AYFacade facade = facades.get("QueryServiceFacade");
-            String json = "{\"skip\" : " + skipCount + ",\"take\" : 10,\"token\": \"" + BasePrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + BasePrefUtils.getUserId() + "\",\"service_type\": \""+service_type+"\"}}";
+            String json = "{\"skip\" : " + skipCount + ",\"take\" : 10,\"token\": \"" + AYPrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + AYPrefUtils.getUserId() + "\",\"service_type\": \""+service_type+"\"}}";
             JSONObject object = new JSONObject(json);
             facade.execute("AYSubjectMoreCommand", object);
         } catch (Exception e) {
@@ -210,8 +210,8 @@ public class FeaturedDetailActivity extends AYActivity {
 
 
     private void sendLikeData(CareMoreServerBean.ResultBean.ServicesBean bean) {
-        String t = BasePrefUtils.getAuthToken();
-        String u = BasePrefUtils.getUserId();
+        String t = AYPrefUtils.getAuthToken();
+        String u = AYPrefUtils.getUserId();
         showProcessDialog();
         if (bean.is_collected) {//已收藏 点击取消
             String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";

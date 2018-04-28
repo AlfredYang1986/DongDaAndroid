@@ -106,8 +106,6 @@
         </activity>
         <activity android:name=".activity.UserAboutMeActivity">
         </activity>
-        <activity android:name=".activity.UserAboutMeNoDataActivity">
-        </activity>
     </application>
 
 </manifest>

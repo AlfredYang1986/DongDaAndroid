@@ -13,8 +13,8 @@ import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
@@ -58,7 +58,7 @@ public class PhoneInputActivity extends AYActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_input);
-
+        AYApplication.addActivity(this);
         initView();
         initData();
         initListener();
@@ -274,8 +274,8 @@ public class PhoneInputActivity extends AYActivity {
         }
 
 
-        BasePrefUtils.setUserId(uiBean.user_id);
-        BasePrefUtils.setAuthToken(uiBean.auth_token);
+        AYPrefUtils.setUserId(uiBean.user_id);
+        AYPrefUtils.setAuthToken(uiBean.auth_token);
 
         if (TextUtils.isEmpty(uiBean.screen_name)) {
 
@@ -283,7 +283,6 @@ public class PhoneInputActivity extends AYActivity {
             AYDaoUserProfile p = new AYDaoUserProfile(args);
             intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
             startActivity(intent);
-            AYApplication.addActivity(this);
 
         } else if (TextUtils.isEmpty(uiBean.screen_photo)){
 
@@ -293,12 +292,11 @@ public class PhoneInputActivity extends AYActivity {
             intent.putExtra("current_user", p);
             intent.putExtra("name", uiBean.screen_name);
             startActivity(intent);
-            AYApplication.addActivity(this);
         }else {
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
             intent.putExtra("img_uuid",uiBean.screen_photo);
-            AYApplication.finishAllActivity();
             startActivity(intent);
+            AYApplication.finishAllActivity();
         }
 
         return true;
@@ -329,6 +327,12 @@ public class PhoneInputActivity extends AYActivity {
             mSms_disposable.dispose();
             mSms_disposable = null;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        AYApplication.removeActivity(this);
+        super.onBackPressed();
     }
 
     @Override

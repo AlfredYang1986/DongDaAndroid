@@ -53,6 +53,9 @@
 
         <command short="AYEditUserInfoCmd" />
         <command short="AYQueryUserInfoCmd" />
+        <command short="UpdateProfile" />
+        <command short="AYUploadFileBySDKCommand" />
+        <command short="UpdateLocalProfile" />
     </facade>
 
     <facade

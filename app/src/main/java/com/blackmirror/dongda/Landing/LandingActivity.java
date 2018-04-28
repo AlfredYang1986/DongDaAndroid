@@ -2,15 +2,10 @@ package com.blackmirror.dongda.Landing;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSON;
@@ -18,9 +13,10 @@ import com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.Tools.AYApplication;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.CalUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
+import com.blackmirror.dongda.Tools.OtherUtils;
 import com.blackmirror.dongda.Tools.SnackbarUtils;
 import com.blackmirror.dongda.Tools.ToastUtils;
 import com.blackmirror.dongda.controllers.AYActivity;
@@ -72,7 +68,7 @@ public class LandingActivity extends AYActivity {
         setContentView(R.layout.activity_landing);
         reference=new WeakReference<>(this);
         //在setContentView之后调用
-        initSystemBarColor();
+        OtherUtils.initSystemBarColor(this);
         initView();
         //        requestPermissions();
         initData();
@@ -104,9 +100,9 @@ public class LandingActivity extends AYActivity {
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
+                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
                 startActivity(intent);
-                /*OSSUtils.initOSS(LandingActivity.this,BasePrefUtils.getAccesskeyId(),BasePrefUtils.getAccesskeySecret(),BasePrefUtils.getSecurityToken());
+                /*OSSUtils.initOSS(LandingActivity.this,AYPrefUtils.getAccesskeyId(),AYPrefUtils.getAccesskeySecret(),AYPrefUtils.getSecurityToken());
                 facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());*/
 //                upload();
 
@@ -117,7 +113,7 @@ public class LandingActivity extends AYActivity {
             @Override
             public void onClick(View view) {
                 weChatLogin();
-                //                startActivity(new Intent(LandingActivity.this, AYHomeActivity.class));
+                //                startActivityForResult(new Intent(LandingActivity.this, AYHomeActivity.class));
             }
         });
 
@@ -140,13 +136,13 @@ public class LandingActivity extends AYActivity {
         if (bean != null && "ok".equals(bean.status) && bean.result != null) {
             if (bean.result.user != null) {
                 LogUtils.d("cal ", bean.result.user.user_id+"   "+CalUtils.md5(bean.result.user.user_id));
-                BasePrefUtils.setUserId(bean.result.user.user_id);
+                AYPrefUtils.setUserId(bean.result.user.user_id);
             }
-            BasePrefUtils.setAuthToken(bean.result.auth_token);
+            AYPrefUtils.setAuthToken(bean.result.auth_token);
             Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
             intent.putExtra("img_uuid",bean.result.user.screen_photo);
             startActivity(intent);
-            finish();
+            AYApplication.finishAllActivity();
         } else if (bean != null && bean.error != null) {
             ToastUtils.showShortToast(bean.error.message);
         }
@@ -426,16 +422,9 @@ public class LandingActivity extends AYActivity {
                 });
     }
 
-    private void initSystemBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            ViewGroup viewGroup = this.findViewById(Window.ID_ANDROID_CONTENT);
-            View childView = viewGroup.getChildAt(0);
-            if (null != childView) {
-                ViewCompat.setFitsSystemWindows(childView, false);
-            }
-        }
+    @Override
+    protected void setStatusBarColor() {
+
     }
 
     @Override

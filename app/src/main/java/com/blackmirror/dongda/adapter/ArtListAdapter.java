@@ -85,11 +85,11 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else {
                 vh.iv_item_art_like.setBackgroundResource(R.drawable.home_art_like);
             }
-            if (TextUtils.isEmpty(servicesBean.service_tags.get(0))){
+            if (TextUtils.isEmpty(servicesBean.operation.get(0))){
                 vh.tv_art_list_name.setVisibility(View.GONE);
             }else {
                 vh.tv_art_list_name.setVisibility(View.VISIBLE);
-                vh.tv_art_list_name.setText(servicesBean.service_tags.get(0));
+                vh.tv_art_list_name.setText(servicesBean.operation.get(0));
             }
             StringBuilder sb = new StringBuilder();
             sb.append(servicesBean.brand_name)

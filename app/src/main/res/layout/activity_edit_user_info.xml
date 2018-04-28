@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ctl_edit_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.blackmirror.dongda.activity.EditUserInfoActivity">
@@ -13,9 +14,9 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:background="@color/sys_bar_white"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:background="@color/sys_bar_white"
             app:contentInsetStart="0dp"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
@@ -50,17 +51,17 @@
                     />
 
                 <TextView
-                     android:id="@+id/tv_save_user_info"
-                    android:gravity="center"
-                    android:layout_marginRight="16dp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:id="@+id/tv_save_user_info"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
+                    android:layout_marginRight="16dp"
+                    android:gravity="center"
                     android:text="保存"
                     android:textColor="#FF59D5C7"
                     android:textSize="17sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     />
             </android.support.constraint.ConstraintLayout>
 
@@ -68,110 +69,168 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v4.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
         <com.facebook.drawee.view.SimpleDraweeView
-            app:placeholderImageScaleType="focusCrop"
             android:id="@+id/sv_user_photo"
-             app:placeholderImage="@drawable/home_cover_00"
-            app:actualImageScaleType="focusCrop"
             android:layout_width="match_parent"
-            android:layout_height="250dp"/>
+            android:layout_height="250dp"
+            app:actualImageScaleType="focusCrop"/>
 
         <ImageView
-            android:minWidth="36dp"
-            android:minHeight="33dp"
-             android:id="@+id/iv_take_photo"
-            android:layout_marginRight="11dp"
-            android:layout_marginBottom="16dp"
-            app:layout_constraintRight_toRightOf="@id/sv_user_photo"
-            app:layout_constraintBottom_toBottomOf="@id/sv_user_photo"
-            android:background="@drawable/icon_editphoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-             android:id="@+id/tv_nick_name_dec"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginTop="45dp"
-            android:layout_marginLeft="16dp"
-            app:layout_constraintTop_toBottomOf="@id/sv_user_photo"
+            android:id="@+id/iv_take_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="11dp"
+            android:background="@drawable/icon_editphoto"
+            android:minHeight="33dp"
+            android:minWidth="36dp"
+            app:layout_constraintBottom_toBottomOf="@id/sv_user_photo"
+            app:layout_constraintRight_toRightOf="@id/sv_user_photo"/>
+
+        <TextView
+            android:id="@+id/tv_nick_name_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="45dp"
             android:text="昵称"
             android:textColor="#FFA6A6A6"
             android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_user_photo"
             />
 
-        <TextView
+
+        <FrameLayout
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:id="@+id/tl_service_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_nick_name_dec"
             app:layout_constraintLeft_toLeftOf="@id/tv_nick_name_dec"
-             android:id="@+id/tv_user_nick_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_nick_name_dec">
+
+            <android.support.design.widget.TextInputEditText
+                 android:id="@+id/tet_user_name"
+                android:layout_width="match_parent"
+                android:layout_height="21dp"
+                android:background="@null"
+                android:hint="请输入昵称"/>
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/tv_user_nick_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
             android:text="花瓣妈妈"
             android:textColor="#FF404040"
             android:textSize="15sp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="@id/tv_nick_name_dec"
+            app:layout_constraintTop_toBottomOf="@id/tv_nick_name_dec"
             />
 
         <View
-             android:id="@+id/view_line_1"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_user_nick_name"
-            android:layout_marginTop="13dp"
+            android:id="@+id/view_line_1"
             android:layout_width="0dp"
             android:layout_height="0.5dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="13dp"
             android:background="#FFE5E5E5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tl_service_name"
             />
 
         <TextView
-             android:id="@+id/tv_user_about_me"
-            app:layout_constraintTop_toBottomOf="@id/view_line_1"
-            app:layout_constraintLeft_toLeftOf="@id/view_line_1"
-            android:layout_marginTop="45.5dp"
+            android:id="@+id/tv_user_about_me"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="45.5dp"
             android:text="关于我"
             android:textColor="#FFA6A6A6"
             android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="@id/view_line_1"
+            app:layout_constraintTop_toBottomOf="@id/view_line_1"
             />
 
-        <TextView
-             android:id="@+id/tv_user_dec"
+
+
+        <FrameLayout
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="30dp"
             app:layout_constraintTop_toBottomOf="@id/tv_user_about_me"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:layout_marginTop="21dp"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
+            android:layout_marginTop="21dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:id="@+id/tl_service_dec"
+            >
+
+            <android.support.design.widget.TextInputEditText
+                android:maxLength="32"
+                 android:id="@+id/tet_user_dec"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                android:layout_width="match_parent"
+                android:layout_height="21dp"
+                android:background="@null"
+                android:hint="请输入关于我的描述"/>
+        </FrameLayout>
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/tv_user_dec"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="21dp"
+            android:ellipsize="end"
+            android:maxLines="2"
             android:text="限32字六七八九十一二三四五六七八九十一二三四五六七八九十一二"
             android:textColor="#FF404040"
             android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_about_me"
             />
 
         <View
-            app:layout_constraintTop_toBottomOf="@id/tv_user_dec"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="16dp"
+            android:background="#FFE5E5E5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="0.5dp"
-            android:background="#FFE5E5E5"
+            app:layout_constraintTop_toBottomOf="@id/tl_service_dec"
             />
 
     </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

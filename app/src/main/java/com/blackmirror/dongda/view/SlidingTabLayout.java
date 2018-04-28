@@ -6,10 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.Tools.OtherUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -168,12 +170,14 @@ public class SlidingTabLayout extends TabLayout{
             LinearLayout tabView = (LinearLayout) tabStrip.getChildAt(i);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (mScreenWidth / (mTabVisibleCount + mLastTabVisibleRatio)), LinearLayout.LayoutParams
                     .WRAP_CONTENT);
+            params.gravity= Gravity.BOTTOM;
+            params.bottomMargin= OtherUtils.dp2px(10);
             tabView.setLayoutParams(params);
             //tab中的图标可以超出父容器
             tabView.setClipChildren(false);
             tabView.setClipToPadding(false);
 
-            tabView.setPadding(0, 30, 0, 30);
+            tabView.setPadding(0, 0, 0, 0);
         }
         initTranslationParams(tabStrip, mScreenWidth);
     }

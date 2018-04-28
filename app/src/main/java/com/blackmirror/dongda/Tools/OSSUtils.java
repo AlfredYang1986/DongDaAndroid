@@ -25,18 +25,18 @@ public class OSSUtils {
                 .append(Content_Type)
                 .append(Date)
                 .append(ss)
-                .append(BasePrefUtils.getSecurityToken());
-        String sign = sign( BasePrefUtils.getAccesskeySecret(), sb.toString());
+                .append(AYPrefUtils.getSecurityToken());
+        String sign = sign( AYPrefUtils.getAccesskeySecret(), sb.toString());
         StringBuilder sb2=new StringBuilder();
 
         sb2.append("https://bm-dongda.oss-cn-beijing.aliyuncs.com/"+imgUrl+".jpg?Expires=".trim())
                 .append(t)
                 .append("&OSSAccessKeyId=".trim())
-                .append(BasePrefUtils.getAccesskeyId())
+                .append(AYPrefUtils.getAccesskeyId())
                 .append("&Signature=")
                 .append(HttpUtil.urlEncode(sign, AppConstant.DEFAULT_CHARSET_NAME))
                 .append("&security-token=")
-                .append(HttpUtil.urlEncode(BasePrefUtils.getSecurityToken(), AppConstant.DEFAULT_CHARSET_NAME));
+                .append(HttpUtil.urlEncode(AYPrefUtils.getSecurityToken(), AppConstant.DEFAULT_CHARSET_NAME));
         return sb2.toString();
     }
 

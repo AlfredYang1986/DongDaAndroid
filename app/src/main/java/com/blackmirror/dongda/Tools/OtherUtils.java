@@ -39,7 +39,7 @@ public class OtherUtils {
             ViewGroup viewGroup = activity.findViewById(Window.ID_ANDROID_CONTENT);
             View childView = viewGroup.getChildAt(0);
             if (null != childView) {
-                ViewCompat.setFitsSystemWindows(childView, false);
+//                ViewCompat.setFitsSystemWindows(childView, false);
             }
         }
     }
@@ -219,6 +219,12 @@ public class OtherUtils {
         screenHeight = height / density;// 屏幕高度(dp)
         screenDensity = density;*/
         return width;
+    }
+
+    public static int getScreenWidthPx() {
+        //2、通过Resources获取
+        DisplayMetrics dm = AYApplication.appContext.getResources().getDisplayMetrics();
+        return dm.widthPixels;
     }
 
     public static int getScreenHeightDp() {

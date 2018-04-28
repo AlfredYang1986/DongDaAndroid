@@ -175,6 +175,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     protected void closeProcessDialog() {
         if (pb != null && pb.isShowing()) {
             pb.dismiss();
+            pb = null;
         }
     }
 }

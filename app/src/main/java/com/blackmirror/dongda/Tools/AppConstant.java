@@ -19,6 +19,8 @@ public class AppConstant {
     public static final int MY_LIKE_REQUEST_CODE =114;
     public static final int SERVICE_DETAIL_REQUEST_CODE =115;
     public static final int FEATURE_DETAIL_REQUEST_CODE =116;
+    public static final int ABOUT_USER_REQUEST_CODE =117;
+    public static final int EDIT_USER_REQUEST_CODE =118;
 
     public static final int NO_GPS_PERMISSION =12;
 

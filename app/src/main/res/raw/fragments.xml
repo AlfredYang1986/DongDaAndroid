@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <fragments>
-    <fragment
-        short="frag_test"
-        name="com.blackmirror.dongda.fragment.FragmentTest.AYFragmentTest"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
-
-    </fragment>
 
     <fragment
         short="frag_navbar"

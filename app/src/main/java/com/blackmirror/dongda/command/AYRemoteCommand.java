@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.Tools.AYPrefUtils;
 import com.blackmirror.dongda.Tools.AppConstant;
-import com.blackmirror.dongda.Tools.BasePrefUtils;
 import com.blackmirror.dongda.Tools.LogUtils;
 import com.blackmirror.dongda.Tools.NetUtils;
 import com.blackmirror.dongda.Tools.OtherUtils;
@@ -177,7 +177,7 @@ public abstract class AYRemoteCommand extends AYCommand {
             return;
         }
 
-        if (args.length>=2 || !OtherUtils.isNeedRefreshToken(BasePrefUtils.getExpiration())){
+        if (args.length>=2 || !OtherUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())){
             sendRequestData(args);
         }else {
             //先获取ImgToken再请求其他数据
@@ -192,7 +192,7 @@ public abstract class AYRemoteCommand extends AYCommand {
             @Override
             public JSONObject apply(JSONObject object) throws Exception {
                 JSONObject o = new JSONObject();
-                o.put("token",BasePrefUtils.getAuthToken());
+                o.put("token", AYPrefUtils.getAuthToken());
                 return executeRequest(o,imageUrl);
             }
         }).map(new Function<JSONObject, JSONObject>() {
@@ -204,10 +204,10 @@ public abstract class AYRemoteCommand extends AYCommand {
                     return object;
                 }
                 if (bean.isSuccess){
-                    BasePrefUtils.setAccesskeyId(bean.accessKeyId);
-                    BasePrefUtils.setSecurityToken(bean.SecurityToken);
-                    BasePrefUtils.setAccesskeySecret(bean.accessKeySecret);
-                    BasePrefUtils.setExpiration(bean.Expiration);
+                    AYPrefUtils.setAccesskeyId(bean.accessKeyId);
+                    AYPrefUtils.setSecurityToken(bean.SecurityToken);
+                    AYPrefUtils.setAccesskeySecret(bean.accessKeySecret);
+                    AYPrefUtils.setExpiration(bean.Expiration);
                 }
                 return executeRequest(args[0]);
             }
