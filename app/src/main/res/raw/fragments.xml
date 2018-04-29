@@ -3,7 +3,7 @@
 
     <fragment
         short="frag_homeseg"
-        name="com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeSegFragment"
+        name="com.blackmirror.dongda.ui.fragment.AYHomeSegFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
 
     </fragment>
