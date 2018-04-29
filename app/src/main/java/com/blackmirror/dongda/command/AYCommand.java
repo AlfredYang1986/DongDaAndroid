@@ -1,7 +1,7 @@
 package com.blackmirror.dongda.command;
 
 import com.blackmirror.dongda.AY.AYSysNotifier;
-import com.blackmirror.dongda.Tools.AppConstant;
+import com.blackmirror.dongda.utils.AppConstant;
 
 import org.json.JSONException;
 import org.json.JSONObject;

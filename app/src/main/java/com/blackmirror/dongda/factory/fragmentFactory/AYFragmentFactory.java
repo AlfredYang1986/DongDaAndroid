@@ -2,11 +2,10 @@ package com.blackmirror.dongda.factory.fragmentFactory;
 
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.controllers.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;
-import com.blackmirror.dongda.fragment.AYFragment;
+import com.blackmirror.dongda.ui.fragment.AYFragment;
 
 import java.util.HashMap;
 import java.util.List;

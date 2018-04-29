@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:layout_height="match_parent"
     android:background="@color/sys_bar_white"
-    tools:context=".activity.ArtListActivity">
+    tools:context=".ui.activity.ArtListActivity">
 
     <include layout="@layout/home_act_header"/>
 

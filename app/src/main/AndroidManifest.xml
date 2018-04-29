@@ -34,7 +34,7 @@
     <uses-feature android:name="android.hardware.camera.autofocus"/>
 
     <application
-        android:name=".Tools.AYApplication"
+        android:name=".utils.AYApplication"
         android:allowBackup="true"
         android:icon="@mipmap/dongda_logo"
         android:label="@string/app_name"
@@ -45,49 +45,38 @@
             android:name="com.amap.api.v2.apikey"
             android:value="4485c16a40931a555ff00c0bacdbf6e1"/>
 
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".ui.activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Message.MessageList.AYMessageListActivity">
+        <activity android:name=".ui.activity.HomeActivity.AYHomeActivity">
         </activity>
-        <activity android:name=".Profile.ProfileActivity.AYProfileActivity">
+        <activity android:name=".ui.activity.Landing.PhoneInputActivity">
         </activity>
-        <activity android:name=".Order.OrderModeCommon.AYOrderCommonActivity">
+        <activity android:name=".ui.activity.Landing.NameInputActivity">
         </activity>
-        <activity android:name=".Home.HomeActivity.AYHomeActivity">
+        <activity android:name=".ui.activity.Landing.PhotoChangeActivity">
         </activity>
-        <activity android:name=".Home.ServicePage.AYServicePageActivity">
+        <activity android:name=".ui.activity.Landing.LandingActivity">
         </activity>
-        <activity android:name=".Landing.PhoneInputActivity">
-        </activity>
-        <activity android:name=".Landing.NameInputActivity">
-        </activity>
-        <activity android:name=".Landing.PhotoChangeActivity">
-        </activity>
-        <activity android:name=".activity.LoginActivity">
-        </activity>
-        <activity android:name=".Landing.LandingActivity">
-        </activity>
-        <!-- 微信 -->
-        <activity android:name=".activity.FeaturedDetailActivity"/>
+        <activity android:name=".ui.activity.FeaturedDetailActivity"/>
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService"/>
 
-        <activity android:name=".activity.NearServiceActivity">
+        <activity android:name=".ui.activity.NearServiceActivity">
         </activity>
-        <activity android:name=".activity.CareListActivity">
+        <activity android:name=".ui.activity.CareListActivity">
         </activity>
-        <activity android:name=".activity.ArtListActivity">
+        <activity android:name=".ui.activity.ArtListActivity">
         </activity>
-        <activity android:name=".activity.MyLikeActivity">
+        <activity android:name=".ui.activity.MyLikeActivity">
         </activity>
         <activity
             android:theme="@style/AppTheme.NoActionBar"
-            android:name=".activity.ServiceDetailInfoActivity">
+            android:name=".ui.activity.ServiceDetailInfoActivity">
         </activity>
 
         <provider
@@ -100,11 +89,11 @@
                 android:resource="@xml/file_paths"/>
         </provider>
 
-        <activity android:name=".activity.EditUserInfoActivity">
+        <activity android:name=".ui.activity.EditUserInfoActivity">
         </activity>
-        <activity android:name=".activity.ServiceProfileActivity">
+        <activity android:name=".ui.activity.ServiceProfileActivity">
         </activity>
-        <activity android:name=".activity.UserAboutMeActivity">
+        <activity android:name=".ui.activity.UserAboutMeActivity">
         </activity>
     </application>
 

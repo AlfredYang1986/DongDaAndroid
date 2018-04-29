@@ -2,44 +2,10 @@
 <fragments>
 
     <fragment
-        short="frag_navbar"
-        name="com.blackmirror.dongda.fragment.DefaultFragment.AYNavBarFragment"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
-    <fragment
-        short="frag_tabbar"
-        name="com.blackmirror.dongda.fragment.DefaultFragment.AYTabBarFragment"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory" />
-
-    <fragment
         short="frag_homeseg"
-        name="com.blackmirror.dongda.Home.HomeActivity.AYHomeSegFragment"
+        name="com.blackmirror.dongda.ui.fragment.AYHomeSegFragment"
         factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
 
-    </fragment>
-
-    <listfragment
-        short="frag_homelist_serv"
-        name="com.blackmirror.dongda.Home.HomeActivity.AYHomeListServFragment"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYListFragmentFactory">
-
-    </listfragment>
-
-    <fragment
-        short="frag_servpage_bottom"
-        name="com.blackmirror.dongda.Home.ServicePage.AYServicePageBottomFragment"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
-    </fragment>
-
-    <fragment
-        short="frag_servpage_images"
-        name="com.blackmirror.dongda.Home.ServicePage.AYServiceImagesFragment"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
-    </fragment>
-
-    <fragment
-        short="frag_servpage_info"
-        name="com.blackmirror.dongda.Home.ServicePage.AYServicePageInfoFragment"
-        factory="com.blackmirror.dongda.factory.fragmentFactory.AYFragmentFactory">
     </fragment>
 
 </fragments>

@@ -6,7 +6,7 @@
     android:id="@+id/ctl_edit_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.blackmirror.dongda.activity.EditUserInfoActivity">
+    tools:context=".ui.activity.EditUserInfoActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
