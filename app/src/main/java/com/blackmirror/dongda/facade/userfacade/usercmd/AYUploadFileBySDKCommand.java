@@ -1,9 +1,11 @@
 package com.blackmirror.dongda.facade.userfacade.usercmd;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
+import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
@@ -12,10 +14,6 @@ import com.blackmirror.dongda.utils.DateUtils;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.NetUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.command.AYRemoteCommand;
-import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
-import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
@@ -202,8 +200,8 @@ public class AYUploadFileBySDKCommand extends AYCommand {
 
         String signature = OSSUtils.sign(AYPrefUtils.getAccesskeyId(), AYPrefUtils.getAccesskeySecret(), sb.toString());
 
-        Log.e("xcx", "onClick: ziji \n"+signature);
-        Log.e("xcx", "onClick: ziji content \n"+sb.toString());
+        LogUtils.d("xcx", "onClick: ziji \n"+signature);
+        LogUtils.d("xcx", "onClick: ziji content \n"+sb.toString());
 
         Request.Builder requestBuilder = new Request.Builder();
 

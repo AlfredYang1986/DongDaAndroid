@@ -21,25 +21,14 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
-import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYApplication;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.DateUtils;
-import com.blackmirror.dongda.utils.DeviceUtils;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.ui.activity.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -50,6 +39,16 @@ import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
+import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DateUtils;
+import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -525,7 +524,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private void handleImageOnKitKat(Intent data) {
         imagePath = null;
         Uri uri = data.getData();
-        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        LogUtils.d("xcx", "handleImageOnKitKat: uri is " + uri);
         if (DocumentsContract.isDocumentUri(this, uri)) {
             // 如果是document类型的Uri，则通过document id处理
             String docId = DocumentsContract.getDocumentId(uri);

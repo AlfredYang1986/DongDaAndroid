@@ -134,7 +134,7 @@ public class AYFactoryManager {
 
     /**
      * 查找并创建对应的factory
-     * @param t
+     * @param t activity传入controller字符串
      * @param short_name activity则传入对应的TAG
      * @return
      */
@@ -186,8 +186,10 @@ public class AYFactoryManager {
     }
 
     protected AYFactory queryFactoryInManager(String md5_code) {
-        if (manager.containsKey(md5_code)) return manager.get(md5_code);
-        else return null;
+        if (manager.containsKey(md5_code))
+            return manager.get(md5_code);
+        else
+            return null;
     }
 
     /**

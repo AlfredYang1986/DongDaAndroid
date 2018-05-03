@@ -24,7 +24,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,15 +31,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYApplication;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.DensityUtils;
-import com.blackmirror.dongda.utils.DeviceUtils;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -49,6 +39,15 @@ import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
+import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DensityUtils;
+import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.OSSUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -423,7 +422,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
     private void handleImageOnKitKat(Intent data) {
         imagePath = null;
         Uri uri = data.getData();
-        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        LogUtils.d("xcx", "handleImageOnKitKat: uri is " + uri);
         if (DocumentsContract.isDocumentUri(this, uri)) {
             // 如果是document类型的Uri，则通过document id处理
             String docId = DocumentsContract.getDocumentId(uri);

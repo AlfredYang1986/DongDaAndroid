@@ -3,7 +3,6 @@ package com.blackmirror.dongda.ui.activity.Landing;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,7 +76,7 @@ public class PhoneInputActivity extends AYActivity {
         sms_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "request SMS code from server");
+                LogUtils.d(TAG, "request SMS code from server");
 
                 String input_phone = et_phone.getText().toString();
 
@@ -156,7 +155,7 @@ public class PhoneInputActivity extends AYActivity {
     public Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
         LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
 
-        Log.i(TAG, "send sms code result is " + arg.toString());
+        LogUtils.d(TAG, "send sms code result is " + arg.toString());
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
 //        sms_result = new SendSMSCodeResult(arg);
         SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
@@ -165,7 +164,7 @@ public class PhoneInputActivity extends AYActivity {
     }
 
     public Boolean AYSendSMSCodeCommandFailed(JSONObject arg) {
-        Log.i(TAG, "send sms code error is " + arg.toString());
+        LogUtils.d(TAG, "send sms code error is " + arg.toString());
 //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
 //        sms_result = new SendSMSCodeResult(arg);
         ErrorInfoServerBean serverBean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
@@ -179,7 +178,7 @@ public class PhoneInputActivity extends AYActivity {
     }
 
     protected void LoginWithPhoneAndCode() {
-        Log.i(TAG, "login with phone code");
+        LogUtils.d(TAG, "login with phone code");
         String phone = et_phone.getText().toString().trim();
         String code = et_code.getText().toString().trim();
         if (TextUtils.isEmpty(phone) || phone.length()!=11){
