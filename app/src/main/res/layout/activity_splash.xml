@@ -21,7 +21,7 @@
         android:layout_marginBottom="24dp"
         android:textSize="13sp"
         android:textColor="#FF59D5C7"
-        android:text="为 孩 子 创 造 与 众 不 同"
+        android:text="@string/str_landing_dec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

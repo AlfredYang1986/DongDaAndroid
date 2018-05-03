@@ -125,9 +125,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     private void initHomeData() {
         //        showProcessDialog();
         try {
-            String url = OSSUtils.getSignedUrl(img_uuid);
-            LogUtils.d("pic url " + url);
-            sv_head_pic.setImageURI(url);
             AYFacade facade = facades.get("QueryServiceFacade");
             String json = "{ \"token\": \"" + AYPrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + AYPrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
             JSONObject root = new JSONObject(json);
@@ -395,6 +392,9 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
      */
     public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
         closeProcessDialog();
+        String url = OSSUtils.getSignedUrl(img_uuid);
+        LogUtils.d("pic url " + url);
+        sv_head_pic.setImageURI(url);
         sl_home_refresh.setRefreshing(false);
         bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
         if (bean != null && "ok".equals(bean.status)) {

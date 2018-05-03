@@ -14,7 +14,7 @@
         tools:context=".ui.activity.Landing.PhoneInputActivity">
 
     <TextView
-            android:text="您的手机号码?"
+            android:text="@string/str_your_phone_dec"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="24sp"
@@ -94,7 +94,7 @@
             android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:id="@+id/landing_phone_input_next_step"
-                android:text="下一步" />
+                android:text="@string/next_step" />
 
 
 

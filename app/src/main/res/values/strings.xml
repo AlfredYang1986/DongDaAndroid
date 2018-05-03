@@ -110,6 +110,17 @@
     <string name="str_art_dec">在感受中学会欣赏和表达</string>
     <string name="str_sport_dec">成长 激励 汗水和Team work</string>
     <string name="str_science_dec">未来，在这里由宝贝们搭建</string>
+    <string name="str_landing_dec">为 孩 子 创 造 与 众 不 同</string>
+    <string name="phone_login">手机号登录</string>
+    <string name="wechat_login">微信登陆</string>
+    <string name="str_input_name_dec">还有，您的姓名?</string>
+    <string name="next_step">下一步</string>
+    <string name="str_your_phone_dec">您的手机号码?</string>
+    <string name="str_change_photo_dec">最后一步, 您的照片?</string>
+    <string name="str_enter_dongda">进入咚哒</string>
+    <string name="str_album">相册</string>
+    <string name="str_camera">相机</string>
+    <string name="str_cancel">取消</string>
 
 
 </resources>

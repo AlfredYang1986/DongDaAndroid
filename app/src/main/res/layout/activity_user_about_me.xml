@@ -56,7 +56,6 @@
         android:layout_marginLeft="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="花瓣妈妈"
         android:textColor="#FF0D0D0D"
         android:textSize="26sp"
         />
@@ -69,7 +68,7 @@
         android:layout_marginTop="32dp"
         android:layout_width="wrap_content"
         android:layout_height="21dp"
-        android:text="关于我"
+        android:text="@string/about_me_dec"
         android:textColor="#FF404040"
         android:textSize="15sp"
         />
