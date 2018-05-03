@@ -7,19 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
-import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYApplication;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.ui.activity.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -28,8 +18,16 @@ import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
 import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
+import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -41,7 +39,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
-import static android.widget.Toast.LENGTH_LONG;
 
 public class PhoneInputActivity extends AYActivity {
 
@@ -62,7 +59,7 @@ public class PhoneInputActivity extends AYActivity {
         initView();
         initData();
         initListener();
-        OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
+        DeviceUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
     }
 
     private void initView() {
@@ -85,20 +82,17 @@ public class PhoneInputActivity extends AYActivity {
                 String input_phone = et_phone.getText().toString();
 
                 if (TextUtils.isEmpty(input_phone)){
-                    ToastUtils.showShortToast("手机号不能为空!");
+                    ToastUtils.showShortToast(getString(R.string.phone_not_empty));
                     return;
                 }
 
                 if (input_phone.trim().length()!=11){
-                    ToastUtils.showShortToast("请输入正确的手机号!");
+                    ToastUtils.showShortToast(getString(R.string.input_phone_error));
                     return;
                 }
 
 
                 AYFacade facade = facades.get("LoginFacade");
-                /*AYCommand cmd = facade.cmds.get("SendSMSCode");
-                           cmd.setTarget(facade);
-                cmd.excute(args);*/
                 LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
                 Map<String, Object> m = new HashMap<>();
                 m.put("phone", input_phone);
@@ -134,7 +128,7 @@ public class PhoneInputActivity extends AYActivity {
 
                     @Override
                     public void onNext(Long aLong) {
-                        sms_code.setText("重新获取("+(30-aLong)+")");
+                        sms_code.setText(String.format(getString(R.string.sms_count_down),String.valueOf(30-aLong)));
                     }
 
                     @Override
@@ -159,52 +153,11 @@ public class PhoneInputActivity extends AYActivity {
     }
 
 
-    public static class SendSMSCodeResult {
-        public SendSMSCodeResult(JSONObject args) {
-            try {
-                if (args.getString("status").equals("ok")) {
-                    isSuccess = true;
-                    reg_token = args.getJSONObject("result").getString("reg_token");
-                    phoneNo = args.getJSONObject("result").getString("phoneNo");
-                } else {
-                    isSuccess = false;
-                    errorMessage = args.getJSONObject("error").getString("messages");
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                isSuccess = false;
-                errorMessage = "unknown message";
-            }
-        }
-
-        public Boolean canGoNext() {
-            return isSuccess && !reg_token.isEmpty() && !phoneNo.isEmpty();
-        }
-
-        public String getErrorMessage() {
-            return errorMessage;
-        }
-
-        public String getPhoneNo() {
-            return phoneNo;
-        }
-
-        public String getReg_token() {
-            return reg_token;
-        }
-
-        private Boolean isSuccess;
-        private String errorMessage = "";
-        private String reg_token = "";
-        private String phoneNo = "";
-    }
-
-
     public Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
         LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
 
         Log.i(TAG, "send sms code result is " + arg.toString());
-        ToastUtils.showShortToast("验证码发送成功!");
+        ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
 //        sms_result = new SendSMSCodeResult(arg);
         SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
         sendSmsUiBean = new SendSmsUiBean(bean);
@@ -217,7 +170,7 @@ public class PhoneInputActivity extends AYActivity {
 //        sms_result = new SendSMSCodeResult(arg);
         ErrorInfoServerBean serverBean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(sms_code,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -230,22 +183,22 @@ public class PhoneInputActivity extends AYActivity {
         String phone = et_phone.getText().toString().trim();
         String code = et_code.getText().toString().trim();
         if (TextUtils.isEmpty(phone) || phone.length()!=11){
-            ToastUtils.showShortToast(R.string.phone_no_empty);
+            ToastUtils.showShortToast(R.string.input_phone_error);
             return;
         }
         if (TextUtils.isEmpty(code)){
-            ToastUtils.showShortToast(R.string.code_no_empty);
+            ToastUtils.showShortToast(getString(R.string.input_code_error));
             return;
         }
         if (sendSmsUiBean!=null && sendSmsUiBean.isSuccess) {
-            showProcessDialog("正在登陆...");
+            showProcessDialog(getString(R.string.logining_process));
             AYFacade facade = facades.get("LoginFacade");
             Map<String, Object> m = new HashMap<>();
             m.put("phone", phone);
             m.put("reg_token", sendSmsUiBean.reg_token);
             m.put("code", code);
             JSONObject args = new JSONObject(m);
-//            cmd.excute(args);
+//            cmd.execute(args);
 
             //登陆不刷新ImageToken
 
@@ -256,20 +209,20 @@ public class PhoneInputActivity extends AYActivity {
             facade.execute("LoginWithPhone",args, login);
 
         } else {
-            Toast.makeText(this, R.string.phone_input_next_step_error, LENGTH_LONG).show();
+            ToastUtils.showShortToast(R.string.phone_input_next_step_error);
         }
     }
 
     public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
         closeProcessDialog();
-        Toast.makeText(this, "登陆成功", LENGTH_LONG).show();
+        ToastUtils.showShortToast(R.string.login_success);
         LogUtils.d("AYLoginWithPhoneCommandSuccess "+args.toString());
 
         PhoneLoginServerBean serverBean = JSON.parseObject(args.toString(), PhoneLoginServerBean.class);
         PhoneLoginUiBean uiBean = new PhoneLoginUiBean(serverBean);
 
         if (!uiBean.isSuccess){
-            ToastUtils.showShortToast("登陆失败");
+            ToastUtils.showShortToast(getString(R.string.login_failare));
             return false;
         }
 
@@ -304,15 +257,9 @@ public class PhoneInputActivity extends AYActivity {
 
     public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
         closeProcessDialog();
-        /*ErrorInfoServerBean bean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast("登陆失败("+bean.error.code+")");
-        }else {
-            ToastUtils.showShortToast("登陆失败");
-        }*/
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(sms_code,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");

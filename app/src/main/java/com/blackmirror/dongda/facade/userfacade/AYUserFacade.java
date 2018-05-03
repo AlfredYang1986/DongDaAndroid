@@ -57,7 +57,7 @@ public class AYUserFacade extends AYFacade {
 
         AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");
         AYCommand cmd = f.cmds.get("LoginSuccess");
-        cmd.excute(p);
+        cmd.execute(p);
         broadcastingNotification("AYUpdateProfileCommandSuccess", args);
     }
 

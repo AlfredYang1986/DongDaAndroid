@@ -106,7 +106,7 @@
                         android:id="@+id/tv_detail_tb_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="服务详情"
+                        android:text="@string/service_detail"
                         android:textColor="#FF0D0D0D"
                         android:textSize="17sp"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -237,7 +237,7 @@
         app:layout_constraintTop_toBottomOf="@id/iv_detail_age"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="适合年龄"
+        android:text="@string/age_range"
         android:textColor="#FF0D0D0D"
         android:textSize="13sp"
         />
@@ -250,7 +250,7 @@
         android:id="@+id/tv_detail_class_dec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="班级人数"
+        android:text="@string/student_num"
         android:textColor="#FF0D0D0D"
         android:textSize="13sp"
         />
@@ -263,7 +263,7 @@
         android:id="@+id/tv_detail_teacher_dec"
         android:layout_width="53dp"
         android:layout_height="18dp"
-        android:text="师生配比"
+        android:text="@string/t_s_ratio"
         android:textColor="#FF0D0D0D"
         android:textSize="13sp"
         />
@@ -392,7 +392,7 @@
         android:layout_marginTop="20.5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="服务描述"
+        android:text="@string/service_dec"
         android:textColor="#FF0D0D0D"
         android:textSize="18sp"
         />
@@ -405,7 +405,7 @@
         android:layout_marginTop="22.5dp"
         android:layout_width="30dp"
         android:layout_height="21dp"
-        android:text="展开"
+        android:text="@string/open_dec_more"
         android:textColor="#FFA6A6A6"
         android:textSize="15sp"
         />
@@ -486,7 +486,7 @@
          android:id="@+id/tv_addr_safe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="场地安全友好性"
+        android:text="@string/addr_safe_dec"
         android:textColor="#FF0D0D0D"
         android:textSize="18sp"
         />
@@ -522,7 +522,7 @@
          android:id="@+id/tv_service_location_dec"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="地理位置"
+        android:text="@string/location_dec"
         android:textColor="#FF0D0D0D"
         android:textSize="18sp"
         />

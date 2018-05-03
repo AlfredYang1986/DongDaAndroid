@@ -19,7 +19,7 @@ public class AYLoginSuccessCommand extends AYCommand {
     }
 
     @Override
-    public <Args, Result> Result excute(Args ... arg) {
+    public <Args, Result> Result execute(Args ... arg) {
         AYDongdaCommonFacade f = (AYDongdaCommonFacade) AYFactoryManager.getInstance(null).
                 queryInstance("facade", "DongdaCommanFacade");
         AYSQLiteProxy proxy = f.getProxy();

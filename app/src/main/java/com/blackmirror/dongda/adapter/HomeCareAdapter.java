@@ -8,9 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
+import com.blackmirror.dongda.utils.OSSUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.List;
@@ -34,7 +33,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 
     @Override
     public HomeCareViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_care,parent,false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_item_care, parent, false);
         return new HomeCareViewHolder(view);
     }
 
@@ -43,27 +42,18 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 
         HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
 
-        String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
-        LogUtils.d("care url "+url);
+        String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
         holder.sv_care_photo.setImageURI(url);
-
-        /*try {
-            String url = GetOSSClient.INSTANCE().oss.presignConstrainedObjectURL("bm-dongda", servicesBean.service_image+".jpg", 30 * 60);
-            Log.d("xcx", "url: "+url);
-            holder.sv_care_photo.setImageURI(url);
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }*/
 
         holder.tv_care_name.setText(this.bean.services.get(position).service_tags.get(0));
         StringBuilder sb = new StringBuilder();
         sb.append(servicesBean.brand_name)
-                .append("的")
-                .append(servicesBean.operation.contains("低龄")?"低龄":"")
+                .append(context.getString(R.string.str_de))
+                .append(servicesBean.operation.contains(context.getString(R.string.low_age)) ? context.getString(R.string.low_age) : "")
                 .append(servicesBean.service_leaf);
         holder.tv_care_detail.setText(sb.toString());
-        holder.tv_care_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
-        initListener(holder,position,servicesBean);
+        holder.tv_care_location.setText(servicesBean.address.substring(0, servicesBean.address.indexOf(context.getString(R.string.str_qu)) + 1));
+        initListener(holder, position, servicesBean);
 
     }
 
@@ -73,7 +63,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
             public void onClick(View v) {
                 if (listener != null) {
                     int pos = holder.getAdapterPosition();
-                    listener.onItemCareClick(holder.itemView, pos,servicesBean.service_id);
+                    listener.onItemCareClick(holder.itemView, pos, servicesBean.service_id);
                 }
             }
         });
@@ -101,7 +91,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
         }
     }
 
-    public void setRefreshData(List<HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean> list){
+    public void setRefreshData(List<HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean> list) {
         bean.services.clear();
         bean.services.addAll(list);
         notifyDataSetChanged();

@@ -13,7 +13,7 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
@@ -43,7 +43,7 @@ public class NameInputActivity extends AYActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_name_input);
         AYApplication.addActivity(this);
-        OtherUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
+        DeviceUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
         has_photo = getIntent().getBooleanExtra("has_photo", true);
         initView();
         initData();
@@ -65,7 +65,7 @@ public class NameInputActivity extends AYActivity {
             public void onClick(View v) {
                 name = et_input_name.getText().toString().trim();
                 if (TextUtils.isEmpty(name)){
-                    ToastUtils.showShortToast("请输入正确的名字!");
+                    ToastUtils.showShortToast(getString(R.string.input_name_error));
                     return;
                 }
                 if (has_photo){
@@ -119,17 +119,17 @@ public class NameInputActivity extends AYActivity {
             profile.screen_photo = uiBean.screen_photo;
             profile.is_current=1;
             AYCommand cmd = facades.get("LoginFacade").cmds.get("UpdateLocalProfile");
-            long result = cmd.excute(profile);
+            long result = cmd.execute(profile);
             if (result>0){
                 closeProcessDialog();
-                ToastUtils.showShortToast("修改成功!");
+                ToastUtils.showShortToast(getString(R.string.update_user_info_success));
                 Intent intent = new Intent(NameInputActivity.this, AYHomeActivity.class);
                 intent.putExtra("img_uuid",uiBean.screen_photo);
                 startActivity(intent);
                 AYApplication.finishAllActivity();
             }else {
                 closeProcessDialog();
-                ToastUtils.showShortToast("系统异常(SQL)");
+                ToastUtils.showShortToast(getString(R.string.update_sql_error));
             }
         }
     }
@@ -138,7 +138,7 @@ public class NameInputActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(btn_next,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");

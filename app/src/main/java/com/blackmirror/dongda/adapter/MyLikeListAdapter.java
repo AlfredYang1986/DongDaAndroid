@@ -59,20 +59,20 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
         holder.tv_care_list_name.setText(list.get(position).service_tags.get(0));
 
         StringBuilder sb = new StringBuilder();
-        if (servicesBean.service_leaf.contains("看顾")){
+        if (servicesBean.service_leaf.contains(context.getString(R.string.str_care))){
             sb.append(servicesBean.brand_name)
-                    .append("的")
+                    .append(context.getString(R.string.str_de))
                     .append(servicesBean.service_leaf);
         }else {
             sb.append(servicesBean.brand_name)
-                    .append("的")
+                    .append(context.getString(R.string.str_de))
                     .append(servicesBean.service_leaf)
                     .append(servicesBean.category);
         }
 
 
         holder.tv_care_list_content.setText(sb.toString());
-        holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
+        holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf(context.getString(R.string.str_qu))+1));
 
         initListener(holder, position,servicesBean);
 

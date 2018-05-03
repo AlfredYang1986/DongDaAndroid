@@ -8,7 +8,8 @@ import android.util.Log;
 
 import com.blackmirror.dongda.AY.AYSysHelperFunc;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
-import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
@@ -62,7 +63,7 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     }
 
     protected void setStatusBarColor() {
-        OtherUtils.setStatusBarColor(this);
+        DeviceUtils.setStatusBarColor(this);
     }
 
     @Override
@@ -140,15 +141,15 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
     protected abstract void bindingFragments();
 
     protected void showProcessDialog() {
-        showProcessDialog("提示", "正在处理中...");
+        showProcessDialog(getString(R.string.dlg_tips), getString(R.string.dlg_processing));
     }
 
     protected void showProcessDialog(String message) {
-        showProcessDialog("提示", message);
+        showProcessDialog(getString(R.string.dlg_tips), message);
     }
 
     protected void showProcessDialog(String message, boolean cancelable) {
-        showProcessDialog("提示", message, cancelable);
+        showProcessDialog(getString(R.string.dlg_tips), message, cancelable);
     }
 
     protected void showProcessDialog(String title, String message) {

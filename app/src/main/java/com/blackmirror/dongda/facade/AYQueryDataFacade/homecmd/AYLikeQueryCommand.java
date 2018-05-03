@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.facade.AYQueryDataFacade.homecmd;
 
 import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.utils.AppConstant;
 
 /**
  * Created by alfredyang on 6/7/17.
@@ -18,7 +19,8 @@ public class AYLikeQueryCommand extends AYRemoteCommand {
     @Override
     protected String getUrl() {
 //        return kDONGDABASEURL +  "v3.1/kidnap/search";
-        return "http://192.168.100.174:9000/al/user/collected/services";
+        return AppConstant.LIKE_QUERY_LIST_URL;
+
     }
 
     @Override

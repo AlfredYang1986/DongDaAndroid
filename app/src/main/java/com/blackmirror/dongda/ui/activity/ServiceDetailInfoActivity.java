@@ -3,7 +3,6 @@ package com.blackmirror.dongda.ui.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
@@ -14,9 +13,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,12 +24,6 @@ import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.CalUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.StringUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
 import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
@@ -48,6 +38,14 @@ import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.SafeUiBean;
 import com.blackmirror.dongda.model.uibean.ServiceDetailInfoUiBean;
 import com.blackmirror.dongda.ui.view.SlidingTabLayout;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.CalUtils;
+import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.StringUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import org.json.JSONException;
@@ -96,18 +94,6 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     private int status;//1 展开 2 关闭 3 中间状态
     private ImageView iv_detail_tb_back;
     private ImageView iv_detail_tb_like;
-    public static final int[] teacher_bg_res_id = {
-            R.drawable.avatar_0,
-            R.drawable.avatar_1,
-            R.drawable.avatar_2,
-            R.drawable.avatar_3,
-            R.drawable.avatar_4,
-            R.drawable.avatar_5,
-            R.drawable.avatar_6,
-            R.drawable.avatar_7,
-            R.drawable.avatar_8,
-            R.drawable.avatar_9
-    };
     private ConstraintLayout cl_tb_content;
     private SimpleDraweeView sv_teacher_bg;
     private TextView tv_addr_safe;
@@ -119,28 +105,12 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_info);
         service_id = getIntent().getStringExtra("service_id");
-        //        OtherUtils.setStatusBarColor(this,0);
-        //        OtherUtils.fullScreen(this);
         setTitle("");
         initView(savedInstanceState);
         initData();
         initListener();
-        initSystemBarColor();
-        Random random = new Random();
+        DeviceUtils.initSystemBarColor(this);
     }
-
-    private void initSystemBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            ViewGroup viewGroup = this.findViewById(Window.ID_ANDROID_CONTENT);
-            View childView = viewGroup.getChildAt(0);
-            if (null != childView) {
-                //                childView.setFitsSystemWindows(false);
-            }
-        }
-    }
-
 
     private void initView(Bundle savedInstanceState) {
         ctl_root = findViewById(R.id.ctl_root);
@@ -221,18 +191,18 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
             @Override
             public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
                 if (verticalOffset == 0) {//展开状态
-                    if (status != 1) {
-                        status = 1;
+                    if (status != AppConstant.OPEN_STATUS) {
+                        status = AppConstant.OPEN_STATUS;
                         hideTb();
                     }
                 } else if (Math.abs(verticalOffset) >= appBarLayout.getTotalScrollRange()) {//折叠状态
-                    if (status != 2) {
-                        status = 2;
+                    if (status != AppConstant.CLOSE_STATUS) {
+                        status = AppConstant.CLOSE_STATUS;
                         showTb();
                     }
                 } else {//其他状态
-                    if (status != 3) {
-                        status = 3;
+                    if (status != AppConstant.OTHER_STATUS) {
+                        status = AppConstant.CLOSE_STATUS;
                         hideTb();
                     }
                 }
@@ -249,12 +219,12 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                 finish();
                 break;
             case R.id.tv_dec_more:
-                if (tv_dec_more.getText().equals("展开")) {
-                    tv_dec_more.setText("收起");
+                if (tv_dec_more.getText().equals(getString(R.string.open_dec_more))) {
+                    tv_dec_more.setText(R.string.close_dec_more);
                     tv_service_dec_content.setMaxLines(100);
                     tv_service_dec_content.setText(uiBean.service.description);
                 } else {
-                    tv_dec_more.setText("展开");
+                    tv_dec_more.setText(getString(R.string.open_dec_more));
                     tv_service_dec_content.setMaxLines(4);
                     tv_service_dec_content.setText(uiBean.service.description);
                 }
@@ -359,7 +329,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
 
         StringBuilder sb = new StringBuilder();
 
-        if (bean.service.service_type.contains("看顾")) {
+        if (bean.service.service_type.contains(getString(R.string.str_care))) {
             sb.append(bean.service.service_leaf);
             tv_detail_type.setVisibility(View.VISIBLE);
         } else {
@@ -377,7 +347,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         range.append(bean.service.min_age)
                 .append("-")
                 .append(bean.service.max_age)
-                .append("岁");
+                .append(getString(R.string.str_age));
         tv_age_range.setText(range.toString());//年龄范围
 
         checkClassMaxStu(bean.service.class_max_stu);
@@ -391,21 +361,14 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                 .append(bean.service.class_max_stu);
         tv_t_s_ratio.setText(radio.toString());
 
-       /* if (bean.service.service_type.contains("看顾")){
-            tv_course_name.setText(bean.service.brand.brand_name);//课程名称
-            tv_teacher_name.setText(bean.service.brand.brand_name+"老师");//
-        }else {
-            tv_course_name.setText(bean.service.service_tags.get(0));//课程名称
-            tv_teacher_name.setText(bean.service.brand.brand_name+"老师");//
-        }*/
 
         tv_course_name.setText(bean.service.brand.brand_name);//课程名称
-        tv_teacher_name.setText(bean.service.brand.brand_name + "老师");//
+        tv_teacher_name.setText(String.format(getString(R.string.str_teacher),bean.service.brand.brand_name));//
 
         Random random = new Random();
         randomInt = random.nextInt(10);
         randomInt = randomInt > 9 || randomInt < 0 ? 0 : randomInt;
-        sv_teacher_bg.setImageURI(OtherUtils.resourceIdToUri(ServiceDetailInfoActivity.this, teacher_bg_res_id[randomInt]));
+        sv_teacher_bg.setImageURI(OtherUtils.resourceIdToUri(ServiceDetailInfoActivity.this, AppConstant.teacher_bg_res_id[randomInt]));
 
         tv_brand_tag.setText(bean.service.brand.brand_tag);//
 
@@ -426,25 +389,25 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
             String s = bean.service.location.friendliness.get(i);
             SafeUiBean b = new SafeUiBean();
             b.dec = s;
-            if (s.equals("新风系统")) {
+            if (s.equals(getString(R.string.new_wind_sys))) {
                 b.res_id = R.drawable.new_wind_sys;
-            } else if (s.equals("空气净化器")) {
+            } else if (s.equals(getString(R.string.air_clear_sys))) {
                 b.res_id = R.drawable.air_clear_sys;
-            } else if (s.equals("安全插座")) {
+            } else if (s.equals(getString(R.string.safe_power))) {
                 b.res_id = R.drawable.safe_power;
-            } else if (s.equals("实时监控")) {
+            } else if (s.equals(getString(R.string.real_time_protect))) {
                 b.res_id = R.drawable.real_time_protect;
-            } else if (s.equals("无线WI-FI")) {
+            } else if (s.equals(getString(R.string.has_wifi))) {
                 b.res_id = R.drawable.wifi;
-            } else if (s.equals("防摔地板")) {
+            } else if (s.equals(getString(R.string.protect_floor))) {
                 b.res_id = R.drawable.floor;
-            } else if (s.equals("加湿器")) {
+            } else if (s.equals(getString(R.string.air_humid))) {
                 b.res_id = R.drawable.air_humid;
-            } else if (s.equals("安全护栏")) {
+            } else if (s.equals(getString(R.string.safe_guard))) {
                 b.res_id = R.drawable.guard;
-            } else if (s.equals("急救包")) {
+            } else if (s.equals(getString(R.string.kit_package))) {
                 b.res_id = R.drawable.kit;
-            } else if (s.equals("安全桌角")) {
+            } else if (s.equals(getString(R.string.safe_table))) {
                 b.res_id = R.drawable.safe_table;
             }
             if (!s.equals("")) {
@@ -510,7 +473,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -539,7 +502,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -568,7 +531,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");

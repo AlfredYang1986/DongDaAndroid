@@ -34,7 +34,6 @@
                 android:id="@+id/tv_home_head_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="看顾"
                 android:textColor="#FF0D0D0D"
                 android:textSize="17sp"
                 app:layout_constraintBottom_toBottomOf="parent"

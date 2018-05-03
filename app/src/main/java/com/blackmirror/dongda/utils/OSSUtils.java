@@ -34,9 +34,9 @@ public class OSSUtils {
                 .append("&OSSAccessKeyId=".trim())
                 .append(AYPrefUtils.getAccesskeyId())
                 .append("&Signature=")
-                .append(HttpUtil.urlEncode(sign, AppConstant.DEFAULT_CHARSET_NAME))
+                .append(NetUtils.urlEncode(sign, AppConstant.DEFAULT_CHARSET_NAME))
                 .append("&security-token=")
-                .append(HttpUtil.urlEncode(AYPrefUtils.getSecurityToken(), AppConstant.DEFAULT_CHARSET_NAME));
+                .append(NetUtils.urlEncode(AYPrefUtils.getSecurityToken(), AppConstant.DEFAULT_CHARSET_NAME));
         return sb2.toString();
     }
 

@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.DensityUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -171,7 +171,7 @@ public class SlidingTabLayout extends TabLayout{
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (mScreenWidth / (mTabVisibleCount + mLastTabVisibleRatio)), LinearLayout.LayoutParams
                     .WRAP_CONTENT);
             params.gravity= Gravity.BOTTOM;
-            params.bottomMargin= OtherUtils.dp2px(10);
+            params.bottomMargin= DensityUtils.dp2px(10);
             tabView.setLayoutParams(params);
             //tab中的图标可以超出父容器
             tabView.setClipChildren(false);

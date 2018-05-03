@@ -52,13 +52,13 @@ public abstract class AYFacade implements AYSysNotificationHandler {
     public void execute(String cmdName,JSONObject... object){
         AYCommand cmd = cmds.get(cmdName);
         cmd.setTarget(this);
-        cmd.excute(object);
+        cmd.execute(object);
     }
 
     public <T> void execute(String cmdName,T t,boolean isUpload){
         AYCommand cmd = cmds.get(cmdName);
         cmd.setTarget(this);
-        cmd.excute(t);
+        cmd.execute(t);
     }
 
 }

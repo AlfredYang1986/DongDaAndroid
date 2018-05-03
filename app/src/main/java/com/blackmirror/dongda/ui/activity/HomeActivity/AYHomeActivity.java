@@ -17,9 +17,9 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DensityUtils;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.ui.activity.ArtListActivity;
@@ -80,7 +80,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     private HomeScienceAdapter scienceAdapter;
     private HomeInfoServerBean bean;
     private int clickLikePos;
-    private int clickAdapter = 0;//1 art 2 sport 3 science
+    private int clickAdapter;//1 art 2 sport 3 science
     private String img_uuid;
 
 
@@ -114,7 +114,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
 
     private void initData() {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            iv_home_location.setElevation(OtherUtils.dp2px(6));
+            iv_home_location.setElevation(DensityUtils.dp2px(6));
         }
         showProcessDialog();
         //精选主题
@@ -229,7 +229,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onArtLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
                     //                    ToastUtils.showShortToast("点击了收藏");
                     clickLikePos = position;
-                    clickAdapter = 1;
+                    clickAdapter = AppConstant.HOME_ART_ADAPTER;
                     sendLikeData(bean);
                 }
 
@@ -265,7 +265,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onSportLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
                     sendLikeData(servicesBean);
                     clickLikePos = position;
-                    clickAdapter = 2;
+                    clickAdapter = AppConstant.HOME_SPORT_ADAPTER;
                 }
 
                 @Override
@@ -294,7 +294,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                 public void onScienceLikeClick(View view, int position, HomeInfoServerBean.ResultBean
                         .HomepageServicesBean.ServicesBean servicesBean) {
                     clickLikePos = position;
-                    clickAdapter = 3;
+                    clickAdapter = AppConstant.HOME_SCIENCE_ADAPTER;
                     sendLikeData(servicesBean);
                 }
 
@@ -353,8 +353,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                     int m = bean.result.homepage_services.get(1).totalCount;
                     intent.putExtra("totalCount", m);
                 }
-                intent.putExtra("serviceType", "艺术");
-                intent.putExtra("title", "艺术");
+                intent.putExtra("serviceType", getString(R.string.type_art));
+                intent.putExtra("title", getString(R.string.type_art));
                 startActivityForResult(intent, AppConstant.ART_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_sport_more:
@@ -362,8 +362,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                     int m = bean.result.homepage_services.get(2).totalCount;
                     intent.putExtra("totalCount", m);
                 }
-                intent.putExtra("serviceType", "运动");
-                intent.putExtra("title", "运动");
+                intent.putExtra("serviceType", getString(R.string.type_sport));
+                intent.putExtra("title", getString(R.string.title_sport));
                 startActivityForResult(intent, AppConstant.SPORT_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_science_more:
@@ -371,8 +371,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
                     int m = bean.result.homepage_services.get(3).totalCount;
                     intent.putExtra("totalCount", m);
                 }
-                intent.putExtra("serviceType", "科学");
-                intent.putExtra("title", "科学");
+                intent.putExtra("serviceType", getString(R.string.type_science));
+                intent.putExtra("title", getString(R.string.title_science));
                 startActivityForResult(intent, AppConstant.SCIENCE_REQUEST_CODE);
                 break;
             case R.id.iv_home_location:
@@ -414,7 +414,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         LogUtils.d("AYSearchServiceCommandFailed " + args.toString());
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -433,11 +433,11 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
         LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
         if (pushUiBean.isSuccess) {
-            if (clickAdapter == 1) {
+            if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
                 artAdapter.notifyItemChanged(clickLikePos, true);
-            } else if (clickAdapter == 2) {
+            } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
                 sportAdapter.notifyItemChanged(clickLikePos, true);
-            } else if (clickAdapter == 3) {
+            } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
                 scienceAdapter.notifyItemChanged(clickLikePos, true);
             }
         } else {
@@ -449,7 +449,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -466,11 +466,11 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
         LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
         if (popUiBean.isSuccess) {
-            if (clickAdapter == 1) {
+            if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
                 artAdapter.notifyItemChanged(clickLikePos, false);
-            } else if (clickAdapter == 2) {
+            } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
                 sportAdapter.notifyItemChanged(clickLikePos, false);
-            } else if (clickAdapter == 3) {
+            } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
                 scienceAdapter.notifyItemChanged(clickLikePos, false);
             }
         } else {
@@ -482,7 +482,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -499,7 +499,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
     }
 
     private void needsRefreshHomeData(int requestCode, int resultCode, Intent data) {
-        LogUtils.d("code=="+requestCode+" "+resultCode);
         switch (requestCode) {
             case AppConstant.CARE_MORE_REQUEST_CODE:
             case AppConstant.ART_MORE_REQUEST_CODE:

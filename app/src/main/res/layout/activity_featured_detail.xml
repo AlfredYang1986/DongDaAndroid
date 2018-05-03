@@ -47,7 +47,6 @@
                     android:id="@+id/tv_featured_tb_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="STEAM"
                     android:textColor="#FF0D0D0D"
                     android:textSize="17sp"
                     app:layout_constraintLeft_toLeftOf="parent"

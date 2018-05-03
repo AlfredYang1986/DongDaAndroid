@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.adapter.MyLikeListAdapter;
@@ -55,7 +56,7 @@ public class MyLikeActivity extends AYActivity {
         rv_my_like = findViewById(R.id.rv_my_like);
         iv_home_head_back = findViewById(R.id.iv_home_head_back);
         tv_home_head_title = findViewById(R.id.tv_home_head_title);
-        tv_home_head_title.setText("我的收藏");
+        tv_home_head_title.setText(R.string.my_collection);
     }
 
     private void initData() {
@@ -122,7 +123,7 @@ public class MyLikeActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code== AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -132,16 +133,16 @@ public class MyLikeActivity extends AYActivity {
     private void showConfirmUnLikeDialog(int position, final QueryLikeServerBean.ResultBean.ServicesBean bean) {
         dialog = new AlertDialog.Builder(MyLikeActivity.this)
                 .setCancelable(false)
-                .setTitle("提示")
-                .setMessage("确定取消收藏吗?")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.dlg_tips)
+                .setMessage(R.string.confirm_un_like)
+                .setPositiveButton(getString(R.string.dlg_confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         sendLikeData(bean);
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dlg_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -195,7 +196,7 @@ public class MyLikeActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -222,7 +223,7 @@ public class MyLikeActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");

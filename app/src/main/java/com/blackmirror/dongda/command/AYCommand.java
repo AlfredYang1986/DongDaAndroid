@@ -1,6 +1,8 @@
 package com.blackmirror.dongda.command;
 
 import com.blackmirror.dongda.AY.AYSysNotifier;
+import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AppConstant;
 
 import org.json.JSONException;
@@ -16,13 +18,13 @@ import okhttp3.OkHttpClient;
 public abstract class AYCommand extends AYSysNotifier {
 
     public static OkHttpClient httpClient = new OkHttpClient().newBuilder()
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(AppConstant.CONNECT_TIMEOUT, TimeUnit.SECONDS)
 //            .addNetworkInterceptor(new StethoInterceptor())
-            .readTimeout(15,TimeUnit.SECONDS)
-            .writeTimeout(60,TimeUnit.SECONDS)
+            .readTimeout(AppConstant.READ_TIMEOUT,TimeUnit.SECONDS)
+            .writeTimeout(AppConstant.WRITE_TIMEOUT,TimeUnit.SECONDS)
             .build();
 
-    public abstract <Args, Result> Result excute(Args ... defaultArgs);
+    public abstract <Args, Result> Result execute(Args ... defaultArgs);
 
     public String kDONGDABASEURL = "http://www.altlys.com:9000/";
 
@@ -34,10 +36,6 @@ public abstract class AYCommand extends AYSysNotifier {
         this.cmd_name = n;
     }
 
-    protected void cancelNetCall(){
-
-    }
-
     protected JSONObject getErrorNetData() {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"status\":\"error\",")
@@ -46,7 +44,7 @@ public abstract class AYCommand extends AYSysNotifier {
                 .append(AppConstant.NET_WORK_UNAVAILABLE)
                 .append(",")
                 .append("\"message\":\"")
-                .append("网络异常,请改善网络环境并重试")
+                .append(AYApplication.appContext.getString(R.string.net_work_error))
                 .append("\"}}");
         JSONObject object = null;
         try {

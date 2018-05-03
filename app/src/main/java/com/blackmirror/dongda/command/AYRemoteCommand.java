@@ -1,18 +1,14 @@
 package com.blackmirror.dongda.command;
 
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.NetUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DateUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.NetUtils;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
@@ -22,11 +18,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.ConnectException;
-import java.net.HttpURLConnection;
 import java.net.SocketTimeoutException;
-import java.net.URL;
 import java.util.zip.GZIPInputStream;
 
 import io.reactivex.Observable;
@@ -35,7 +28,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -48,109 +40,16 @@ public abstract class AYRemoteCommand extends AYCommand {
 
     private static final String imageUrl="http://192.168.100.174:9000/al/oss/gst";
     private AYSysNotificationHandler mNotificationHandler;
-    private Call net_call;
     private Disposable disposable;
     private Disposable muliteDisposable;
-    private JSONObject o;
-
-    protected class AYAsyncTask extends AsyncTask<JSONObject, Integer, JSONObject> {
-        @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
-        protected JSONObject doInBackground(JSONObject... params) {
-            String result = "";
-            HttpURLConnection conn = null;
-            try {
-                URL urls = new URL(Uri.parse(getUrl()).buildUpon().build().toString());
-                conn = (HttpURLConnection) urls.openConnection();
-                conn.setDoOutput(true);
-                conn.setRequestMethod("POST");
-                conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-                conn.setRequestProperty("Accept", "application/json");
-                conn.setChunkedStreamingMode(0);
-
-                conn.setReadTimeout(50000); //milliseconds
-                conn.setConnectTimeout(20000); // milliseconds
-
-                conn.connect();
-
-                JSONObject p = null;
-                if (params.length > 0) {
-                    p = params[0];
-                }
-
-                Log.i("remote task", p.toString());
-                byte[] outputBytes = p.toString().getBytes("UTF-8");
-                OutputStream os = conn.getOutputStream();
-                os.write(outputBytes);
-                os.flush();
-                os.close();
-
-                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(
-                            conn.getInputStream(), "UTF-8"), 8);
-                    //                            conn.getInputStream(), "iso-8859-1"), 8);
-                    StringBuilder sb = new StringBuilder();
-                    String line = null;
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
-
-                    }
-                    result = sb.toString();
-
-                } else {
-                    result = "";
-                }
-                LogUtils.d(result);
-
-            } catch (Exception e) {
-                // System.out.println("exception in jsonparser class ........");
-                e.printStackTrace();
-            } finally {
-                if (conn != null)
-                    conn.disconnect();
-            }
-
-            JSONObject js_result = null;
-            try {
-                js_result = new JSONObject(result);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return js_result;
-        }
-
-        @Override
-        protected void onPostExecute(JSONObject result) {
-            super.onPostExecute(result);
-            AYSysNotificationHandler t = getTarget();
-
-            try {
-                if (result == null || !result.getString("status").equals("ok"))
-                    t.handleNotifications(getFailedCallBackName(), result);
-                else
-                    t.handleNotifications(getSuccessCallBackName(), result);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-                // t.handleNotifications(getSuccessCallBackName(), result);
-            }
-        }
-    }
 
     @Override
-    public <Args, Result> Result excute(Args[] args) {
-        excuteImpl((JSONObject[]) args);
+    public <Args, Result> Result execute(Args[] args) {
+        executeImpl((JSONObject[]) args);
         return null;
     }
 
-    public void excuteImpl(JSONObject... args) {
-        /*AYAsyncTask tk = new AYAsyncTask();
-        tk.execute(args);*/
+    public void executeImpl(JSONObject... args) {
         if (NetUtils.isNetworkAvailable()) {
             getServerData(args);
         }else {//确定所有网络请求发起都在主线程
@@ -158,16 +57,9 @@ public abstract class AYRemoteCommand extends AYCommand {
             if (mNotificationHandler==null) {
                 mNotificationHandler = getTarget();
             }
-            if (mNotificationHandler == null){
-                LogUtils.d("flag","mNotificationHandler null");
-
+            if (mNotificationHandler != null){
+                mNotificationHandler.handleNotifications(getFailedCallBackName(),getErrorNetData());
             }
-
-            LogUtils.d("flag","getFailedCallBackName "+getFailedCallBackName());
-            LogUtils.d("flag","getErrorNetData "+getErrorNetData().toString());
-
-
-            mNotificationHandler.handleNotifications(getFailedCallBackName(),getErrorNetData());
         }
     }
 
@@ -177,7 +69,7 @@ public abstract class AYRemoteCommand extends AYCommand {
             return;
         }
 
-        if (args.length>=2 || !OtherUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())){
+        if (args.length>=2 || !DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())){
             sendRequestData(args);
         }else {
             //先获取ImgToken再请求其他数据
@@ -362,8 +254,8 @@ public abstract class AYRemoteCommand extends AYCommand {
         sb.append("{\"status\":\"error\",")
                 .append("\"error\":{")
                 .append("\"code\":")
-                .append("-9999,")
-                .append("\"message\":\"")
+                .append(AppConstant.NET_UNKNOWN_ERROR)
+                .append(",\"message\":\"")
                 .append(e.getMessage())
                 .append("\"}}");
         JSONObject object = null;
@@ -389,12 +281,5 @@ public abstract class AYRemoteCommand extends AYCommand {
     protected abstract String getSuccessCallBackName();
 
     protected abstract String getFailedCallBackName();
-
-    @Override
-    protected void cancelNetCall() {
-        if (net_call != null && !net_call.isCanceled()) {
-            net_call.cancel();
-        }
-    }
 
 }

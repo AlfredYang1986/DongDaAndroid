@@ -18,17 +18,18 @@ public class SendSmsUiBean {
         status=bean.status;
         if (bean != null && "ok".equals(bean.status)) {
             isSuccess = true;
+            if ( bean.result != null && bean.result.reg != null) {
+                phone=bean.result.reg.phone;
+                code=bean.result.reg.code;
+                reg_token=bean.result.reg.reg_token;
+                is_reg=bean.result.reg.is_reg;
+            }
         } else {
             isSuccess = false;
             if (bean!=null && bean.error!=null) {
                 message = bean.error.message;
             }
         }
-        if (bean != null && "ok".equals(bean.status) && bean.result != null && bean.result.reg != null) {
-            phone=bean.result.reg.phone;
-            code=bean.result.reg.code;
-            reg_token=bean.result.reg.reg_token;
-            is_reg=bean.result.reg.is_reg;
-        }
+
     }
 }

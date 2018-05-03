@@ -33,9 +33,9 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DateUtils;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
@@ -85,14 +85,13 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_change);
         AYApplication.addActivity(this);
-        OtherUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
+        DeviceUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
         p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
         name = getIntent().getStringExtra("name");
         isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_NAME_INPUT;
         initView();
         initData();
         initListener();
-        //        getImageToken();
     }
 
     private void initView() {
@@ -128,15 +127,15 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
                 break;
             case R.id.btn_enter_home:
                 if (isChangeScreenPhoto) {
-                    showProcessDialog("正在上传头像...");
-                    if (OtherUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
+                    showProcessDialog(getString(R.string.uploading_head_photo));
+                    if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
                         getImageToken();
                     } else {
                         uploadImage();
                     }
 
                 } else {
-                    ToastUtils.showShortToast("请选择头像!");
+                    ToastUtils.showShortToast(getString(R.string.choose_head_photo));
                 }
                 break;
             case R.id.btn_enter_cancel:
@@ -203,16 +202,16 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
 
         AlertDialog dialog = new AlertDialog.Builder(PhotoChangeActivity.this)
                 .setCancelable(false)
-                .setTitle("权限拒绝")
-                .setMessage("请在设置->应用管理->咚哒->权限管理打开相机权限.")
-                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.permission_denied)
+                .setMessage(R.string.open_camera_permission_setting)
+                .setPositiveButton(getString(R.string.go_permission_setting), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         DeviceUtils.gotoPermissionSetting(PhotoChangeActivity.this);
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dlg_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -260,7 +259,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             AYPrefUtils.setExpiration(bean.Expiration);
             uploadImage();
         } else {
-            ToastUtils.showShortToast("数据异常("+bean.message+"," + bean.code + ")");
+            ToastUtils.showShortToast(String.format(getString(R.string.data_unknown_error),bean.message,String.valueOf(bean.code)));
         }
     }
 
@@ -269,10 +268,10 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(btn_enter_home, uiBean.message);
         } else {
-            ToastUtils.showShortToast("上传失败(" + uiBean.message + "," + uiBean.code + ")");
+            ToastUtils.showShortToast(String.format(getString(R.string.upload_unknown_error),uiBean.message,String.valueOf(uiBean.code)));
         }
     }
 
@@ -300,7 +299,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(iv_head_photo,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -329,15 +328,15 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             profile.is_current = 1;
 
             AYCommand cmd = facades.get("LoginFacade").cmds.get("UpdateLocalProfile");
-            long result = cmd.excute(profile);
+            long result = cmd.execute(profile);
             if (result > 0) {
-                ToastUtils.showShortToast("修改成功!");
+                ToastUtils.showShortToast(R.string.update_user_info_success);
                 Intent intent = new Intent(PhotoChangeActivity.this, AYHomeActivity.class);
                 intent.putExtra("img_uuid",uiBean.screen_photo);
                 startActivity(intent);
                 AYApplication.finishAllActivity();
             } else {
-                ToastUtils.showShortToast("系统异常(SQL)");
+                ToastUtils.showShortToast(R.string.update_sql_error);
             }
         }
 
@@ -349,7 +348,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_head_photo, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -382,7 +381,6 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
      */
     private void getPicFromCamera() {
         // 创建File对象，用于存储拍照后的图片
-        LogUtils.d(getExternalCacheDir() + "/takePic");
         File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
         try {
             if (outputImage.exists()) {
@@ -392,7 +390,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (Build.VERSION.SDK_INT < 24) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {//7.0 以下
             imageUri = Uri.fromFile(outputImage);
         } else {
             //Android 7.0系统开始 使用本地真实的Uri路径不安全,使用FileProvider封装共享Uri
@@ -420,7 +418,7 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
             switch (requestCode) {
                 case AppConstant.CHOOSE_PIC://从相册选择图片
                     // 判断手机系统版本号
-                    if (Build.VERSION.SDK_INT >= 19) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         // 4.4及以上系统使用这个方法处理图片
                         handleImageOnKitKat(data);
                     } else {

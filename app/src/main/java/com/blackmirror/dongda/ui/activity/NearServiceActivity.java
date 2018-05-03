@@ -99,7 +99,7 @@ public class NearServiceActivity extends AYActivity {
 
 
     private void initLocation() {
-        showProcessDialog("正在定位...");
+        showProcessDialog(getString(R.string.location_processing));
         //初始化client
         locationClient = new AMapLocationClient(this.getApplicationContext());
         locationOption = new AMapLocationClientOption();
@@ -150,7 +150,7 @@ public class NearServiceActivity extends AYActivity {
                 closeProcessDialog();
                 markers.clear();
                 aMap.clear();
-                showProcessDialog("正在定位...");
+                showProcessDialog(getString(R.string.location_processing));
                 closePopUpWindow();
                 stopLocation();
                 if (locationClient != null) {
@@ -206,13 +206,13 @@ public class NearServiceActivity extends AYActivity {
         sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image));
         tv_near_title.setText(b.service_leaf);
         StringBuilder s = new StringBuilder();
-        if (b.service_leaf.contains("看顾")){
+        if (b.service_leaf.contains(getString(R.string.str_care))){
             s.append(b.brand_name)
-                    .append("的")
+                    .append(getString(R.string.str_de))
                     .append(b.service_leaf);
         }else {
             s.append(b.brand_name)
-                    .append("的")
+                    .append(getString(R.string.str_de))
                     .append(b.service_leaf)
                     .append(b.category);
         }
@@ -226,16 +226,16 @@ public class NearServiceActivity extends AYActivity {
     }
 
     private int getImageResId(String serviceType, boolean isSelect) {
-        if (serviceType.equals("看顾")){
+        if (serviceType.equals(getString(R.string.str_care))){
             return isSelect ? R.drawable.map_icon_day_care_select : R.drawable.map_icon_day_care_normal;
         }
-        if (serviceType.equals("艺术")){
+        if (serviceType.equals(getString(R.string.str_art))){
             return isSelect ? R.drawable.map_icon_art_select : R.drawable.map_icon_art_normal;
         }
-        if (serviceType.equals("运动")){
+        if (serviceType.equals(getString(R.string.str_sport))){
             return isSelect ? R.drawable.map_icon_sport_select : R.drawable.map_icon_sport_normal;
         }
-        if (serviceType.equals("科学")){
+        if (serviceType.equals(getString(R.string.str_science))){
             return isSelect ? R.drawable.map_icon_science_select : R.drawable.map_icon_science_normal;
         }
         return R.drawable.map_icon_day_care_normal;
@@ -312,7 +312,7 @@ public class NearServiceActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(iv_current_location,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -482,20 +482,20 @@ public class NearServiceActivity extends AYActivity {
                 str = "GPS状态正常";
                 break;
             case AMapLocationQualityReport.GPS_STATUS_NOGPSPROVIDER:
-                str = "手机中没有GPS Provider，无法进行GPS定位";
+                str = getString(R.string.gps_status_nogpsprovider);
                 ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_OFF:
-                str = "GPS关闭，建议开启GPS，提高定位质量";
+                str = getString(R.string.gps_status_off);
                 ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_MODE_SAVING:
-                str = "选择的定位模式中不包含GPS定位，建议选择包含GPS定位的模式，提高定位质量";
+                str = getString(R.string.gps_status_mode_saving);
                 ToastUtils.showShortToast(str);
                 break;
             case AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION:
             case AppConstant.NO_GPS_PERMISSION:
-                str = "没有GPS定位权限，建议开启gps定位权限";
+                str = getString(R.string.gps_status_nogpspermission);
                 showGoSettingDialog();
                 break;
         }
@@ -506,16 +506,16 @@ public class NearServiceActivity extends AYActivity {
 
         dialog = new AlertDialog.Builder(NearServiceActivity.this)
                 .setCancelable(false)
-                .setTitle("权限拒绝")
-                .setMessage("请在设置->应用管理->咚哒->权限管理打开定位权限.")
-                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.permission_denied)
+                .setMessage(R.string.go_location_permission_setting)
+                .setPositiveButton(getString(R.string.go_permission_setting), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         DeviceUtils.gotoPermissionSetting(NearServiceActivity.this);
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dlg_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();

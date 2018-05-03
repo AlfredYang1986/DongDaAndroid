@@ -5,7 +5,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.DensityUtils;
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14
@@ -23,11 +23,11 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
 
 
     public GridItemDecoration(int top, int space, int inner_space, int lastTop, int lastBottom, int column) {
-        this.lastTop=OtherUtils.dp2px(lastTop);
-        this.lastBottom=OtherUtils.dp2px(lastBottom);
-        this.top = OtherUtils.dp2px(top);
-        this.space = OtherUtils.dp2px(space);
-        this.inner_space = inner_space == -1 ? this.space / 2 : OtherUtils.dp2px(inner_space / 2);
+        this.lastTop= DensityUtils.dp2px(lastTop);
+        this.lastBottom= DensityUtils.dp2px(lastBottom);
+        this.top = DensityUtils.dp2px(top);
+        this.space = DensityUtils.dp2px(space);
+        this.inner_space = inner_space == -1 ? this.space / 2 : DensityUtils.dp2px(inner_space / 2);
         this.column = column;
     }
 
@@ -49,7 +49,7 @@ public class GridItemDecoration extends RecyclerView.ItemDecoration {
         if (pos >= 0 && pos < column) {
             outRect.top = top;
         } else {
-            outRect.top = OtherUtils.dp2px(55);
+            outRect.top = DensityUtils.dp2px(55);
         }
 
         if (pos % column == 0) {//最左列元素

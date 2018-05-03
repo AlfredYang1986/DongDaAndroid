@@ -45,13 +45,6 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
         String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
         holder.sv_item_art_photo.setImageURI(url);
 
-        /*try {
-            String url = GetOSSClient.INSTANCE().oss.presignConstrainedObjectURL("bm-dongda", servicesBean.service_image+".jpg", 30 * 60);
-            Log.d("xcx", "url: "+url);
-            holder.sv_item_art_photo.setImageURI(url);
-        } catch (ClientException e) {
-            e.printStackTrace();
-        }*/
         if (servicesBean.is_collected){
             holder.iv_item_art_like.setBackgroundResource(R.drawable.like_selected);
         }else {
@@ -67,11 +60,11 @@ public class HomeArtAdapter extends RecyclerView.Adapter<HomeArtAdapter.HomeArtV
 
         StringBuilder sb = new StringBuilder();
         sb.append(servicesBean.brand_name)
-                .append("的")
+                .append(context.getString(R.string.str_de))
                 .append(servicesBean.service_leaf)
                 .append(servicesBean.category);
         holder.tv_item_art_detail.setText(sb.toString());
-        holder.tv_item_art_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
+        holder.tv_item_art_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf(context.getString(R.string.str_qu))+1));
         initListener(holder, position,servicesBean);
 
     }
