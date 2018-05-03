@@ -1,34 +1,41 @@
 <controllers>
     <controller short="Landing Activity"
-                name="com.blackmirror.dongda.Landing.LandingActivity"
+                name="com.blackmirror.dongda.ui.activity.Landing.LandingActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="LoginFacade" />
     </controller>
 
     <controller short="Name Input Activity"
-                name="com.blackmirror.dongda.Landing.NameInputActivity"
+                name="com.blackmirror.dongda.ui.activity.Landing.NameInputActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="LoginFacade" />
     </controller>
 
     <controller short="Phone Input Activity"
-                name="com.blackmirror.dongda.Landing.PhoneInputActivity"
+                name="com.blackmirror.dongda.ui.activity.Landing.PhoneInputActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="LoginFacade" />
     </controller>
 
     <controller short="Photo Change Activity"
-                name="com.blackmirror.dongda.Landing.PhotoChangeActivity"
+                name="com.blackmirror.dongda.ui.activity.Landing.PhotoChangeActivity"
+                factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
+
+        <facade short="LoginFacade" />
+    </controller>
+
+    <controller short="Login Success Tmp Activity"
+                name="com.blackmirror.dongda.ui.activity.Landing.LoginSuccessTmpActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="LoginFacade" />
     </controller>
 
     <controller short="AYHomeActivity"
-        name="com.blackmirror.dongda.Home.HomeActivity.AYHomeActivity"
+        name="com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity"
         factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="QueryServiceFacade" />
@@ -36,88 +43,63 @@
 
     </controller>
 
-    <controller short="AYServicePageActivity"
-        name="com.blackmirror.dongda.Home.ServicePage.AYServicePageActivity"
-        factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
-
-
-    </controller>
-
-    <controller short="AYProfileActivity"
-        name="com.blackmirror.dongda.Profile.ProfileActivity.AYProfileActivity"
-        factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
-
-    </controller>
-
-    <controller short="AYMessageListActivity"
-        name="com.blackmirror.dongda.Message.MessageList.AYMessageListActivity"
-        factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
-
-    </controller>
-
-    <controller short="AYOrderCommonActivity"
-        name="com.blackmirror.dongda.Order.OrderModeCommon.AYOrderCommonActivity"
-        factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
-
-    </controller>
-
     <controller short="CareListActivity"
-                name="com.blackmirror.dongda.activity.CareListActivity"
+                name="com.blackmirror.dongda.ui.activity.CareListActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="QueryServiceFacade" />
     </controller>
 
     <controller short="ArtListActivity"
-                name="com.blackmirror.dongda.activity.ArtListActivity"
+                name="com.blackmirror.dongda.ui.activity.ArtListActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="QueryServiceFacade" />
     </controller>
 
     <controller short="MyLikeActivity"
-                name="com.blackmirror.dongda.activity.MyLikeActivity"
+                name="com.blackmirror.dongda.ui.activity.MyLikeActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="QueryServiceFacade" />
     </controller>
 
     <controller short="EditUserInfoActivity"
-                name="com.blackmirror.dongda.activity.EditUserInfoActivity"
+                name="com.blackmirror.dongda.ui.activity.EditUserInfoActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="UserFacade" />
     </controller>
 
     <controller short="FeaturedDetailActivity"
-                name="com.blackmirror.dongda.activity.FeaturedDetailActivity"
+                name="com.blackmirror.dongda.ui.activity.FeaturedDetailActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="QueryServiceFacade" />
     </controller>
 
     <controller short="ServiceDetailInfoActivity"
-                name="com.blackmirror.dongda.activity.ServiceDetailInfoActivity"
+                name="com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="AYDetailInfoFacade" />
     </controller>
 
     <controller short="NearServiceActivity"
-                name="com.blackmirror.dongda.activity.NearServiceActivity"
+                name="com.blackmirror.dongda.ui.activity.NearServiceActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="AYMapCommonFacade" />
     </controller>
 
     <controller short="UserAboutMeActivity"
-                name="com.blackmirror.dongda.activity.UserAboutMeActivity"
+                name="com.blackmirror.dongda.ui.activity.UserAboutMeActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="UserFacade" />
     </controller>
     <controller short="EditUserInfoActivity"
-                name="com.blackmirror.dongda.activity.EditUserInfoActivity"
+                name="com.blackmirror.dongda.ui.activity.EditUserInfoActivity"
                 factory="com.blackmirror.dongda.factory.activityFactory.AYDefaultActivityFactory">
 
         <facade short="UserFacade" />

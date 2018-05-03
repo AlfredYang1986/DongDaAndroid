@@ -2,7 +2,7 @@ package com.blackmirror.dongda.model.serverbean;
 
 import android.support.annotation.NonNull;
 
-import com.blackmirror.dongda.Tools.StringUtils;
+import com.blackmirror.dongda.utils.StringUtils;
 import com.blackmirror.dongda.model.BaseServerBean;
 
 import java.util.List;

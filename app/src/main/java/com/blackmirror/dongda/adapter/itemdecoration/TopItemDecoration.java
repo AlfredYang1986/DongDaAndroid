@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.blackmirror.dongda.Tools.OtherUtils;
+import com.blackmirror.dongda.utils.OtherUtils;
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14

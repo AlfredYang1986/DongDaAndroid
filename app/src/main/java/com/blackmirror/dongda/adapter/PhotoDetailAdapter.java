@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.Tools.LogUtils;
-import com.blackmirror.dongda.Tools.OSSUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
