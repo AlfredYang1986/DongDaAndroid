@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.facade.AYQueryDataFacade.AYQueryServiceFacade2;
+import com.blackmirror.dongda.facade.AYQueryDataFacade.QueryServiceCallBack;
+import com.blackmirror.dongda.model.BaseServerBean;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
@@ -57,7 +60,7 @@ import java.util.List;
  * Created by alfredyang on 29/6/17.
  */
 
-public class AYHomeActivity extends AYActivity implements View.OnClickListener {
+public class AYHomeActivity extends AYActivity implements View.OnClickListener,QueryServiceCallBack<BaseServerBean> {
 
     private final String TAG = "AYHomeActivity";
     private CoordinatorLayout ctl_root;
@@ -120,6 +123,11 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
         //精选主题
         initSubject();
         initHomeData();
+        initHomeData2();
+    }
+
+    private void initHomeData2() {
+        AYQueryServiceFacade2.getInstance().query();
     }
 
     private void initHomeData() {
@@ -547,6 +555,17 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener {
 
     @Override
     protected void bindingFragments() {
+
+    }
+
+
+    @Override
+    public void onSuccess(BaseServerBean bean) {
+
+    }
+
+    @Override
+    public void onError(BaseServerBean bean) {
 
     }
 }
