@@ -29,6 +29,10 @@ public class PhoneLoginUiBean extends BaseUiBean {
         }
     }
 
+    public PhoneLoginUiBean() {
+
+    }
+
     private void initData(PhoneLoginServerBean bean) {
         if (bean.result != null) {
             auth_token = bean.result.auth_token;

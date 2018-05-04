@@ -9,16 +9,22 @@ import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.domain.features.login.LoginContract;
+import com.blackmirror.dongda.domain.features.login.LoginFacade;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
+import com.blackmirror.dongda.model.request.PhoneLoginRequestBean;
+import com.blackmirror.dongda.model.request.SendSmsRequestBean;
+import com.blackmirror.dongda.model.response.uibean.PhoneLoginBean;
+import com.blackmirror.dongda.model.response.uibean.SendSmsBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.PhoneLoginServerBean;
 import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
 import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
-import com.blackmirror.dongda.ui.activity.AYActivity;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
@@ -39,7 +45,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 
-public class PhoneInputActivity extends AYActivity {
+public class PhoneInputActivity extends BaseActivity implements LoginContract.View{
 
     final static String TAG = "Phone Input Activity";
 
@@ -49,6 +55,8 @@ public class PhoneInputActivity extends AYActivity {
     private Disposable mSms_disposable;
     private Button next_step;
     private SendSmsUiBean sendSmsUiBean;
+    private LoginFacade loginFacade;
+    private SendSmsBean bean;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +99,7 @@ public class PhoneInputActivity extends AYActivity {
                 }
 
 
-                AYFacade facade = facades.get("LoginFacade");
+                /*AYFacade facade = facades.get("LoginFacade");
                 LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
                 Map<String, Object> m = new HashMap<>();
                 m.put("phone", input_phone);
@@ -101,7 +109,12 @@ public class PhoneInputActivity extends AYActivity {
                 m1.put("login", "login");
                 JSONObject login = new JSONObject(m1);
 
-                facade.execute("SendSMSCode",args,login);
+                facade.execute("SendSMSCode",args,login);*/
+                SendSmsRequestBean bean = new SendSmsRequestBean();
+                bean.phone_number = input_phone;
+                loginFacade = new LoginFacade();
+                loginFacade.setView(PhoneInputActivity.this);
+                loginFacade.sendSms(bean);
                 getSmsMsg();
 
             }
@@ -189,6 +202,14 @@ public class PhoneInputActivity extends AYActivity {
             ToastUtils.showShortToast(getString(R.string.input_code_error));
             return;
         }
+
+
+        PhoneLoginRequestBean requestBean = new PhoneLoginRequestBean();
+        requestBean.reg_token = bean.reg_token;
+        requestBean.phone_number = bean.phone;
+        requestBean.code = code;
+        loginFacade.login(requestBean);
+
         if (sendSmsUiBean!=null && sendSmsUiBean.isSuccess) {
             showProcessDialog(getString(R.string.logining_process));
             AYFacade facade = facades.get("LoginFacade");
@@ -285,4 +306,67 @@ public class PhoneInputActivity extends AYActivity {
     protected void bindingFragments() {
 
     }
+
+    private void gotoActivity(PhoneLoginBean bean) {
+        if (!bean.isSuccess){
+            ToastUtils.showShortToast(getString(R.string.login_failare));
+            return;
+        }
+
+        ToastUtils.showShortToast(R.string.login_success);
+
+        if (TextUtils.isEmpty(bean.screen_name)) {
+
+            Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
+            intent.putExtra("has_photo", !TextUtils.isEmpty(bean.screen_photo));
+            startActivity(intent);
+
+        } else if (TextUtils.isEmpty(bean.screen_photo)){
+
+            Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
+            intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
+            intent.putExtra("name", bean.screen_name);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
+            intent.putExtra("img_uuid",bean.screen_photo);
+            startActivity(intent);
+            AYApplication.finishAllActivity();
+        }
+    }
+
+    @Override
+    public void loginSuccess(PhoneLoginBean bean) {
+        closeProcessDialog();
+        gotoActivity(bean);
+    }
+
+
+    @Override
+    public void loginError(PhoneLoginBean bean) {
+        closeProcessDialog();
+        if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
+            SnackbarUtils.show(sms_code,bean.message);
+        }else {
+            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        }
+    }
+
+    @Override
+    public void sendSmsSuccess(SendSmsBean bean) {
+        ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
+        closeProcessDialog();
+        this.bean = bean == null ? new SendSmsBean():bean;
+    }
+
+    @Override
+    public void sendSmsError(SendSmsBean bean) {
+        closeProcessDialog();
+        if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
+            SnackbarUtils.show(sms_code,bean.message);
+        }else {
+            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        }
+    }
+
 }

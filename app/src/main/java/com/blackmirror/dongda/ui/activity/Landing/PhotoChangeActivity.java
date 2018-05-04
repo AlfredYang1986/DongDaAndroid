@@ -67,7 +67,6 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
     private Button btn_enter_album;
     private Button btn_open_camera;
     private TextView tv_screen_name;
-    private AYDaoUserProfile p = null;
     private Boolean isChangeScreenPhoto = false;
     private String imagePath;//打开相册选择照片的路径
     private Uri outputUri;//裁剪万照片保存地址
@@ -85,7 +84,6 @@ public class PhotoChangeActivity extends AYActivity implements View.OnClickListe
         setContentView(R.layout.activity_photo_change);
         AYApplication.addActivity(this);
         DeviceUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
-        p = (AYDaoUserProfile) getIntent().getSerializableExtra("current_user");
         name = getIntent().getStringExtra("name");
         isFromNameInput = getIntent().getIntExtra("from", AppConstant.FROM_PHONE_INPUT) == AppConstant.FROM_NAME_INPUT;
         initView();

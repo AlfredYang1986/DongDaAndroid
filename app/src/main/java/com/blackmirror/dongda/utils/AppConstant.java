@@ -27,13 +27,21 @@ public class AppConstant {
     public static final int NO_GPS_PERMISSION =12;
 
     public static final int IMAGE_TOKEN_ERROR=10;
-    public static final int NET_WORK_UNAVAILABLE=10010;
 
 
     public static final int CONNECT_TIMEOUT=15;
     public static final int READ_TIMEOUT=15;
     public static final int WRITE_TIMEOUT=60;
+    /**
+     * 网络请求错误码
+     */
     public static final int NET_UNKNOWN_ERROR=-9999;
+    public static final int NET_WORK_UNAVAILABLE=10010;
+    public static final int CONNECT_TIMEOUT_EXCEPTION=-100;
+    public static final int SOCKET_TIMEOUT_EXCEPTION=-101;
+    public static final int CONNECT_EXCEPTION=-102;
+    public static final int OTHER_EXCEPTION=-103;
+
 
     public static final int HOME_ART_ADAPTER=1;//1 art 2 sport 3 science
     public static final int HOME_SPORT_ADAPTER=2;//1 art 2 sport 3 science
@@ -55,6 +63,8 @@ public class AppConstant {
             R.drawable.avatar_8,
             R.drawable.avatar_9
     };
+
+
 
 
     /**
