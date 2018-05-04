@@ -5,7 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.DensityUtils;
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14
@@ -19,8 +19,8 @@ public class TopItemDecoration extends RecyclerView.ItemDecoration {
 
 
     public TopItemDecoration(int top, int bottom) {
-        this.top = OtherUtils.dp2px(top);
-        this.bottom = OtherUtils.dp2px(bottom);
+        this.top = DensityUtils.dp2px(top);
+        this.bottom = DensityUtils.dp2px(bottom);
     }
 
     @Override

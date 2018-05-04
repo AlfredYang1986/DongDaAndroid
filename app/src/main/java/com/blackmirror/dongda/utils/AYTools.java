@@ -1,7 +1,5 @@
 package com.blackmirror.dongda.utils;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,7 +40,7 @@ public class AYTools {
                 }
                 holder.put(key, data);
             } catch (JSONException e) {
-                Log.e("Transforming", "There was an error packaging JSON", e);
+                LogUtils.e(AYTools.class, "There was an error packaging JSON", e);
             }
         }
         return holder;

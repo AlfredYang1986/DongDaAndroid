@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
@@ -64,7 +65,6 @@ public class CareListActivity extends AYActivity {
         initView();
         initData(skip, take);
         initListener();
-        //        OtherUtils.setStatusBarColor(this);
     }
 
     @Override
@@ -93,7 +93,6 @@ public class CareListActivity extends AYActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -162,7 +161,7 @@ public class CareListActivity extends AYActivity {
         }
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code== AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -173,7 +172,7 @@ public class CareListActivity extends AYActivity {
 
         if (bean.isSuccess) {
 
-            tv_home_head_title.setText("看顾");
+            tv_home_head_title.setText(R.string.str_care);
 
             if (skip == 0) {//首次加载或者下拉刷新
                 if (adapter == null) {
@@ -257,7 +256,7 @@ public class CareListActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -285,7 +284,7 @@ public class CareListActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -301,7 +300,6 @@ public class CareListActivity extends AYActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        clearMemBitMap();
     }
 
     private void clearMemBitMap() {

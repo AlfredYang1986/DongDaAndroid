@@ -12,8 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.utils.DensityUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -100,7 +100,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 vh.iv_featured_detail_like.setBackgroundResource(R.drawable.home_art_like);
             }
 
-            if (servicesBean.service_type.contains("看顾")){
+            if (servicesBean.service_type.contains(context.getString(R.string.str_care))){
                 vh.tv_featured_detail_type.setText(servicesBean.service_leaf);
             }else {
                 StringBuilder sb = new StringBuilder();
@@ -117,7 +117,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     .append(servicesBean.punchline)
                     .append("\"");
             vh.tv_featured_detail_content.setText(sb.toString());
-            vh.tv_featured_detail_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
+            vh.tv_featured_detail_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf(context.getString(R.string.str_qu))+1));
             initListener(vh, position,servicesBean);
 
         }
@@ -180,7 +180,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void displayImage(Uri uri, SimpleDraweeView draweeView){
 
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(OtherUtils.dp2px(OtherUtils.getScreenWidthDp()-32), OtherUtils.dp2px(211)))
+                .setResizeOptions(new ResizeOptions(DensityUtils.dp2px(DensityUtils.getScreenWidthDp()-32), DensityUtils.dp2px(211)))
                 .build();
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()

@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.model.ServiceProfileBean;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -27,7 +28,7 @@ public class ServiceProfileActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_profile);
-        OtherUtils.initSystemBarColor(this);
+        DeviceUtils.initSystemBarColor(this);
         bean = getIntent().getParcelableExtra("bean");
         initView();
         initData();
@@ -49,7 +50,7 @@ public class ServiceProfileActivity extends AppCompatActivity {
             sv_service_photo.setImageURI(OtherUtils.resourceIdToUri(this,bean.res_id));
             tv_service_tag.setText(bean.brand_tag);
             tv_service_name.setText(bean.brand_name);
-            tv_service_teacher_name.setText(bean.brand_name+"老师");
+            tv_service_teacher_name.setText(String.format(getString(R.string.str_teacher),bean.brand_name));
             tv_service_dec.setText(bean.about_brand);
         }
     }

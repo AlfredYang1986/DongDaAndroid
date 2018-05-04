@@ -25,15 +25,6 @@
     </facade>
 
     <facade
-            short="FileFacade"
-            name="com.blackmirror.dongda.facade.FileOptFacade.AYFileOptFacade"
-            factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >
-
-        <command short="DownloadFile" />
-        <command short="uploadFile" />
-    </facade>
-
-    <facade
         short="QueryServiceFacade"
         name="com.blackmirror.dongda.facade.AYQueryDataFacade.AYQueryServiceFacade"
         factory="com.blackmirror.dongda.factory.facadeFactory.AYFacadeFactory" >

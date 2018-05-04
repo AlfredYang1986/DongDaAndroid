@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.facade.WeChatLoginFacade.WeChatLoginCmd;
 
 import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.utils.AppConstant;
 
 /**
  * Created by Ruge on 2018-04-11 下午3:31
@@ -11,7 +12,7 @@ public class AYWeChatLoginCmd extends AYRemoteCommand{
 
     @Override
     protected String getUrl() {
-        return "http://192.168.100.174:9000/al/auth/sns";
+        return AppConstant.WECHAT_LOGIN_URL;
     }
 
     @Override

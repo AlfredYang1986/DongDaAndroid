@@ -15,8 +15,8 @@ import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.CalUtils;
+import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.ui.activity.AYActivity;
@@ -68,9 +68,8 @@ public class LandingActivity extends AYActivity {
         setContentView(R.layout.activity_landing);
         reference=new WeakReference<>(this);
         //在setContentView之后调用
-        OtherUtils.initSystemBarColor(this);
+        DeviceUtils.initSystemBarColor(this);
         initView();
-        //        requestPermissions();
         initData();
         AYApplication.addActivity(this);
         initListener();
@@ -102,10 +101,6 @@ public class LandingActivity extends AYActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
                 startActivity(intent);
-                /*OSSUtils.initOSS(LandingActivity.this,AYPrefUtils.getAccesskeyId(),AYPrefUtils.getAccesskeySecret(),AYPrefUtils.getSecurityToken());
-                facades.get("LoginFacade").execute("AYUploadFileBySDKCommand", new JSONObject());*/
-//                upload();
-
             }
         });
 
@@ -113,7 +108,6 @@ public class LandingActivity extends AYActivity {
             @Override
             public void onClick(View view) {
                 weChatLogin();
-                //                startActivityForResult(new Intent(LandingActivity.this, AYHomeActivity.class));
             }
         });
 
@@ -131,9 +125,9 @@ public class LandingActivity extends AYActivity {
         closeProcessDialog();
 
         LogUtils.d("LandingActivity wechat login " + arg.toString());
-        ToastUtils.showShortToast("登陆成功!");
+        ToastUtils.showShortToast(getString(R.string.login_success));
         WeChatLoginServerBean bean = JSON.parseObject(arg.toString(), WeChatLoginServerBean.class);
-        if (bean != null && "ok".equals(bean.status) && bean.result != null) {
+        if (bean != null && getString(R.string.net_status_ok).equals(bean.status) && bean.result != null) {
             if (bean.result.user != null) {
                 LogUtils.d("cal ", bean.result.user.user_id+"   "+CalUtils.md5(bean.result.user.user_id));
                 AYPrefUtils.setUserId(bean.result.user.user_id);
@@ -161,7 +155,7 @@ public class LandingActivity extends AYActivity {
         //        sms_result = new SendSMSCodeResult(arg);
         ErrorInfoServerBean bean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(bean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(rl_phone_login,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -178,7 +172,7 @@ public class LandingActivity extends AYActivity {
         req.scope = "snsapi_userinfo";
         req.state = "dongda_wx_login";
         AYApplication.weChatApi.sendReq(req);*/
-        showProcessDialog("正在登陆...", true);
+        showProcessDialog(getString(R.string.logining_process), true);
         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
         if (reference.get()!=null) {
             wechat.setPlatformActionListener(new PlatformActionListener() {
@@ -265,7 +259,7 @@ public class LandingActivity extends AYActivity {
                                         return;
                                     }
                                     closeProcessDialog();
-                                    ToastUtils.showShortToast("授权已取消");
+                                    ToastUtils.showShortToast(getString(R.string.wechat_auth_cancel));
                                 }
                             });
                 }
@@ -362,7 +356,7 @@ public class LandingActivity extends AYActivity {
                 .subscribe(new Consumer<String>() {
                     @Override
                     public void accept(String s) throws Exception {
-                        showProcessDialog("正在登陆...",true);
+                        showProcessDialog(getString(R.string.logining_process),true);
                         LogUtils.d("Observable " + Thread.currentThread().getName());
                         login(m);
                     }
@@ -392,36 +386,6 @@ public class LandingActivity extends AYActivity {
     }
 
 
-    public void onError(Platform platform, int i, Throwable throwable) {
-        errorDb = Observable.just(throwable.getMessage())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        if (!isViewValid()) {
-                            return;
-                        }
-                        if (!TextUtils.isEmpty(s))
-                            ToastUtils.showShortToast(s);
-                    }
-                });
-    }
-
-
-    public void onCancel(Platform platform, int i) {
-        cancelDb = Observable.just("")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<String>() {
-                    @Override
-                    public void accept(String s) throws Exception {
-                        if (!isViewValid()) {
-                            return;
-                        }
-                        ToastUtils.showShortToast("授权已取消");
-                    }
-                });
-    }
-
     @Override
     protected void setStatusBarColor() {
 
@@ -434,9 +398,7 @@ public class LandingActivity extends AYActivity {
 
     @Override
     protected void bindingFragments() {
-        //        FragmentManager fm = getSupportFragmentManager();
-        //        AYFragment f = this.fragments.get("frag_test");
-        //        fm.beginTransaction().add(R.id.fragment_test, f).commit();
+
     }
 
 }

@@ -15,15 +15,6 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="stylr_tab_homeseg" parent="Widget.Design.TabLayout">
-        <!--tab的布局-->
-        <item name="tabGravity">fill</item>
-        <!--tab下面的滚动条的颜色-->
-        <item name="tabIndicatorColor">#ff3355</item>
-        <!--将tab设置成固定-->
-        <item name="tabMode">fixed</item>
-    </style>
-
     <!--去除ToolBar阴影-->
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="elevation">0dp</item>
@@ -46,10 +37,6 @@
     <style name="TabLayoutTextStyle">
         <item name="android:textSize">13sp</item>
         <item name="android:textAllCaps">true</item>
-    </style>
-
-    <style name="counterOverflow">
-        <item name="android:textColor">#ff0000</item>
     </style>
 
 </resources>

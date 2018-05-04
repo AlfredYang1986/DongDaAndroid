@@ -10,8 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.utils.DensityUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -74,11 +74,11 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
         holder.tv_care_list_name.setText(servicesBean.service_tags.get(0));
         StringBuilder sb = new StringBuilder();
         sb.append(servicesBean.brand_name)
-                .append("的")
-                .append(servicesBean.operation.contains("低龄")?"低龄":"")
+                .append(context.getString(R.string.str_de))
+                .append(servicesBean.operation.contains(context.getString(R.string.low_age))?context.getString(R.string.low_age):"")
                 .append(servicesBean.service_leaf);
         holder.tv_care_list_content.setText(sb.toString());
-        holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf("区")+1));
+        holder.tv_care_list_location.setText(servicesBean.address.substring(0,servicesBean.address.indexOf(context.getString(R.string.str_qu))+1));
         initListener(holder, position,servicesBean);
 
     }
@@ -169,7 +169,7 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
     public void displayImage(Uri uri, SimpleDraweeView draweeView){
 
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(OtherUtils.dp2px(OtherUtils.getScreenWidthDp()-32), OtherUtils.dp2px(212)))
+                .setResizeOptions(new ResizeOptions(DensityUtils.dp2px(DensityUtils.getScreenWidthDp()-32), DensityUtils.dp2px(212)))
                 .build();
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()

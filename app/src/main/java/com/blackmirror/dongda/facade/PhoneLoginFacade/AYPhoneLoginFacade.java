@@ -29,7 +29,7 @@ public class AYPhoneLoginFacade extends AYFacade {
 
         AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");
         AYCommand cmd = f.cmds.get("LoginSuccess");
-        cmd.excute(p);
+        cmd.execute(p);
 
 
         broadcastingNotification("AYLoginWithPhoneCommandSuccess", args);
@@ -75,7 +75,7 @@ public class AYPhoneLoginFacade extends AYFacade {
 
         AYFacade f = (AYFacade) AYFactoryManager.getInstance(null).queryInstance("facade", "DongdaCommanFacade");
         AYCommand cmd = f.cmds.get("LoginSuccess");
-        cmd.excute(p);
+        cmd.execute(p);
         broadcastingNotification("AYUpdateProfileCommandSuccess", args);
     }
 

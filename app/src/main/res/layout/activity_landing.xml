@@ -35,7 +35,7 @@
         android:layout_marginTop="14dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="为 孩 子 创 造 与 众 不 同"
+        android:text="@string/str_landing_dec"
         android:textColor="#FFFFFFFF"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -64,7 +64,7 @@
             android:layout_height="50dp"
             android:layout_centerInParent="true"
             android:gravity="center"
-            android:text="手机号登录"
+            android:text="@string/phone_login"
             android:textColor="#FF59D5C7"
             android:textSize="17sp"
             />
@@ -100,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:gravity="center"
-            android:text="微信登陆"
+            android:text="@string/wechat_login"
             android:textColor="#FFFFFFFF"
             android:textSize="17sp"
             />

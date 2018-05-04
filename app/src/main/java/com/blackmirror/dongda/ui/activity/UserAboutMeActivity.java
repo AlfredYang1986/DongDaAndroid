@@ -15,8 +15,8 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -47,7 +47,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_about_me);
         AYApplication.addActivity(this);
-        OtherUtils.initSystemBarColor(this);
+        DeviceUtils.initSystemBarColor(this);
         initView();
         initData();
         initListener();
@@ -103,9 +103,9 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
     private void showLogOutDialog() {
         dialog = new AlertDialog.Builder(UserAboutMeActivity.this)
                 .setCancelable(false)
-                .setTitle("提示")
-                .setMessage("确定退出登录吗?")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.dlg_tips)
+                .setMessage(R.string.confirm_logout)
+                .setPositiveButton(getString(R.string.dlg_confirm), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         closeDialog();
@@ -114,7 +114,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
                         AYApplication.finishAllActivity();
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dlg_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         closeDialog();
@@ -132,7 +132,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
             sv_user_about_photo.setImageURI(url);
             tv_user_about_name.setText(uiBean.screen_name);
             if (TextUtils.isEmpty(uiBean.description)) {
-                tv_user_about_dec.setText("一句话很短，高调的夸一夸自己");
+                tv_user_about_dec.setText(R.string.default_about_me);
             } else {
                 tv_user_about_dec.setText(uiBean.description);
             }
@@ -146,7 +146,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_about_edit, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");

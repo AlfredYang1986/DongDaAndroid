@@ -3,6 +3,7 @@ package com.blackmirror.dongda.model.uibean;
 import com.blackmirror.dongda.model.BaseUiBean;
 import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,12 +11,14 @@ import java.util.List;
  */
 public class QueryLikeUiBean extends BaseUiBean {
 
-    public List<QueryLikeServerBean.ResultBean.ServicesBean> services;
+    public List<QueryLikeServerBean.ResultBean.ServicesBean> services = new ArrayList<>();
 
     public QueryLikeUiBean(QueryLikeServerBean bean) {
-        if (bean!=null && bean.result!=null && "ok".equals(bean.status)){
+        if (bean!=null && "ok".equals(bean.status)){
             isSuccess=true;
-            services=bean.result.services;
+            if (bean.result!=null) {
+                services = bean.result.services;
+            }
         }else {
             if (bean!=null && bean.error!=null){
                 code=bean.error.code;

@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.facade.detailfacade.detailcmd;
 
 import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.utils.AppConstant;
 
 /**
  * Created by xcx on 2018/4/16.
@@ -16,7 +17,7 @@ public class AYGetDetailInfoCmd extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return "http://192.168.100.174:9000/al/service/detail";
+        return AppConstant.SERVICE_DETAIL_URL;
     }
 
     @Override

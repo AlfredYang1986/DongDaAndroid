@@ -9,7 +9,7 @@
     <!-- 主体背景颜色值 -->
     <item android:bottom="2dp">
         <shape>
-            <solid android:color="#ffffff" />
+            <solid android:color="@color/btn_bg_white" />
             <!--<padding-->
                 <!--android:bottom="10dp"-->
                 <!--android:left="10dp"-->

@@ -98,4 +98,21 @@ public class DateUtils {
     public static synchronized void setCurrentServerTime(long serverTime) {
         amendTimeSkewed = serverTime - System.currentTimeMillis();
     }
+
+    public static boolean isNeedRefreshToken(String expirate_time) {
+        long time;
+        String date = expirate_time.replace("Z", " UTC");//注意是空格+UTC
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss Z");//注意格式化的表达式
+        try {
+            Date d = format.parse(date);
+            time = d.getTime() / 1000 - System.currentTimeMillis() / 1000;
+            if (time <= 300) {
+                return true;
+            }
+            return false;
+        } catch (ParseException e) {
+
+        }
+        return true;
+    }
 }

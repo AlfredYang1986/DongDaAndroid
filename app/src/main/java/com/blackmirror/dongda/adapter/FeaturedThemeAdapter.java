@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.utils.DensityUtils;
 import com.blackmirror.dongda.utils.OtherUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
@@ -44,15 +45,7 @@ public class FeaturedThemeAdapter extends RecyclerView.Adapter<FeaturedThemeAdap
 
     @Override
     public void onBindViewHolder(final FeaturedViewHolder holder, int position) {
-        /*Uri uri = new Uri.Builder().scheme("res").path(String.valueOf(list.get(position))).build();
-        holder.sv_featured.setImageURI(uri);*/
 
-        //        LogUtils.d("xcx",OtherUtils.getUriFromDrawableRes(context,list.get(position)).toString());
-
-
-        /*if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-            holder.cl_featured_root.set
-        }*/
         displayImage(OtherUtils.resourceIdToUri(context, list.get(position)),holder.sv_featured);
 
 //        holder.sv_featured.setImageURI();
@@ -80,7 +73,7 @@ public class FeaturedThemeAdapter extends RecyclerView.Adapter<FeaturedThemeAdap
     public void displayImage(Uri uri, SimpleDraweeView draweeView){
         ImageDecodeOptions options = ImageDecodeOptions.newBuilder().setBitmapConfig(Bitmap.Config.RGB_565).build();
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(OtherUtils.dp2px(235), OtherUtils.dp2px(311)))
+                .setResizeOptions(new ResizeOptions(DensityUtils.dp2px(235), DensityUtils.dp2px(311)))
                 .setImageDecodeOptions(options)
                 .build();
 
@@ -91,13 +84,6 @@ public class FeaturedThemeAdapter extends RecyclerView.Adapter<FeaturedThemeAdap
         draweeView.setController(controller);
     }
 
-    protected String getCacheUrl(String url){
-        if (url.contains("?")){
-            return url.substring(0,url.indexOf("?")+1);
-        }
-        return url;
-
-    }
 
     public static class FeaturedViewHolder extends RecyclerView.ViewHolder {
 

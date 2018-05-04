@@ -24,7 +24,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -32,15 +31,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYApplication;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.DeviceUtils;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -49,6 +39,15 @@ import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
+import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DensityUtils;
+import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.OSSUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -98,7 +97,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
         screen_photo = getIntent().getStringExtra("screen_photo");
         screen_name = getIntent().getStringExtra("screen_name");
         description = getIntent().getStringExtra("description");
-        OtherUtils.setStatusBarColor(this);
+        DeviceUtils.setStatusBarColor(this);
         initView();
         initData();
         initListener();
@@ -151,18 +150,18 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
         input_name = tet_user_name.getText().toString().trim();
         input_dec = tet_user_dec.getText().toString().trim();
         if (TextUtils.isEmpty(input_name)) {
-            ToastUtils.showShortToast("昵称不能为空!");
+            ToastUtils.showShortToast(getString(R.string.input_nickname_error));
             return;
         }
         if (TextUtils.isEmpty(input_dec)) {
-            ToastUtils.showShortToast("关于我不能为空!");
+            ToastUtils.showShortToast(getString(R.string.input_about_me_error));
             return;
         }
         upload(input_name, input_dec);
     }
 
     private void upload(String name, String dec) {
-        showProcessDialog("正在修改信息...");
+        showProcessDialog(getString(R.string.update_user_info_processing));
         if (isChangeScreenPhoto) {
             uploadImage();
         } else {
@@ -203,7 +202,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_edit_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -247,14 +246,14 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
             profile.is_current = 1;
             img_url = uiBean.screen_photo;
             AYCommand cmd = facades.get("UserFacade").cmds.get("UpdateLocalProfile");
-            long result = cmd.excute(profile);
+            long result = cmd.execute(profile);
             needsRefresh = true;
             if (result > 0) {
-                ToastUtils.showShortToast("修改成功!");
+                ToastUtils.showShortToast(R.string.update_user_info_success);
                 setResult(needsRefresh ? RESULT_OK : RESULT_CANCELED,getIntent().putExtra("img_url",img_url));
                 AYApplication.finishActivity(this);
             } else {
-                ToastUtils.showShortToast("系统异常(SQL)");
+                ToastUtils.showShortToast(R.string.update_sql_error);
             }
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -268,7 +267,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == 10010) {
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_edit_root, uiBean.message);
         } else {
             ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
@@ -312,16 +311,16 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
 
         AlertDialog dialog = new AlertDialog.Builder(EditUserInfoActivity.this)
                 .setCancelable(false)
-                .setTitle("权限拒绝")
-                .setMessage("请在设置->应用管理->咚哒->权限管理打开相机权限.")
-                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+                .setTitle(R.string.permission_denied)
+                .setMessage(R.string.open_camera_permission_setting)
+                .setPositiveButton(getString(R.string.go_permission_setting), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                         DeviceUtils.gotoPermissionSetting(EditUserInfoActivity.this);
                     }
                 })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.dlg_cancel), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
@@ -356,7 +355,6 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
      */
     private void getPicFromCamera() {
         // 创建File对象，用于存储拍照后的图片
-        LogUtils.d(getExternalCacheDir() + "/takePic");
         File outputImage = new File(getExternalCacheDir(), "output_image.jpg");
         try {
             if (outputImage.exists()) {
@@ -366,7 +364,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (Build.VERSION.SDK_INT < 24) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             imageUri = Uri.fromFile(outputImage);
         } else {
             //Android 7.0系统开始 使用本地真实的Uri路径不安全,使用FileProvider封装共享Uri
@@ -385,7 +383,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
             switch (requestCode) {
                 case AppConstant.CHOOSE_PIC://从相册选择图片
                     // 判断手机系统版本号
-                    if (Build.VERSION.SDK_INT >= 19) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                         // 4.4及以上系统使用这个方法处理图片
                         handleImageOnKitKat(data);
                     } else {
@@ -408,7 +406,6 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
 
                         }
                     } catch (Exception e) {
-                        e.printStackTrace();
                     }
                     break;
                 case AppConstant.TAKE_PHOTO:
@@ -425,7 +422,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
     private void handleImageOnKitKat(Intent data) {
         imagePath = null;
         Uri uri = data.getData();
-        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        LogUtils.d("xcx", "handleImageOnKitKat: uri is " + uri);
         if (DocumentsContract.isDocumentUri(this, uri)) {
             // 如果是document类型的Uri，则通过document id处理
             String docId = DocumentsContract.getDocumentId(uri);
@@ -506,7 +503,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
     public void displayImage(Uri uri, SimpleDraweeView draweeView) {
 
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(new ResizeOptions(OtherUtils.getScreenWidthPx(), OtherUtils.dp2px(250)))
+                .setResizeOptions(new ResizeOptions(DensityUtils.getScreenWidthPx(), DensityUtils.dp2px(250)))
                 .build();
 
         DraweeController controller = Fresco.newDraweeControllerBuilder()

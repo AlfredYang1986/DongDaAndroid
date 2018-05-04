@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.facade.userfacade.usercmd;
 
 import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.utils.AppConstant;
 
 /**
  * Created by xcx on 2018/4/16.
@@ -16,7 +17,7 @@ public class AYQueryUserInfoCmd extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return "http://192.168.100.174:9000/al/profile/query";
+        return AppConstant.QUERY_USER_INFO_URL;
     }
 
     @Override

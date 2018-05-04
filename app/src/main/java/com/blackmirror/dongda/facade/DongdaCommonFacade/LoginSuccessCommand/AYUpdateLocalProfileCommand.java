@@ -19,7 +19,7 @@ public class AYUpdateLocalProfileCommand extends AYCommand {
     }
 
     @Override
-    public <Args, Result> Result excute(Args ... args) {
+    public <Args, Result> Result execute(Args ... args) {
         AYDongdaCommonFacade f = (AYDongdaCommonFacade) AYFactoryManager.getInstance(null).
                 queryInstance("facade", "DongdaCommanFacade");
         AYSQLiteProxy proxy = f.getProxy();

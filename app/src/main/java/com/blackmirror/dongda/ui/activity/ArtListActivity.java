@@ -2,7 +2,6 @@ package com.blackmirror.dongda.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,10 +12,6 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
 import com.blackmirror.dongda.adapter.ArtListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.GridItemDecoration;
 import com.blackmirror.dongda.facade.AYFacade;
@@ -28,9 +23,11 @@ import com.blackmirror.dongda.model.uibean.ArtMoreUiBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -133,7 +130,7 @@ public class ArtListActivity extends AYActivity {
         }
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code== AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -268,7 +265,7 @@ public class ArtListActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -295,7 +292,7 @@ public class ArtListActivity extends AYActivity {
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==10010){
+        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(ctl_root,uiBean.message);
         }else {
             ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
@@ -316,28 +313,6 @@ public class ArtListActivity extends AYActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        clearMemBitMap();
     }
 
-    private void clearMemBitMap() {
-        if (adapter!=null){
-            for (String url : adapter.urlSet) {
-                try {
-                    Uri uri = Uri.parse(url);
-                    ImageRequest request= ImageRequestBuilder.newBuilderWithSource(uri).build();
-                    boolean cache = Fresco.getImagePipeline().isInBitmapMemoryCache(uri);
-
-                    LogUtils.d(url+" in memory "+cache);
-                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
-                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
-
-                } catch (Exception e) {
-                    LogUtils.e(ArtListActivity.class,"CacheException: ",e);
-                }
-            }
-            adapter.urlSet.clear();
-            adapter.urlSet=null;
-            adapter=null;
-        }
-    }
 }

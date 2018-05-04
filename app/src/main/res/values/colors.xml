@@ -34,4 +34,18 @@
     <color name="sys_bar_white">#FFFFFFFF</color>
     <color name="text_black">#000000</color>
 
+    <!--activity_detail_info.xml-->
+    <color name="btn_bg_white">#FFFFFF</color>
+    <color name="btn_stroke_color">#46DBCA</color>
+    <color name="stroke_gray">#47FFFFFF</color>
+    <color name="head_text_black_color">#FF0D0D0D</color>
+    <color name="text_dec_gray">#FF737373</color>
+    <color name="bg_white_color">#FFFFFFFF</color>
+    <color name="line_bg_color">#1F000000</color>
+    <color name="text_dec_more_color">#FFA6A6A6</color>
+    <color name="type_text_color">#FF23554F</color>
+    <color name="class_info_color">#FF404040</color>
+
+
+
 </resources>

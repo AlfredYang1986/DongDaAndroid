@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.facade.PhoneLoginFacade.LoginFacadeCommands;
 
 import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.utils.AppConstant;
 
 /**
  * Created by alfredyang on 23/05/2017.
@@ -16,7 +17,7 @@ public class AYLoginWithPhoneCommand extends AYRemoteCommand {
 
     @Override
     protected String getUrl() {
-        return "http://192.168.100.174:9000/al/auth/code";
+        return AppConstant.AUTH_SMS_CODE_URL;
     }
 
     @Override

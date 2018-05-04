@@ -4,7 +4,7 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.DensityUtils;
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14
@@ -31,19 +31,19 @@ public class SpacesItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
         super.getItemOffsets(outRect, view, parent, state);
         if (left !=-1){
-            outRect.left = OtherUtils.dp2px(left);
+            outRect.left = DensityUtils.dp2px(left);
         }
         if (top !=-1){
-            outRect.top = OtherUtils.dp2px(top);
+            outRect.top = DensityUtils.dp2px(top);
         }
         if (right !=-1){
-            outRect.right = OtherUtils.dp2px(right);
+            outRect.right = DensityUtils.dp2px(right);
         }
         if (bottom !=-1){
-            outRect.bottom = OtherUtils.dp2px(bottom);
+            outRect.bottom = DensityUtils.dp2px(bottom);
         }
         if (space !=-1) {
-            outRect.right = OtherUtils.dp2px(space);
+            outRect.right = DensityUtils.dp2px(space);
         }
     }
 }

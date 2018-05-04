@@ -31,7 +31,7 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private static final int TYPE_NORMAL = 101;
     public int totalCount;
 
-    public Set<String> urlSet=new HashSet<>();
+    public Set<String> urlSet = new HashSet<>();
 
 
     public void setOnArtListClickListener(OnArtListClickListener listener) {
@@ -66,15 +66,6 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ArtListViewHolder vh = (ArtListViewHolder) holder;
             ArtMoreServerBean.ResultBean.ServicesBean servicesBean = this.bean.services.get(position);
 
-           /* if (urlMap.containsKey(position)){
-//                String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
-                vh.sv_art_list_photo.setImageURI(urlMap.get(position));
-            }else {
-                String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
-                urlMap.put(position,url);
-                vh.sv_art_list_photo.setImageURI(url);
-            }*/
-
 
             String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
             urlSet.add(getCacheUrl(url));
@@ -85,19 +76,19 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else {
                 vh.iv_item_art_like.setBackgroundResource(R.drawable.home_art_like);
             }
-            if (TextUtils.isEmpty(servicesBean.operation.get(0))){
+            if (TextUtils.isEmpty(servicesBean.operation.get(0))) {
                 vh.tv_art_list_name.setVisibility(View.GONE);
-            }else {
+            } else {
                 vh.tv_art_list_name.setVisibility(View.VISIBLE);
                 vh.tv_art_list_name.setText(servicesBean.operation.get(0));
             }
             StringBuilder sb = new StringBuilder();
             sb.append(servicesBean.brand_name)
-                    .append("的")
-                    .append(servicesBean.operation.contains("低龄") ? "低龄" : "")
+                    .append(context.getString(R.string.str_de))
+                    .append(servicesBean.operation.contains(context.getString(R.string.low_age)) ? context.getString(R.string.low_age) : "")
                     .append(servicesBean.service_leaf);
             vh.tv_art_list_content.setText(sb.toString());
-            vh.tv_art_list_location.setText(servicesBean.address.substring(0, servicesBean.address.indexOf("区") + 1));
+            vh.tv_art_list_location.setText(servicesBean.address.substring(0, servicesBean.address.indexOf(context.getString(R.string.str_qu)) + 1));
             initListener(vh, position, servicesBean);
         } else if (holder instanceof ArtFooterViewHolder) {
             /*LogUtils.d("totalCount "+totalCount+" size "+getItemCount());
@@ -119,11 +110,11 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             onBindViewHolder(holder, position);
         } else {
             ArtListViewHolder vh = (ArtListViewHolder) holder;
-            boolean isLike= (boolean) payloads.get(0);
-            bean.services.get(position).is_collected= isLike;
-            if (isLike){
+            boolean isLike = (boolean) payloads.get(0);
+            bean.services.get(position).is_collected = isLike;
+            if (isLike) {
                 vh.iv_item_art_like.setBackgroundResource(R.drawable.like_selected);
-            }else {
+            } else {
                 vh.iv_item_art_like.setBackgroundResource(R.drawable.home_art_like);
             }
         }
@@ -158,9 +149,10 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public static class ArtFooterViewHolder extends RecyclerView.ViewHolder {
 
         public ConstraintLayout cl_art_root;
+
         public ArtFooterViewHolder(View itemView) {
             super(itemView);
-            cl_art_root=itemView.findViewById(R.id.cl_art_root);
+            cl_art_root = itemView.findViewById(R.id.cl_art_root);
         }
     }
 
@@ -222,9 +214,9 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    protected String getCacheUrl(String url){
-        if (url.contains("?")){
-            return url.substring(0,url.indexOf("?")+1);
+    protected String getCacheUrl(String url) {
+        if (url.contains("?")) {
+            return url.substring(0, url.indexOf("?") + 1);
         }
         return url;
 

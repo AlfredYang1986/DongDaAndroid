@@ -1,21 +1,19 @@
 package com.blackmirror.dongda.facade.userfacade.usercmd;
 
-import android.util.Log;
-
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.AY.AYSysNotificationHandler;
+import com.blackmirror.dongda.command.AYCommand;
+import com.blackmirror.dongda.command.AYRemoteCommand;
+import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
+import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.CalUtils;
 import com.blackmirror.dongda.utils.DateUtils;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.NetUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
-import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.command.AYRemoteCommand;
-import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
-import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
@@ -46,7 +44,7 @@ import okhttp3.Response;
  */
 public class AYUploadFileBySDKCommand extends AYCommand {
 
-    protected static final String imageUrl="http://192.168.100.174:9000/al/oss/gst";
+    protected static final String imageUrl= AppConstant.OSS_INFO_URL;
     final String TAG = "AYUploadFileBySDKCommand";
     private AYSysNotificationHandler notificationHandler;
     private Disposable disposable;
@@ -58,7 +56,7 @@ public class AYUploadFileBySDKCommand extends AYCommand {
 
 
     @Override
-    public <Args, Result> Result excute(Args... args) {
+    public <Args, Result> Result execute(Args... args) {
         executeImpl((JSONObject[]) args);
         return null;
     }
@@ -95,7 +93,7 @@ public class AYUploadFileBySDKCommand extends AYCommand {
         Observable.just("").map(new Function<String, JSONObject>() {
             @Override
             public JSONObject apply(String s) throws Exception {
-                if (OtherUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())){
+                if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())){
                     JSONObject imgToken = getImgToken();
                     ImgTokenServerBean serverBean = JSON.parseObject(imgToken.toString(), ImgTokenServerBean.class);
                     ImgTokenUiBean bean = new ImgTokenUiBean(serverBean);
@@ -202,8 +200,8 @@ public class AYUploadFileBySDKCommand extends AYCommand {
 
         String signature = OSSUtils.sign(AYPrefUtils.getAccesskeyId(), AYPrefUtils.getAccesskeySecret(), sb.toString());
 
-        Log.e("xcx", "onClick: ziji \n"+signature);
-        Log.e("xcx", "onClick: ziji content \n"+sb.toString());
+        LogUtils.d("xcx", "onClick: ziji \n"+signature);
+        LogUtils.d("xcx", "onClick: ziji content \n"+sb.toString());
 
         Request.Builder requestBuilder = new Request.Builder();
 
@@ -273,8 +271,8 @@ public class AYUploadFileBySDKCommand extends AYCommand {
         sb.append("{\"status\":\"error\",")
                 .append("\"error\":{")
                 .append("\"code\":")
-                .append("-9999,")
-                .append("\"message\":\"")
+                .append(AppConstant.NET_UNKNOWN_ERROR)
+                .append(",\"message\":\"")
                 .append(e.getMessage())
                 .append("\"}}");
         JSONObject object = null;
