@@ -14,31 +14,12 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.facade.AYQueryDataFacade.AYQueryServiceFacade2;
-import com.blackmirror.dongda.facade.AYQueryDataFacade.QueryServiceCallBack;
-import com.blackmirror.dongda.model.BaseServerBean;
-import com.blackmirror.dongda.utils.AYApplication;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.OtherUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.ui.activity.ArtListActivity;
-import com.blackmirror.dongda.ui.activity.CareListActivity;
-import com.blackmirror.dongda.ui.activity.FeaturedDetailActivity;
-import com.blackmirror.dongda.ui.activity.MyLikeActivity;
-import com.blackmirror.dongda.ui.activity.NearServiceActivity;
-import com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity;
-import com.blackmirror.dongda.ui.activity.UserAboutMeActivity;
 import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
 import com.blackmirror.dongda.adapter.HomeArtAdapter;
 import com.blackmirror.dongda.adapter.HomeCareAdapter;
 import com.blackmirror.dongda.adapter.HomeScienceAdapter;
 import com.blackmirror.dongda.adapter.HomeSportAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration;
-import com.blackmirror.dongda.ui.activity.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
@@ -47,6 +28,22 @@ import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
+import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.activity.ArtListActivity;
+import com.blackmirror.dongda.ui.activity.CareListActivity;
+import com.blackmirror.dongda.ui.activity.FeaturedDetailActivity;
+import com.blackmirror.dongda.ui.activity.MyLikeActivity;
+import com.blackmirror.dongda.ui.activity.NearServiceActivity;
+import com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity;
+import com.blackmirror.dongda.ui.activity.UserAboutMeActivity;
+import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.OSSUtils;
+import com.blackmirror.dongda.utils.OtherUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -60,7 +57,7 @@ import java.util.List;
  * Created by alfredyang on 29/6/17.
  */
 
-public class AYHomeActivity extends AYActivity implements View.OnClickListener,QueryServiceCallBack<BaseServerBean> {
+public class AYHomeActivity extends AYActivity implements View.OnClickListener{
 
     private final String TAG = "AYHomeActivity";
     private CoordinatorLayout ctl_root;
@@ -123,11 +120,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener,Q
         //精选主题
         initSubject();
         initHomeData();
-        initHomeData2();
-    }
-
-    private void initHomeData2() {
-        AYQueryServiceFacade2.getInstance().query();
     }
 
     private void initHomeData() {
@@ -555,17 +547,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener,Q
 
     @Override
     protected void bindingFragments() {
-
-    }
-
-
-    @Override
-    public void onSuccess(BaseServerBean bean) {
-
-    }
-
-    @Override
-    public void onError(BaseServerBean bean) {
 
     }
 }
