@@ -29,6 +29,25 @@ allprojects {
         }
     }
 }
+ext{
+    // android版本
+    compileSdkVersion = 26
+    buildToolsVersion = '27.0.3'
+    minSdkVersion = 16
+    targetSdkVersion = 23
+
+    //其他库的版本
+    supportLibVersion = "26.1.0"
+    frescoVersion = "1.8.1"
+    rxJavaVersion = "2.1.10"
+    rxAndroidVersion = "2.0.2"
+    okhttpVersion = "3.10.0"
+    fastjsonVersion = "1.2.46"
+    fastjsonAndroidVersion = "1.2.46.android"
+    SmartRefreshLayoutVersion = "1.0.5.1"
+    SmartRefreshHeaderVersion = "1.0.5.1"
+    ShareSDKVersion = "3.1.4"
+}
 
 task clean(type: Delete) {
     delete rootProject.buildDir

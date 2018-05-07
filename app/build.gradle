@@ -3,17 +3,20 @@ apply plugin: 'com.android.application'
 apply plugin: "com.mob.sdk"
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.blackmirror.dongda"
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            minifyEnabled false     //混淆
+        }
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
             zipAlignEnabled true     //Zipalign优化
@@ -52,25 +55,25 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testImplementation 'junit:junit:4.12'
-    implementation 'com.facebook.fresco:fresco:1.8.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support:cardview-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-//    implementation 'com.facebook.stetho:stetho:1.5.0'
-//    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
+    implementation 'com.android.support:appcompat-v7:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:support-v4:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:cardview-v7:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:design:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:recyclerview-v7:' + rootProject.ext.supportLibVersion
+    implementation 'com.facebook.fresco:fresco:' + rootProject.ext.frescoVersion
+    implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
+    implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.ext.rxAndroidVersion
+    implementation 'com.squareup.okhttp3:okhttp:' + rootProject.ext.okhttpVersion
+    //    implementation 'com.facebook.stetho:stetho:1.5.0'
     //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-//    implementation 'com.aliyun.dpa:oss-android-sdk:+'
-    implementation 'com.alibaba:fastjson:1.2.46'
-    implementation 'com.alibaba:fastjson:1.1.68.android'
-    implementation 'com.android.support:recyclerview-v7:26.1.0'
+    //    implementation 'com.aliyun.dpa:oss-android-sdk:+'
+    implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion
+    implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonAndroidVersion
     //1.0.5 当1.1.0出现问题可以回退到1.0.5.1
-    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:' + rootProject.ext.SmartRefreshLayoutVersion
     //没有使用特殊Header，可以不加这行
-    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.5.1'
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+
 }
