@@ -12,6 +12,7 @@ buildscript {
         }
     }
     dependencies {
+//        classpath 'com.android.tools.build:gradle:3.1.2'
         classpath 'com.android.tools.build:gradle:3.1.0'
 // 注册MobSDK
         classpath "com.mob.sdk:MobSDK:+"
@@ -46,6 +47,8 @@ ext{
     fastjsonAndroidVersion = "1.2.46.android"
     SmartRefreshLayoutVersion = "1.0.5.1"
     SmartRefreshHeaderVersion = "1.0.5.1"
+    daggerVersion = "2.14.1"
+    daggerCompilerVersion = "2.14.1"
     ShareSDKVersion = "3.1.4"
 }
 

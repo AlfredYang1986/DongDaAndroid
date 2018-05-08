@@ -28,6 +28,10 @@ android {
             javaMaxHeapSize "4g"
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 MobSDK {
     appKey "252704f3d1440"
@@ -75,5 +79,9 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-
+    implementation project(':domain')
+    implementation project(':device')
+    compile 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
+    implementation project(':data')
 }

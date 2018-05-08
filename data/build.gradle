@@ -39,4 +39,5 @@ dependencies {
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonAndroidVersion
     implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
+    implementation project(':domain')
 }

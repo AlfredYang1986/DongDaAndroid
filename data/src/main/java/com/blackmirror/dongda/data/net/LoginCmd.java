@@ -2,7 +2,6 @@ package com.blackmirror.dongda.data.net;
 
 
 import com.blackmirror.dongda.data.AppConstant;
-import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.response.PhoneLoginResponseBean;
 
 import io.reactivex.Observable;

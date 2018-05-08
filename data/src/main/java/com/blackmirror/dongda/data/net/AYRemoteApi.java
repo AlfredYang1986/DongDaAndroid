@@ -3,9 +3,9 @@ package com.blackmirror.dongda.data.net;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.data.AppConstant;
-import com.blackmirror.dongda.data.model.request.BaseRequestBean;
 import com.blackmirror.dongda.data.model.response.BaseResponseBean;
 import com.blackmirror.dongda.data.utils.LogUtils;
+import com.blackmirror.dongda.data.model.request.BaseRequestBean;
 
 import org.apache.http.conn.ConnectTimeoutException;
 

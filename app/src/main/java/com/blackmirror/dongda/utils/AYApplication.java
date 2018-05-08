@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 
+import com.blackmirror.dongda.di.component.DaggerAppComponent;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.memory.MemoryTrimType;
 import com.facebook.common.memory.MemoryTrimmable;
@@ -46,7 +47,12 @@ public class AYApplication extends Application {
         initShareSDK();
         activityList= new ArrayList<>();
         initAMap();
+        initDagger();
 
+    }
+
+    private void initDagger() {
+        DaggerAppComponent.builder().build();
     }
 
     /**
