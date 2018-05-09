@@ -4,6 +4,8 @@ import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.blackmirror.dongda.base.AYApplication;
+
 public class LogUtils {
     public static boolean DEBUG = (AYApplication.getApplication().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
     public static final String DEFAULT_TAG = "xcx";

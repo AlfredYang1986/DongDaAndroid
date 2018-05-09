@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.data.net;
 
-import com.blackmirror.dongda.data.AppConstant;
+import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.response.SendSmsResponseBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 
@@ -14,7 +14,7 @@ public class SendSmsCmd extends AYRemoteApi {
     public static Observable<SendSmsResponseBean> sendSms(SendSmsRequestBean bean){
         String json="{\"phone\":\""+bean.phone_number+"\"}";
         bean.json=json;
-        bean.url= AppConstant.SEND_SMS_CODE_URL;
+        bean.url= DataConstant.SEND_SMS_CODE_URL;
         return execute(bean, SendSmsResponseBean.class);
     }
 

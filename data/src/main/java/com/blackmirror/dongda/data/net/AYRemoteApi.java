@@ -2,7 +2,7 @@ package com.blackmirror.dongda.data.net;
 
 
 import com.alibaba.fastjson.JSON;
-import com.blackmirror.dongda.data.AppConstant;
+import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.response.BaseResponseBean;
 import com.blackmirror.dongda.data.utils.LogUtils;
 import com.blackmirror.dongda.data.model.request.BaseRequestBean;
@@ -64,22 +64,22 @@ public abstract class AYRemoteApi extends BaseApi {
 
             return obj;
         } catch (ConnectTimeoutException e1){
-            error_code = AppConstant.CONNECT_TIMEOUT_EXCEPTION;
+            error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION;
             error_message = e1.getMessage();
             LogUtils.e(AYRemoteApi.class,"ConnectTimeoutException: ", e1);
 
         } catch (SocketTimeoutException e2) {//服务器响应超时
-            error_code = AppConstant.SOCKET_TIMEOUT_EXCEPTION;
+            error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION;
             error_message = e2.getMessage();
             LogUtils.e(AYRemoteApi.class,"SocketTimeoutException: ",e2);
 
         } catch (ConnectException e3) {//服务器请求超时
-            error_code = AppConstant.CONNECT_EXCEPTION;
+            error_code = DataConstant.CONNECT_EXCEPTION;
             error_message = e3.getMessage();
             LogUtils.e(AYRemoteApi.class,"ConnectException: ",e3);
 
         } catch (Exception e4) {
-            error_code = AppConstant.OTHER_EXCEPTION;
+            error_code = DataConstant.OTHER_EXCEPTION;
             error_message = e4.getMessage();
             LogUtils.e(AYRemoteApi.class,"Exception: ",e4);
 

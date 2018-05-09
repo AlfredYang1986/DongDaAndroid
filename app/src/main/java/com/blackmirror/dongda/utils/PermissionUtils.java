@@ -82,7 +82,7 @@ public class PermissionUtils {
 
         /*List<String> noGranted = checkPermissionWithNoGranted(activity, list);
         if (noGranted.size() != 0){
-            ActivityCompat.requestPermissions(activity, list, AppConstant.PERMISSION_REQUEST);
+            ActivityCompat.requestPermissions(activity, list, DataConstant.PERMISSION_REQUEST);
         }*/
     }
 

@@ -12,9 +12,9 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.di.component.DaggerPhoneInputComponent;
+import com.blackmirror.dongda.domain.model.PhoneLoginBean;
+import com.blackmirror.dongda.domain.model.SendSmsBean;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.model.response.uibean.PhoneLoginBean;
-import com.blackmirror.dongda.model.response.uibean.SendSmsBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
 import com.blackmirror.dongda.model.serverbean.PhoneLoginServerBean;
 import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
@@ -25,10 +25,10 @@ import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
 import com.blackmirror.dongda.ui.PhoneLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
-import com.blackmirror.dongda.utils.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.DongdaApplication;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
@@ -61,7 +61,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_input);
-        AYApplication.addActivity(this);
+        DongdaApplication.addActivity(this);
         initInject();
         initView();
         initData();
@@ -218,7 +218,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         requestBean.code = code;
         //        loginFacade.login(requestBean);
 
-        if (sendSmsUiBean != null && sendSmsUiBean.isSuccess) {
+        if (bean != null && bean.isSuccess) {
             showProcessDialog(getString(R.string.logining_process));
             presenter.login(requestBean);
            /* AYFacade facade = facades.get("LoginFacade");
@@ -278,7 +278,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
             intent.putExtra("img_uuid", uiBean.screen_photo);
             startActivity(intent);
-            AYApplication.finishAllActivity();
+            DongdaApplication.finishAllActivity();
         }
 
         return true;
@@ -307,7 +307,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
     @Override
     public void onBackPressed() {
-        AYApplication.removeActivity(this);
+        DongdaApplication.removeActivity(this);
         super.onBackPressed();
     }
 
@@ -340,14 +340,14 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
             intent.putExtra("img_uuid", bean.screen_photo);
             startActivity(intent);
-            AYApplication.finishAllActivity();
+            DongdaApplication.finishAllActivity();
         }
     }
 
     @Override
-    public void loginSuccess(com.blackmirror.dongda.domain.model.PhoneLoginBean bean) {
+    public void loginSuccess(PhoneLoginBean bean) {
         closeProcessDialog();
-        //        gotoActivity(bean);
+        gotoActivity(bean);
     }
 
     @Override
@@ -361,10 +361,10 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
     @Override
-    public void sendSmsSuccess(com.blackmirror.dongda.domain.model.SendSmsBean bean) {
+    public void sendSmsSuccess(SendSmsBean bean) {
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
         closeProcessDialog();
-        //        this.bean = bean == null ? new SendSmsBean():bean;
+        this.bean = bean == null ? new SendSmsBean():bean;
     }
 
     @Override

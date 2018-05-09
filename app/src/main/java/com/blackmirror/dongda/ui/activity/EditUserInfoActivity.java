@@ -39,7 +39,7 @@ import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
-import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DensityUtils;

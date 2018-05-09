@@ -3,6 +3,8 @@ package com.blackmirror.dongda.utils;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.blackmirror.dongda.base.AYApplication;
+
 public class ToastUtils {
     private static Toast toast;
 

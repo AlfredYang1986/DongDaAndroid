@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.data.net;
 
-import com.blackmirror.dongda.data.AppConstant;
+import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.data.model.request.WeChatLoginRequestBean;
@@ -20,7 +20,7 @@ public class LoginApi extends AYRemoteApi {
         bean.phone_number = phone;
         String json="{\"phone\":\""+phone+"\"}";
         bean.json=json;
-        bean.url= AppConstant.SEND_SMS_CODE_URL;
+        bean.url= DataConstant.SEND_SMS_CODE_URL;
         return execute(bean, SendSmsResponseBean.class);
     }
 
@@ -29,7 +29,7 @@ public class LoginApi extends AYRemoteApi {
         PhoneLoginRequestBean bean = new PhoneLoginRequestBean();
         String json="{\"phone\":\""+phone+"\",\"code\":\""+code+"\",\"reg_token\":\""+reg_token+"\"}";
         bean.json=json;
-        bean.url= AppConstant.AUTH_SMS_CODE_URL;
+        bean.url= DataConstant.AUTH_SMS_CODE_URL;
         return execute(bean, PhoneLoginResponseBean.class);
     }
 
@@ -40,7 +40,7 @@ public class LoginApi extends AYRemoteApi {
         String json="{\"third\":{\"provide_uid\":\""+provide_uid+"\",\"provide_token\":\""+provide_token+"\",\"provide_screen_name\":\""+provide_screen_name+"\"," +
                 "\"provide_name\":\""+provide_name+"\",\"provide_screen_photo\":\""+provide_screen_photo+"\"}}";
         bean.json=json;
-        bean.url= AppConstant.WECHAT_LOGIN_URL;
+        bean.url= DataConstant.WECHAT_LOGIN_URL;
         return execute(bean, WeChatLoginResponseBean.class);
     }
 

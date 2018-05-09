@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import com.blackmirror.dongda.base.AYApplication;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Map;

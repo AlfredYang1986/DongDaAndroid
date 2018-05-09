@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.data.repository;
 
+import com.blackmirror.dongda.data.model.db.UserInfoDbBean;
 import com.blackmirror.dongda.data.model.response.PhoneLoginResponseBean;
 import com.blackmirror.dongda.data.model.response.SendSmsResponseBean;
 import com.blackmirror.dongda.data.model.response.WeChatLoginResponseBean;
@@ -8,6 +9,7 @@ import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.domain.repository.LoginRepository;
+import com.blackmirror.dongda.utils.AYPrefUtils;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
@@ -22,8 +24,23 @@ public class LoginRepositoryImpl implements LoginRepository {
         return LoginApi.sendSms(phone)
                 .map(new Function<SendSmsResponseBean, SendSmsBean>() {
                     @Override
-                    public SendSmsBean apply(SendSmsResponseBean bean) throws Exception {
-                        return null;
+                    public SendSmsBean apply(SendSmsResponseBean responseBean) throws Exception {
+                        SendSmsBean bean = new SendSmsBean();
+                        if (responseBean != null && "ok".equals(responseBean.status)) {
+                            bean.isSuccess = true;
+                            if ( responseBean.result != null && responseBean.result.reg != null) {
+                                bean.phone=responseBean.result.reg.phone;
+//                                bean.code=responseBean.result.reg.code;
+                                bean.reg_token=responseBean.result.reg.reg_token;
+                                bean.is_reg=responseBean.result.reg.is_reg;
+                            }
+                        } else {
+                            if (responseBean!=null && responseBean.error!=null) {
+                                bean.code = responseBean.error.code;
+                                bean.message = responseBean.error.message;
+                            }
+                        }
+                        return bean;
                     }
                 });
     }
@@ -33,8 +50,42 @@ public class LoginRepositoryImpl implements LoginRepository {
         return LoginApi.phoneLogin(phone, code, reg_token)
                 .map(new Function<PhoneLoginResponseBean, PhoneLoginBean>() {
                     @Override
-                    public PhoneLoginBean apply(PhoneLoginResponseBean bean) throws Exception {
-                        return null;
+                    public PhoneLoginBean apply(PhoneLoginResponseBean responseBean) throws Exception {
+                        PhoneLoginBean bean = new PhoneLoginBean();
+                        if (bean != null && "ok".equals(responseBean.status)) {
+                            bean.isSuccess = true;
+                            if (responseBean.result != null) {
+                                bean.auth_token = responseBean.result.auth_token;
+                            }
+                            if (responseBean.result != null && responseBean.result.user != null) {
+                                bean.screen_name=responseBean.result.user.screen_name;
+                                bean.has_auth_phone=responseBean.result.user.has_auth_phone;
+                                bean.current_device_type=responseBean.result.user.current_device_type;
+                                bean.is_service_provider=responseBean.result.user.is_service_provider;
+                                bean.user_id=responseBean.result.user.user_id;
+                                bean.screen_photo=responseBean.result.user.screen_photo;
+                                bean.current_device_id=responseBean.result.user.current_device_id;
+                            }
+                        } else {
+                            if (bean != null && responseBean.error != null) {
+                                bean.code = responseBean.error.code;
+                                bean.message = responseBean.error.message;
+                            }
+                        }
+                        //插入数据库
+                        if (bean.isSuccess){
+                            AYPrefUtils.setUserId(bean.user_id);
+                            AYPrefUtils.setAuthToken(bean.auth_token);
+
+                            UserInfoDbBean dbBean = new UserInfoDbBean();
+                            dbBean.is_current = 1;//目前没什么卵用
+                            dbBean.screen_name = bean.screen_name;
+                            dbBean.screen_photo = bean.screen_photo;
+                            dbBean.user_id = bean.user_id;
+                            dbBean.auth_token = bean.auth_token;
+                            DbRepository.insertProfile(dbBean);
+                        }
+                        return bean;
                     }
                 });
     }
@@ -45,8 +96,47 @@ public class LoginRepositoryImpl implements LoginRepository {
         return LoginApi.wechatLogin(provide_uid, provide_token, provide_screen_name, provide_name, provide_screen_photo)
                 .map(new Function<WeChatLoginResponseBean, WeChatLoginBean>() {
                     @Override
-                    public WeChatLoginBean apply(WeChatLoginResponseBean bean) throws Exception {
-                        return null;
+                    public WeChatLoginBean apply(WeChatLoginResponseBean responseBean) throws Exception {
+                        WeChatLoginBean bean = new WeChatLoginBean();
+                        bean.isSuccess = "ok".equals(responseBean.status);
+
+                        if ("ok".equals(responseBean.status)) {
+                            bean.isSuccess = true;
+                            if (responseBean.result != null) {
+                                bean.auth_token = responseBean.result.auth_token;
+                                if (responseBean.result.user != null) {
+                                    bean.screen_name = responseBean.result.user.screen_name;
+                                    bean.has_auth_phone = responseBean.result.user.has_auth_phone;
+                                    bean.current_device_type = responseBean.result.user.current_device_type;
+                                    bean.is_service_provider = responseBean.result.user.is_service_provider;
+                                    bean.user_id = responseBean.result.user.user_id;
+                                    bean.screen_photo = responseBean.result.user.screen_photo;
+                                    bean.current_device_id = responseBean.result.user.current_device_id;
+                                }
+                            }
+
+                        } else {
+                            if (responseBean.error != null) {
+                                bean.code = responseBean.error.code;
+                                bean.message = responseBean.error.message;
+                            }
+                        }
+                        //插入数据库
+                        if (bean.isSuccess){
+
+                            AYPrefUtils.setUserId(bean.user_id);
+                            AYPrefUtils.setAuthToken(bean.auth_token);
+
+                            UserInfoDbBean dbBean = new UserInfoDbBean();
+                            dbBean.is_current = 1;//目前没什么卵用
+                            dbBean.screen_name = bean.screen_name;
+                            dbBean.screen_photo = bean.screen_photo;
+                            dbBean.user_id = bean.user_id;
+                            dbBean.auth_token = bean.auth_token;
+                            DbRepository.insertProfile(dbBean);
+                        }
+
+                        return bean;
                     }
                 });
     }

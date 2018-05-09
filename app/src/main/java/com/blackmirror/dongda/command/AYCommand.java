@@ -2,7 +2,7 @@ package com.blackmirror.dongda.command;
 
 import com.blackmirror.dongda.AY.AYSysNotifier;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.utils.AppConstant;
 
 import org.json.JSONException;

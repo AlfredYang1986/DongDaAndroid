@@ -1,10 +1,10 @@
 package com.blackmirror.dongda.presenter;
 
 
-import com.blackmirror.dongda.data.model.request.WeChatLoginRequestBean;
+import com.blackmirror.dongda.domain.Interactor.WeChatLoginUseCase;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
-import com.blackmirror.dongda.domain.repository.LoginRepository;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
+import com.blackmirror.dongda.utils.AYPrefUtils;
 
 import javax.inject.Inject;
 
@@ -15,18 +15,20 @@ import io.reactivex.schedulers.Schedulers;
 
 public class WeChatLoginPresenter implements WeChatLoginContract.WeChatLoginPresenter {
 
-    private final LoginRepository repository;
+    @Inject
+    WeChatLoginUseCase weChat;
+
     private WeChatLoginContract.View view;
 
     @Inject
-    public WeChatLoginPresenter(LoginRepository repository, WeChatLoginContract.View view) {
-        this.repository = repository;
+    public WeChatLoginPresenter(WeChatLoginContract.View view) {
         this.view = view;
     }
 
     @Override
-    public void weChatLogin(WeChatLoginRequestBean bean) {
-        repository.weChatLogin(bean.provide_uid,bean.provide_token,bean.provide_screen_name,bean.provide_name,bean.provide_screen_photo)
+    public void weChatLogin(String provide_uid, String provide_token, String provide_screen_name,
+                            String provide_name, String provide_screen_photo) {
+        weChat.weChatLogin(provide_uid, provide_token, provide_screen_name, provide_name, provide_screen_photo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<WeChatLoginBean>() {
@@ -37,7 +39,13 @@ public class WeChatLoginPresenter implements WeChatLoginContract.WeChatLoginPres
 
                     @Override
                     public void onNext(WeChatLoginBean bean) {
-                        view.weChatLoginSuccess(bean);
+                        if (bean.isSuccess){
+                            AYPrefUtils.setUserId(bean.user_id);
+                            AYPrefUtils.setAuthToken(bean.auth_token);
+                            view.weChatLoginSuccess(bean);
+                        }else {
+                            view.weChatLoginError(bean);
+                        }
                     }
 
                     @Override

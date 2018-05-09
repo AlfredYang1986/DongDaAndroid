@@ -3,6 +3,8 @@ package com.blackmirror.dongda.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.blackmirror.dongda.base.AYApplication;
+
 public class AYPrefUtils {
     private static final String USER_INFO ="user_info";
     private static final String WECHAT_ACCESSTOKEN="access_token";

@@ -138,7 +138,9 @@ public abstract class AYActivity extends AppCompatActivity implements AYSysNotif
         super.onDestroy();
     }
 
-    protected abstract void bindingFragments();
+    protected void bindingFragments(){
+
+    }
 
     protected void showProcessDialog() {
         showProcessDialog(getString(R.string.dlg_tips), getString(R.string.dlg_processing));

@@ -2,6 +2,8 @@ package com.blackmirror.dongda.utils;
 
 import android.util.DisplayMetrics;
 
+import com.blackmirror.dongda.base.AYApplication;
+
 /**
  * 像素Dp Px相关
  * Created by Ruge on 2018-05-03 下午4:46

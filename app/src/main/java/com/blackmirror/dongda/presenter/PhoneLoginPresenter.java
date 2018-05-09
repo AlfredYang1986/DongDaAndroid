@@ -3,11 +3,14 @@ package com.blackmirror.dongda.presenter;
 
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
+import com.blackmirror.dongda.domain.Interactor.PhoneLoginUseCase;
+import com.blackmirror.dongda.domain.Interactor.SendSmsUseCase;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
-import com.blackmirror.dongda.domain.repository.LoginRepository;
 import com.blackmirror.dongda.ui.PhoneLoginContract;
 import com.blackmirror.dongda.utils.LogUtils;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -16,17 +19,21 @@ import io.reactivex.schedulers.Schedulers;
 
 public class PhoneLoginPresenter implements PhoneLoginContract.PhoneLoginPresenter {
 
-    private final LoginRepository repository;
+    @Inject
+    SendSmsUseCase smsUseCase;
+    @Inject
+    PhoneLoginUseCase phoneUseCase;
+
     private PhoneLoginContract.View view;
 
-    public PhoneLoginPresenter(LoginRepository repository,PhoneLoginContract.View view) {
-        this.repository = repository;
+    @Inject
+    public PhoneLoginPresenter(PhoneLoginContract.View view) {
         this.view = view;
     }
 
     @Override
     public void login(PhoneLoginRequestBean bean) {
-        repository.phoneLogin(bean.phone_number,bean.code,bean.reg_token)
+        phoneUseCase.phoneLogin(bean.phone_number,bean.code,bean.reg_token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<PhoneLoginBean>() {
@@ -56,7 +63,7 @@ public class PhoneLoginPresenter implements PhoneLoginContract.PhoneLoginPresent
 
     @Override
     public void sendSms(SendSmsRequestBean bean) {
-        repository.sendSms(bean.phone_number)
+        smsUseCase.sendSms(bean.phone_number)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<SendSmsBean>() {

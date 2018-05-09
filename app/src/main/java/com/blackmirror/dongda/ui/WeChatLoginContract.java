@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.ui;
 
 
-import com.blackmirror.dongda.data.model.request.WeChatLoginRequestBean;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 
 public class WeChatLoginContract {
@@ -14,6 +13,7 @@ public class WeChatLoginContract {
     }
 
     public interface WeChatLoginPresenter extends BasePresenter<View> {
-        void weChatLogin(WeChatLoginRequestBean bean);
+        void weChatLogin(String provide_uid, String provide_token, String provide_screen_name,
+                         String provide_name, String provide_screen_photo);
     }
 }

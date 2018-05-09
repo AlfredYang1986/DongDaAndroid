@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.base.AYApplication;
 
 /**
  * Created by Ruge on 2018-04-23 上午10:34

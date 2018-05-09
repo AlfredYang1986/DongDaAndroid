@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.data;
 
-public class AppConstant {
+public class DataConstant {
 
     public static final int PERMISSION_REQUEST = 10010;
     public static final int CHOOSE_PIC=10011;

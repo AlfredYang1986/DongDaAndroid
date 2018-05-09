@@ -64,7 +64,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
     implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.ext.rxAndroidVersion
     implementation 'com.squareup.okhttp3:okhttp:' + rootProject.ext.okhttpVersion
-    //    implementation 'com.facebook.stetho:stetho:1.5.0'
+    implementation 'com.facebook.stetho:stetho:1.5.0'
     //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     //    implementation 'com.aliyun.dpa:oss-android-sdk:+'
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion

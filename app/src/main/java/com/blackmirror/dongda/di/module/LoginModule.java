@@ -1,12 +1,10 @@
 package com.blackmirror.dongda.di.module;
 
 import com.blackmirror.dongda.data.repository.LoginRepositoryImpl;
-import com.blackmirror.dongda.domain.Interactor.PhoneLoginUserCase;
-import com.blackmirror.dongda.domain.Interactor.SendSmsUserCase;
-import com.blackmirror.dongda.domain.Interactor.WeChatLoginUserCase;
+import com.blackmirror.dongda.domain.Interactor.PhoneLoginUseCase;
+import com.blackmirror.dongda.domain.Interactor.SendSmsUseCase;
+import com.blackmirror.dongda.domain.Interactor.WeChatLoginUseCase;
 import com.blackmirror.dongda.domain.repository.LoginRepository;
-import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
-import com.blackmirror.dongda.ui.PhoneLoginContract;
 
 import dagger.Module;
 import dagger.Provides;
@@ -20,22 +18,17 @@ public class LoginModule {
     }
 
     @Provides
-    SendSmsUserCase providerSendSmsUserCase(LoginRepository repository){
-        return new SendSmsUserCase(repository);
+    SendSmsUseCase providerSendSmsUserCase(LoginRepository repository){
+        return new SendSmsUseCase(repository);
     }
 
     @Provides
-    PhoneLoginUserCase providerPhoneLoginUserCase(LoginRepository repository){
-        return new PhoneLoginUserCase(repository);
+    PhoneLoginUseCase providerPhoneLoginUserCase(LoginRepository repository){
+        return new PhoneLoginUseCase(repository);
     }
 
     @Provides
-    WeChatLoginUserCase providerWeChatLoginUserCase(LoginRepository repository){
-        return new WeChatLoginUserCase(repository);
-    }
-
-    @Provides
-    PhoneLoginPresenter providePhoneLoginPresenter(LoginRepository repository,PhoneLoginContract.View view){
-        return new PhoneLoginPresenter(repository, view);
+    WeChatLoginUseCase providerWeChatLoginUserCase(LoginRepository repository){
+        return new WeChatLoginUseCase(repository);
     }
 }

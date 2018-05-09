@@ -6,7 +6,7 @@ import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.command.AYRemoteCommand;
 import com.blackmirror.dongda.model.serverbean.ImgTokenServerBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
-import com.blackmirror.dongda.utils.AYApplication;
+import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.CalUtils;
