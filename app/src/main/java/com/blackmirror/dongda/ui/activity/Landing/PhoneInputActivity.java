@@ -9,12 +9,10 @@ import android.widget.EditText;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.domain.features.login.LoginContract;
-import com.blackmirror.dongda.domain.features.login.LoginFacade;
-import com.blackmirror.dongda.facade.AYFacade;
+import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
+import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
+import com.blackmirror.dongda.di.component.DaggerPhoneInputComponent;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.model.request.PhoneLoginRequestBean;
-import com.blackmirror.dongda.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.model.response.uibean.PhoneLoginBean;
 import com.blackmirror.dongda.model.response.uibean.SendSmsBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -23,6 +21,8 @@ import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
 import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
+import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
+import com.blackmirror.dongda.ui.PhoneLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AYApplication;
@@ -35,9 +35,9 @@ import com.blackmirror.dongda.utils.ToastUtils;
 
 import org.json.JSONObject;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -45,9 +45,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 
-public class PhoneInputActivity extends BaseActivity implements LoginContract.View{
+public class PhoneInputActivity extends BaseActivity implements PhoneLoginContract.View{
 
     final static String TAG = "Phone Input Activity";
+
+    @Inject
+    public PhoneLoginPresenter presenter;
 
     private EditText et_phone = null;
     private EditText et_code = null;
@@ -55,7 +58,6 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
     private Disposable mSms_disposable;
     private Button next_step;
     private SendSmsUiBean sendSmsUiBean;
-    private LoginFacade loginFacade;
     private SendSmsBean bean;
 
     @Override
@@ -67,6 +69,14 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
         initData();
         initListener();
         DeviceUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
+        initInject();
+    }
+
+    private void initInject() {
+        DaggerPhoneInputComponent.builder()
+                .activity(this)
+                .view(this)
+                .build();
     }
 
     private void initView() {
@@ -98,7 +108,6 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
                     return;
                 }
 
-
                 /*AYFacade facade = facades.get("LoginFacade");
                 LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
                 Map<String, Object> m = new HashMap<>();
@@ -112,10 +121,11 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
                 facade.execute("SendSMSCode",args,login);*/
                 SendSmsRequestBean bean = new SendSmsRequestBean();
                 bean.phone_number = input_phone;
-                loginFacade = new LoginFacade();
-                loginFacade.setView(PhoneInputActivity.this);
-                loginFacade.sendSms(bean);
-                getSmsMsg();
+//                loginFacade = new LoginFacade();
+//                loginFacade.setView(PhoneInputActivity.this);
+//                loginFacade.sendSms(bean);
+                presenter.sendSms(bean);
+                countDownSmsTime();
 
             }
         });
@@ -128,7 +138,7 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
         });
     }
 
-    private void getSmsMsg() {
+    private void countDownSmsTime() {
         sms_code.setEnabled(false);
         Observable.intervalRange(0,30,0,1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -208,11 +218,12 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
         requestBean.reg_token = bean.reg_token;
         requestBean.phone_number = bean.phone;
         requestBean.code = code;
-        loginFacade.login(requestBean);
+//        loginFacade.login(requestBean);
 
         if (sendSmsUiBean!=null && sendSmsUiBean.isSuccess) {
             showProcessDialog(getString(R.string.logining_process));
-            AYFacade facade = facades.get("LoginFacade");
+            presenter.login(requestBean);
+           /* AYFacade facade = facades.get("LoginFacade");
             Map<String, Object> m = new HashMap<>();
             m.put("phone", phone);
             m.put("reg_token", sendSmsUiBean.reg_token);
@@ -226,7 +237,7 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
             m1.put("login", "login");
             JSONObject login = new JSONObject(m1);
 
-            facade.execute("LoginWithPhone",args, login);
+            facade.execute("LoginWithPhone",args, login);*/
 
         } else {
             ToastUtils.showShortToast(R.string.phone_input_next_step_error);
@@ -336,14 +347,13 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
     }
 
     @Override
-    public void loginSuccess(PhoneLoginBean bean) {
+    public void loginSuccess(com.blackmirror.dongda.domain.model.PhoneLoginBean bean) {
         closeProcessDialog();
-        gotoActivity(bean);
+//        gotoActivity(bean);
     }
 
-
     @Override
-    public void loginError(PhoneLoginBean bean) {
+    public void loginError(com.blackmirror.dongda.domain.model.PhoneLoginBean bean) {
         closeProcessDialog();
         if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(sms_code,bean.message);
@@ -353,14 +363,14 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
     }
 
     @Override
-    public void sendSmsSuccess(SendSmsBean bean) {
+    public void sendSmsSuccess(com.blackmirror.dongda.domain.model.SendSmsBean bean) {
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
         closeProcessDialog();
-        this.bean = bean == null ? new SendSmsBean():bean;
+//        this.bean = bean == null ? new SendSmsBean():bean;
     }
 
     @Override
-    public void sendSmsError(SendSmsBean bean) {
+    public void sendSmsError(com.blackmirror.dongda.domain.model.SendSmsBean bean) {
         closeProcessDialog();
         if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
             SnackbarUtils.show(sms_code,bean.message);
@@ -368,5 +378,4 @@ public class PhoneInputActivity extends BaseActivity implements LoginContract.Vi
             ToastUtils.showShortToast(bean.message+"("+bean.code+")");
         }
     }
-
 }

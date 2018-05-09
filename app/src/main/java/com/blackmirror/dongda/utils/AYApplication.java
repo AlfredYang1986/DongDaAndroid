@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.app.AppCompatActivity;
 
-import com.blackmirror.dongda.di.component.DaggerAppComponent;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.memory.MemoryTrimType;
 import com.facebook.common.memory.MemoryTrimmable;
@@ -16,7 +15,6 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.imagepipeline.core.ImagePipelineConfig;
 import com.facebook.imagepipeline.core.ImagePipelineFactory;
 import com.mob.MobSDK;
-import com.squareup.leakcanary.LeakCanary;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +32,12 @@ public class AYApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+        /*if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.
             return;
         }
-        LeakCanary.install(this);
+        LeakCanary.install(this);*/
         me=this;
         appContext =this.getApplicationContext();
 //        Stetho.initializeWithDefaults(this);
@@ -52,7 +50,6 @@ public class AYApplication extends Application {
     }
 
     private void initDagger() {
-        DaggerAppComponent.builder().build();
     }
 
     /**

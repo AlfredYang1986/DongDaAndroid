@@ -1,4 +1,4 @@
-package com.blackmirror.dongda.mvp.ui;
+package com.blackmirror.dongda.ui;
 
 public  interface BasePresenter<T> {
     void setView(T view);

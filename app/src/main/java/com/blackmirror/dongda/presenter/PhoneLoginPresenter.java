@@ -1,17 +1,20 @@
-package com.blackmirror.dongda.mvp.ui;
+package com.blackmirror.dongda.presenter;
 
+
+import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
+import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
 import com.blackmirror.dongda.domain.repository.LoginRepository;
-import com.blackmirror.dongda.model.request.PhoneLoginRequestBean;
-import com.blackmirror.dongda.model.request.SendSmsRequestBean;
+import com.blackmirror.dongda.ui.PhoneLoginContract;
+import com.blackmirror.dongda.utils.LogUtils;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class PhoneLoginPresenter implements PhoneLoginContract.LoginPresenter {
+public class PhoneLoginPresenter implements PhoneLoginContract.PhoneLoginPresenter {
 
     private final LoginRepository repository;
     private PhoneLoginContract.View view;
@@ -34,12 +37,14 @@ public class PhoneLoginPresenter implements PhoneLoginContract.LoginPresenter {
 
                     @Override
                     public void onNext(PhoneLoginBean bean) {
+                        LogUtils.d("phoneLogin success");
                         view.loginSuccess(bean);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        view.onError(null);
+                        LogUtils.d("phoneLogin error");
+                        view.loginError(null);
                     }
 
                     @Override
@@ -62,12 +67,14 @@ public class PhoneLoginPresenter implements PhoneLoginContract.LoginPresenter {
 
                     @Override
                     public void onNext(SendSmsBean bean) {
+                        LogUtils.d("sendSms success");
                         view.sendSmsSuccess(bean);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        view.onError(null);
+                        LogUtils.d("sendSms error");
+                        view.loginError(null);
                     }
 
                     @Override

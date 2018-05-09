@@ -17,7 +17,7 @@ android {
 
     buildTypes {
         debug {
-            minifyEnabled false     //混淆
+            //混淆
         }
         release {
             minifyEnabled false

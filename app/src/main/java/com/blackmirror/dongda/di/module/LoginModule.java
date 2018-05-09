@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.di.module;
 
 import com.blackmirror.dongda.data.repository.LoginRepositoryImpl;
-import com.blackmirror.dongda.di.scope.PerActivity;
 import com.blackmirror.dongda.domain.Interactor.PhoneLoginUserCase;
 import com.blackmirror.dongda.domain.Interactor.SendSmsUserCase;
 import com.blackmirror.dongda.domain.Interactor.WeChatLoginUserCase;
@@ -11,7 +10,6 @@ import dagger.Module;
 import dagger.Provides;
 
 @Module
-@PerActivity
 public class LoginModule {
 
     @Provides
