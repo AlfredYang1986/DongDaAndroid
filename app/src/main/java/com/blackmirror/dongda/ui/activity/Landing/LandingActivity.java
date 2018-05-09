@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.alibaba.fastjson.JSON;
+import com.blackmirror.dongda.di.component.DaggerLandingComponent;
+import com.blackmirror.dongda.domain.model.WeChatLoginBean;
+import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
+import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.utils.AYApplication;
@@ -46,7 +50,7 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
-public class LandingActivity extends AYActivity {
+public class LandingActivity extends AYActivity implements WeChatLoginContract.View{
 
     final static String TAG = "Landing Activity";
     private RelativeLayout rl_phone_login;
@@ -57,6 +61,7 @@ public class LandingActivity extends AYActivity {
     private Disposable completeDb;
     private Disposable errorDb;
     private Disposable cancelDb;
+    private WeChatLoginPresenter presenter;
 
     public static PublishSubject getWeChatInfo() {
         return pb;
@@ -69,10 +74,19 @@ public class LandingActivity extends AYActivity {
         reference=new WeakReference<>(this);
         //在setContentView之后调用
         DeviceUtils.initSystemBarColor(this);
+        initInject();
         initView();
         initData();
         AYApplication.addActivity(this);
         initListener();
+    }
+
+    private void initInject() {
+        presenter = DaggerLandingComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getWeChatLoginPresenter();
     }
 
     private void initView() {
@@ -401,4 +415,13 @@ public class LandingActivity extends AYActivity {
 
     }
 
+    @Override
+    public void weChatLoginSuccess(WeChatLoginBean bean) {
+
+    }
+
+    @Override
+    public void weChatLoginError(WeChatLoginBean bean) {
+
+    }
 }

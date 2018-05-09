@@ -74,7 +74,7 @@ public class PhoneLoginPresenter implements PhoneLoginContract.PhoneLoginPresent
                     @Override
                     public void onError(Throwable e) {
                         LogUtils.d("sendSms error");
-                        view.loginError(null);
+                        view.sendSmsError(null);
                     }
 
                     @Override

@@ -37,19 +37,16 @@ import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 
-public class PhoneInputActivity extends BaseActivity implements PhoneLoginContract.View{
+public class PhoneInputActivity extends BaseActivity implements PhoneLoginContract.View {
 
     final static String TAG = "Phone Input Activity";
 
-    @Inject
     public PhoneLoginPresenter presenter;
 
     private EditText et_phone = null;
@@ -65,18 +62,19 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phone_input);
         AYApplication.addActivity(this);
+        initInject();
         initView();
         initData();
         initListener();
-        DeviceUtils.setStatusBarColor(this,getResources().getColor(R.color.colorPrimary));
-        initInject();
+        DeviceUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
     }
 
     private void initInject() {
-        DaggerPhoneInputComponent.builder()
+        presenter = DaggerPhoneInputComponent.builder()
                 .activity(this)
                 .view(this)
-                .build();
+                .build()
+                .getPhoneLoginPresenter();
     }
 
     private void initView() {
@@ -98,12 +96,12 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
                 String input_phone = et_phone.getText().toString();
 
-                if (TextUtils.isEmpty(input_phone)){
+                if (TextUtils.isEmpty(input_phone)) {
                     ToastUtils.showShortToast(getString(R.string.phone_not_empty));
                     return;
                 }
 
-                if (input_phone.trim().length()!=11){
+                if (input_phone.trim().length() != 11) {
                     ToastUtils.showShortToast(getString(R.string.input_phone_error));
                     return;
                 }
@@ -121,9 +119,10 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
                 facade.execute("SendSMSCode",args,login);*/
                 SendSmsRequestBean bean = new SendSmsRequestBean();
                 bean.phone_number = input_phone;
-//                loginFacade = new LoginFacade();
-//                loginFacade.setView(PhoneInputActivity.this);
-//                loginFacade.sendSms(bean);
+                //                loginFacade = new LoginFacade();
+                //                loginFacade.setView(PhoneInputActivity.this);
+                //                loginFacade.sendSms(bean);
+                LogUtils.d("hello zxctyuogggooo");
                 presenter.sendSms(bean);
                 countDownSmsTime();
 
@@ -140,7 +139,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
     private void countDownSmsTime() {
         sms_code.setEnabled(false);
-        Observable.intervalRange(0,30,0,1, TimeUnit.SECONDS)
+        Observable.intervalRange(0, 30, 0, 1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
                     @Override
@@ -150,7 +149,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
                     @Override
                     public void onNext(Long aLong) {
-                        sms_code.setText(String.format(getString(R.string.sms_count_down),String.valueOf(30-aLong)));
+                        sms_code.setText(String.format(getString(R.string.sms_count_down), String.valueOf(30 - aLong)));
                     }
 
                     @Override
@@ -168,7 +167,6 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
 
-
     @Override
     public String getClassTag() {
         return TAG;
@@ -176,11 +174,11 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
 
     public Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
-        LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
+        LogUtils.d("PhoneInputActivity " + Thread.currentThread().getName());
 
         LogUtils.d(TAG, "send sms code result is " + arg.toString());
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
-//        sms_result = new SendSMSCodeResult(arg);
+        //        sms_result = new SendSMSCodeResult(arg);
         SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
         sendSmsUiBean = new SendSmsUiBean(bean);
         return true;
@@ -188,14 +186,14 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
     public Boolean AYSendSMSCodeCommandFailed(JSONObject arg) {
         LogUtils.d(TAG, "send sms code error is " + arg.toString());
-//        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
-//        sms_result = new SendSMSCodeResult(arg);
+        //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
+        //        sms_result = new SendSMSCodeResult(arg);
         ErrorInfoServerBean serverBean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(sms_code,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(sms_code, uiBean.message);
+        } else {
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
         }
         return true;
     }
@@ -204,11 +202,11 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         LogUtils.d(TAG, "login with phone code");
         String phone = et_phone.getText().toString().trim();
         String code = et_code.getText().toString().trim();
-        if (TextUtils.isEmpty(phone) || phone.length()!=11){
+        if (TextUtils.isEmpty(phone) || phone.length() != 11) {
             ToastUtils.showShortToast(R.string.input_phone_error);
             return;
         }
-        if (TextUtils.isEmpty(code)){
+        if (TextUtils.isEmpty(code)) {
             ToastUtils.showShortToast(getString(R.string.input_code_error));
             return;
         }
@@ -218,9 +216,9 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         requestBean.reg_token = bean.reg_token;
         requestBean.phone_number = bean.phone;
         requestBean.code = code;
-//        loginFacade.login(requestBean);
+        //        loginFacade.login(requestBean);
 
-        if (sendSmsUiBean!=null && sendSmsUiBean.isSuccess) {
+        if (sendSmsUiBean != null && sendSmsUiBean.isSuccess) {
             showProcessDialog(getString(R.string.logining_process));
             presenter.login(requestBean);
            /* AYFacade facade = facades.get("LoginFacade");
@@ -247,12 +245,12 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
         closeProcessDialog();
         ToastUtils.showShortToast(R.string.login_success);
-        LogUtils.d("AYLoginWithPhoneCommandSuccess "+args.toString());
+        LogUtils.d("AYLoginWithPhoneCommandSuccess " + args.toString());
 
         PhoneLoginServerBean serverBean = JSON.parseObject(args.toString(), PhoneLoginServerBean.class);
         PhoneLoginUiBean uiBean = new PhoneLoginUiBean(serverBean);
 
-        if (!uiBean.isSuccess){
+        if (!uiBean.isSuccess) {
             ToastUtils.showShortToast(getString(R.string.login_failare));
             return false;
         }
@@ -268,7 +266,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
             intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
             startActivity(intent);
 
-        } else if (TextUtils.isEmpty(uiBean.screen_photo)){
+        } else if (TextUtils.isEmpty(uiBean.screen_photo)) {
 
             Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
             intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
@@ -276,9 +274,9 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
             intent.putExtra("current_user", p);
             intent.putExtra("name", uiBean.screen_name);
             startActivity(intent);
-        }else {
+        } else {
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
-            intent.putExtra("img_uuid",uiBean.screen_photo);
+            intent.putExtra("img_uuid", uiBean.screen_photo);
             startActivity(intent);
             AYApplication.finishAllActivity();
         }
@@ -290,10 +288,10 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         closeProcessDialog();
         ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
         ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(sms_code,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(sms_code, uiBean.message);
+        } else {
+            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
         }
         return true;
     }
@@ -301,7 +299,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mSms_disposable != null && !mSms_disposable.isDisposed()){
+        if (mSms_disposable != null && !mSms_disposable.isDisposed()) {
             mSms_disposable.dispose();
             mSms_disposable = null;
         }
@@ -319,7 +317,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
     private void gotoActivity(PhoneLoginBean bean) {
-        if (!bean.isSuccess){
+        if (!bean.isSuccess) {
             ToastUtils.showShortToast(getString(R.string.login_failare));
             return;
         }
@@ -332,15 +330,15 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
             intent.putExtra("has_photo", !TextUtils.isEmpty(bean.screen_photo));
             startActivity(intent);
 
-        } else if (TextUtils.isEmpty(bean.screen_photo)){
+        } else if (TextUtils.isEmpty(bean.screen_photo)) {
 
             Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
             intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
             intent.putExtra("name", bean.screen_name);
             startActivity(intent);
-        }else {
+        } else {
             Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
-            intent.putExtra("img_uuid",bean.screen_photo);
+            intent.putExtra("img_uuid", bean.screen_photo);
             startActivity(intent);
             AYApplication.finishAllActivity();
         }
@@ -349,16 +347,16 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     @Override
     public void loginSuccess(com.blackmirror.dongda.domain.model.PhoneLoginBean bean) {
         closeProcessDialog();
-//        gotoActivity(bean);
+        //        gotoActivity(bean);
     }
 
     @Override
     public void loginError(com.blackmirror.dongda.domain.model.PhoneLoginBean bean) {
         closeProcessDialog();
-        if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(sms_code,bean.message);
-        }else {
-            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(sms_code, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 
@@ -366,16 +364,16 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     public void sendSmsSuccess(com.blackmirror.dongda.domain.model.SendSmsBean bean) {
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
         closeProcessDialog();
-//        this.bean = bean == null ? new SendSmsBean():bean;
+        //        this.bean = bean == null ? new SendSmsBean():bean;
     }
 
     @Override
     public void sendSmsError(com.blackmirror.dongda.domain.model.SendSmsBean bean) {
         closeProcessDialog();
-        if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(sms_code,bean.message);
-        }else {
-            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(sms_code, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 }

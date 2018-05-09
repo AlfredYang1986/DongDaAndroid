@@ -5,6 +5,8 @@ import com.blackmirror.dongda.domain.Interactor.PhoneLoginUserCase;
 import com.blackmirror.dongda.domain.Interactor.SendSmsUserCase;
 import com.blackmirror.dongda.domain.Interactor.WeChatLoginUserCase;
 import com.blackmirror.dongda.domain.repository.LoginRepository;
+import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
+import com.blackmirror.dongda.ui.PhoneLoginContract;
 
 import dagger.Module;
 import dagger.Provides;
@@ -30,5 +32,10 @@ public class LoginModule {
     @Provides
     WeChatLoginUserCase providerWeChatLoginUserCase(LoginRepository repository){
         return new WeChatLoginUserCase(repository);
+    }
+
+    @Provides
+    PhoneLoginPresenter providePhoneLoginPresenter(LoginRepository repository,PhoneLoginContract.View view){
+        return new PhoneLoginPresenter(repository, view);
     }
 }

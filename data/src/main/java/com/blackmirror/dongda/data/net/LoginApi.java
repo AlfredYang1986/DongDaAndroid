@@ -17,7 +17,8 @@ public class LoginApi extends AYRemoteApi {
 
     public static Observable<SendSmsResponseBean> sendSms(String phone){
         SendSmsRequestBean bean = new SendSmsRequestBean();
-        String json="{\"phone\":\""+bean.phone_number+"\"}";
+        bean.phone_number = phone;
+        String json="{\"phone\":\""+phone+"\"}";
         bean.json=json;
         bean.url= AppConstant.SEND_SMS_CODE_URL;
         return execute(bean, SendSmsResponseBean.class);
