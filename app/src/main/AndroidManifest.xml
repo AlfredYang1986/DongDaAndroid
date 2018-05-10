@@ -75,8 +75,8 @@
         <activity android:name=".ui.activity.MyLikeActivity">
         </activity>
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name=".ui.activity.ServiceDetailInfoActivity">
+            android:name=".ui.activity.ServiceDetailInfoActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
         <provider
@@ -94,6 +94,10 @@
         <activity android:name=".ui.activity.ServiceProfileActivity">
         </activity>
         <activity android:name=".ui.activity.UserAboutMeActivity">
+        </activity>
+        <activity android:name=".ui.activity.UserInfoActivity">
+        </activity>
+        <activity android:name=".ui.activity.ApplyActivity">
         </activity>
     </application>
 

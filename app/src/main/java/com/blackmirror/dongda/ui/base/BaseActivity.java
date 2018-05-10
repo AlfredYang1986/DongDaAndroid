@@ -6,33 +6,37 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.utils.DeviceUtils;
-
-import java.util.Map;
 
 /**
  * Created by Ruge on 2018-05-04 下午6:41
  */
-public class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     protected ProgressDialog pb;
     private boolean isViewValid;
-    public Map<String, AYCommand> cmds;
-    public Map<String, AYFacade> facades;
-    public Map<String, Object> fragments;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(getLayoutResId());
         isViewValid = true;
         setStatusBarColor();
+        initInject();
+        initView();
+        initData();
+        initListener();
     }
 
     protected void setStatusBarColor() {
         DeviceUtils.setStatusBarColor(this);
     }
+
+    protected abstract int getLayoutResId();
+    protected abstract void initInject();
+    protected abstract void initView();
+    protected abstract void initData();
+    protected abstract void initListener();
 
     @Override
     protected void onDestroy() {
@@ -85,14 +89,5 @@ public class BaseActivity extends AppCompatActivity {
     protected boolean isViewValid() {
         return isViewValid;
     }
-
-    public String getClassTag() {
-        return this.getClass().getSimpleName();
-    }
-
-    protected void bindingFragments(){
-
-    }
-
 
 }

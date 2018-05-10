@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.ui;
 
-import com.blackmirror.dongda.domain.model.UpdateUserInfoRequestBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
 
 /**
  * Created by xcx on 2018/5/9.
@@ -13,7 +13,7 @@ public class UpdateUserInfoContract {
     }
 
     public interface UpdatePresenter extends BasePresenter<View>{
-        void updateUserInfo(UpdateUserInfoRequestBean bean);
+        void updateUserInfo(UpdateUserInfoDomainBean bean);
     }
 
 }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:background="@drawable/apply_bg"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.ApplyActivity">
+
+    <TextView
+        android:lineSpacingMultiplier="1.1"
+        android:letterSpacing="0.1"
+        android:layout_width="335dp"
+        android:layout_height="66.3dp"
+        android:text="咚哒为0-12岁的孩子
+提供看顾和兴趣教育课程"
+        android:textColor="#FFF6F9FB"
+        android:textSize="24sp"
+        />
+
+</android.support.constraint.ConstraintLayout>

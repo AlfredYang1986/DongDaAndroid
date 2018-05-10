@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.di.component.DaggerLandingComponent;
@@ -15,6 +16,7 @@ import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.AYActivity;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
+import com.blackmirror.dongda.ui.activity.UserInfoActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.DongdaApplication;
@@ -38,7 +40,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
     final static String TAG = "Landing Activity";
     private RelativeLayout rl_phone_login;
-    private RelativeLayout rl_wechat_login;
+    private TextView tv_wechat_login;
     private Disposable errorDb;
     private Disposable cancelDb;
     private WeChatLoginPresenter presenter;
@@ -67,7 +69,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
     private void initView() {
         rl_phone_login = findViewById(R.id.rl_phone_login);
-        rl_wechat_login = findViewById(R.id.rl_wechat_login);
+        tv_wechat_login = findViewById(R.id.tv_wechat_login);
     }
 
     private void initData() {
@@ -79,12 +81,12 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
+                Intent intent = new Intent(LandingActivity.this, UserInfoActivity.class);
                 startActivity(intent);
             }
         });
 
-        rl_wechat_login.setOnClickListener(new View.OnClickListener() {
+        tv_wechat_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 weChatLogin();
