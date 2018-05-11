@@ -1,4 +1,4 @@
-package com.blackmirror.dongda.ui.activity;
+package com.blackmirror.dongda.ui.base;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;

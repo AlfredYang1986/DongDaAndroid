@@ -12,16 +12,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
+import com.blackmirror.dongda.adapter.HomeArtAdapter;
+import com.blackmirror.dongda.adapter.HomeCareAdapter;
+import com.blackmirror.dongda.adapter.HomeScienceAdapter;
+import com.blackmirror.dongda.adapter.HomeSportAdapter;
+import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration;
 import com.blackmirror.dongda.base.AYApplication;
-import com.blackmirror.dongda.utils.AYPrefUtils;
-import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.DensityUtils;
-import com.blackmirror.dongda.utils.LogUtils;
-import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.utils.SnackbarUtils;
-import com.blackmirror.dongda.utils.ToastUtils;
+import com.blackmirror.dongda.di.component.DaggerAYHomeComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.HomepageDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.presenter.HomePresenter;
 import com.blackmirror.dongda.ui.activity.ArtListActivity;
 import com.blackmirror.dongda.ui.activity.CareListActivity;
 import com.blackmirror.dongda.ui.activity.FeaturedDetailActivity;
@@ -29,26 +33,15 @@ import com.blackmirror.dongda.ui.activity.MyLikeActivity;
 import com.blackmirror.dongda.ui.activity.NearServiceActivity;
 import com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity;
 import com.blackmirror.dongda.ui.activity.UserAboutMeActivity;
-import com.blackmirror.dongda.adapter.FeaturedThemeAdapter;
-import com.blackmirror.dongda.adapter.HomeArtAdapter;
-import com.blackmirror.dongda.adapter.HomeCareAdapter;
-import com.blackmirror.dongda.adapter.HomeScienceAdapter;
-import com.blackmirror.dongda.adapter.HomeSportAdapter;
-import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.LikePopUiBean;
-import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.base.BaseActivity;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DensityUtils;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.OSSUtils;
+import com.blackmirror.dongda.utils.SnackbarUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +50,8 @@ import java.util.List;
  * Created by alfredyang on 29/6/17.
  */
 
-public class AYHomeActivity extends AYActivity implements View.OnClickListener{
+public class AYHomeActivity extends BaseActivity implements View.OnClickListener,HomeContract.HomeView{
 
-    private final String TAG = "AYHomeActivity";
     private CoordinatorLayout ctl_root;
     private RecyclerView rv_featured_theme;
     private RecyclerView rv_home_care;
@@ -78,24 +70,36 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
     private HomeArtAdapter artAdapter;
     private HomeSportAdapter sportAdapter;
     private HomeScienceAdapter scienceAdapter;
-    private HomeInfoServerBean bean;
     private int clickLikePos;
     private int clickAdapter;//1 art 2 sport 3 science
     private String img_uuid;
+    private HomePresenter presenter;
+    private HomepageDomainBean bean;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         img_uuid=getIntent().getStringExtra("img_uuid");
         AYApplication.addActivity(this);
-        initView();
-        initData();
-        initListener();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_home;
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerAYHomeComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getHomePresenter();
+    }
+
+    @Override
+    protected void initView() {
         ctl_root = findViewById(R.id.ctl_root);
         sv_head_pic = findViewById(R.id.sv_head_pic);
         rv_featured_theme = findViewById(R.id.rv_featured_theme);
@@ -112,7 +116,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         iv_home_like = findViewById(R.id.iv_home_like);
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
         if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
             iv_home_location.setElevation(DensityUtils.dp2px(6));
         }
@@ -122,21 +127,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         initHomeData();
     }
 
-    private void initHomeData() {
-        //        showProcessDialog();
-        try {
-            AYFacade facade = facades.get("QueryServiceFacade");
-            String json = "{ \"token\": \"" + AYPrefUtils.getAuthToken() + "\", \"condition\": { \"user_id\": \"" + AYPrefUtils.getUserId() + "\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}";
-            JSONObject root = new JSONObject(json);
-            facade.execute("SearchService", root);
-
-        } catch (Exception e) {
-            LogUtils.e(AYHomeActivity.class, "homeData Exception: ", e);
-            closeProcessDialog();
-        }
-    }
-
-    private void initListener() {
+    @Override
+    protected void initListener() {
         tv_home_care_more.setOnClickListener(this);
         tv_home_art_more.setOnClickListener(this);
         tv_home_sport_more.setOnClickListener(this);
@@ -151,6 +143,10 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 initHomeData();
             }
         });
+    }
+
+    private void initHomeData() {
+        presenter.getHomePageData();
     }
 
     private void initSubject() {
@@ -186,7 +182,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         });
     }
 
-    private void initCare(HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+    private void initCare(HomepageDomainBean.HomepageServicesBean bean) {
         if (careAdapter == null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -211,7 +207,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void initArt(final HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+    private void initArt(final HomepageDomainBean.HomepageServicesBean bean) {
 
         if (artAdapter == null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
@@ -223,7 +219,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             rv_home_art.addItemDecoration(new SpacesItemDecoration(8));
             artAdapter.setOnItemClickListener(new HomeArtAdapter.OnItemClickListener() {
                 @Override
-                public void onArtLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
+                public void onArtLikeClick(View view, int position, HomepageDomainBean.HomepageServicesBean.ServicesBean bean) {
                     //                    ToastUtils.showShortToast("点击了收藏");
                     clickLikePos = position;
                     clickAdapter = AppConstant.HOME_ART_ADAPTER;
@@ -247,7 +243,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void initSport(final HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+    private void initSport(final HomepageDomainBean.HomepageServicesBean bean) {
 
         if (sportAdapter == null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
@@ -259,7 +255,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             rv_home_sport.addItemDecoration(new SpacesItemDecoration(8));
             sportAdapter.setOnItemClickListener(new HomeSportAdapter.OnItemClickListener() {
                 @Override
-                public void onSportLikeClick(View view, int position, HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+                public void onSportLikeClick(View view, int position, HomepageDomainBean.HomepageServicesBean.ServicesBean servicesBean) {
                     sendLikeData(servicesBean);
                     clickLikePos = position;
                     clickAdapter = AppConstant.HOME_SPORT_ADAPTER;
@@ -277,7 +273,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void initScience(HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+    private void initScience(HomepageDomainBean.HomepageServicesBean bean) {
         if (scienceAdapter == null) {
             LinearLayoutManager manager = new LinearLayoutManager(AYHomeActivity.this);
             manager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -288,8 +284,7 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             rv_home_science.addItemDecoration(new SpacesItemDecoration(8));
             scienceAdapter.setOnItemClickListener(new HomeScienceAdapter.OnItemClickListener() {
                 @Override
-                public void onScienceLikeClick(View view, int position, HomeInfoServerBean.ResultBean
-                        .HomepageServicesBean.ServicesBean servicesBean) {
+                public void onScienceLikeClick(View view, int position, HomepageDomainBean.HomepageServicesBean.ServicesBean servicesBean) {
                     clickLikePos = position;
                     clickAdapter = AppConstant.HOME_SCIENCE_ADAPTER;
                     sendLikeData(servicesBean);
@@ -307,29 +302,15 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
-    private void sendLikeData(HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean bean) {
-        String t = AYPrefUtils.getAuthToken();
-        String u = AYPrefUtils.getUserId();
+    private void sendLikeData(HomepageDomainBean.HomepageServicesBean.ServicesBean bean) {
         showProcessDialog();
+
         if (bean.is_collected) {//已收藏 点击取消
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand", object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+            presenter.likePop(bean.service_id);
         } else {
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand", object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+            presenter.likePush(bean.service_id);
         }
+
     }
 
     @Override
@@ -339,15 +320,15 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
             case R.id.tv_home_care_more:
 
                 Intent careIntent = new Intent(AYHomeActivity.this, CareListActivity.class);
-                if (bean != null && bean.result != null) {
-                    int m = bean.result.homepage_services.get(0).totalCount;
+                if (bean != null && bean.homepage_services != null) {
+                    int m = bean.homepage_services.get(0).totalCount;
                     careIntent.putExtra("totalCount", m);
                 }
                 startActivityForResult(careIntent, AppConstant.CARE_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_art_more:
-                if (bean != null && bean.result != null) {
-                    int m = bean.result.homepage_services.get(1).totalCount;
+                if (bean != null && bean.homepage_services != null) {
+                    int m = bean.homepage_services.get(1).totalCount;
                     intent.putExtra("totalCount", m);
                 }
                 intent.putExtra("serviceType", getString(R.string.type_art));
@@ -355,8 +336,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 startActivityForResult(intent, AppConstant.ART_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_sport_more:
-                if (bean != null && bean.result != null) {
-                    int m = bean.result.homepage_services.get(2).totalCount;
+                if (bean != null && bean.homepage_services != null) {
+                    int m = bean.homepage_services.get(2).totalCount;
                     intent.putExtra("totalCount", m);
                 }
                 intent.putExtra("serviceType", getString(R.string.type_sport));
@@ -364,8 +345,8 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 startActivityForResult(intent, AppConstant.SPORT_MORE_REQUEST_CODE);
                 break;
             case R.id.tv_home_science_more:
-                if (bean != null && bean.result != null) {
-                    int m = bean.result.homepage_services.get(3).totalCount;
+                if (bean != null && bean.homepage_services != null) {
+                    int m = bean.homepage_services.get(3).totalCount;
                     intent.putExtra("totalCount", m);
                 }
                 intent.putExtra("serviceType", getString(R.string.type_science));
@@ -383,119 +364,6 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
                 startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
                 break;
         }
-    }
-
-    /**
-     * 加载首页成功回调
-     * @param args
-     * @return
-     */
-    public Boolean AYSearchServiceCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        String url = OSSUtils.getSignedUrl(img_uuid);
-        LogUtils.d("pic url " + url);
-        sv_head_pic.setImageURI(url);
-        sl_home_refresh.setRefreshing(false);
-        bean = JSON.parseObject(args.toString(), HomeInfoServerBean.class);
-        if (bean != null && "ok".equals(bean.status)) {
-            initCare(bean.result.homepage_services.get(0));
-            initArt(bean.result.homepage_services.get(1));
-            initSport(bean.result.homepage_services.get(2));
-            initScience(bean.result.homepage_services.get(3));
-        } else if (bean != null && bean.error != null) {
-            ToastUtils.showShortToast(bean.error.message);
-        }
-        return true;
-    }
-
-    public Boolean AYSearchServiceCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        sl_home_refresh.setRefreshing(false);
-        LogUtils.d("AYSearchServiceCommandFailed " + args.toString());
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-
-        return true;
-    }
-
-    /**
-     * 收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePushCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
-        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess) {
-            if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
-                artAdapter.notifyItemChanged(clickLikePos, true);
-            } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
-                sportAdapter.notifyItemChanged(clickLikePos, true);
-            } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
-                scienceAdapter.notifyItemChanged(clickLikePos, true);
-            }
-        } else {
-            ToastUtils.showShortToast(pushUiBean.message + "(" + pushUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePushCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
-    /**
-     * 取消收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePopCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
-        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess) {
-            if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
-                artAdapter.notifyItemChanged(clickLikePos, false);
-            } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
-                sportAdapter.notifyItemChanged(clickLikePos, false);
-            } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
-                scienceAdapter.notifyItemChanged(clickLikePos, false);
-            }
-        } else {
-            ToastUtils.showShortToast(popUiBean.message + "(" + popUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePopCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-
-    }
-
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        needsRefreshHomeData(requestCode, resultCode, data);
     }
 
     private void needsRefreshHomeData(int requestCode, int resultCode, Intent data) {
@@ -538,14 +406,69 @@ public class AYHomeActivity extends AYActivity implements View.OnClickListener{
         }
     }
 
+
+    @Override
+    public void onGetHomePageData(HomepageDomainBean bean) {
+        this.bean = bean;
+        closeProcessDialog();
+        String url = OSSUtils.getSignedUrl(img_uuid);
+        LogUtils.d("pic url " + url);
+        sv_head_pic.setImageURI(url);
+        sl_home_refresh.setRefreshing(false);
+        initCare(bean.homepage_services.get(0));
+        initArt(bean.homepage_services.get(1));
+        initSport(bean.homepage_services.get(2));
+        initScience(bean.homepage_services.get(3));
+    }
+
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+        closeProcessDialog();
+
+        if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
+            artAdapter.notifyItemChanged(clickLikePos, true);
+        } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
+            sportAdapter.notifyItemChanged(clickLikePos, true);
+        } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
+            scienceAdapter.notifyItemChanged(clickLikePos, true);
+        }
+
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        closeProcessDialog();
+
+        if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
+            artAdapter.notifyItemChanged(clickLikePos, false);
+        } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
+            sportAdapter.notifyItemChanged(clickLikePos, false);
+        } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
+            scienceAdapter.notifyItemChanged(clickLikePos, false);
+        }
+
+    }
+
+    @Override
+    public void onGetHomeDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        sl_home_refresh.setRefreshing(false);
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        needsRefreshHomeData(requestCode, resultCode, data);
+    }
+
     @Override
     public void onBackPressed() {
         AYApplication.removeActivity(this);
         moveTaskToBack(true);
-    }
-
-    @Override
-    protected void bindingFragments() {
-
     }
 }

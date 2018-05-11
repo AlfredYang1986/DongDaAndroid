@@ -1,11 +1,13 @@
 package com.blackmirror.dongda.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.ui.activity.apply.ApplyActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -64,7 +66,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             case R.id.sv_user_photo:
                 break;
             case R.id.tv_join_service:
-
+                startActivity(new Intent(UserInfoActivity.this,ApplyActivity.class));
                 break;
             case R.id.tv_setting:
                 break;

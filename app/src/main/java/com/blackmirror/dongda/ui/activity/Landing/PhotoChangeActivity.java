@@ -39,7 +39,7 @@ import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.ImgTokenUiBean;
 import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
-import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.utils.AYPrefUtils;

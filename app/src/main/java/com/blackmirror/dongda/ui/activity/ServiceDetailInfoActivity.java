@@ -37,6 +37,7 @@ import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.SafeUiBean;
 import com.blackmirror.dongda.model.uibean.ServiceDetailInfoUiBean;
+import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.ui.view.SlidingTabLayout;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;

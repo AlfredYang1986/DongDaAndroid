@@ -14,7 +14,7 @@ import com.blackmirror.dongda.di.component.DaggerLandingComponent;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
-import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.ui.activity.UserInfoActivity;
 import com.blackmirror.dongda.utils.AppConstant;

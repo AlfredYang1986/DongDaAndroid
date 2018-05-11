@@ -121,6 +121,23 @@
     <string name="str_album">相册</string>
     <string name="str_camera">相机</string>
     <string name="str_cancel">取消</string>
+    <string name="apply_to_service">申请成为服务者</string>
+    <string name="setting">设置</string>
+    <string name="apply_dec_1">咚哒为0-12岁的孩子</string>
+    <string name="apply_dec_2">提供看顾和兴趣教育课程</string>
+    <string name="apply_dec_3">出于对用户安全和服务质量的保证</string>
+    <string name="apply_dec_4">该功能暂时只对有授权账号的用户开放</string>
+    <string name="apply_account">申请获取授权账号</string>
+    <string name="input_user_name_hint">请输入姓名</string>
+    <string name="input_service_name_hint">请输入品牌名称</string>
+    <string name="apply_account_header">申请授权账号</string>
+    <string name="tv_next_step">下一步</string>
+    <string name="input_name_dec">下午好！\n我应该怎么称呼你？</string>
+    <string name="input_service_nme_dec">如果有品牌名称,也请告诉我们</string>
+    <string name="apply_input_city_name_hint">请输入城市</string>
+    <string name="apply_input_phone_hint">请输入手机号</string>
+    <string name="str_class">课程</string>
+    <string name="str_experience">体验</string>
 
 
 </resources>

@@ -1,13 +1,11 @@
 package com.blackmirror.dongda.utils;
 
-import android.content.pm.ApplicationInfo;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.blackmirror.dongda.base.AYApplication;
-
 public class LogUtils {
-    public static boolean DEBUG = (AYApplication.getApplication().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+    //    public static boolean DEBUG = (AYApplication.getApplication().getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+    public static boolean DEBUG = true;
     public static final String DEFAULT_TAG = "xcx";
     public static final String DEFAULT_ERROR_MSG = "dongda Exception: ";
 
@@ -38,12 +36,12 @@ public class LogUtils {
         }
     }
 
-    public static void e(Class<?> c, String message){
+    public static void e(Class<?> c, String message) {
         String tag = (c == null ? DEFAULT_TAG : c.getSimpleName());
-        e(tag, "Exception: "+message, null);
+        e(tag, "Exception: " + message, null);
     }
 
-    public static void e(Class<?> c, Throwable t){
+    public static void e(Class<?> c, Throwable t) {
         String tag = (c == null ? DEFAULT_TAG : c.getSimpleName());
         e(tag, DEFAULT_ERROR_MSG, t);
     }

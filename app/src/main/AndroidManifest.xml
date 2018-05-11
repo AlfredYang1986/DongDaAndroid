@@ -97,7 +97,17 @@
         </activity>
         <activity android:name=".ui.activity.UserInfoActivity">
         </activity>
-        <activity android:name=".ui.activity.ApplyActivity">
+        <activity android:name=".ui.activity.apply.ApplyActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyNameActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyCityActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyPhoneActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyServiceActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ServiceHelpActivity">
         </activity>
     </application>
 

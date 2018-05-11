@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.model.serverbean.HomeInfoServerBean;
+import com.blackmirror.dongda.domain.model.HomepageDomainBean;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -17,7 +17,7 @@ import java.util.List;
 public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCareViewHolder> {
 
 
-    HomeInfoServerBean.ResultBean.HomepageServicesBean bean;
+    private HomepageDomainBean.HomepageServicesBean bean;
     protected Context context;
     private OnCareClickListener listener;
 
@@ -26,7 +26,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
         this.listener = listener;
     }
 
-    public HomeCareAdapter(Context context, HomeInfoServerBean.ResultBean.HomepageServicesBean bean) {
+    public HomeCareAdapter(Context context, HomepageDomainBean.HomepageServicesBean bean) {
         this.context = context;
         this.bean = bean;
     }
@@ -40,7 +40,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
     @Override
     public void onBindViewHolder(HomeCareViewHolder holder, int position) {
 
-        HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
+        HomepageDomainBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
 
         String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
         holder.sv_care_photo.setImageURI(url);
@@ -57,7 +57,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
 
     }
 
-    private void initListener(final HomeCareViewHolder holder, int position, final HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean servicesBean) {
+    private void initListener(final HomeCareViewHolder holder, int position, final HomepageDomainBean.HomepageServicesBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +91,7 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
         }
     }
 
-    public void setRefreshData(List<HomeInfoServerBean.ResultBean.HomepageServicesBean.ServicesBean> list) {
+    public void setRefreshData(List<HomepageDomainBean.HomepageServicesBean.ServicesBean> list) {
         bean.services.clear();
         bean.services.addAll(list);
         notifyDataSetChanged();
