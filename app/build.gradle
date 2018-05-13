@@ -80,4 +80,5 @@ dependencies {
     implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
     annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
     implementation project(':data')
+    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
 }

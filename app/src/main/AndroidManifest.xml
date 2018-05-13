@@ -109,6 +109,12 @@
         </activity>
         <activity android:name=".ui.activity.apply.ServiceHelpActivity">
         </activity>
+        <activity android:name=".ui.activity.MyBrandActivity">
+        </activity>
+        <activity android:name=".ui.activity.SettingActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplySuccessActivity">
+        </activity>
     </application>
 
 </manifest>

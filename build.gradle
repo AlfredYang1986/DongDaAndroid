@@ -49,6 +49,7 @@ ext{
     SmartRefreshHeaderVersion = "1.0.5.1"
     daggerVersion = "2.14.1"
     daggerCompilerVersion = "2.14.1"
+    lubanVersion = "1.1.4"
     ShareSDKVersion = "3.1.4"
 }
 

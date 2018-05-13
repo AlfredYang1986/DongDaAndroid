@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/apply_bg"
+    tools:context="com.blackmirror.dongda.ui.activity.apply.ApplySuccessActivity">
+
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@drawable/details_icon_back"
+        android:layout_marginTop="33dp"
+        android:layout_marginLeft="6dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <android.support.constraint.Guideline
+         android:id="@+id/gv_1"
+        app:layout_constraintGuide_percent="0.142"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+         android:id="@+id/iv_apply_success"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gv_1"
+        android:background="@drawable/succeed_white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+         android:id="@+id/tv_apply_dec_1"
+        android:layout_marginTop="46dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_apply_success"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="咚哒已经收到了你的申请"
+        android:textColor="#FFFFFFFF"
+        android:textSize="22sp"
+        />
+
+    <TextView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+         android:id="@+id/tv_apply_dec_2"
+        android:layout_marginTop="2dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_apply_dec_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="我们会尽快与你联系"
+        android:textColor="#FFFFFFFF"
+        android:textSize="22sp"
+        />
+
+    <android.support.constraint.ConstraintLayout
+         android:id="@+id/cl_mp_root"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="#FFFFFFFF"
+        android:layout_marginTop="81dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_apply_dec_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+             android:id="@+id/tv_apply_mp_1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="21dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="你也可以通过添加咚哒微信号"
+            android:textColor="#FF737373"
+            android:textSize="17sp"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_apply_mp_2"
+            app:layout_constraintTop_toBottomOf="@id/tv_apply_mp_1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="1dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系我们"
+            android:textColor="#FF737373"
+            android:textSize="17sp"
+            />
+
+        <ImageView
+             android:id="@+id/iv_mp_qrcode"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginTop="19dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_apply_mp_2"
+            android:background="@drawable/mp_qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:layout_marginRight="12dp"
+            app:layout_constraintHorizontal_chainStyle="packed"
+             android:id="@+id/iv_mp_wechat"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_mp_num"
+            app:layout_constraintTop_toTopOf="@id/tv_mp_num"
+            app:layout_constraintBottom_toBottomOf="@id/tv_mp_num"
+            android:background="@drawable/wechat_shape"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="24dp"
+            android:layout_marginTop="29dp"
+            app:layout_constraintLeft_toRightOf="@id/iv_mp_wechat"
+            app:layout_constraintRight_toRightOf="parent"
+             android:id="@+id/tv_mp_num"
+            app:layout_constraintTop_toBottomOf="@id/iv_mp_qrcode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="dxjmama"
+            android:textColor="#FF404040"
+            android:textSize="24sp"
+            />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
