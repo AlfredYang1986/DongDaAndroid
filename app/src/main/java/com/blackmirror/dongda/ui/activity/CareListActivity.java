@@ -2,7 +2,6 @@ package com.blackmirror.dongda.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,37 +10,27 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.adapter.CareListAdapter;
+import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
+import com.blackmirror.dongda.di.component.DaggerCareListComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.presenter.GetMoreDataPresenter;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.adapter.CareListAdapter;
-import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
-import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.LikePopUiBean;
-import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-public class CareListActivity extends AYActivity {
+public class CareListActivity extends BaseActivity implements ListMoreContract.View {
 
     private final String TAG = "CareListActivity";
 
@@ -56,23 +45,31 @@ public class CareListActivity extends AYActivity {
     int take = 10;
     private boolean isNeedRefresh;
     private int clickLikePos;
+    private GetMoreDataPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_care_list);
         totalCount = getIntent().getIntExtra("totalCount", 10);
-        initView();
-        initData(skip, take);
-        initListener();
     }
 
     @Override
-    protected void bindingFragments() {
-
+    protected int getLayoutResId() {
+        return R.layout.activity_care_list;
     }
 
-    private void initView() {
+    @Override
+    protected void initInject() {
+        presenter = DaggerCareListComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getMoreDataPresenter();
+    }
+
+
+    @Override
+    protected void initView() {
         ctl_root = findViewById(R.id.ctl_root);
         iv_home_head_back = findViewById(R.id.iv_home_head_back);
         tv_home_head_title = findViewById(R.id.tv_home_head_title);
@@ -83,21 +80,18 @@ public class CareListActivity extends AYActivity {
         sl_care_list.setRefreshHeader(new MaterialHeader(CareListActivity.this));
     }
 
+    @Override
+    protected void initData() {
+        initData(skip, take);
+    }
+
     private void initData(int skipCount, int takeCount) {
-
-        AYFacade facade = facades.get("QueryServiceFacade");
-        try {
-            String json = "{\"skip\" : " + skipCount + ",\"take\" : " + takeCount + ",\"token\": \"" + AYPrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + AYPrefUtils.getUserId() + "\",\"service_type\": \"看顾\"}}";
-            JSONObject object = new JSONObject(json);
-            facade.execute("AYSubjectMoreCommand", object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+        presenter.getServiceMoreData(skipCount, takeCount, "看顾");
     }
 
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -139,36 +133,7 @@ public class CareListActivity extends AYActivity {
         });
     }
 
-    /**
-     * 获取更多信息列表
-     *
-     * @param args
-     */
-    public void AYSubjectMoreCommandSuccess(JSONObject args) {
-        CareMoreServerBean serverBean = JSON.parseObject(args.toString(), CareMoreServerBean.class);
-        CareMoreUiBean bean = new CareMoreUiBean(serverBean);
-        if (sl_care_list.getState().opening) {
-            sl_care_list.finishLoadMore();
-            sl_care_list.finishRefresh();
-        }
-        setDataToRecyclerView(bean);
-    }
-
-    public void AYSubjectMoreCommandFailed(JSONObject args) {
-        if (sl_care_list.getState().opening) {
-            sl_care_list.finishLoadMore(false);
-            sl_care_list.finishRefresh(false);
-        }
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code== AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    private void setDataToRecyclerView(CareMoreUiBean bean) {
+    private void setDataToRecyclerView(CareMoreDomainBean bean) {
 
         if (bean.isSuccess) {
 
@@ -188,7 +153,6 @@ public class CareListActivity extends AYActivity {
                 adapter.setMoreData(bean.services);
             }
 
-
             adapter.setOnCareListClickListener(new CareListAdapter.OnCareListClickListener() {
                 @Override
                 public void onItemCareListClick(View view, int position, String service_id) {
@@ -198,8 +162,7 @@ public class CareListActivity extends AYActivity {
                 }
 
                 @Override
-                public void onItemCareLikeClick(View view, int position, CareMoreServerBean
-                        .ResultBean.ServicesBean servicesBean) {
+                public void onItemCareLikeClick(View view, int position, CareMoreDomainBean.ServicesBean servicesBean) {
                     clickLikePos = position;
                     sendLikeData(servicesBean);
                 }
@@ -210,84 +173,12 @@ public class CareListActivity extends AYActivity {
     }
 
 
-    private void sendLikeData(CareMoreServerBean.ResultBean.ServicesBean bean) {
-        String t = AYPrefUtils.getAuthToken();
-        String u = AYPrefUtils.getUserId();
+    private void sendLikeData(CareMoreDomainBean.ServicesBean bean) {
         showProcessDialog();
         if (bean.is_collected) {//已收藏 点击取消
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand", object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+            presenter.likePop(bean.service_id);
         } else {
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand", object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
-        }
-    }
-
-    /**
-     * 收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePushCommandSuccess(JSONObject args) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
-        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess) {
-            adapter.notifyItemChanged(clickLikePos, true);
-        } else {
-            ToastUtils.showShortToast(pushUiBean.message + "(" + pushUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePushCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    /**
-     * 取消收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePopCommandSuccess(JSONObject args) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
-        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess) {
-            adapter.notifyItemChanged(clickLikePos, false);
-        } else {
-            ToastUtils.showShortToast(popUiBean.message + "(" + popUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePopCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+            presenter.likePush(bean.service_id);
         }
     }
 
@@ -302,25 +193,42 @@ public class CareListActivity extends AYActivity {
         super.onDestroy();
     }
 
-    private void clearMemBitMap() {
-        if (adapter!=null){
-            for (String url : adapter.urlSet) {
-                try {
-                    Uri uri = Uri.parse(url);
-                    ImageRequest request= ImageRequestBuilder.newBuilderWithSource(uri).build();
-                    boolean cache = Fresco.getImagePipeline().isInBitmapMemoryCache(uri);
 
-                    LogUtils.d(url+" in memory "+cache);
-                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
-                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
+    @Override
+    public void onGetServiceMoreDataSuccess(CareMoreDomainBean bean) {
+        if (sl_care_list.getState().opening) {
+            sl_care_list.finishLoadMore();
+            sl_care_list.finishRefresh();
+        }
+        setDataToRecyclerView(bean);
+    }
 
-                } catch (Exception e) {
-                    LogUtils.e(ArtListActivity.class,"CacheException: ",e);
-                }
-            }
-            adapter.urlSet.clear();
-            adapter.urlSet=null;
-            adapter=null;
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, true);
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, false);
+
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        if (sl_care_list.getState().opening) {
+            sl_care_list.finishLoadMore(false);
+            sl_care_list.finishRefresh(false);
+        }
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
+
 }

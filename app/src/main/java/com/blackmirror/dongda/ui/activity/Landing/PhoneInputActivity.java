@@ -60,16 +60,17 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_phone_input);
         DongdaApplication.addActivity(this);
-        initInject();
-        initView();
-        initData();
-        initListener();
         DeviceUtils.setStatusBarColor(this, getResources().getColor(R.color.colorPrimary));
     }
 
-    private void initInject() {
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_phone_input;
+    }
+
+    @Override
+    protected void initInject() {
         presenter = DaggerPhoneInputComponent.builder()
                 .activity(this)
                 .view(this)
@@ -77,18 +78,21 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
                 .getPhoneLoginPresenter();
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         et_phone = findViewById(R.id.phone_edit_text);
         et_code = findViewById(R.id.code_edit_text);
         sms_code = findViewById(R.id.request_sms_code);
         next_step = findViewById(R.id.landing_phone_input_next_step);
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
 
     }
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
         sms_code.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,7 +171,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
 
-    @Override
+
     public String getClassTag() {
         return TAG;
     }
@@ -311,7 +315,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         super.onBackPressed();
     }
 
-    @Override
+
     protected void bindingFragments() {
 
     }

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.base.AYActivity;
 
 import org.json.JSONObject;
 

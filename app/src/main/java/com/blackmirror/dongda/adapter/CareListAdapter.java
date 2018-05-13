@@ -10,10 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
 import com.blackmirror.dongda.utils.DensityUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
-import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -28,7 +27,7 @@ import java.util.Set;
 public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareListViewHolder> {
 
 
-    private CareMoreUiBean bean;
+    private CareMoreDomainBean bean;
     protected Context context;
     private OnCareListClickListener listener;
     public Set<String> urlSet=new HashSet<>();
@@ -39,7 +38,7 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
         this.listener = listener;
     }
 
-    public CareListAdapter(Context context, CareMoreUiBean bean) {
+    public CareListAdapter(Context context, CareMoreDomainBean bean) {
         this.context = context;
         this.bean = bean;
     }
@@ -56,7 +55,7 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
     @Override
     public void onBindViewHolder(CareListAdapter.CareListViewHolder holder, int position) {
 
-        CareMoreServerBean.ResultBean.ServicesBean servicesBean = this.bean.services.get(position);
+        CareMoreDomainBean.ServicesBean servicesBean = this.bean.services.get(position);
 
 
         String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
@@ -99,8 +98,7 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
         }
     }
 
-    private void initListener(final CareListViewHolder holder, int position, final CareMoreServerBean
-            .ResultBean.ServicesBean servicesBean) {
+    private void initListener(final CareListViewHolder holder, int position, final CareMoreDomainBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,12 +125,12 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
         return bean.services == null ? 0 : bean.services.size();
     }
 
-    public void setMoreData(List<CareMoreServerBean.ResultBean.ServicesBean> moreList) {
+    public void setMoreData(List<CareMoreDomainBean.ServicesBean> moreList) {
         bean.services.addAll(moreList);
         notifyDataSetChanged();
     }
 
-    public void setRefreshData(List<CareMoreServerBean.ResultBean.ServicesBean> moreList) {
+    public void setRefreshData(List<CareMoreDomainBean.ServicesBean> moreList) {
         bean.services.clear();
         bean.services.addAll(moreList);
         notifyDataSetChanged();
@@ -162,8 +160,7 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
     public interface OnCareListClickListener {
         void onItemCareListClick(View view, int position, String service_id);
 
-        void onItemCareLikeClick(View view, int position, CareMoreServerBean.ResultBean
-                .ServicesBean servicesBean);
+        void onItemCareLikeClick(View view, int position, CareMoreDomainBean.ServicesBean servicesBean);
     }
 
     public void displayImage(Uri uri, SimpleDraweeView draweeView){

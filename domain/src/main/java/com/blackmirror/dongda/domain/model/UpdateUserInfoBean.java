@@ -18,4 +18,5 @@ public class UpdateUserInfoBean extends BaseDataBean {
     public String address;
     public String contact_no;
     public String social_id;
+
 }

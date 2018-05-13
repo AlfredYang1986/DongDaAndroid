@@ -3,7 +3,7 @@ package com.blackmirror.dongda.factory.activityFactory;
 import com.blackmirror.dongda.AY.AYSysObject;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.command.AYCommand;
-import com.blackmirror.dongda.ui.activity.AYActivity;
+import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.facade.AYFacade;
 import com.blackmirror.dongda.factory.AYFactoryManager;
 import com.blackmirror.dongda.factory.common.AYFactory;

@@ -4,6 +4,7 @@ package com.blackmirror.dongda.utils;
  * Created by Ruge on 2018-04-16 上午11:35
  */
 public class OSSUtils {
+    public static final String DEFAULT_CHARSET_NAME = "utf-8";
 
 
     public static String getSignedUrl(String imgUrl){
@@ -34,9 +35,9 @@ public class OSSUtils {
                 .append("&OSSAccessKeyId=".trim())
                 .append(AYPrefUtils.getAccesskeyId())
                 .append("&Signature=")
-                .append(NetUtils.urlEncode(sign, AppConstant.DEFAULT_CHARSET_NAME))
+                .append(NetUtils.urlEncode(sign, DEFAULT_CHARSET_NAME))
                 .append("&security-token=")
-                .append(NetUtils.urlEncode(AYPrefUtils.getSecurityToken(), AppConstant.DEFAULT_CHARSET_NAME));
+                .append(NetUtils.urlEncode(AYPrefUtils.getSecurityToken(), DEFAULT_CHARSET_NAME));
         return sb2.toString();
     }
 

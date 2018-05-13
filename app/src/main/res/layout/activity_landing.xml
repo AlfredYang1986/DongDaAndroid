@@ -69,24 +69,16 @@
             android:textSize="17sp"
             />
 
-        <ImageView
-            android:layout_marginRight="14dp"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/tv_phone_login"
-            android:background="@drawable/login_icon_cellphone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+
 
     </RelativeLayout>
 
     <RelativeLayout
+        android:layout_marginTop="24dp"
         android:id="@+id/rl_wechat_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/landing_wechat_button"
+        android:layout_marginBottom="40dp"
         android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -95,18 +87,19 @@
 
 
         <TextView
+
             android:layout_centerInParent="true"
             android:id="@+id/tv_wechat_login"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/wechat_login"
             android:textColor="#FFFFFFFF"
-            android:textSize="17sp"
+            android:textSize="15sp"
             />
 
         <ImageView
-            android:layout_marginRight="16dp"
+            android:layout_marginRight="13dp"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tv_wechat_login"
             android:background="@drawable/login_icon_wechat"

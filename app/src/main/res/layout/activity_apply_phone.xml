@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
+    tools:context=".ui.activity.apply.ApplyPhoneActivity">
+
+    <include layout="@layout/activity_apply_header"/>
+
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="1dp"
+        android:background="#FF59D5C7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/view_2"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        />
+
+    <View
+        android:id="@+id/view_2"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="1dp"
+        android:background="#FF59D5C7"
+        app:layout_constraintLeft_toRightOf="@id/view_1"
+        app:layout_constraintRight_toLeftOf="@id/view_3"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+    <View
+        android:id="@+id/view_3"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="1dp"
+        android:background="#FF59D5C7"
+        app:layout_constraintLeft_toRightOf="@id/view_2"
+        app:layout_constraintRight_toLeftOf="@id/view_4"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+
+    <View
+        android:id="@+id/view_4"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="1dp"
+        android:background="#FFD8D8D8"
+        app:layout_constraintLeft_toRightOf="@id/view_3"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+    <TextView
+        android:id="@+id/tv_name_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:lineSpacingMultiplier="1.1"
+        android:text="非常好，来自北京的Jacky\n我们怎样可以联系到你？"
+        android:textColor="#FF404040"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_1"
+        />
+
+    <TextView
+        android:id="@+id/tv_phone_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="75dp"
+        android:text="手机号"
+        android:textColor="#FFA6A6A6"
+        android:textSize="15sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name_dec"
+        />
+
+    <FrameLayout
+        android:id="@+id/fl_city_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="75dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintLeft_toRightOf="@id/tv_phone_dec"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_name_dec">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_city_name"
+            android:layout_width="match_parent"
+            android:layout_height="21dp"
+            android:background="@null"
+            android:hint="@string/apply_input_phone_hint"/>
+    </FrameLayout>
+
+
+    <View
+        android:id="@+id/view_line_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFE0E0E0"
+        app:layout_constraintLeft_toLeftOf="@id/fl_city_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_city_name"
+        />
+
+</android.support.constraint.ConstraintLayout>
