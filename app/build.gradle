@@ -73,12 +73,13 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:' + rootProject.ext.SmartRefreshLayoutVersion
     //没有使用特殊Header，可以不加这行
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
+    implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
+    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
+    implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project(':domain')
     implementation project(':device')
-    implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
-    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
     implementation project(':data')
-    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
 }

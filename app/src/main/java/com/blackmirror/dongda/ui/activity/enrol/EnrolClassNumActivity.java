@@ -1,19 +1,20 @@
-package com.blackmirror.dongda.ui.activity.apply;
+package com.blackmirror.dongda.ui.activity.enrol;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.ui.base.BaseActivity;
-import com.blackmirror.dongda.utils.DeviceUtils;
 
-public class ApplyActivity extends BaseActivity{
+public class EnrolClassNumActivity extends BaseActivity {
 
     private ImageView iv_back;
-    private TextView tv_apply_account;
+    private TextView tv_next;
+    private TextInputEditText tet_max_num;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +23,7 @@ public class ApplyActivity extends BaseActivity{
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_apply;
+        return R.layout.activity_enrol_class_num;
     }
 
     @Override
@@ -33,7 +34,8 @@ public class ApplyActivity extends BaseActivity{
     @Override
     protected void initView() {
         iv_back = findViewById(R.id.iv_back);
-        tv_apply_account = findViewById(R.id.tv_apply_account);
+        tv_next = findViewById(R.id.tv_next);
+        tet_max_num = findViewById(R.id.tet_max_num);
     }
 
     @Override
@@ -50,16 +52,12 @@ public class ApplyActivity extends BaseActivity{
             }
         });
 
-        tv_apply_account.setOnClickListener(new View.OnClickListener() {
+        tv_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ApplyActivity.this,ApplyNameActivity.class));
+                Intent intent = new Intent(EnrolClassNumActivity.this, EnrolPayTypeActivity.class);
+                startActivity(intent);
             }
         });
-    }
-
-    @Override
-    protected void setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this);
     }
 }

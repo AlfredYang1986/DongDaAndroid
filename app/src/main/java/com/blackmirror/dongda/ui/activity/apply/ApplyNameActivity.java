@@ -3,12 +3,14 @@ package com.blackmirror.dongda.ui.activity.apply;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.ui.base.BaseActivity;
+import com.blackmirror.dongda.utils.ToastUtils;
 
 public class ApplyNameActivity extends BaseActivity {
 
@@ -58,7 +60,16 @@ public class ApplyNameActivity extends BaseActivity {
         tv_next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ApplyNameActivity.this,ApplyCityActivity.class));
+                String user_name = tet_user_name.getEditableText().toString();
+                String brand_name = tet_service_name.getEditableText().toString();
+                if (TextUtils.isEmpty(user_name)){
+                    ToastUtils.showShortToast("用户名不能为空!");
+                    return;
+                }
+                Intent intent = new Intent(ApplyNameActivity.this, ApplyCityActivity.class);
+                intent.putExtra("user_name",user_name);
+                intent.putExtra("brand_name",brand_name);
+                startActivity(intent);
             }
         });
     }

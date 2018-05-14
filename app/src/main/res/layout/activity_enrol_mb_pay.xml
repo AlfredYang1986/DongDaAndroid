@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
+    tools:context=".ui.activity.enrol.EnrolTimePayActivity">
+
+    <include layout="@layout/activity_pay_header"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_time_price_root"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/cl_choose_age_shape"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
+
+        <TextView
+            android:id="@+id/tv_time_price_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="22dp"
+            android:text="会员价格"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:digits="1234567890"
+            android:inputType="phone|number"
+            android:text="¥"
+            android:textColor="#FFD9D9D9"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_time_price_dec"
+            app:layout_constraintRight_toLeftOf="@id/tet_mb_price"
+            app:layout_constraintTop_toTopOf="@id/tv_time_price_dec"
+            />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_mb_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:background="@null"
+            android:hint="请填写"
+            android:textColor="#FF404040"
+            android:textColorHint="#FFD9D9D9"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_time_price_dec"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_time_price_dec"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_min_order_dec"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/cl_choose_age_shape"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_time_price_root">
+
+        <TextView
+            android:id="@+id/tv_min_order_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="22dp"
+            android:text="有效单位时间"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_valid_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:background="@null"
+            android:digits="1234567890"
+            android:hint="请填写"
+            android:inputType="phone|number"
+            android:textColor="#FF404040"
+            android:textColorHint="#FFD9D9D9"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_min_order_dec"
+            app:layout_constraintRight_toLeftOf="@id/tv_class_time_unit"
+            app:layout_constraintTop_toTopOf="@id/tv_min_order_dec"
+            />
+
+        <TextView
+            android:id="@+id/tv_class_time_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="个月"
+            android:textColor="#FFD9D9D9"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_min_order_dec"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_min_order_dec"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/cl_choose_age_shape"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_min_order_dec">
+
+        <TextView
+            android:id="@+id/tv_class_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="22dp"
+            android:text="单次授课时长"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/tet_class_time_minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:background="@null"
+            android:digits="1234567890"
+            android:hint="请填写"
+            android:inputType="phone|number"
+            android:textColor="#FF404040"
+            android:textColorHint="#FFD9D9D9"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_class_time"
+            app:layout_constraintRight_toLeftOf="@id/tv_class_time_minute"
+            app:layout_constraintTop_toTopOf="@id/tv_class_time"
+            />
+
+        <TextView
+            android:id="@+id/tv_class_time_minute"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:text="分钟"
+            android:textColor="#FFD9D9D9"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_class_time"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_class_time"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -258,13 +258,13 @@ public class DeviceUtils {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (isMIUI()) {
                 activity.getWindow().setStatusBarColor(color);
-                MIUISetStatusBarLightMode(activity, false);
+                MIUISetStatusBarLightMode(activity, true);
                 return;
             }
             if (isFlyme()) {
                 activity.getWindow().setStatusBarColor(color);
                 //                activity.getWindow().setStatusBarColor(Color.TRANSPARENT);
-                FlymeSetStatusBarLightMode(activity.getWindow(), false);
+                FlymeSetStatusBarLightMode(activity.getWindow(), true);
                 return;
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

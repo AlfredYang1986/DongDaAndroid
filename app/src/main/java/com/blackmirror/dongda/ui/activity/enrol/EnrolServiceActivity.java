@@ -1,19 +1,23 @@
-package com.blackmirror.dongda.ui.activity.apply;
+package com.blackmirror.dongda.ui.activity.enrol;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.DeviceUtils;
+import com.facebook.drawee.view.SimpleDraweeView;
 
-public class ApplyActivity extends BaseActivity{
+public class EnrolServiceActivity extends BaseActivity {
 
     private ImageView iv_back;
-    private TextView tv_apply_account;
+    private TextView iv_service_location;
+    private SimpleDraweeView sv_service_photo;
+    private TextView tv_service_brand;
+    private Button btn_start_enrol;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,7 +26,7 @@ public class ApplyActivity extends BaseActivity{
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_apply;
+        return R.layout.activity_enrol_service;
     }
 
     @Override
@@ -33,7 +37,10 @@ public class ApplyActivity extends BaseActivity{
     @Override
     protected void initView() {
         iv_back = findViewById(R.id.iv_back);
-        tv_apply_account = findViewById(R.id.tv_apply_account);
+        iv_service_location = findViewById(R.id.tv_service_location);
+        sv_service_photo = findViewById(R.id.sv_service_photo);
+        tv_service_brand = findViewById(R.id.tv_service_brand);
+        btn_start_enrol = findViewById(R.id.btn_start_enrol);
     }
 
     @Override
@@ -43,6 +50,7 @@ public class ApplyActivity extends BaseActivity{
 
     @Override
     protected void initListener() {
+
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,16 +58,16 @@ public class ApplyActivity extends BaseActivity{
             }
         });
 
-        tv_apply_account.setOnClickListener(new View.OnClickListener() {
+        btn_start_enrol.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ApplyActivity.this,ApplyNameActivity.class));
+
             }
         });
     }
 
     @Override
     protected void setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this);
+        DeviceUtils.setStatusBarColor(this,getResources().getColor(R.color.enrol_bg));
     }
 }

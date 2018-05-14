@@ -115,6 +115,34 @@
         </activity>
         <activity android:name=".ui.activity.apply.ApplySuccessActivity">
         </activity>
+        <activity android:name=".ui.activity.enrol.EnrolServiceActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolLocationActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolAgeActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolClassNumActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolPayTypeActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolTimePayActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolMbPayActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolConfirmActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.EnrolSuccessActivity">
+        </activity>
+        <activity android:name=".ui.activity.newservice.ServiceAgeActivity">
+        </activity>
+        <activity android:name=".ui.activity.newservice.ServiceTeacherNumActivity">
+        </activity>
+        <activity android:name=".ui.activity.newservice.ServicePayTypeActivity">
+        </activity>
+        <activity android:name=".ui.activity.newservice.ServiceFlexibleActivity">
+        </activity>
+        <activity android:name=".ui.activity.newservice.ServiceFixedActivity">
+        </activity>
     </application>
 
 </manifest>

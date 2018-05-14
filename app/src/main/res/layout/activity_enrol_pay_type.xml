@@ -6,16 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/sys_bar_white"
-    tools:context=".ui.activity.apply.ApplyServiceActivity">
+    tools:context=".ui.activity.enrol.EnrolPayTypeActivity">
 
-    <include layout="@layout/activity_apply_header"/>
-
+    <include layout="@layout/activity_enrol_student_header"/>
 
     <View
         android:id="@+id/view_1"
         android:layout_width="0dp"
         android:layout_height="4dp"
-        android:layout_marginTop="1dp"
         android:background="#FF59D5C7"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/view_2"
@@ -28,7 +26,6 @@
         android:layout_width="0dp"
         android:layout_height="4dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="1dp"
         android:background="#FF59D5C7"
         app:layout_constraintLeft_toRightOf="@id/view_1"
         app:layout_constraintRight_toLeftOf="@id/view_3"
@@ -40,39 +37,27 @@
         android:layout_width="0dp"
         android:layout_height="4dp"
         android:layout_marginLeft="2dp"
-        android:layout_marginTop="1dp"
         android:background="#FF59D5C7"
         app:layout_constraintLeft_toRightOf="@id/view_2"
-        app:layout_constraintRight_toLeftOf="@id/view_4"
-        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
-        />
-
-
-    <View
-        android:id="@+id/view_4"
-        android:layout_width="0dp"
-        android:layout_height="4dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginTop="1dp"
-        android:background="#FF59D5C7"
-        app:layout_constraintLeft_toRightOf="@id/view_3"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
         />
 
     <TextView
-        android:id="@+id/tv_service_dec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+         android:id="@+id/tv_pay_dec"
+        android:textStyle="bold"
+        android:typeface="sans"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
-        android:lineSpacingMultiplier="1.1"
-        android:text="最后，请告诉我\n你希望在咚哒上线的服务类型？"
-        android:textColor="#FF404040"
-        android:textSize="22sp"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/view_1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="该课程可以接受的付费方式"
+        android:textColor="#FF404040"
+        android:textSize="24sp"
         />
+
 
     <RadioGroup
         android:layout_width="0dp"
@@ -83,10 +68,12 @@
         android:orientation="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_service_dec">
+        app:layout_constraintTop_toBottomOf="@id/tv_pay_dec">
 
         <RadioButton
-             android:id="@+id/rb_care"
+             android:id="@+id/rb_time_pay"
+            android:paddingRight="16dp"
+            android:drawableRight="@drawable/icon_arrowr_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/btn_service_selector"
@@ -95,27 +82,14 @@
             android:paddingBottom="16dp"
             android:paddingLeft="20dp"
             android:paddingTop="16dp"
-            android:text="@string/str_care"
+            android:text="按次"
             android:textColor="@drawable/bt_service_text_selector"
             android:textSize="17sp"/>
 
         <RadioButton
-             android:id="@+id/rb_class"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/btn_service_selector"
-            android:button="@null"
-            android:checked="false"
-            android:paddingBottom="16dp"
-            android:paddingLeft="20dp"
-            android:paddingTop="16dp"
-            android:text="@string/str_class"
-            android:textColor="@drawable/bt_service_text_selector"
-            android:textSize="17sp"/>
-
-        <RadioButton
-             android:id="@+id/rb_experience"
+             android:id="@+id/rb_mb_pay"
+            android:paddingRight="16dp"
+            android:drawableRight="@drawable/icon_arrowr_gray"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -125,39 +99,15 @@
             android:paddingBottom="16dp"
             android:paddingLeft="20dp"
             android:paddingTop="16dp"
-            android:text="@string/str_experience"
+            android:text="会员制"
             android:textColor="@drawable/bt_service_text_selector"
             android:textSize="17sp"/>
+
+
 
     </RadioGroup>
 
 
-    <TextView
 
-        android:id="@+id/tv_service_about_dec"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:text="我是哪种服务类型?"
-        android:textColor="#FFA6A6A6"
-        android:textSize="13sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
-
-
-    <View
-
-        android:id="@+id/view_line_1"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
-        android:background="#FFA6A6A6"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="@id/tv_service_about_dec"
-        app:layout_constraintRight_toRightOf="@id/tv_service_about_dec"
-        />
 
 </android.support.constraint.ConstraintLayout>

@@ -14,9 +14,9 @@ import com.blackmirror.dongda.di.component.DaggerLandingComponent;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
-import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
-import com.blackmirror.dongda.ui.activity.UserInfoActivity;
+import com.blackmirror.dongda.ui.activity.enrol.EnrolAgeActivity;
+import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.DongdaApplication;
@@ -81,7 +81,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
         rl_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, UserInfoActivity.class);
+                Intent intent = new Intent(LandingActivity.this, EnrolAgeActivity.class);
                 startActivity(intent);
             }
         });

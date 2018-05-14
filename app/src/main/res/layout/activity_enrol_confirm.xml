@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#33ADBADE"
+    tools:context=".ui.activity.enrol.EnrolConfirmActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#33ADBADE"
+        app:contentInsetStart="0dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:background="@drawable/icon_back_black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:visibility="gone"
+                android:id="@+id/tv_head_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="按次付费设置"
+                android:textColor="#FF0D0D0D"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+
+            <TextView
+                android:id="@+id/tv_save"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center"
+                android:text="预览"
+                android:textColor="#FF404040"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.Toolbar>
+    
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:placeholderImage="@mipmap/dongda_logo"
+        app:placeholderImageScaleType="focusCrop"
+        app:actualImageScaleType="focusCrop"
+        app:roundedCornerRadius="2.77dp"
+        app:layout_constraintLeft_toLeftOf="@id/cv_confirm_root"
+        app:layout_constraintRight_toRightOf="@id/cv_confirm_root"
+        app:layout_constraintBottom_toTopOf="@id/cv_confirm_root"
+        app:layout_constraintTop_toTopOf="@id/cv_confirm_root"
+        android:layout_width="116dp"
+        android:layout_height="72dp"/>
+
+    <android.support.v7.widget.CardView
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+         android:id="@+id/cv_confirm_root"
+        android:background="#FFFFFFFF"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="0dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintTop_toTopOf="@id/tv_confirm_location"
+                app:layout_constraintBottom_toBottomOf="@id/tv_confirm_location"
+                app:layout_constraintRight_toLeftOf="@id/tv_confirm_location"
+                 android:id="@+id/iv_confirm_loc"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:background="@drawable/icon_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="60dp"
+                android:layout_marginLeft="4dp"
+                app:layout_constraintLeft_toRightOf="@id/iv_confirm_loc"
+                app:layout_constraintRight_toRightOf="parent"
+                 android:id="@+id/tv_confirm_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="朝阳区酒仙桥路52号院"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                 android:id="@+id/tv_class_name_dec"
+                android:layout_marginTop="50dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_confirm_location"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="课程名称"
+                android:textColor="#FFA6A6A6"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                 android:id="@+id/tv_confirm_brand"
+                app:layout_constraintTop_toTopOf="@id/tv_class_name_dec"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="品牌名称加服务leaf"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                android:layout_marginTop="17dp"
+                 android:id="@+id/tv_child_age_dec"
+                app:layout_constraintTop_toBottomOf="@id/tv_class_name_dec"
+                app:layout_constraintLeft_toLeftOf="@id/tv_class_name_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="孩子年龄"
+                android:textColor="#FFA6A6A6"
+                android:textSize="15sp"
+                />
+
+            <TextView
+                 android:id="@+id/tv_child_age"
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_child_age_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5岁-12岁"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                />
+
+            <View
+                 android:id="@+id/view_line_1"
+                android:layout_marginTop="55dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_child_age"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="#FFF2F2F2"
+                />
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintTop_toBottomOf="@id/view_line_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:drawablePadding="8dp"
+                android:drawableRight="@drawable/icon_arrowr_theme"
+                android:id="@+id/tv_to_set_date"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="去设置开放体验日"
+                android:textColor="#FF59D5C7"
+                android:textSize="15sp"
+                />
+
+            <!--<android.support.constraint.ConstraintLayout
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_line_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <TextView
+                     android:id="@+id/tv_to_set_date"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                     app:layout_constraintRight_toLeftOf="@id/iv_to_set_date"
+                    android:layout_width="120dp"
+                    android:layout_height="21dp"
+                    android:text="去设置开放体验日"
+                    android:textColor="#FF59D5C7"
+                    android:textSize="15sp"
+                    />
+
+                <ImageView
+                    app:layout_constraintRight_toRightOf="parent"
+
+                     android:id="@+id/iv_to_set_date"
+                    android:background="@drawable/icon_arrowr_theme"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </android.support.constraint.ConstraintLayout>-->
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_confirm_enrol"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_enrol_selector"
+        android:text="发布招生"
+        android:textColor="@drawable/bt_enrol_text_selector"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_confirm_root"/>
+
+
+    <TextView
+
+        android:id="@+id/tv_service_about_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="什么是开放体验日?"
+        android:textColor="#FFA6A6A6"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+    <View
+
+        android:id="@+id/view_line_2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        android:background="#FFA6A6A6"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/tv_service_about_dec"
+        app:layout_constraintRight_toRightOf="@id/tv_service_about_dec"
+        />
+
+
+</android.support.constraint.ConstraintLayout>
