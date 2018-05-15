@@ -1,9 +1,16 @@
 package com.blackmirror.dongda.ui.activity.apply;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
+import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +25,7 @@ public class ApplyNameActivity extends BaseActivity {
     private TextView tv_next;
     private TextInputEditText tet_user_name;
     private TextInputEditText tet_service_name;
+    private boolean can_next;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +52,15 @@ public class ApplyNameActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        SpannableString s1 = new SpannableString(getString(R.string.input_user_name_hint));//定义hint的值
+        AbsoluteSizeSpan as1 = new AbsoluteSizeSpan(15,true);//设置字体大小 true表示单位是sp
+        s1.setSpan(as1, 0, s1.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tet_user_name.setHint(new SpannedString(s1));
 
+        SpannableString s2 = new SpannableString(getString(R.string.input_user_name_hint));//定义hint的值
+        AbsoluteSizeSpan as2 = new AbsoluteSizeSpan(15,true);//设置字体大小 true表示单位是sp
+        s2.setSpan(as2, 0, s2.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        tet_service_name.setHint(new SpannedString(s2));
     }
 
     @Override
@@ -70,6 +86,30 @@ public class ApplyNameActivity extends BaseActivity {
                 intent.putExtra("user_name",user_name);
                 intent.putExtra("brand_name",brand_name);
                 startActivity(intent);
+            }
+        });
+
+        tet_user_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length()!=0 && !can_next){
+                    can_next = true;
+                    tv_next.setTextColor(Color.parseColor("#FF59D5C7"));
+                }
+                if (s.toString().length()==0 && can_next){
+                    can_next = false;
+                    tv_next.setTextColor(Color.parseColor("#FFD9D9D9"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

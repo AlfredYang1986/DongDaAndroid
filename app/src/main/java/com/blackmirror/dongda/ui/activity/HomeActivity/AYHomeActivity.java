@@ -32,7 +32,7 @@ import com.blackmirror.dongda.ui.activity.FeaturedDetailActivity;
 import com.blackmirror.dongda.ui.activity.MyLikeActivity;
 import com.blackmirror.dongda.ui.activity.NearServiceActivity;
 import com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity;
-import com.blackmirror.dongda.ui.activity.UserAboutMeActivity;
+import com.blackmirror.dongda.ui.activity.UserInfoActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DensityUtils;
@@ -361,7 +361,8 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
                 startActivityForResult(new Intent(AYHomeActivity.this, MyLikeActivity.class), AppConstant.MY_LIKE_REQUEST_CODE);
                 break;
             case R.id.sv_head_pic:
-                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
+//                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
+                startActivity(new Intent(AYHomeActivity.this, UserInfoActivity.class));
                 break;
         }
     }

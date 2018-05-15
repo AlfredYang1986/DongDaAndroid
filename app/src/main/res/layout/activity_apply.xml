@@ -63,8 +63,8 @@
         android:textSize="24sp"
         />
 
-    <TextView
-         android:id="@+id/tv_apply_account"
+    <Button
+         android:id="@+id/btn_apply_account"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:paddingTop="16dp"
@@ -97,7 +97,7 @@
     <TextView
         android:letterSpacing="0.1"
         android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@id/tv_apply_account"
+        app:layout_constraintBottom_toTopOf="@id/btn_apply_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
          android:id="@+id/tv_apply_dec_4"

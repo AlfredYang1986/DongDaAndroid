@@ -79,6 +79,10 @@ public class DataConstant {
     public static final String SERVICE_MORE_URL="http://192.168.100.174:9000/al/service/search";
     //服务详细信息
     public static final String SERVICE_DETAIL_URL="http://192.168.100.174:9000/al/service/detail";
+    //申请成为服务者
+    public static final String APPLY_SERVICE_URL="http://192.168.100.174:9000/al/apply/push";
+    //遍历品牌下的所有位置
+    public static final String BRAND_ALL_LOC_URL="http://192.168.100.174:9000/al/brand/locations";
 
 
 

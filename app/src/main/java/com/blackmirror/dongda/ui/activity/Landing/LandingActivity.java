@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
@@ -15,7 +14,7 @@ import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
-import com.blackmirror.dongda.ui.activity.enrol.EnrolAgeActivity;
+import com.blackmirror.dongda.ui.activity.enrol.ChooseEnrolLocActivity;
 import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
@@ -39,7 +38,7 @@ import io.reactivex.functions.Consumer;
 public class LandingActivity extends AYActivity implements WeChatLoginContract.View{
 
     final static String TAG = "Landing Activity";
-    private RelativeLayout rl_phone_login;
+    private TextView tv_phone_login;
     private TextView tv_wechat_login;
     private Disposable errorDb;
     private Disposable cancelDb;
@@ -68,7 +67,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
     }
 
     private void initView() {
-        rl_phone_login = findViewById(R.id.rl_phone_login);
+        tv_phone_login = findViewById(R.id.tv_phone_login);
         tv_wechat_login = findViewById(R.id.tv_wechat_login);
     }
 
@@ -78,10 +77,10 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
     private void initListener() {
 
-        rl_phone_login.setOnClickListener(new View.OnClickListener() {
+        tv_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, EnrolAgeActivity.class);
+                Intent intent = new Intent(LandingActivity.this, ChooseEnrolLocActivity.class);
                 startActivity(intent);
             }
         });
@@ -204,7 +203,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
         closeProcessDialog();
         LogUtils.d("LandingActivity wechat failed ");
         if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(rl_phone_login,bean.message);
+            SnackbarUtils.show(tv_phone_login,bean.message);
         }else {
             ToastUtils.showShortToast(bean.message+"("+bean.code+")");
         }

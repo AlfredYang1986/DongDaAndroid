@@ -20,12 +20,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
+        init();
         isViewValid = true;
         setStatusBarColor();
         initInject();
         initView();
         initData();
         initListener();
+    }
+
+    protected void init(){
+
     }
 
     protected void setStatusBarColor() {

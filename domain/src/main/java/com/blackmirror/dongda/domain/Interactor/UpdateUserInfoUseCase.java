@@ -3,7 +3,7 @@ package com.blackmirror.dongda.domain.Interactor;
 import com.blackmirror.dongda.domain.base.UseCase;
 import com.blackmirror.dongda.domain.model.UpdateUserInfoBean;
 import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
-import com.blackmirror.dongda.domain.repository.UpdateUserInfoRepository;
+import com.blackmirror.dongda.domain.repository.UserInfoRepository;
 
 import io.reactivex.Observable;
 
@@ -12,9 +12,9 @@ import io.reactivex.Observable;
  */
 public class UpdateUserInfoUseCase implements UseCase<UpdateUserInfoBean>{
 
-    private final UpdateUserInfoRepository repository;
+    private final UserInfoRepository repository;
 
-    public UpdateUserInfoUseCase(UpdateUserInfoRepository repository) {
+    public UpdateUserInfoUseCase(UserInfoRepository repository) {
         this.repository = repository;
     }
 

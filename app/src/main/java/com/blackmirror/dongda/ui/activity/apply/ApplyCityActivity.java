@@ -1,9 +1,11 @@
 package com.blackmirror.dongda.ui.activity.apply;
 
 import android.content.Intent;
-import android.os.Bundle;
+import android.graphics.Color;
 import android.support.design.widget.TextInputEditText;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,11 +22,7 @@ public class ApplyCityActivity extends BaseActivity {
     private TextView tv_name_dec;
     private String user_name;
     private String brand_name;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    private boolean can_next;
 
     @Override
     protected int getLayoutResId() {
@@ -32,9 +30,13 @@ public class ApplyCityActivity extends BaseActivity {
     }
 
     @Override
+    protected void init() {
+
+    }
+
+    @Override
     protected void initInject() {
-        user_name = getIntent().getStringExtra("user_name");
-        brand_name = getIntent().getStringExtra("brand_name");
+
     }
 
     @Override
@@ -47,7 +49,9 @@ public class ApplyCityActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        tv_name_dec.setText("你好，"+user_name+"\\n你的服务所在的城市？");
+        user_name = getIntent().getStringExtra("user_name");
+        brand_name = getIntent().getStringExtra("brand_name");
+        tv_name_dec.setText("你好，"+user_name+"\n你的服务所在的城市？");
     }
 
     @Override
@@ -72,6 +76,30 @@ public class ApplyCityActivity extends BaseActivity {
                 intent.putExtra("brand_name",brand_name);
                 intent.putExtra("city_name",city_name);
                 startActivity(intent);
+            }
+        });
+
+        tet_city_name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length()!=0 && !can_next){
+                    can_next = true;
+                    tv_next.setTextColor(Color.parseColor("#FF59D5C7"));
+                }
+                if (s.toString().length()==0 && can_next){
+                    can_next = false;
+                    tv_next.setTextColor(Color.parseColor("#FFD9D9D9"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

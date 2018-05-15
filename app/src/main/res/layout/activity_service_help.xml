@@ -20,7 +20,7 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="9dp"
+            android:layout_marginLeft="20dp"
             android:background="@drawable/icon_close_tips"
             />
 
@@ -55,13 +55,12 @@
                 app:layout_constraintTop_toTopOf="parent"
                 />
 
-            <TextView
+            <com.blackmirror.dongda.ui.view.AlignTextView
                 android:id="@+id/tv_help_care_dec"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="8dp"
-                android:text="噶考虑过建档立卡国家根据，打个卡了。国际嘎达科技的噶破打开。打个卡的京东到家，的感慨；大概；就"
                 android:textColor="#FF737373"
                 android:textSize="15sp"
                 app:layout_constraintLeft_toLeftOf="@id/tv_help_care"
@@ -84,7 +83,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_help_care_dec"
                 />
 
-            <TextView
+            <com.blackmirror.dongda.ui.view.AlignTextView
                 android:id="@+id/tv_help_class_dec"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -113,7 +112,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_help_class_dec"
                 />
 
-            <TextView
+            <com.blackmirror.dongda.ui.view.AlignTextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
