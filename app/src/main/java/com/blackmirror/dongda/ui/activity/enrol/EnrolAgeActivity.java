@@ -100,6 +100,9 @@ public class EnrolAgeActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onOptionsSelect(int options1, int options2, int options3, View v) {
                 //返回的分别是三个级别的选中位置
+                if (options2<=options1){
+                    options2 = options1;
+                }
                 String min = ageMin.get(options1);
                 String max = ageMax.get(options2);
 
@@ -130,13 +133,11 @@ public class EnrolAgeActivity extends BaseActivity implements View.OnClickListen
 
                     }
                 })
-//                .setSelectOptions(0, 0)
+                .setSelectOptions(0, 0)
                 .setContentTextSize(23)
                 .build();
 
-        pvCustomOptions.setSelectOptions(0,0,0);
         pvCustomOptions.setNPicker(ageMin, ageMax, null);//添加数据
-        pvCustomOptions.show();
     }
 
     @Override
@@ -179,12 +180,12 @@ public class EnrolAgeActivity extends BaseActivity implements View.OnClickListen
                 startActivity(intent);
                 break;
             case R.id.cl_choose_low_age:
-                /*pvCustomOptions.setSelectOptions(0, 0);
-                pvCustomOptions.show();*/
+                pvCustomOptions.setSelectOptions(0, 0);
+                pvCustomOptions.show();
                 break;
             case R.id.cl_choose_large_age:
-                /*pvCustomOptions.setSelectOptions(0, 0);
-                pvCustomOptions.show();*/
+                pvCustomOptions.setSelectOptions(0, 0);
+                pvCustomOptions.show();
                 break;
         }
     }
