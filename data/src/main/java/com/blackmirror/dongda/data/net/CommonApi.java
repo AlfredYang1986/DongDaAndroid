@@ -4,12 +4,14 @@ import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.request.ApplyServiceRequestBean;
 import com.blackmirror.dongda.data.model.request.BrandAllLocRequestBean;
 import com.blackmirror.dongda.data.model.request.LikePushRequestBean;
+import com.blackmirror.dongda.data.model.request.LocAllServiceRequestBean;
 import com.blackmirror.dongda.data.model.request.SearchServiceRequestBean;
 import com.blackmirror.dongda.data.model.request.UserInfoRequestBean;
 import com.blackmirror.dongda.data.model.response.ApplyServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
 import com.blackmirror.dongda.data.model.response.CareMoreResponseBean;
 import com.blackmirror.dongda.data.model.response.LikePushResponseBean;
+import com.blackmirror.dongda.data.model.response.LocAllServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.SearchServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.UserInfoResponseBean;
 import com.blackmirror.dongda.utils.AYPrefUtils;
@@ -82,5 +84,18 @@ public class CommonApi extends AYRemoteApi {
         bean.url = DataConstant.BRAND_ALL_LOC_URL;
 
         return execute(bean, BrandAllLocResponseBean.class);
+    }
+
+    /**
+     * 遍历品牌下的所有位置
+     * @return
+     */
+    public static Observable<LocAllServiceResponseBean> getLocAllService(String json,String locations) {
+        LocAllServiceRequestBean bean = new LocAllServiceRequestBean();
+        bean.json = "{\"token\":\""+AYPrefUtils.getAuthToken()+"\",\"locations\":[\""+locations+"\"]}";
+
+        bean.url = DataConstant.LOC_ALL_SERVICE_URL;
+
+        return execute(bean, LocAllServiceResponseBean.class);
     }
 }

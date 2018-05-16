@@ -51,6 +51,11 @@ public class AppConstant {
     public static final int CLOSE_STATUS=2;//1 展开 2 关闭 3 中间状态
     public static final int OTHER_STATUS=3;//1 展开 2 关闭 3 中间状态
 
+    public static final int ENROL_TIME_PAY_CODE=100;
+    public static final int ENROL_MB_PAY_CODE=101;
+
+
+
     public static final int[] teacher_bg_res_id = {
             R.drawable.avatar_0,
             R.drawable.avatar_1,

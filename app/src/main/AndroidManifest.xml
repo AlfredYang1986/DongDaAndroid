@@ -145,6 +145,10 @@
         </activity>
         <activity android:name=".ui.activity.enrol.ChooseEnrolLocActivity">
         </activity>
+        <activity android:name=".ui.activity.enrol.EnrolUnOpenDayActivity">
+        </activity>
+        <activity android:name=".ui.activity.enrol.LocAllServiceActivity">
+        </activity>
     </application>
 
 </manifest>

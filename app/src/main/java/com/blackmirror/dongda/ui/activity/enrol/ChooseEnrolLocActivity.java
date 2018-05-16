@@ -1,9 +1,12 @@
 package com.blackmirror.dongda.ui.activity.enrol;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,9 +16,11 @@ import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.adapter.BrandAllLocAdapter;
 import com.blackmirror.dongda.di.component.DaggerChooseEnrolLocComponent;
 import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 import com.blackmirror.dongda.presenter.EnrolPresenter;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
@@ -255,8 +260,25 @@ public class ChooseEnrolLocActivity extends BaseActivity implements EnrolContrac
         initBrandAllLoc(bean);
     }
 
-    private void initBrandAllLoc(BrandAllLocDomainBean bean) {
+    @Override
+    public void onGetLocAllServiceSuccess(LocAllServiceDomainBean bean) {
 
+    }
+
+    private void initBrandAllLoc(BrandAllLocDomainBean bean) {
+        LogUtils.d("initBrandAllLoc");
+        BrandAllLocAdapter adapter = new BrandAllLocAdapter(this, bean);
+        rv_brand_loc_list.setLayoutManager(new LinearLayoutManager(this));
+        rv_brand_loc_list.setAdapter(adapter);
+        adapter.setOnItemClickListener(new BrandAllLocAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, BrandAllLocDomainBean.LocationsBean bean) {
+                Intent intent = new Intent(ChooseEnrolLocActivity.this, LocAllServiceActivity.class);
+                intent.putExtra("locations",bean.location_id);
+                intent.putExtra("address",bean.address);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

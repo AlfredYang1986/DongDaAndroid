@@ -12,4 +12,14 @@ public class StringUtils {
         }
         return false;
     }
+
+    public static double getDoubleValue(String str){
+        double d=-1;
+        try {
+             d = Double.parseDouble(str);
+            return d;
+        } catch (NumberFormatException e){
+            return d;
+        }
+    }
 }

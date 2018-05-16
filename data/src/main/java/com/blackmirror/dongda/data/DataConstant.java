@@ -83,6 +83,10 @@ public class DataConstant {
     public static final String APPLY_SERVICE_URL="http://192.168.100.174:9000/al/apply/push";
     //遍历品牌下的所有位置
     public static final String BRAND_ALL_LOC_URL="http://192.168.100.174:9000/al/brand/locations";
+    //遍历位置下的所有服务
+    public static final String LOC_ALL_SERVICE_URL="http://192.168.100.174:9000/al/location/lst/service";
+    //发布招生
+    public static final String ENROL_URL="http://192.168.100.174:9000/al/recruit/push";
 
 
 

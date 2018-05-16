@@ -1,8 +1,10 @@
 package com.blackmirror.dongda.presenter;
 
 import com.blackmirror.dongda.domain.Interactor.enrol.BrandAllLocUseCase;
+import com.blackmirror.dongda.domain.Interactor.enrol.LocAllServiceUseCase;
 import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 import com.blackmirror.dongda.ui.activity.enrol.EnrolContract;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
@@ -21,6 +23,9 @@ public class EnrolPresenter implements EnrolContract.Presenter {
 
     @Inject
     BrandAllLocUseCase useCase;
+
+    @Inject
+    LocAllServiceUseCase locAllServiceUseCase;
 
     private EnrolContract.View view;
 
@@ -42,13 +47,55 @@ public class EnrolPresenter implements EnrolContract.Presenter {
 
                     @Override
                     public void onNext(BrandAllLocDomainBean bean) {
-                        LogUtils.d("apply onNext");
                         if (view == null){
                             return;
                         }
                         if (bean.isSuccess){
                             view.onGetBrandAllLocationSuccess(bean);
+                            LogUtils.d("apply onNext isSuccess");
                         }else {
+                            LogUtils.d("apply onNext onError");
+                            view.onError(bean);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.e(EnrolPresenter.class,e);
+                        if (view == null){
+                            return;
+                        }
+                        view.onError(getErrorData(e));
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void getLocAllService(String json, String locations) {
+        locAllServiceUseCase.getLocAllService(json, locations)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LocAllServiceDomainBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(LocAllServiceDomainBean bean) {
+                        if (view == null){
+                            return;
+                        }
+                        if (bean.isSuccess){
+                            view.onGetLocAllServiceSuccess(bean);
+                            LogUtils.d("apply onNext isSuccess");
+                        }else {
+                            LogUtils.d("apply onNext onError");
                             view.onError(bean);
                         }
                     }

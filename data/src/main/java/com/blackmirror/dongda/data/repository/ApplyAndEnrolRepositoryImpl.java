@@ -2,9 +2,11 @@ package com.blackmirror.dongda.data.repository;
 
 import com.blackmirror.dongda.data.model.response.ApplyServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
+import com.blackmirror.dongda.data.model.response.LocAllServiceResponseBean;
 import com.blackmirror.dongda.data.net.CommonApi;
 import com.blackmirror.dongda.domain.model.ApplyServiceDomainBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 import com.blackmirror.dongda.domain.repository.ApplyAndEnrolRepository;
 
 import java.util.ArrayList;
@@ -52,15 +54,55 @@ public class ApplyAndEnrolRepositoryImpl implements ApplyAndEnrolRepository {
                 });
     }
 
+    @Override
+    public Observable<LocAllServiceDomainBean> getLocAllService(String json, String locations) {
+        return CommonApi.getLocAllService(json, locations)
+                .map(new Function<LocAllServiceResponseBean, LocAllServiceDomainBean>() {
+                    @Override
+                    public LocAllServiceDomainBean apply(LocAllServiceResponseBean bean) throws Exception {
+                        LocAllServiceDomainBean db = new LocAllServiceDomainBean();
+                        if (bean == null) {
+                            return db;
+                        }
+                        db.services = new ArrayList<>();
+                        if ("ok".equals(bean.status)) {
+                            db.isSuccess = true;
+                            if (bean.result != null && bean.result.services != null) {
+                                for (int i = 0; i < bean.result.services.size(); i++) {
+                                    LocAllServiceDomainBean.ServicesBean dsb = new LocAllServiceDomainBean.ServicesBean();
+                                    LocAllServiceResponseBean.ResultBean.ServicesBean sb = bean.result.services.get(i);
+                                    dsb.punchline = sb.punchline;
+                                    dsb.service_leaf = sb.service_leaf;
+                                    dsb.service_image = sb.service_image;
+                                    dsb.service_type = sb.service_type;
+                                    dsb.category = sb.category;
+                                    dsb.service_id = sb.service_id;
+                                    dsb.service_tags = sb.service_tags == null ? new ArrayList<String>() : sb.service_tags;
+                                    dsb.operation = sb.operation == null ? new ArrayList<String>() : sb.operation;
+                                    db.services.add(dsb);
+                                }
+                            }
+                        } else {
+                            if (bean.error != null) {
+                                db.code = bean.error.code;
+                                db.message = bean.error.message;
+                            }
+                        }
+                        return db;
+                    }
+                });
+    }
+
     private void transLoc2DomainBean(BrandAllLocResponseBean bean, BrandAllLocDomainBean domainBean) {
         if (bean == null) {
             return;
         }
         if (!"ok".equals(bean.status)) {
-            domainBean.isSuccess = true;
             domainBean.code = bean.error != null ? bean.error.code : domainBean.code;
             domainBean.message = bean.error != null ? bean.error.message : domainBean.message;
+            return;
         }
+        domainBean.isSuccess = true;
         List<BrandAllLocDomainBean.LocationsBean> locations = new ArrayList<>();
         domainBean.locations = locations;
         if (bean.result == null) {
@@ -75,16 +117,16 @@ public class ApplyAndEnrolRepositoryImpl implements ApplyAndEnrolRepository {
             dlb.address = lb.address;
 
             BrandAllLocDomainBean.LocationsBean.PinBean pin = new BrandAllLocDomainBean.LocationsBean.PinBean();
-            if (lb.pin!=null){
-                pin.latitude=lb.pin.latitude;
-                pin.longitude=lb.pin.longitude;
+            if (lb.pin != null) {
+                pin.latitude = lb.pin.latitude;
+                pin.longitude = lb.pin.longitude;
             }
             dlb.pin = pin;
 
             dlb.friendliness = lb.friendliness == null ? new ArrayList<String>() : lb.friendliness;
 
             dlb.location_images = new ArrayList<>();
-            if (lb.location_images==null){
+            if (lb.location_images == null) {
                 domainBean.locations.add(dlb);
                 continue;
             }
