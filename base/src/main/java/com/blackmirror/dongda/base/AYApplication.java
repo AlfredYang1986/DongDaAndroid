@@ -16,6 +16,8 @@ public class AYApplication extends Application {
     public static AYApplication me;
     public static Context appContext;
     public static List<AppCompatActivity> activityList;
+    public static List<AppCompatActivity> applyList;
+    public static List<AppCompatActivity> enrolList;
 
     @Override
     public void onCreate() {

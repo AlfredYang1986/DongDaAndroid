@@ -95,7 +95,7 @@
         </activity>
         <activity android:name=".ui.activity.UserAboutMeActivity">
         </activity>
-        <activity android:name=".ui.activity.UserInfoActivity">
+        <activity android:name=".ui.activity.UserInfoActivity" android:launchMode="singleTop">
         </activity>
         <activity android:name=".ui.activity.apply.ApplyActivity">
         </activity>
@@ -147,7 +147,7 @@
         </activity>
         <activity android:name=".ui.activity.enrol.EnrolUnOpenDayActivity">
         </activity>
-        <activity android:name=".ui.activity.enrol.LocAllServiceActivity">
+        <activity android:name=".ui.activity.enrol.LocAllServiceActivity" android:launchMode="singleTop">
         </activity>
     </application>
 

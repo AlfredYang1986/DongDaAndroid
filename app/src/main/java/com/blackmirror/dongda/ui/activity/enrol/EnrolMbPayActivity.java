@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.ui.base.BaseActivity;
+import com.blackmirror.dongda.utils.StringUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 
 public class EnrolMbPayActivity extends BaseActivity {
@@ -95,11 +96,14 @@ public class EnrolMbPayActivity extends BaseActivity {
                     return;
                 }
 
-                getIntent().putExtra("mb_price",mb_price);
+                long d = (long) (StringUtils.getDoubleValue(mb_price)*100);
+
+                getIntent().putExtra("mb_price",d);
                 getIntent().putExtra("valid_time",valid_time);
                 getIntent().putExtra("time",time);
 
                 setResult(RESULT_OK,getIntent());
+                finish();
             }
         });
 

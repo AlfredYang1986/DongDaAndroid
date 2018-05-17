@@ -1,13 +1,18 @@
 package com.blackmirror.dongda.presenter;
 
+import com.blackmirror.dongda.domain.Interactor.UpdateUserInfoUseCase;
 import com.blackmirror.dongda.domain.Interactor.userinfo.QueryUserInfoUseCase;
 import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
 import com.blackmirror.dongda.domain.model.UserInfoDomainBean;
+import com.blackmirror.dongda.ui.Contract;
 import com.blackmirror.dongda.ui.activity.UserInfoContract;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -22,11 +27,22 @@ public class UserInfoPresenter implements UserInfoContract.presenter {
     @Inject
     QueryUserInfoUseCase queryUseCase;
 
+    @Inject
+    UpdateUserInfoUseCase updateUserInfoUseCase;
+
     UserInfoContract.View view;
+
+    Contract.NameInputView nameInputView;
 
     @Inject
     public UserInfoPresenter(UserInfoContract.View view) {
         this.view = view;
+    }
+
+    @Named("NameInput")
+    @Inject
+    public UserInfoPresenter(Contract.NameInputView nameInputView) {
+        this.nameInputView = nameInputView;
     }
 
     @Override
@@ -57,6 +73,49 @@ public class UserInfoPresenter implements UserInfoContract.presenter {
                     public void onError(Throwable e) {
                         LogUtils.e(UserInfoPresenter.class,e);
                         if (view == null){
+                            return;
+                        }
+                        BaseDataBean bean = new BaseDataBean();
+                        bean.code = AppConstant.NET_UNKNOWN_ERROR;
+                        bean.message = e.getMessage();
+                        view.onGetDataError(bean);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void updateUserInfo(UpdateUserInfoDomainBean bean) {
+        updateUserInfoUseCase.updateUserInfo(bean)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UpdateUserInfoBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(UpdateUserInfoBean bean) {
+                        LogUtils.d("apply onNext");
+                        if (nameInputView == null){
+                            return;
+                        }
+                        if (bean.isSuccess){
+                            nameInputView.onUpdateUserInfo(bean);
+                        }else {
+                            nameInputView.onError(bean);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.e(UserInfoPresenter.class,e);
+                        if (nameInputView == null){
                             return;
                         }
                         BaseDataBean bean = new BaseDataBean();

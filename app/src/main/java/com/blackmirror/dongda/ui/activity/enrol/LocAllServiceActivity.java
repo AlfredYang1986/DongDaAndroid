@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.ui.activity.enrol;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +14,13 @@ import com.blackmirror.dongda.adapter.LocAllServiceAdapter;
 import com.blackmirror.dongda.di.component.DaggerLocAllServiceComponent;
 import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.EnrolDomainBean;
 import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 import com.blackmirror.dongda.presenter.EnrolPresenter;
+import com.blackmirror.dongda.ui.activity.newservice.ServiceAgeActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
@@ -89,7 +93,7 @@ public class LocAllServiceActivity extends BaseActivity implements EnrolContract
         adapter.setOnItemClickListener(new LocAllServiceAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, LocAllServiceDomainBean.ServicesBean bean) {
-                Intent intent = new Intent(LocAllServiceActivity.this, EnrolServiceActivity.class);
+                Intent intent = new Intent();
                 StringBuilder sb = new StringBuilder();
                 if (bean.service_tags!=null && bean.service_tags.size()!=0 && !TextUtils.isEmpty(bean.service_tags.get(0))){
                     sb.append(bean.service_tags.get(0))
@@ -101,9 +105,21 @@ public class LocAllServiceActivity extends BaseActivity implements EnrolContract
                 intent.putExtra("service_image",bean.service_image);
                 intent.putExtra("service_id",bean.service_id);
                 intent.putExtra("address",getIntent().getStringExtra("address"));
+
+                if (bean.service_type.contains("看顾")){
+                    intent.setClass(LocAllServiceActivity.this, ServiceAgeActivity.class);
+                }else {
+                    intent.setClass(LocAllServiceActivity.this, EnrolAgeActivity.class);
+                }
+
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onEnrolSuccess(EnrolDomainBean bean) {
+
     }
 
     @Override
@@ -114,5 +130,10 @@ public class LocAllServiceActivity extends BaseActivity implements EnrolContract
         } else {
             ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
+    }
+
+    @Override
+    protected void setStatusBarColor() {
+        DeviceUtils.setStatusBarColor(this, Color.parseColor("#FFF7F9FA"));
     }
 }

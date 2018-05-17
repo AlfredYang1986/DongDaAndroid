@@ -2,6 +2,7 @@ package com.blackmirror.dongda.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,11 +38,18 @@ public class LocAllServiceAdapter extends RecyclerView.Adapter<LocAllServiceAdap
 
     @Override
     public void onBindViewHolder(LocAllServiceHolder holder, int position) {
-        holder.tv_service_loc.setText(bean.services.get(position).service_leaf);
-        String url = OSSUtils.getSignedUrl(bean.services.get(position).service_image);
+        LocAllServiceDomainBean.ServicesBean servicesBean = this.bean.services.get(position);
+        StringBuilder sb = new StringBuilder();
+        if (servicesBean.service_tags!=null && servicesBean.service_tags.size()!=0 && !TextUtils.isEmpty(servicesBean.service_tags.get(0))){
+            sb.append(servicesBean.service_tags.get(0))
+                    .append("的");
+        }
+        sb.append(servicesBean.service_leaf);
+        holder.tv_service_loc.setText(sb.toString());
+        String url = OSSUtils.getSignedUrl(this.bean.services.get(position).service_image);
         LogUtils.d(url);
         holder.sv_service_photo.setImageURI(url);
-        initListener(holder, position,bean.services.get(position));
+        initListener(holder, position, this.bean.services.get(position));
 
     }
 

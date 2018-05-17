@@ -1,5 +1,7 @@
 package com.blackmirror.dongda.utils;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by Ruge on 2018-04-23 下午2:06
  */
@@ -22,4 +24,16 @@ public class StringUtils {
             return d;
         }
     }
+
+    /**
+     *
+     * @param amt
+     * @return
+     */
+    public static String formatNumber(double amt){
+        DecimalFormat decimalFormat = new DecimalFormat("###################.###########");
+        String format = decimalFormat.format(amt);
+        return format;
+    }
+
 }

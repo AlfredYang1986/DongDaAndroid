@@ -12,16 +12,16 @@
         android:id="@+id/tb_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/sys_bar_white"
         app:contentInsetStart="0dp"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
     <ImageView
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
         android:id="@+id/iv_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:background="@drawable/icon_close_tips"
+        android:src="@drawable/icon_close_tips"
         />
     </android.support.v7.widget.Toolbar>
 
@@ -37,7 +37,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gl_1"
-        android:background="@mipmap/dongda_logo"
+        android:background="@drawable/icon_succeed_enrol"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

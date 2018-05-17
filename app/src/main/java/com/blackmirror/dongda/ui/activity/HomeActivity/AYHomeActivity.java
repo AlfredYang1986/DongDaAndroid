@@ -81,7 +81,6 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         img_uuid=getIntent().getStringExtra("img_uuid");
-        AYApplication.addActivity(this);
     }
 
     @Override
@@ -362,7 +361,8 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.sv_head_pic:
 //                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
-                startActivity(new Intent(AYHomeActivity.this, UserInfoActivity.class));
+                AYApplication.addActivity(this);
+                startActivityForResult(new Intent(AYHomeActivity.this, UserInfoActivity.class),AppConstant.ABOUT_USER_REQUEST_CODE);
                 break;
         }
     }
@@ -401,6 +401,7 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void refreshHeadPhoto(int resultCode, Intent data) {
+        LogUtils.d("img_url ayhome "+data.getStringExtra("img_url"));
         if (resultCode == RESULT_OK){
             String img_url = data.getStringExtra("img_url");
             sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url));

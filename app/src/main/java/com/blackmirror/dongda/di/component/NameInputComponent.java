@@ -1,8 +1,11 @@
 package com.blackmirror.dongda.di.component;
 
 import com.blackmirror.dongda.di.module.LoginModule;
-import com.blackmirror.dongda.ui.UpdateUserInfoContract;
+import com.blackmirror.dongda.presenter.UserInfoPresenter;
+import com.blackmirror.dongda.ui.Contract;
 import com.blackmirror.dongda.ui.activity.Landing.NameInputActivity;
+
+import javax.inject.Named;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -13,12 +16,16 @@ import dagger.Component;
 
 @Component(modules = LoginModule.class)
 public interface NameInputComponent {
+
+    @Named("NameInput")
+    UserInfoPresenter getUserInfoPresenter();
+
     @Component.Builder
     interface Builder{
         @BindsInstance
         Builder activity(NameInputActivity activity);
         @BindsInstance
-        Builder view(UpdateUserInfoContract.View view);
+        Builder view(Contract.NameInputView view);
         NameInputComponent build();
 
     }

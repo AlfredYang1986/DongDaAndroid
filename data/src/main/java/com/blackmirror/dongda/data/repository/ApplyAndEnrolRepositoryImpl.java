@@ -2,10 +2,12 @@ package com.blackmirror.dongda.data.repository;
 
 import com.blackmirror.dongda.data.model.response.ApplyServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
+import com.blackmirror.dongda.data.model.response.EnrolResponseBean;
 import com.blackmirror.dongda.data.model.response.LocAllServiceResponseBean;
 import com.blackmirror.dongda.data.net.CommonApi;
 import com.blackmirror.dongda.domain.model.ApplyServiceDomainBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.EnrolDomainBean;
 import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 import com.blackmirror.dongda.domain.repository.ApplyAndEnrolRepository;
 
@@ -87,6 +89,28 @@ public class ApplyAndEnrolRepositoryImpl implements ApplyAndEnrolRepository {
                                 db.code = bean.error.code;
                                 db.message = bean.error.message;
                             }
+                        }
+                        return db;
+                    }
+                });
+    }
+
+    @Override
+    public Observable<EnrolDomainBean> enrol(String json) {
+        return CommonApi.enrol(json)
+                .map(new Function<EnrolResponseBean, EnrolDomainBean>() {
+                    @Override
+                    public EnrolDomainBean apply(EnrolResponseBean bean) throws Exception {
+                        EnrolDomainBean db = new EnrolDomainBean();
+                        if (bean == null) {
+                            return db;
+                        }
+                        if ("ok".equals(bean.status)) {
+                            db.isSuccess = true;
+                            db.recruit_id = bean.result != null ? bean.result.recruit_id : "";
+                        } else {
+                            db.code = bean.error != null ? bean.error.code : db.code;
+                            db.message = bean.error != null ? bean.error.message : "";
                         }
                         return db;
                     }

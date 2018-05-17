@@ -54,6 +54,7 @@
             />
 
         <android.support.design.widget.TextInputEditText
+            android:inputType="number|numberDecimal"
             android:id="@+id/tet_mb_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

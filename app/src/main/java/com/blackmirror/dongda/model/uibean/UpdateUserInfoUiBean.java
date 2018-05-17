@@ -35,6 +35,20 @@ public class UpdateUserInfoUiBean extends BaseUiBean {
     }
 
     private void inData(UpdateUserInfoServerBean bean) {
-
+        if (bean.result!=null && bean.result.profile!=null) {
+            screen_name = bean.result.profile.screen_name;
+            description = bean.result.profile.description;
+            has_auth_phone = bean.result.profile.has_auth_phone;
+            owner_name = bean.result.profile.owner_name;
+            is_service_provider = bean.result.profile.is_service_provider;
+            user_id = bean.result.profile.user_id;
+            company = bean.result.profile.company;
+            screen_photo = bean.result.profile.screen_photo;
+            date = bean.result.profile.date;
+            token = bean.result.profile.token;
+            address = bean.result.profile.address;
+            contact_no = bean.result.profile.contact_no;
+            social_id = bean.result.profile.social_id;
+        }
     }
 }

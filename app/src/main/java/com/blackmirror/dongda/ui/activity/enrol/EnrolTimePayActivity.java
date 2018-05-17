@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.ui.base.BaseActivity;
+import com.blackmirror.dongda.utils.StringUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 
 public class EnrolTimePayActivity extends BaseActivity {
@@ -97,7 +98,9 @@ public class EnrolTimePayActivity extends BaseActivity {
                     return;
                 }
 
-                getIntent().putExtra("price",price);
+                long d = (long) (StringUtils.getDoubleValue(price)*100);
+
+                getIntent().putExtra("price",d);
                 getIntent().putExtra("order",order);
                 getIntent().putExtra("time",time);
 
@@ -129,8 +132,7 @@ public class EnrolTimePayActivity extends BaseActivity {
                 String temp = s.toString();
                 int posDot = temp.indexOf(".");
                 if (posDot <= 0) return;
-                if (temp.length() - posDot - 1 > 2)
-                {
+                if (temp.length() - posDot - 1 > 2) {
                     s.delete(posDot + 3, posDot + 4);
                 }
 

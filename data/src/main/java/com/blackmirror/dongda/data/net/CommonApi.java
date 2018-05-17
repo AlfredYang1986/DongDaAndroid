@@ -3,6 +3,7 @@ package com.blackmirror.dongda.data.net;
 import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.request.ApplyServiceRequestBean;
 import com.blackmirror.dongda.data.model.request.BrandAllLocRequestBean;
+import com.blackmirror.dongda.data.model.request.EnrolRequestBean;
 import com.blackmirror.dongda.data.model.request.LikePushRequestBean;
 import com.blackmirror.dongda.data.model.request.LocAllServiceRequestBean;
 import com.blackmirror.dongda.data.model.request.SearchServiceRequestBean;
@@ -10,6 +11,7 @@ import com.blackmirror.dongda.data.model.request.UserInfoRequestBean;
 import com.blackmirror.dongda.data.model.response.ApplyServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
 import com.blackmirror.dongda.data.model.response.CareMoreResponseBean;
+import com.blackmirror.dongda.data.model.response.EnrolResponseBean;
 import com.blackmirror.dongda.data.model.response.LikePushResponseBean;
 import com.blackmirror.dongda.data.model.response.LocAllServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.SearchServiceResponseBean;
@@ -97,5 +99,18 @@ public class CommonApi extends AYRemoteApi {
         bean.url = DataConstant.LOC_ALL_SERVICE_URL;
 
         return execute(bean, LocAllServiceResponseBean.class);
+    }
+
+    /**
+     * 发布招生
+     * @return
+     */
+    public static Observable<EnrolResponseBean> enrol(String json) {
+        EnrolRequestBean bean = new EnrolRequestBean();
+        bean.json = json;
+
+        bean.url = DataConstant.ENROL_URL;
+
+        return execute(bean, EnrolResponseBean.class);
     }
 }

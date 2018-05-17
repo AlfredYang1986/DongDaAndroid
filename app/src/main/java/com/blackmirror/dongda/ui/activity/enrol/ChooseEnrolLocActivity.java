@@ -20,6 +20,7 @@ import com.blackmirror.dongda.adapter.BrandAllLocAdapter;
 import com.blackmirror.dongda.di.component.DaggerChooseEnrolLocComponent;
 import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.EnrolDomainBean;
 import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 import com.blackmirror.dongda.presenter.EnrolPresenter;
 import com.blackmirror.dongda.ui.base.BaseActivity;
@@ -262,6 +263,11 @@ public class ChooseEnrolLocActivity extends BaseActivity implements EnrolContrac
 
     @Override
     public void onGetLocAllServiceSuccess(LocAllServiceDomainBean bean) {
+
+    }
+
+    @Override
+    public void onEnrolSuccess(EnrolDomainBean bean) {
 
     }
 

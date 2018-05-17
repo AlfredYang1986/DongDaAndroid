@@ -12,7 +12,6 @@
         android:id="@+id/tb_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#33ADBADE"
         app:contentInsetStart="0dp"
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         >
@@ -20,7 +19,6 @@
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#33ADBADE"
             >
 
 
@@ -66,39 +64,21 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/sv_service_photo"
-        android:layout_width="116dp"
-        android:layout_height="72dp"
-        app:actualImageScaleType="focusCrop"
-        app:layout_constraintBottom_toTopOf="@id/cv_confirm_root"
-        app:layout_constraintLeft_toLeftOf="@id/cv_confirm_root"
-        app:layout_constraintRight_toRightOf="@id/cv_confirm_root"
-        app:layout_constraintTop_toTopOf="@id/cv_confirm_root"
-        app:placeholderImage="@mipmap/dongda_logo"
-        app:placeholderImageScaleType="focusCrop"
-        app:roundedCornerRadius="2.77dp"/>
 
-    <android.support.v7.widget.CardView
-        android:id="@+id/cv_confirm_root"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="18dp"
-        android:layout_marginTop="50dp"
-        android:background="#FFFFFFFF"
-        android:foreground="?attr/selectableItemBackground"
-        app:cardCornerRadius="4dp"
-        app:cardElevation="2dp"
-        app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
+
 
         <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:elevation="2dp"
+            android:id="@+id/cv_confirm_root"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="18dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/cl_mp_no_shape"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_toolbar">
 
             <ImageView
                 android:id="@+id/iv_confirm_loc"
@@ -231,9 +211,22 @@
 
             </android.support.constraint.ConstraintLayout>-->
 
-        </android.support.constraint.ConstraintLayout>
 
-    </android.support.v7.widget.CardView>
+    </android.support.constraint.ConstraintLayout>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:elevation="2dp"
+        android:id="@+id/sv_service_photo"
+        android:layout_width="116dp"
+        android:layout_height="72dp"
+        app:actualImageScaleType="focusCrop"
+        app:layout_constraintBottom_toTopOf="@id/cv_confirm_root"
+        app:layout_constraintLeft_toLeftOf="@id/cv_confirm_root"
+        app:layout_constraintRight_toRightOf="@id/cv_confirm_root"
+        app:layout_constraintTop_toTopOf="@id/cv_confirm_root"
+        app:placeholderImage="@mipmap/dongda_logo"
+        app:placeholderImageScaleType="focusCrop"
+        app:roundedCornerRadius="2.77dp"/>
 
     <Button
         android:id="@+id/btn_confirm_enrol"

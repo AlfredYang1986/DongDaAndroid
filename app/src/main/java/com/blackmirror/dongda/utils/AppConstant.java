@@ -53,6 +53,13 @@ public class AppConstant {
 
     public static final int ENROL_TIME_PAY_CODE=100;
     public static final int ENROL_MB_PAY_CODE=101;
+    public static final int FLEXIBLE_PAY_CODE=102;
+    public static final int FIXED_PAY_CODE=103;
+
+    //设置
+    public static final int NO_SERVICE_CODE=104;
+    public static final int SHOW_ORDER_CODE=105;
+    public static final int EDIT_USER_INFO_CODE=106;
 
 
 

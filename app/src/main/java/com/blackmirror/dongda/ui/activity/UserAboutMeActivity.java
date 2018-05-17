@@ -17,6 +17,7 @@ import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
+import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
@@ -161,6 +162,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
             needsRefresh = true;
             getUserInfo();
             img_url = data.getStringExtra("img_url");
+            LogUtils.d("UserAboutMeActivity img_url "+img_url);
         }
     }
 

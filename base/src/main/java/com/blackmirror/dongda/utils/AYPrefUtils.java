@@ -20,6 +20,15 @@ public class AYPrefUtils {
     private static final String SECURITYTOKEN="SecurityToken";
     private static final String ACCESSKEYSECRET="accessKeySecret";
     private static final String EXPIRATION="Expiration";//
+    private static final String SETTING_FLAG="setting_flag";//
+
+    public static void setSettingFlag(String setting_flag){
+        setStringPref(AYApplication.appContext, USER_INFO,SETTING_FLAG,setting_flag);
+    }
+
+    public static String getSettingFlag(){
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(SETTING_FLAG,"3");
+    }
 
     public static void setAccesskeyId(String accessKeyId){
         setStringPref(AYApplication.appContext, USER_INFO,ACCESSKEYID,accessKeyId);

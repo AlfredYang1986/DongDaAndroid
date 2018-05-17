@@ -75,6 +75,7 @@ public class EnrolClassNumActivity extends BaseActivity {
                 }
                 if (Integer.parseInt(max_num)<10){
                     ToastUtils.showShortToast("最大满班人数不能小于最少开班人数!");
+                    return;
                 }
                 Intent intent = new Intent(EnrolClassNumActivity.this, EnrolPayTypeActivity.class);
                 intent.putExtra("service_id",getIntent().getStringExtra("service_id"));

@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.ui.activity;
 
 import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
 import com.blackmirror.dongda.domain.model.UserInfoDomainBean;
 import com.blackmirror.dongda.ui.BasePresenter;
 
@@ -19,6 +20,8 @@ public interface UserInfoContract {
     interface presenter extends BasePresenter<View>{
 
         void queryUserInfo();
+
+        void updateUserInfo(UpdateUserInfoDomainBean bean);
 
     }
 }

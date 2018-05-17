@@ -2,7 +2,6 @@ package com.blackmirror.dongda.ui.activity.enrol;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
@@ -31,11 +30,6 @@ public class EnrolAgeActivity extends BaseActivity implements View.OnClickListen
     private TextView tv_choose_low_age;
     private ConstraintLayout cl_choose_large_age;
     private TextView tv_choose_large_age;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
 
     @Override
     protected int getLayoutResId() {

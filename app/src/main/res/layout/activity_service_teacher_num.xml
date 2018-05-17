@@ -83,9 +83,8 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="39dp"
             android:layout_marginTop="22dp"
-            android:hint="老师数量"
             android:textColor="#FF404040"
-            android:textSize="15sp"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -133,9 +132,8 @@
             android:layout_marginLeft="40dp"
             android:layout_marginRight="39dp"
             android:layout_marginTop="22dp"
-            android:hint="孩子数量"
             android:textColor="#FF404040"
-            android:textSize="15sp"
+            android:textSize="22sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -183,9 +181,8 @@
             android:background="@null"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="请填写"
             android:textColor="#FF404040"
-            android:textSize="15sp"
+            android:textSize="22sp"
             />
 
     </android.support.constraint.ConstraintLayout>

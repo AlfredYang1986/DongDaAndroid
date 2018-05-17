@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.command.AYCommand;
 import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -39,7 +40,6 @@ import com.blackmirror.dongda.model.serverbean.UpdateUserInfoServerBean;
 import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
 import com.blackmirror.dongda.model.uibean.UpLoadFileUiBean;
 import com.blackmirror.dongda.model.uibean.UpdateUserInfoUiBean;
-import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.ui.base.AYActivity;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
@@ -233,7 +233,6 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
      * @return
      */
     public void AYUpdateProfileCommandSuccess(JSONObject args) {
-        LogUtils.d("EditUserInfoActivity AYUpdateProfileCommandSuccess");
 
         UpdateUserInfoServerBean serverBean = JSON.parseObject(args.toString(), UpdateUserInfoServerBean.class);
         UpdateUserInfoUiBean uiBean = new UpdateUserInfoUiBean(serverBean);
@@ -249,6 +248,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
             AYCommand cmd = facades.get("UserFacade").cmds.get("UpdateLocalProfile");
             long result = cmd.execute(profile);
             needsRefresh = true;
+            LogUtils.d("AYUpdateProfileCommandSuccess img_url "+img_url);
             if (result > 0) {
                 ToastUtils.showShortToast(R.string.update_user_info_success);
                 setResult(needsRefresh ? RESULT_OK : RESULT_CANCELED,getIntent().putExtra("img_url",img_url));
@@ -531,6 +531,7 @@ public class EditUserInfoActivity extends AYActivity implements View.OnClickList
     public void onBackPressed() {
         setResult(needsRefresh ? RESULT_OK : RESULT_CANCELED,getIntent().putExtra("img_url",img_url));
         AYApplication.removeActivity(this);
+        finish();
         super.onBackPressed();
     }
 }

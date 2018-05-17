@@ -5,6 +5,10 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <ImageView
         android:scaleType="centerCrop"
          android:id="@+id/iv_featured_detail_bg"
@@ -49,4 +53,5 @@
         android:textSize="14sp"
         />
 
+</android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

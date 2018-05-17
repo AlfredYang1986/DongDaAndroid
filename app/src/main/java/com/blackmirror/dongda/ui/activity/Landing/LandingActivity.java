@@ -14,8 +14,7 @@ import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
-import com.blackmirror.dongda.ui.activity.enrol.ChooseEnrolLocActivity;
-import com.blackmirror.dongda.ui.base.AYActivity;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.DongdaApplication;
@@ -35,7 +34,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class LandingActivity extends AYActivity implements WeChatLoginContract.View{
+public class LandingActivity extends BaseActivity implements WeChatLoginContract.View{
 
     final static String TAG = "Landing Activity";
     private TextView tv_phone_login;
@@ -46,19 +45,17 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
-        //在setContentView之后调用
-        DeviceUtils.initSystemBarColor(this);
-        initInject();
-        initView();
-        initData();
-        DongdaApplication.addActivity(this);
-        initListener();
+    protected int getLayoutResId() {
+        return R.layout.activity_landing;
     }
 
-    private void initInject() {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DongdaApplication.addActivity(this);
+    }
+
+    protected void initInject() {
         presenter = DaggerLandingComponent.builder()
                 .activity(this)
                 .view(this)
@@ -66,21 +63,21 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
                 .getWeChatLoginPresenter();
     }
 
-    private void initView() {
+    protected void initView() {
         tv_phone_login = findViewById(R.id.tv_phone_login);
         tv_wechat_login = findViewById(R.id.tv_wechat_login);
     }
 
-    private void initData() {
+    protected void initData() {
     }
 
 
-    private void initListener() {
+    protected void initListener() {
 
         tv_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, ChooseEnrolLocActivity.class);
+                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
                 startActivity(intent);
             }
         });
@@ -211,7 +208,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
     @Override
     protected void setStatusBarColor() {
-
+        DeviceUtils.initSystemBarColor(this);
     }
 
     private void unSubscribe() {
@@ -231,11 +228,6 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
     protected void onDestroy() {
         super.onDestroy();
         unSubscribe();
-    }
-
-    @Override
-    public String getClassTag() {
-        return TAG;
     }
 
     @Override

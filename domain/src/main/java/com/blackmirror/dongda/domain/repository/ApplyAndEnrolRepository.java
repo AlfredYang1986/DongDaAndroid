@@ -2,6 +2,7 @@ package com.blackmirror.dongda.domain.repository;
 
 import com.blackmirror.dongda.domain.model.ApplyServiceDomainBean;
 import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.EnrolDomainBean;
 import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
 
 import io.reactivex.Observable;
@@ -17,5 +18,7 @@ public interface ApplyAndEnrolRepository extends Repository {
     Observable<BrandAllLocDomainBean> getBrandAllLocation(String brand_id);
 
     Observable<LocAllServiceDomainBean> getLocAllService(String json, String locations);
+
+    Observable<EnrolDomainBean> enrol(String json);
 
 }
