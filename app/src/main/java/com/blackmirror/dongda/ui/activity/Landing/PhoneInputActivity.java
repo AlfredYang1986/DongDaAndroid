@@ -7,33 +7,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.di.component.DaggerPhoneInputComponent;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
-import com.blackmirror.dongda.facade.DongdaCommonFacade.SQLiteProxy.DAO.AYDaoUserProfile;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.PhoneLoginServerBean;
-import com.blackmirror.dongda.model.serverbean.SendSmsServerBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.PhoneLoginUiBean;
-import com.blackmirror.dongda.model.uibean.SendSmsUiBean;
 import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
 import com.blackmirror.dongda.ui.PhoneLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
-import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.DongdaApplication;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-
-import org.json.JSONObject;
 
 import java.util.concurrent.TimeUnit;
 
@@ -47,15 +36,13 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
     final static String TAG = "Phone Input Activity";
 
-    public PhoneLoginPresenter presenter;
-
-    private EditText et_phone = null;
-    private EditText et_code = null;
+    private EditText et_phone;
+    private EditText et_code;
     private Button sms_code;
     private Disposable mSms_disposable;
     private Button next_step;
-    private SendSmsUiBean sendSmsUiBean;
     private SendSmsBean bean;
+    private PhoneLoginPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,23 +97,8 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
                     return;
                 }
 
-                /*AYFacade facade = facades.get("LoginFacade");
-                LogUtils.d("PhoneInputActivity "+Thread.currentThread().getName());
-                Map<String, Object> m = new HashMap<>();
-                m.put("phone", input_phone);
-                JSONObject args = new JSONObject(m);
-
-                Map<String, Object> m1 = new HashMap<>();
-                m1.put("login", "login");
-                JSONObject login = new JSONObject(m1);
-
-                facade.execute("SendSMSCode",args,login);*/
                 SendSmsRequestBean bean = new SendSmsRequestBean();
                 bean.phone_number = input_phone;
-                //                loginFacade = new LoginFacade();
-                //                loginFacade.setView(PhoneInputActivity.this);
-                //                loginFacade.sendSms(bean);
-                LogUtils.d("hello zxctyuogggooo");
                 presenter.sendSms(bean);
                 countDownSmsTime();
 
@@ -170,38 +142,6 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
 
     }
 
-
-
-    public String getClassTag() {
-        return TAG;
-    }
-
-
-    public Boolean AYSendSMSCodeCommandSuccess(JSONObject arg) {
-        LogUtils.d("PhoneInputActivity " + Thread.currentThread().getName());
-
-        LogUtils.d(TAG, "send sms code result is " + arg.toString());
-        ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
-        //        sms_result = new SendSMSCodeResult(arg);
-        SendSmsServerBean bean = JSON.parseObject(arg.toString(), SendSmsServerBean.class);
-        sendSmsUiBean = new SendSmsUiBean(bean);
-        return true;
-    }
-
-    public Boolean AYSendSMSCodeCommandFailed(JSONObject arg) {
-        LogUtils.d(TAG, "send sms code error is " + arg.toString());
-        //        Toast.makeText(this, sms_result.getErrorMessage(), LENGTH_LONG).show();
-        //        sms_result = new SendSMSCodeResult(arg);
-        ErrorInfoServerBean serverBean = JSON.parseObject(arg.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(sms_code, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-        return true;
-    }
-
     protected void LoginWithPhoneAndCode() {
         LogUtils.d(TAG, "login with phone code");
         String phone = et_phone.getText().toString().trim();
@@ -216,108 +156,17 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         }
 
 
-        PhoneLoginRequestBean requestBean = new PhoneLoginRequestBean();
-        requestBean.reg_token = bean.reg_token;
-        requestBean.phone_number = bean.phone;
-        requestBean.code = code;
-        //        loginFacade.login(requestBean);
-
         if (bean != null && bean.isSuccess) {
+            PhoneLoginRequestBean requestBean = new PhoneLoginRequestBean();
+            requestBean.reg_token = bean.reg_token;
+            requestBean.phone_number = bean.phone;
+            requestBean.code = code;
             showProcessDialog(getString(R.string.logining_process));
             presenter.login(requestBean);
-           /* AYFacade facade = facades.get("LoginFacade");
-            Map<String, Object> m = new HashMap<>();
-            m.put("phone", phone);
-            m.put("reg_token", sendSmsUiBean.reg_token);
-            m.put("code", code);
-            JSONObject args = new JSONObject(m);
-//            cmd.execute(args);
-
-            //登陆不刷新ImageToken
-
-            Map<String, Object> m1 = new HashMap<>();
-            m1.put("login", "login");
-            JSONObject login = new JSONObject(m1);
-
-            facade.execute("LoginWithPhone",args, login);*/
 
         } else {
             ToastUtils.showShortToast(R.string.phone_input_next_step_error);
         }
-    }
-
-    public Boolean AYLoginWithPhoneCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        ToastUtils.showShortToast(R.string.login_success);
-        LogUtils.d("AYLoginWithPhoneCommandSuccess " + args.toString());
-
-        PhoneLoginServerBean serverBean = JSON.parseObject(args.toString(), PhoneLoginServerBean.class);
-        PhoneLoginUiBean uiBean = new PhoneLoginUiBean(serverBean);
-
-        if (!uiBean.isSuccess) {
-            ToastUtils.showShortToast(getString(R.string.login_failare));
-            return false;
-        }
-
-
-        AYPrefUtils.setUserId(uiBean.user_id);
-        AYPrefUtils.setAuthToken(uiBean.auth_token);
-
-        if (TextUtils.isEmpty(uiBean.screen_name)) {
-
-            Intent intent = new Intent(PhoneInputActivity.this, NameInputActivity.class);
-            AYDaoUserProfile p = new AYDaoUserProfile(args);
-            intent.putExtra("has_photo", !TextUtils.isEmpty(uiBean.screen_photo));
-            startActivity(intent);
-
-        } else if (TextUtils.isEmpty(uiBean.screen_photo)) {
-
-            Intent intent = new Intent(PhoneInputActivity.this, PhotoChangeActivity.class);
-            intent.putExtra("from", AppConstant.FROM_PHONE_INPUT);
-            AYDaoUserProfile p = new AYDaoUserProfile(args);
-            intent.putExtra("current_user", p);
-            intent.putExtra("name", uiBean.screen_name);
-            startActivity(intent);
-        } else {
-            Intent intent = new Intent(PhoneInputActivity.this, AYHomeActivity.class);
-            intent.putExtra("img_uuid", uiBean.screen_photo);
-            startActivity(intent);
-            DongdaApplication.finishAllActivity();
-        }
-
-        return true;
-    }
-
-    public Boolean AYLoginWithPhoneCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(sms_code, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-        return true;
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mSms_disposable != null && !mSms_disposable.isDisposed()) {
-            mSms_disposable.dispose();
-            mSms_disposable = null;
-        }
-    }
-
-    @Override
-    public void onBackPressed() {
-        DongdaApplication.removeActivity(this);
-        super.onBackPressed();
-    }
-
-
-    protected void bindingFragments() {
-
     }
 
     private void gotoActivity(PhoneLoginBean bean) {
@@ -379,5 +228,20 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         } else {
             ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mSms_disposable != null && !mSms_disposable.isDisposed()) {
+            mSms_disposable.dispose();
+            mSms_disposable = null;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        DongdaApplication.removeActivity(this);
+        super.onBackPressed();
     }
 }

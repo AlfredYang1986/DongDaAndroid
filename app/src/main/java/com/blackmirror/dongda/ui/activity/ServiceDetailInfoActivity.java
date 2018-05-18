@@ -26,6 +26,11 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
+import com.blackmirror.dongda.di.component.DaggerServiceDetailInfoComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.DetailInfoDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
 import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
 import com.blackmirror.dongda.model.ServiceProfileBean;
 import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
@@ -37,7 +42,9 @@ import com.blackmirror.dongda.model.uibean.LikePopUiBean;
 import com.blackmirror.dongda.model.uibean.LikePushUiBean;
 import com.blackmirror.dongda.model.uibean.SafeUiBean;
 import com.blackmirror.dongda.model.uibean.ServiceDetailInfoUiBean;
-import com.blackmirror.dongda.ui.base.AYActivity;
+import com.blackmirror.dongda.presenter.DetailInfoPresenter;
+import com.blackmirror.dongda.ui.Contract;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.ui.view.SlidingTabLayout;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
@@ -57,7 +64,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ServiceDetailInfoActivity extends AYActivity implements View.OnClickListener {
+public class ServiceDetailInfoActivity extends BaseActivity implements View.OnClickListener, Contract.DetailInfoView{
 
     private ViewPager vp_detail_photo;
     private SlidingTabLayout tl_detail_tab;
@@ -100,17 +107,35 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     private TextView tv_addr_safe;
     private View view_line_4;
     private int randomInt;
+    private DetailInfoPresenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_info);
         service_id = getIntent().getStringExtra("service_id");
         setTitle("");
         initView(savedInstanceState);
         initData();
         initListener();
-        DeviceUtils.initSystemBarColor(this);
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_detail_info;
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerServiceDetailInfoComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getDetailInfoPresenter();
+    }
+
+    @Override
+    protected void initView() {
+
     }
 
     private void initView(Bundle savedInstanceState) {
@@ -169,19 +194,22 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         aMap.moveCamera(CameraUpdateFactory.zoomTo(15));*/
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
+        presenter.getDetailInfo(service_id);
         try {
             showProcessDialog();
             String json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"service_id\":\"" + service_id + "\"}}";
             JSONObject object = new JSONObject(json);
-            facades.get("AYDetailInfoFacade").execute("AYGetDetailInfoCmd", object);
+//            facades.get("AYDetailInfoFacade").execute("AYGetDetailInfoCmd", object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
     }
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
         iv_detail_back.setOnClickListener(this);
         iv_detail_tb_back.setOnClickListener(this);
         tv_dec_more.setOnClickListener(this);
@@ -203,7 +231,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                     }
                 } else {//其他状态
                     if (status != AppConstant.OTHER_STATUS) {
-                        status = AppConstant.CLOSE_STATUS;
+                        status = AppConstant.OTHER_STATUS;
                         hideTb();
                     }
                 }
@@ -255,13 +283,36 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onGetDetailInfoSuccess(DetailInfoDomainBean bean) {
+
+    }
+
+
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+
+    }
+
     private void showTb() {
+        DeviceUtils.setStatusBarColor(this);
         tb_toolbar.setVisibility(View.VISIBLE);
         tb_toolbar.setBackgroundColor(getResources().getColor(R.color.sys_bar_white));
         cl_tb_content.setVisibility(View.VISIBLE);
     }
 
     private void hideTb() {
+        DeviceUtils.initSystemBarColor(this);
         tb_toolbar.setVisibility(View.GONE);
         tb_toolbar.setBackgroundColor(Color.TRANSPARENT);
         cl_tb_content.setVisibility(View.GONE);
@@ -548,7 +599,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                     "\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + service_id + "\"}}";
             try {
                 JSONObject object = new JSONObject(json);
-                facades.get("AYDetailInfoFacade").execute("AYLikePopCommand", object);
+//                facades.get("AYDetailInfoFacade").execute("AYLikePopCommand", object);
             } catch (Exception e) {
                 e.printStackTrace();
                 closeProcessDialog();
@@ -558,7 +609,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                     "\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + service_id + "\"}}";
             try {
                 JSONObject object = new JSONObject(json);
-                facades.get("AYDetailInfoFacade").execute("AYLikePushCommand", object);
+//                facades.get("AYDetailInfoFacade").execute("AYLikePushCommand", object);
             } catch (Exception e) {
                 e.printStackTrace();
                 closeProcessDialog();
@@ -596,14 +647,14 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
 
 
     @Override
-    protected void bindingFragments() {
-
-    }
-
-    @Override
     public void onBackPressed() {
         setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
         super.onBackPressed();
 
     }
+
+    @Override
+    protected void setStatusBarColor() {
+    }
+
 }

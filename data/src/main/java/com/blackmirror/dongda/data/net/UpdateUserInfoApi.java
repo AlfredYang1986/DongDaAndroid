@@ -40,6 +40,7 @@ public class UpdateUserInfoApi extends AYRemoteApi {
     private static Observable<UpdateUserInfoBean> updateUserInfoWithPhoto(final UpdateUserInfoDomainBean requestBean) {
         UploadImageRequestBean bean = new UploadImageRequestBean();
         bean.json = requestBean.json;
+        bean.imgUUID = requestBean.imgUUID;
         bean.url = DataConstant.UPDATE_USER_INFO_URL;
         return UpLoadImageApi.execute(bean, UpLoadImgResponseBean.class)
                 .flatMap(new Function<UpLoadImgResponseBean, Observable<UpdateUserInfoBean>>() {

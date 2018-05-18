@@ -40,7 +40,6 @@ import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -397,7 +396,7 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onStop() {
         super.onStop();
-        Fresco.getImagePipeline().clearMemoryCaches();
+//        Fresco.getImagePipeline().clearMemoryCaches();
     }
 
     private void refreshHeadPhoto(int resultCode, Intent data) {

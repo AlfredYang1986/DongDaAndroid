@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.annotation.ColorInt;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -212,6 +213,18 @@ public class DeviceUtils {
             View childView = viewGroup.getChildAt(0);
             if (null != childView) {
 //                ViewCompat.setFitsSystemWindows(childView, false);
+            }
+        }
+    }
+
+    public static void initSystemBarColor(AppCompatActivity activity,boolean FitsSys) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            ViewGroup viewGroup = activity.findViewById(Window.ID_ANDROID_CONTENT);
+            View childView = viewGroup.getChildAt(0);
+            if (null != childView) {
+                ViewCompat.setFitsSystemWindows(childView, FitsSys);
             }
         }
     }

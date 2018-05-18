@@ -61,7 +61,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     protected void initInject() {
         presenter = DaggerUserInfoComponent.builder()
                 .activity(this)
-                .view(this)
                 .build()
                 .getUserInfoPresenter();
     }
@@ -93,6 +92,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
     @Override
     protected void initData() {
         showProcessDialog();
+        presenter.setUserInfoView(this);
         presenter.queryUserInfo();
     }
 

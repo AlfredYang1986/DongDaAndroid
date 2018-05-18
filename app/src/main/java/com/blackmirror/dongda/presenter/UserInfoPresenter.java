@@ -12,7 +12,6 @@ import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,14 +33,17 @@ public class UserInfoPresenter implements UserInfoContract.presenter {
 
     Contract.NameInputView nameInputView;
 
-    @Inject
-    public UserInfoPresenter(UserInfoContract.View view) {
+    public void setUserInfoView(UserInfoContract.View view) {
         this.view = view;
     }
 
-    @Named("NameInput")
     @Inject
-    public UserInfoPresenter(Contract.NameInputView nameInputView) {
+    public UserInfoPresenter() {
+
+    }
+
+
+    public void setNameInputView(Contract.NameInputView nameInputView) {
         this.nameInputView = nameInputView;
     }
 
@@ -106,7 +108,7 @@ public class UserInfoPresenter implements UserInfoContract.presenter {
                             return;
                         }
                         if (bean.isSuccess){
-                            nameInputView.onUpdateUserInfo(bean);
+                            nameInputView.onUpdateUserInfoSuccess(bean);
                         }else {
                             nameInputView.onError(bean);
                         }

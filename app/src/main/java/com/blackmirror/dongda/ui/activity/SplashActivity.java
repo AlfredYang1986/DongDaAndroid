@@ -5,12 +5,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.PermissionUtils;
@@ -24,20 +25,40 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     private Disposable disposable;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_splash);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
+    }
 
-//        init();
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_splash;
+    }
+
+    @Override
+    protected void initInject() {
+
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void initData() {
         requestPermissions();
+    }
+
+    @Override
+    protected void initListener() {
+
     }
 
     /**
@@ -54,13 +75,11 @@ public class SplashActivity extends AppCompatActivity {
         if (list.size()!=0){
             PermissionUtils.requestMulitPermissions(SplashActivity.this, list);
         }else {
-            init();
+            init2Landing();
         }
-
-
     }
 
-    private void init() {
+    private void init2Landing() {
         disposable = Observable.timer(1500, TimeUnit.MILLISECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
@@ -72,19 +91,6 @@ public class SplashActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unSubscribe();
-    }
-
-    private void unSubscribe() {
-        if (disposable != null && !disposable.isDisposed()){
-            disposable.dispose();
-            disposable = null;
-        }
     }
 
     @Override
@@ -103,6 +109,19 @@ public class SplashActivity extends AppCompatActivity {
                 startActivity(new Intent(SplashActivity.this, LandingActivity.class));
                 finish();
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unSubscribe();
+    }
+
+    private void unSubscribe() {
+        if (disposable != null && !disposable.isDisposed()){
+            disposable.dispose();
+            disposable = null;
         }
     }
 

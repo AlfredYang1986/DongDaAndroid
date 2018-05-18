@@ -20,9 +20,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareListViewHolder> {
 
@@ -30,7 +28,6 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
     private CareMoreDomainBean bean;
     protected Context context;
     private OnCareListClickListener listener;
-    public Set<String> urlSet=new HashSet<>();
 
 
 
@@ -60,7 +57,6 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
 
         String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
 //        holder.sv_care_list_photo.setImageURI(url);
-        urlSet.add(getCacheUrl(url));
 
 
         displayImage(Uri.parse(url),holder.sv_care_list_photo);
@@ -174,14 +170,6 @@ public class CareListAdapter extends RecyclerView.Adapter<CareListAdapter.CareLi
                 .setOldController(draweeView.getController())
                 .build();
         draweeView.setController(controller);
-    }
-
-    protected String getCacheUrl(String url){
-        if (url.contains("?")){
-            return url.substring(0,url.indexOf("?")+1);
-        }
-        return url;
-
     }
 
 }

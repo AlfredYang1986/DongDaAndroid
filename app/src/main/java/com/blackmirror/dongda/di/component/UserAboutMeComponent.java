@@ -2,7 +2,7 @@ package com.blackmirror.dongda.di.component;
 
 import com.blackmirror.dongda.di.module.UserInfoModule;
 import com.blackmirror.dongda.presenter.UserInfoPresenter;
-import com.blackmirror.dongda.ui.activity.Landing.NameInputActivity;
+import com.blackmirror.dongda.ui.activity.UserAboutMeActivity;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -12,15 +12,15 @@ import dagger.Component;
  */
 
 @Component(modules = UserInfoModule.class)
-public interface NameInputComponent {
+public interface UserAboutMeComponent {
 
     UserInfoPresenter getUserInfoPresenter();
 
     @Component.Builder
     interface Builder{
         @BindsInstance
-        Builder activity(NameInputActivity activity);
-        NameInputComponent build();
+        Builder activity(UserAboutMeActivity activity);
+        UserAboutMeComponent build();
 
     }
 }

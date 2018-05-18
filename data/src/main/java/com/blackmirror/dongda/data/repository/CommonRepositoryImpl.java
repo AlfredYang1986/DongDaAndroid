@@ -3,13 +3,19 @@ package com.blackmirror.dongda.data.repository;
 import android.text.TextUtils;
 
 import com.blackmirror.dongda.data.model.response.CareMoreResponseBean;
+import com.blackmirror.dongda.data.model.response.DetailInfoResponseBean;
 import com.blackmirror.dongda.data.model.response.LikePushResponseBean;
+import com.blackmirror.dongda.data.model.response.LikeResponseBean;
+import com.blackmirror.dongda.data.model.response.NearServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.SearchServiceResponseBean;
 import com.blackmirror.dongda.data.net.CommonApi;
 import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
+import com.blackmirror.dongda.domain.model.DetailInfoDomainBean;
 import com.blackmirror.dongda.domain.model.HomepageDomainBean;
+import com.blackmirror.dongda.domain.model.LikeDomainBean;
 import com.blackmirror.dongda.domain.model.LikePopDomainBean;
 import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.domain.model.NearServiceDomainBean;
 import com.blackmirror.dongda.domain.repository.CommonRepository;
 
 import java.util.ArrayList;
@@ -81,6 +87,32 @@ public class CommonRepositoryImpl implements CommonRepository {
     }
 
     @Override
+    public Observable<LikeDomainBean> getLikeData() {
+        return CommonApi.getLikeData()
+                .map(new Function<LikeResponseBean, LikeDomainBean>() {
+                    @Override
+                    public LikeDomainBean apply(LikeResponseBean bean) throws Exception {
+                        LikeDomainBean domainBean = new LikeDomainBean();
+                        tran2LikeDomainBean(bean, domainBean);
+                        return domainBean;
+                    }
+                });
+    }
+
+    @Override
+    public Observable<NearServiceDomainBean> getNearService(double latitude, double longitude) {
+        return CommonApi.getNearService(latitude, longitude)
+                .map(new Function<NearServiceResponseBean, NearServiceDomainBean>() {
+                    @Override
+                    public NearServiceDomainBean apply(NearServiceResponseBean bean) throws Exception {
+                        NearServiceDomainBean domainBean = new NearServiceDomainBean();
+                        tran2NearServiceDomainBean(bean, domainBean);
+                        return domainBean;
+                    }
+                });
+    }
+
+    @Override
     public Observable<CareMoreDomainBean> getServiceMoreData(int skipCount, int takeCount, String serviceType) {
         return CommonApi.getServiceMoreData(skipCount, takeCount, serviceType)
                 .map(new Function<CareMoreResponseBean, CareMoreDomainBean>() {
@@ -91,6 +123,131 @@ public class CommonRepositoryImpl implements CommonRepository {
                         return domainBean;
                     }
                 });
+    }
+
+    @Override
+    public Observable<DetailInfoDomainBean> getDetailInfo(String service_id) {
+        return CommonApi.getDetailInfo(service_id)
+                .map(new Function<DetailInfoResponseBean, DetailInfoDomainBean>() {
+                    @Override
+                    public DetailInfoDomainBean apply(DetailInfoResponseBean bean) throws Exception {
+                        DetailInfoDomainBean domainBean = new DetailInfoDomainBean();
+//                        tran2CareMoreDomainBean(bean, domainBean);
+                        return domainBean;
+                    }
+                });
+    }
+
+    private void tran2NearServiceDomainBean(NearServiceResponseBean bean, NearServiceDomainBean domainBean) {
+        if (bean == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(bean.status) || !"ok".equals(bean.status)) {
+            if (bean.error == null) {
+                return;
+            }
+            domainBean.code = bean.error.code;
+            domainBean.message = bean.error.message;
+            return;
+
+        }
+
+        domainBean.isSuccess = true;
+
+        domainBean.services = new ArrayList<>();
+        if (bean.result == null || bean.result.services == null) {
+            return;
+        }
+
+        for (int i = 0; i < bean.result.services.size(); i++) {
+            NearServiceResponseBean.ResultBean.ServicesBean sb = bean.result.services.get(i);
+            NearServiceDomainBean.ServicesBean b = new NearServiceDomainBean.ServicesBean();
+
+            b.is_collected=sb.is_collected;
+            b.punchline=sb.punchline;
+            b.service_leaf=sb.service_leaf;
+            b.brand_id=sb.brand_id;
+            b.location_id=sb.location_id;
+            b.service_image=sb.service_image;
+            b.brand_name=sb.brand_name;
+            b.service_type=sb.service_type;
+            b.address=sb.address;
+            b.category=sb.category;
+            NearServiceDomainBean.ServicesBean.PinBean pin = new NearServiceDomainBean.ServicesBean.PinBean();
+            if (sb.pin != null) {
+                pin.latitude = sb.pin.latitude;
+                pin.longitude = sb.pin.longitude;
+                b.pin = pin;
+            } else {
+                b.pin = pin;
+            }
+
+            b.service_id=sb.service_id;
+
+            b.service_tags = sb.service_tags != null ? sb.service_tags : new ArrayList<String>();
+            b.operation = sb.operation != null ? sb.operation : new ArrayList<String>();
+
+            domainBean.services.add(b);
+
+        }
+
+    }
+
+    private void tran2LikeDomainBean(LikeResponseBean bean, LikeDomainBean domainBean) {
+        if (bean == null) {
+            return;
+        }
+
+        if (TextUtils.isEmpty(bean.status) || !"ok".equals(bean.status)) {
+            if (bean.error == null) {
+                return;
+            }
+            domainBean.code = bean.error.code;
+            domainBean.message = bean.error.message;
+            return;
+
+        }
+
+        domainBean.isSuccess = true;
+
+        domainBean.services = new ArrayList<>();
+        if (bean.result == null || bean.result.services == null) {
+            return;
+        }
+
+        for (int i = 0; i < bean.result.services.size(); i++) {
+            LikeResponseBean.ResultBean.ServicesBean sb = bean.result.services.get(i);
+            LikeDomainBean.ServicesBean b = new LikeDomainBean.ServicesBean();
+
+            b.is_collected=sb.is_collected;
+            b.punchline=sb.punchline;
+            b.service_leaf=sb.service_leaf;
+            b.brand_id=sb.brand_id;
+            b.location_id=sb.location_id;
+            b.service_image=sb.service_image;
+            b.brand_name=sb.brand_name;
+            b.service_type=sb.service_type;
+            b.address=sb.address;
+            b.category=sb.category;
+            LikeDomainBean.ServicesBean.PinBean pin = new LikeDomainBean.ServicesBean.PinBean();
+            if (sb.pin != null) {
+                pin.latitude = sb.pin.latitude;
+                pin.longitude = sb.pin.longitude;
+                b.pin = pin;
+            } else {
+                b.pin = pin;
+            }
+
+            b.service_id=sb.service_id;
+
+            b.service_tags = sb.service_tags != null ? sb.service_tags : new ArrayList<String>();
+            b.operation = sb.operation != null ? sb.operation : new ArrayList<String>();
+
+            domainBean.services.add(b);
+
+        }
+
     }
 
     private void tran2CareMoreDomainBean(CareMoreResponseBean bean, CareMoreDomainBean domainBean) {
@@ -104,6 +261,7 @@ public class CommonRepositoryImpl implements CommonRepository {
             }
             domainBean.code = bean.error.code;
             domainBean.message = bean.error.message;
+            return;
 
         }
 
@@ -159,7 +317,7 @@ public class CommonRepositoryImpl implements CommonRepository {
             }
             domainBean.code = bean.error.code;
             domainBean.message = bean.error.message;
-
+            return;
         }
 
         domainBean.isSuccess = true;

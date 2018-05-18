@@ -1,9 +1,6 @@
 package com.blackmirror.dongda.ui.activity.Landing;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -36,7 +33,6 @@ import io.reactivex.functions.Consumer;
 
 public class LandingActivity extends BaseActivity implements WeChatLoginContract.View{
 
-    final static String TAG = "Landing Activity";
     private TextView tv_phone_login;
     private TextView tv_wechat_login;
     private Disposable errorDb;
@@ -50,11 +46,11 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void init() {
         DongdaApplication.addActivity(this);
     }
 
+    @Override
     protected void initInject() {
         presenter = DaggerLandingComponent.builder()
                 .activity(this)
@@ -63,15 +59,17 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
                 .getWeChatLoginPresenter();
     }
 
+    @Override
     protected void initView() {
         tv_phone_login = findViewById(R.id.tv_phone_login);
         tv_wechat_login = findViewById(R.id.tv_wechat_login);
     }
 
+    @Override
     protected void initData() {
     }
 
-
+    @Override
     protected void initListener() {
 
         tv_phone_login.setOnClickListener(new View.OnClickListener() {
@@ -228,23 +226,6 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
     protected void onDestroy() {
         super.onDestroy();
         unSubscribe();
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case AppConstant.PERMISSION_REQUEST:
-                for (int i = 0; i < grantResults.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        LogUtils.d("xcx", permissions[i] + " granted");
-                    } else {
-                        LogUtils.d("xcx", permissions[i] + " denied");
-
-                    }
-                }
-                break;
-        }
     }
 
 }

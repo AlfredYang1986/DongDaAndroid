@@ -3,34 +3,28 @@ package com.blackmirror.dongda.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
-import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.base.AYApplication;
-import com.blackmirror.dongda.ui.base.AYActivity;
-import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.di.component.DaggerUserAboutMeComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.UserInfoDomainBean;
+import com.blackmirror.dongda.presenter.UserInfoPresenter;
+import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.QueryUserInfoServerBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.QueryUserInfoUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-public class UserAboutMeActivity extends AYActivity implements View.OnClickListener {
+public class UserAboutMeActivity extends BaseActivity implements View.OnClickListener, UserInfoContract.View {
 
     private ImageView iv_service_back;
     private TextView tv_user_logout;
@@ -38,24 +32,33 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
     private ImageView iv_about_edit;
     private TextView tv_user_about_name;
     private TextView tv_user_about_dec;
-    private QueryUserInfoUiBean uiBean;
     private boolean needsRefresh;
     private String img_url;
     private AlertDialog dialog;
-
+    private UserInfoPresenter presenter;
+    private UserInfoDomainBean bean;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_about_me);
+    protected void init() {
         AYApplication.addActivity(this);
-        DeviceUtils.initSystemBarColor(this);
-        initView();
-        initData();
-        initListener();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_user_about_me;
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerUserAboutMeComponent.builder()
+                .activity(this)
+                .build()
+                .getUserInfoPresenter();
+        presenter.setUserInfoView(this);
+    }
+
+    @Override
+    protected void initView() {
         iv_service_back = findViewById(R.id.iv_service_back);
         tv_user_logout = findViewById(R.id.tv_user_logout);
         sv_user_about_photo = findViewById(R.id.sv_user_about_photo);
@@ -65,25 +68,22 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
 
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
         getUserInfo();
     }
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
         iv_service_back.setOnClickListener(this);
         tv_user_logout.setOnClickListener(this);
         iv_about_edit.setOnClickListener(this);
     }
 
+
     private void getUserInfo() {
         showProcessDialog();
-        try {
-            String json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"}}";
-            JSONObject object = new JSONObject(json);
-            facades.get("UserFacade").execute("AYQueryUserInfoCmd", object);
-        } catch (JSONException e) {
-            closeProcessDialog();
-        }
+        presenter.queryUserInfo();
     }
 
     @Override
@@ -97,8 +97,32 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
                 showLogOutDialog();
                 break;
             case R.id.iv_about_edit:
-                EditUserInfoActivity.startActivityForResult(UserAboutMeActivity.this, uiBean.screen_photo, uiBean.screen_name, uiBean.description, AppConstant.EDIT_USER_REQUEST_CODE);
+                EditUserInfoActivity.startActivityForResult(UserAboutMeActivity.this, bean.screen_photo, bean.screen_name, bean.description, AppConstant.EDIT_USER_REQUEST_CODE);
                 break;
+        }
+    }
+
+    @Override
+    public void onQueryUserInfoSuccess(UserInfoDomainBean dbean) {
+        bean = dbean;
+        closeProcessDialog();
+        String url = OSSUtils.getSignedUrl(bean.screen_photo);
+        sv_user_about_photo.setImageURI(url);
+        tv_user_about_name.setText(bean.screen_name);
+        if (TextUtils.isEmpty(bean.description)) {
+            tv_user_about_dec.setText(R.string.default_about_me);
+        } else {
+            tv_user_about_dec.setText(bean.description);
+        }
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(iv_about_edit, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 
@@ -112,6 +136,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
                     public void onClick(DialogInterface dialog, int which) {
                         closeDialog();
                         Intent intent = new Intent(UserAboutMeActivity.this, LandingActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
                         AYApplication.finishAllActivity();
                     }
@@ -125,36 +150,6 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
         dialog.show();
     }
 
-    public void AYQueryUserInfoCmdSuccess(JSONObject args) {
-        closeProcessDialog();
-        QueryUserInfoServerBean serverBean = JSON.parseObject(args.toString(), QueryUserInfoServerBean.class);
-        uiBean = new QueryUserInfoUiBean(serverBean);
-        if (uiBean.isSuccess) {
-            String url = OSSUtils.getSignedUrl(uiBean.screen_photo);
-            sv_user_about_photo.setImageURI(url);
-            tv_user_about_name.setText(uiBean.screen_name);
-            if (TextUtils.isEmpty(uiBean.description)) {
-                tv_user_about_dec.setText(R.string.default_about_me);
-            } else {
-                tv_user_about_dec.setText(uiBean.description);
-            }
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
-
-    public void AYQueryUserInfoCmdFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_about_edit, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -164,11 +159,6 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
             img_url = data.getStringExtra("img_url");
             LogUtils.d("UserAboutMeActivity img_url "+img_url);
         }
-    }
-
-    @Override
-    protected void bindingFragments() {
-
     }
 
     @Override
@@ -195,6 +185,7 @@ public class UserAboutMeActivity extends AYActivity implements View.OnClickListe
 
     @Override
     protected void setStatusBarColor() {
-
+        DeviceUtils.initSystemBarColor(this);
     }
+
 }

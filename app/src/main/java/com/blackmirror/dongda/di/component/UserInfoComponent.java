@@ -3,7 +3,6 @@ package com.blackmirror.dongda.di.component;
 import com.blackmirror.dongda.di.module.UserInfoModule;
 import com.blackmirror.dongda.presenter.UserInfoPresenter;
 import com.blackmirror.dongda.ui.activity.UserInfoActivity;
-import com.blackmirror.dongda.ui.activity.UserInfoContract;
 
 import dagger.BindsInstance;
 import dagger.Component;
@@ -21,8 +20,6 @@ public interface UserInfoComponent {
     interface Builder{
         @BindsInstance
         Builder activity(UserInfoActivity activity);
-        @BindsInstance
-        Builder view(UserInfoContract.View view);
         UserInfoComponent build();
 
     }

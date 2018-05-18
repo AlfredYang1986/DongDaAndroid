@@ -20,7 +20,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
-        init();
+        init(savedInstanceState);
         isViewValid = true;
         setStatusBarColor();
         initInject();
@@ -29,7 +29,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         initListener();
     }
 
+    protected void init(@Nullable Bundle savedInstanceState){
+        init();
+    }
+
     protected void init(){
+
+    }
+
+    protected void initPreSetContentView(){
 
     }
 
