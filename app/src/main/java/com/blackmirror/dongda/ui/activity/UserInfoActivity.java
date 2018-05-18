@@ -112,7 +112,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 break;
             //发布招生
             case R.id.tv_enrol_class:
-
                 break;
             case R.id.tv_my_brand:
                 break;
