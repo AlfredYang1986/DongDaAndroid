@@ -9,16 +9,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.domain.model.LikeDomainBean;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.MyLikeListViewHolder> {
 
 
-    private List<QueryLikeServerBean.ResultBean.ServicesBean> list;
+    private LikeDomainBean bean;
+    private List<LikeDomainBean.ServicesBean> list;
     protected Context context;
     private OnLikeListClickListener listener;
 
@@ -27,9 +29,14 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
         this.listener = listener;
     }
 
-    public MyLikeListAdapter(Context context, List<QueryLikeServerBean.ResultBean.ServicesBean> list) {
+    public MyLikeListAdapter(Context context, LikeDomainBean bean) {
         this.context = context;
-        this.list = list;
+        this.bean = bean;
+        if (bean == null || bean.services == null){
+            list = new ArrayList<>();
+        }else {
+            list = bean.services;
+        }
     }
 
 
@@ -45,7 +52,7 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
     public void onBindViewHolder(MyLikeListAdapter.MyLikeListViewHolder holder, int position) {
 
 
-        QueryLikeServerBean.ResultBean.ServicesBean servicesBean = list.get(position);
+        LikeDomainBean.ServicesBean servicesBean = list.get(position);
 
         String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
         holder.sv_care_list_photo.setImageURI(url);
@@ -95,8 +102,7 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
     }
 
 
-    private void initListener(final MyLikeListViewHolder holder, int position,
-                              final QueryLikeServerBean.ResultBean.ServicesBean servicesBean) {
+    private void initListener(final MyLikeListViewHolder holder, int position, final LikeDomainBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,8 +116,7 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemLikeClick(holder.iv_care_list_like, holder
-                            .getAdapterPosition(), servicesBean);
+                    listener.onItemLikeClick(holder.iv_care_list_like, holder.getAdapterPosition(), servicesBean);
                 }
             }
         });
@@ -148,8 +153,7 @@ public class MyLikeListAdapter extends RecyclerView.Adapter<MyLikeListAdapter.My
     public interface OnLikeListClickListener {
         void onItemLikeListClick(View view, int position, String service_id);
 
-        void onItemLikeClick(View view, int position, QueryLikeServerBean.ResultBean.ServicesBean
-                servicesBean);
+        void onItemLikeClick(View view, int position, LikeDomainBean.ServicesBean servicesBean);
     }
 
     public void removeItem(int position){

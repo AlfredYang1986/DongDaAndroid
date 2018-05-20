@@ -12,33 +12,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.model.serverbean.ArtMoreServerBean;
-import com.blackmirror.dongda.model.uibean.ArtMoreUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
-    private ArtMoreUiBean bean;
+    private CareMoreDomainBean bean;
     protected Context context;
     private OnArtListClickListener listener;
     private static final int TYPE_FOOTER = 100;
     private static final int TYPE_NORMAL = 101;
     public int totalCount;
 
-    public Set<String> urlSet = new HashSet<>();
-
 
     public void setOnArtListClickListener(OnArtListClickListener listener) {
         this.listener = listener;
     }
 
-    public ArtListAdapter(Context context, ArtMoreUiBean bean) {
+    public ArtListAdapter(Context context, CareMoreDomainBean bean) {
         this.context = context;
         this.bean = bean;
     }
@@ -64,11 +59,9 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         if (holder instanceof ArtListViewHolder) {
             ArtListViewHolder vh = (ArtListViewHolder) holder;
-            ArtMoreServerBean.ResultBean.ServicesBean servicesBean = this.bean.services.get(position);
-
+            CareMoreDomainBean.ServicesBean servicesBean = this.bean.services.get(position);
 
             String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
-            urlSet.add(getCacheUrl(url));
 
             vh.sv_art_list_photo.setImageURI(url);
             if (servicesBean.is_collected) {
@@ -120,7 +113,7 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    private void initListener(final ArtListViewHolder holder, int position, final ArtMoreServerBean.ResultBean.ServicesBean servicesBean) {
+    private void initListener(final ArtListViewHolder holder, int position, final CareMoreDomainBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,13 +169,13 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    public void setMoreData(List<ArtMoreServerBean.ResultBean.ServicesBean> moreList) {
+    public void setMoreData(List<CareMoreDomainBean.ServicesBean> moreList) {
         bean.services.addAll(moreList);
         notifyDataSetChanged();
     }
 
 
-    public void setRefreshData(List<ArtMoreServerBean.ResultBean.ServicesBean> list) {
+    public void setRefreshData(List<CareMoreDomainBean.ServicesBean> list) {
         bean.services.clear();
         bean.services.addAll(list);
         notifyDataSetChanged();
@@ -191,7 +184,7 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public interface OnArtListClickListener {
         void onItemArtListClick(View view, int position, String service_id);
 
-        void onItemArtLikeClick(View view, int position, ArtMoreServerBean.ResultBean.ServicesBean servicesBean);
+        void onItemArtLikeClick(View view, int position, CareMoreDomainBean.ServicesBean servicesBean);
     }
 
     @Override
@@ -214,12 +207,5 @@ public class ArtListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-    protected String getCacheUrl(String url) {
-        if (url.contains("?")) {
-            return url.substring(0, url.indexOf("?") + 1);
-        }
-        return url;
-
-    }
 }
 

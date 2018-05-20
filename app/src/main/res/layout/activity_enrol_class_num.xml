@@ -141,9 +141,9 @@
             android:layout_marginRight="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="请填写"
-            android:textColor="#FFD9D9D9"
-            android:textSize="15sp"
+            android:textColorHint="#FFD9D9D9"
+             android:textColor="#FF404040"
+            android:textSize="22sp"
             />
 
     </android.support.constraint.ConstraintLayout>

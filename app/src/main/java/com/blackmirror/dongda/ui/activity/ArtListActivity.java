@@ -2,7 +2,6 @@ package com.blackmirror.dongda.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,21 +9,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.adapter.ArtListAdapter;
 import com.blackmirror.dongda.adapter.itemdecoration.GridItemDecoration;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.ArtMoreServerBean;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
-import com.blackmirror.dongda.model.uibean.ArtMoreUiBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.LikePopUiBean;
-import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-import com.blackmirror.dongda.ui.base.AYActivity;
-import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.di.component.DaggerArtListComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.presenter.GetMoreDataPresenter;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
@@ -36,10 +30,7 @@ import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-public class ArtListActivity extends AYActivity {
+public class ArtListActivity extends BaseActivity implements ListMoreContract.View{
 
     private CoordinatorLayout ctl_root;
     private ImageView iv_home_head_back;
@@ -55,21 +46,32 @@ public class ArtListActivity extends AYActivity {
     private ArtListAdapter adapter;
     private int clickLikePos;
     private boolean isNeedRefresh;
+    private GetMoreDataPresenter presenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_art_list);
+    protected void init() {
         totalCount = getIntent().getIntExtra("totalCount", 10);
         serviceType = getIntent().getStringExtra("serviceType");
         title = getIntent().getStringExtra("title");
-        initView();
-        initData();
-        initListener();
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_art_list;
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerArtListComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getMoreDataPresenter();
     }
 
 
-    private void initView() {
+    @Override
+    protected void initView() {
         ctl_root = findViewById(R.id.ctl_root);
         iv_home_head_back = findViewById(R.id.iv_home_head_back);
         tv_home_head_title = findViewById(R.id.tv_home_head_title);
@@ -82,63 +84,16 @@ public class ArtListActivity extends AYActivity {
         sl_art_list.setRefreshFooter(footer.setNormalColor(getResources().getColor(R.color.colorPrimary)));
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
         showProcessDialog();
         getGridListData(skip, take);
         tv_home_head_title.setText(title);
     }
 
-    private void getGridListData(int skipCount, int takeCount) {
-        try {
-            AYFacade facade = facades.get("QueryServiceFacade");
-//            showProcessDialog();
-            String json = "{\"skip\" : " + skipCount + ",\"take\" : " + takeCount + ",\"token\": \"" + AYPrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + AYPrefUtils.getUserId() + "\",\"service_type\": \"" +
-                    serviceType + "\"}}";
-            JSONObject object = new JSONObject(json);
-            facade.execute("AYSubjectMoreCommand", object);
-        } catch (JSONException e) {
-//            closeProcessDialog();
-            e.printStackTrace();
-        }
-    }
 
-    /**
-     * 获取更多信息列表
-     *
-     * @param args
-     */
-    public void AYSubjectMoreCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        ArtMoreServerBean serverBean = JSON.parseObject(args.toString(), ArtMoreServerBean.class);
-        ArtMoreUiBean bean = new ArtMoreUiBean(serverBean);
-        if (sl_art_list.getState().opening) {
-            sl_art_list.finishLoadMore();
-            sl_art_list.finishRefresh();
-        }
-        if (bean.isSuccess) {
-            setDataToRecyclerView(bean);
-        }else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
-        }
-    }
-
-    public void AYSubjectMoreCommandFailed(JSONObject args) {
-        LogUtils.d("flag","AYSubjectMoreCommandFailed");
-        closeProcessDialog();
-        if (sl_art_list.getState().opening) {
-            sl_art_list.finishLoadMore(false);
-            sl_art_list.finishRefresh(false);
-        }
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code== AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    private void initListener() {
+    @Override
+    protected void initListener() {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,7 +136,49 @@ public class ArtListActivity extends AYActivity {
         });
     }
 
-    private void setDataToRecyclerView(ArtMoreUiBean bean) {
+    private void getGridListData(int skipCount, int takeCount) {
+        presenter.getServiceMoreData(skipCount, takeCount, serviceType);
+    }
+
+    @Override
+    public void onGetServiceMoreDataSuccess(CareMoreDomainBean bean) {
+        closeProcessDialog();
+        if (sl_art_list.getState().opening) {
+            sl_art_list.finishLoadMore();
+            sl_art_list.finishRefresh();
+        }
+        setDataToRecyclerView(bean);
+    }
+
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, true);
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, false);
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (sl_art_list.getState().opening) {
+            sl_art_list.finishLoadMore(false);
+            sl_art_list.finishRefresh(false);
+        }
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
+        }
+    }
+
+    private void setDataToRecyclerView(CareMoreDomainBean bean) {
 
         if (bean.isSuccess) {
 
@@ -201,7 +198,7 @@ public class ArtListActivity extends AYActivity {
                         }
 
                         @Override
-                        public void onItemArtLikeClick(View view, int position, ArtMoreServerBean.ResultBean.ServicesBean servicesBean) {
+                        public void onItemArtLikeClick(View view, int position, CareMoreDomainBean.ServicesBean servicesBean) {
                             clickLikePos=position;
                             sendLikeData(servicesBean);
                         }
@@ -221,88 +218,13 @@ public class ArtListActivity extends AYActivity {
         }
     }
 
-    private void sendLikeData(ArtMoreServerBean.ResultBean.ServicesBean bean) {
-        String t= AYPrefUtils.getAuthToken();
-        String u= AYPrefUtils.getUserId();
+    private void sendLikeData(CareMoreDomainBean.ServicesBean bean) {
         showProcessDialog();
-        if (bean.is_collected){//已收藏 点击取消
-            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
-        }else {
-            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+        if (bean.is_collected) {//已收藏 点击取消
+            presenter.likePop(bean.service_id);
+        } else {
+            presenter.likePush(bean.service_id);
         }
-    }
-
-    /**
-     * 收藏相关
-     * @param args
-     */
-    public void AYLikePushCommandSuccess(JSONObject args){
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
-        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess){
-            adapter.notifyItemChanged(clickLikePos,true);
-        }else {
-            ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
-        }
-    }
-
-    public void AYLikePushCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    /**
-     * 取消收藏相关
-     * @param args
-     */
-    public void AYLikePopCommandSuccess(JSONObject args){
-        isNeedRefresh = false;
-        closeProcessDialog();
-        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
-        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess){
-            adapter.notifyItemChanged(clickLikePos,false);
-        }else {
-            ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
-        }
-    }
-
-    public void AYLikePopCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    @Override
-    protected void bindingFragments() {
-
     }
 
     @Override
@@ -315,5 +237,6 @@ public class ArtListActivity extends AYActivity {
     protected void onDestroy() {
         super.onDestroy();
     }
+
 
 }

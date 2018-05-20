@@ -19,7 +19,7 @@ public class UpdateUserInfoUseCase implements UseCase<UpdateUserInfoBean>{
     }
 
 
-    public Observable<UpdateUserInfoBean> weChatLogin(UpdateUserInfoDomainBean bean) {
+    public Observable<UpdateUserInfoBean> updateUserInfo(UpdateUserInfoDomainBean bean) {
         return repository.updateUserInfo(bean);
     }
 }

@@ -40,7 +40,6 @@ import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
@@ -81,7 +80,6 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         img_uuid=getIntent().getStringExtra("img_uuid");
-        AYApplication.addActivity(this);
     }
 
     @Override
@@ -362,7 +360,8 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.sv_head_pic:
 //                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
-                startActivity(new Intent(AYHomeActivity.this, UserInfoActivity.class));
+                AYApplication.addActivity(this);
+                startActivityForResult(new Intent(AYHomeActivity.this, UserInfoActivity.class),AppConstant.ABOUT_USER_REQUEST_CODE);
                 break;
         }
     }
@@ -397,10 +396,11 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
     @Override
     protected void onStop() {
         super.onStop();
-        Fresco.getImagePipeline().clearMemoryCaches();
+//        Fresco.getImagePipeline().clearMemoryCaches();
     }
 
     private void refreshHeadPhoto(int resultCode, Intent data) {
+        LogUtils.d("img_url ayhome "+data.getStringExtra("img_url"));
         if (resultCode == RESULT_OK){
             String img_url = data.getStringExtra("img_url");
             sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url));

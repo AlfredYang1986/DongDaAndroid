@@ -9,6 +9,7 @@
     tools:context="com.blackmirror.dongda.ui.activity.apply.ApplySuccessActivity">
 
     <ImageView
+         android:id="@+id/iv_back"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         android:background="@drawable/details_icon_back"

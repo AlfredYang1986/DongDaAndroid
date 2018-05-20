@@ -59,7 +59,7 @@ public  class UpLoadFileApi extends AYRemoteApi {
                     public UpLoadImgResponseBean apply(OssInfoResponseBean bean) throws Exception {
 //                        LogUtils.d("flag", "做网络请求前的json数据: " + q.json.toString());
                         if ("ok".equals(bean.status)) {
-                            return  executeUpload(requestBean);
+                            return executeUpload(requestBean);
                         } else {
                             int code = bean.error == null ? DataConstant.NET_UNKNOWN_ERROR : bean.error.code;
                             String message = bean.error == null ? "" : bean.error.message;
@@ -179,6 +179,7 @@ public  class UpLoadFileApi extends AYRemoteApi {
 
         try {
             obj = (P) clz.newInstance();
+            obj.error = new P.ErrorBean();
             obj.error.code = code;
             obj.error.message = message;
         } catch (InstantiationException e) {

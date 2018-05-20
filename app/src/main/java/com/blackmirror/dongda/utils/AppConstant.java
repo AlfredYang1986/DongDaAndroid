@@ -51,6 +51,22 @@ public class AppConstant {
     public static final int CLOSE_STATUS=2;//1 展开 2 关闭 3 中间状态
     public static final int OTHER_STATUS=3;//1 展开 2 关闭 3 中间状态
 
+    public static final int ENROL_TIME_PAY_CODE=100;
+    public static final int ENROL_MB_PAY_CODE=101;
+    public static final int FLEXIBLE_PAY_CODE=102;
+    public static final int FIXED_PAY_CODE=103;
+
+    //设置
+    public static final int NO_SERVICE_CODE=104;
+    public static final int SHOW_ORDER_CODE=105;
+    public static final int EDIT_USER_INFO_CODE=106;
+
+    //我的收藏
+    public static final int MY_LIKE_CODE=107;
+
+
+
+
     public static final int[] teacher_bg_res_id = {
             R.drawable.avatar_0,
             R.drawable.avatar_1,
@@ -63,40 +79,6 @@ public class AppConstant {
             R.drawable.avatar_8,
             R.drawable.avatar_9
     };
-
-
-
-
-    /**
-     * url地址
-      */
-    //收藏
-    public static final String LIKE_PUSH_URL="http://192.168.100.174:9000/al/collections/push";
-    //取消收藏
-    public static final String LIKE_POP_URL="http://192.168.100.174:9000/al/collections/pop";
-    //收藏列表
-    public static final String LIKE_QUERY_LIST_URL="http://192.168.100.174:9000/al/user/collected/services";
-    //定位 附近的服务
-    public static final String NEAR_SERVICE_URL="http://192.168.100.174:9000/al/location/near";
-    //发送短信验证码
-    public static final String SEND_SMS_CODE_URL="http://192.168.100.174:9000/al/code/send";
-    //手机短信登录
-    public static final String AUTH_SMS_CODE_URL="http://192.168.100.174:9000/al/auth/code";
-    //更新用户信息
-    public static final String UPDATE_USER_INFO_URL="http://192.168.100.174:9000/al/profile/update";
-    //查询用户信息
-    public static final String QUERY_USER_INFO_URL="http://192.168.100.174:9000/al/profile/query";
-    //获取OSS信息
-    public static final String OSS_INFO_URL="http://192.168.100.174:9000/al/oss/gst";
-    //微信登陆
-    public static final String WECHAT_LOGIN_URL="http://192.168.100.174:9000/al/auth/sns";
-    //主页信息
-    public static final String HOME_PAGE_URL="http://192.168.100.174:9000/al/homepage/service";
-    //更多相关
-    public static final String SERVICE_MORE_URL="http://192.168.100.174:9000/al/service/search";
-    //服务详细信息
-    public static final String SERVICE_DETAIL_URL="http://192.168.100.174:9000/al/service/detail";
-
 
 
 }

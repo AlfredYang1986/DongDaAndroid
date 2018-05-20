@@ -210,6 +210,9 @@
 -keep class com.amap.api.navi.**{*;}
 -keep class com.autonavi.**{*;}
 
+# Dagger
+-dontwarn com.google.errorprone.annotations.**
+
 # ShareSDK
 -keep class cn.sharesdk.**{*;}
 -keep class com.sina.**{*;}

@@ -1,10 +1,13 @@
 package com.blackmirror.dongda.di.module;
 
 import com.blackmirror.dongda.data.repository.CommonRepositoryImpl;
+import com.blackmirror.dongda.domain.Interactor.DetailInfoUseCase;
 import com.blackmirror.dongda.domain.Interactor.GetMoreDataUseCase;
 import com.blackmirror.dongda.domain.Interactor.HomeUseCase;
+import com.blackmirror.dongda.domain.Interactor.LikeDataUseCase;
 import com.blackmirror.dongda.domain.Interactor.LikePopUseCase;
 import com.blackmirror.dongda.domain.Interactor.LikePushUseCase;
+import com.blackmirror.dongda.domain.Interactor.NearServiceUseCase;
 import com.blackmirror.dongda.domain.repository.CommonRepository;
 
 import dagger.Module;
@@ -40,6 +43,21 @@ public class CommonModule {
     @Provides
     GetMoreDataUseCase provideGetMoreDataUseCase(CommonRepository repository){
         return new GetMoreDataUseCase(repository);
+    }
+
+    @Provides
+    LikeDataUseCase provideLikeDataUseCase(CommonRepository repository){
+        return new LikeDataUseCase(repository);
+    }
+
+    @Provides
+    NearServiceUseCase provideNearServiceUseCase(CommonRepository repository){
+        return new NearServiceUseCase(repository);
+    }
+
+    @Provides
+    DetailInfoUseCase provideDetailInfoUseCase(CommonRepository repository){
+        return new DetailInfoUseCase(repository);
     }
 
 }

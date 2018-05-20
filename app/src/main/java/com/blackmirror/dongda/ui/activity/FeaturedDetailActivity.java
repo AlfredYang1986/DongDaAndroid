@@ -2,7 +2,6 @@ package com.blackmirror.dongda.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,35 +10,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.ui.base.AYActivity;
-import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.adapter.FeaturedDetailAdapter;
+import com.blackmirror.dongda.di.component.DaggerFeaturedDetailComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.presenter.GetMoreDataPresenter;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.DeviceUtils;
-import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.adapter.FeaturedDetailAdapter;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
-import com.blackmirror.dongda.model.uibean.CareMoreUiBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.LikePopUiBean;
-import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * 精选主题详情页
  */
-public class FeaturedDetailActivity extends AYActivity {
+public class FeaturedDetailActivity extends BaseActivity implements ListMoreContract.View{
 
-    final static String TAG = "FeaturedDetailActivity";
     private ImageView iv_featured_detail_back;
     private TextView tv_featured_tb_title;
     private RecyclerView rv_featured_detail;
@@ -54,19 +42,29 @@ public class FeaturedDetailActivity extends AYActivity {
     private int skipCount=0;
     private FeaturedDetailAdapter adapter;
     private boolean isNeedRefresh;
+    private GetMoreDataPresenter presenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_featured_detail);
-        DeviceUtils.setStatusBarColor(FeaturedDetailActivity.this);
+    protected void init() {
         pos = getIntent().getIntExtra("pos", 0);
-        initView();
-        initData();
-        initListener();
     }
 
-    private void initView() {
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_featured_detail;
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerFeaturedDetailComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getMoreDataPresenter();
+    }
+
+    @Override
+    protected void initView() {
         toolbar = findViewById(R.id.tb_toolbar);
         setSupportActionBar(toolbar);
         iv_featured_detail_back = findViewById(R.id.iv_featured_detail_back);
@@ -75,10 +73,20 @@ public class FeaturedDetailActivity extends AYActivity {
         ctl_root = findViewById(R.id.ctl_root);
     }
 
-    private void initData() {
-
+    @Override
+    protected void initData() {
         initTbTitle();
+    }
 
+    @Override
+    protected void initListener() {
+        iv_featured_detail_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+                finish();
+            }
+        });
     }
 
     private void initTbTitle() {
@@ -127,57 +135,48 @@ public class FeaturedDetailActivity extends AYActivity {
         }
     }
 
-    private void initListener() {
-        iv_featured_detail_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
-                finish();
-            }
-        });
-    }
-
     private void getServerData(int skipCount,String service_type) {
+
         showProcessDialog();
-        try {
-            AYFacade facade = facades.get("QueryServiceFacade");
-            String json = "{\"skip\" : " + skipCount + ",\"take\" : 10,\"token\": \"" + AYPrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + AYPrefUtils.getUserId() + "\",\"service_type\": \""+service_type+"\"}}";
-            JSONObject object = new JSONObject(json);
-            facade.execute("AYSubjectMoreCommand", object);
-        } catch (Exception e) {
-            closeProcessDialog();
-            LogUtils.e(FeaturedDetailActivity.class, e);
+        presenter.getServiceMoreData(skipCount, 10, service_type);
+    }
+
+    @Override
+    public void onGetServiceMoreDataSuccess(CareMoreDomainBean bean) {
+        closeProcessDialog();
+        setDataToRecyclerView(bean);
+    }
+
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, true);
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, false);
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 
-    /**
-     * 获取更多信息列表
-     *
-     * @param args
-     */
-    public void AYSubjectMoreCommandSuccess(JSONObject args) {
-        closeProcessDialog();
-        CareMoreServerBean serverBean = JSON.parseObject(args.toString(), CareMoreServerBean.class);
-        CareMoreUiBean uiBean = new CareMoreUiBean(serverBean);
-        setDataToRecyclerView(uiBean);
-    }
 
-    public void AYSubjectMoreCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    private void setDataToRecyclerView(CareMoreUiBean bean) {
+    private void setDataToRecyclerView(CareMoreDomainBean bean) {
 
         if (bean.isSuccess) {
 
-            adapter = new FeaturedDetailAdapter(FeaturedDetailActivity.this,bean.services);
+            adapter = new FeaturedDetailAdapter(FeaturedDetailActivity.this,bean);
             adapter.title = title;
             adapter.content=content;
             adapter.bg_resId=bg_resId;
@@ -194,7 +193,7 @@ public class FeaturedDetailActivity extends AYActivity {
                 }
 
                 @Override
-                public void onItemDetailLikeClick(View view, int position, CareMoreServerBean.ResultBean.ServicesBean servicesBean) {
+                public void onItemDetailLikeClick(View view, int position, CareMoreDomainBean.ServicesBean servicesBean) {
                     clickLikePos = position;
                     sendLikeData(servicesBean);
                 }
@@ -206,84 +205,12 @@ public class FeaturedDetailActivity extends AYActivity {
     }
 
 
-    private void sendLikeData(CareMoreServerBean.ResultBean.ServicesBean bean) {
-        String t = AYPrefUtils.getAuthToken();
-        String u = AYPrefUtils.getUserId();
+    private void sendLikeData(CareMoreDomainBean.ServicesBean bean) {
         showProcessDialog();
         if (bean.is_collected) {//已收藏 点击取消
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand", object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+            presenter.likePop(bean.service_id);
         } else {
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + bean.service_id + "\"},\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + bean.service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand", object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
-        }
-    }
-
-    /**
-     * 收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePushCommandSuccess(JSONObject args) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
-        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess) {
-            adapter.notifyItemChanged(clickLikePos, true);
-        } else {
-            ToastUtils.showShortToast(pushUiBean.message + "(" + pushUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePushCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    /**
-     * 取消收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePopCommandSuccess(JSONObject args) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
-        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess) {
-            adapter.notifyItemChanged(clickLikePos, false);
-        } else {
-            ToastUtils.showShortToast(popUiBean.message + "(" + popUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePopCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+            presenter.likePush(bean.service_id);
         }
     }
 
@@ -295,7 +222,6 @@ public class FeaturedDetailActivity extends AYActivity {
                 getServerData(skipCount,service_type);
             }
         }
-
     }
 
     @Override
@@ -307,34 +233,5 @@ public class FeaturedDetailActivity extends AYActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        clearMemBitMap();
-    }
-
-    private void clearMemBitMap() {
-        /*if (adapter!=null){
-            for (String url : adapter.urlSet) {
-                try {
-                    Uri uri = Uri.parse(url);
-                    ImageRequest request= ImageRequestBuilder.newBuilderWithSource(uri).build();
-                    boolean cache = Fresco.getImagePipeline().isInBitmapMemoryCache(uri);
-
-                    LogUtils.d(url+" in memory "+cache);
-                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
-                    Fresco.getImagePipeline().evictFromMemoryCache(uri);
-
-                } catch (Exception e) {
-                    LogUtils.e(ArtListActivity.class,"CacheException: ",e);
-                }
-            }
-            adapter.urlSet.clear();
-            adapter.urlSet=null;
-            adapter=null;
-        }*/
-    }
-
-
-    @Override
-    protected void bindingFragments() {
-
     }
 }

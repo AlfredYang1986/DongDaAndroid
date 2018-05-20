@@ -3,6 +3,7 @@ package com.blackmirror.dongda.ui.activity;
 import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -15,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -29,29 +29,26 @@ import com.amap.api.maps2d.model.LatLng;
 import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.ui.base.AYActivity;
+import com.blackmirror.dongda.di.component.DaggerNearServiceComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.NearServiceDomainBean;
+import com.blackmirror.dongda.presenter.NearServicePresenter;
+import com.blackmirror.dongda.ui.Contract;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
-import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.NearServiceServerBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.NearServiceUiBean;
 import com.facebook.drawee.view.SimpleDraweeView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class NearServiceActivity extends AYActivity {
+public class NearServiceActivity extends BaseActivity implements Contract.NearServiceView {
     private MapView mv_near_map;
     private AMap aMap;
     private MarkerOptions markerOption;
@@ -66,26 +63,46 @@ public class NearServiceActivity extends AYActivity {
     private TextView tv_near_dec;
     private TextView tv_near_location;
     private Map<String, Marker> markers;
-    private NearServiceUiBean uiBean;
     private PopupWindow popupWindow;
     private TranslateAnimation animation;
     private View view;
     private String lastClickMarker;
     private AlertDialog dialog;
     private String locMarkerId;
+    private NearServicePresenter presenter;
 
     //设置定位回调监听
-//mLocationClient.setLocationListener(mLocationListener);
+    //mLocationClient.setLocationListener(mLocationListener);
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_near_service);
-        initView(savedInstanceState);
+    protected int getLayoutResId() {
+        return R.layout.activity_near_service;
+    }
 
+    @Override
+    protected void init(@Nullable Bundle savedInstanceState) {
+        initView(savedInstanceState);
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerNearServiceComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getNearServicePresenter();
+
+    }
+
+    @Override
+    protected void initView() {
+
+    }
+
+    @Override
+    protected void initData() {
         initLocation();
         initAMap();
-        initListener();
     }
 
     private void initView(Bundle savedInstanceState) {
@@ -132,12 +149,13 @@ public class NearServiceActivity extends AYActivity {
 
     }
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
 
         iv_near_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (locationClient!=null){
+                if (locationClient != null) {
                     stopLocation();
                     destroyLocation();
                     finish();
@@ -167,7 +185,7 @@ public class NearServiceActivity extends AYActivity {
             // 返回 true 则表示接口已响应事件，否则返回false
             @Override
             public boolean onMarkerClick(Marker marker) {
-                LogUtils.d("onclick "+marker.getId());
+                LogUtils.d("onclick " + marker.getId());
                 if (!marker.getId().equals(locMarkerId)) {
                     refreshPopUpWindow(marker);
                 }
@@ -177,7 +195,7 @@ public class NearServiceActivity extends AYActivity {
     }
 
     private void closePopUpWindow() {
-        if (popupWindow!=null && popupWindow.isShowing()){
+        if (popupWindow != null && popupWindow.isShowing()) {
             popupWindow.dismiss();
         }
     }
@@ -185,33 +203,33 @@ public class NearServiceActivity extends AYActivity {
     private void refreshPopUpWindow(Marker marker) {
 
 
-//        LogUtils.d("is_select"+markers.get(marker.getId()).is_select);
+        //        LogUtils.d("is_select"+markers.get(marker.getId()).is_select);
 
         //重复点击
-        if (marker.getId().equals(lastClickMarker)){
+        if (marker.getId().equals(lastClickMarker)) {
             return;
         }
 
         boolean b1 = marker == markers.get(marker.getId());
 
-        LogUtils.d("marker equals "+marker.equals(markers.get(marker.getId())));
-        LogUtils.d("marker == "+b1);
+        LogUtils.d("marker equals " + marker.equals(markers.get(marker.getId())));
+        LogUtils.d("marker == " + b1);
 
         view.clearAnimation();
         closePopUpWindow();
         showPopUpWindow();
 
-        NearServiceServerBean.ResultBean.ServicesBean b= (NearServiceServerBean.ResultBean.ServicesBean) marker.getObject();
+        NearServiceDomainBean.ServicesBean b = (NearServiceDomainBean.ServicesBean) marker.getObject();
 
-        marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(b.service_type,true)));
+        marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(b.service_type, true)));
         sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image));
         tv_near_title.setText(b.service_leaf);
         StringBuilder s = new StringBuilder();
-        if (b.service_leaf.contains(getString(R.string.str_care))){
+        if (b.service_leaf.contains(getString(R.string.str_care))) {
             s.append(b.brand_name)
                     .append(getString(R.string.str_de))
                     .append(b.service_leaf);
-        }else {
+        } else {
             s.append(b.brand_name)
                     .append(getString(R.string.str_de))
                     .append(b.service_leaf)
@@ -219,24 +237,24 @@ public class NearServiceActivity extends AYActivity {
         }
         tv_near_dec.setText(s.toString());
         tv_near_location.setText(b.address);
-        NearServiceServerBean.ResultBean.ServicesBean l= (NearServiceServerBean.ResultBean.ServicesBean) markers.get(lastClickMarker).getObject();
-        markers.get(lastClickMarker).setIcon(BitmapDescriptorFactory.fromResource(getImageResId(l.service_type,false)));
+        NearServiceDomainBean.ServicesBean l = (NearServiceDomainBean.ServicesBean) markers.get(lastClickMarker).getObject();
+        markers.get(lastClickMarker).setIcon(BitmapDescriptorFactory.fromResource(getImageResId(l.service_type, false)));
 
-        lastClickMarker=marker.getId();
+        lastClickMarker = marker.getId();
 
     }
 
     private int getImageResId(String serviceType, boolean isSelect) {
-        if (serviceType.equals(getString(R.string.str_care))){
+        if (serviceType.equals(getString(R.string.str_care))) {
             return isSelect ? R.drawable.map_icon_day_care_select : R.drawable.map_icon_day_care_normal;
         }
-        if (serviceType.equals(getString(R.string.str_art))){
+        if (serviceType.equals(getString(R.string.str_art))) {
             return isSelect ? R.drawable.map_icon_art_select : R.drawable.map_icon_art_normal;
         }
-        if (serviceType.equals(getString(R.string.str_sport))){
+        if (serviceType.equals(getString(R.string.str_sport))) {
             return isSelect ? R.drawable.map_icon_sport_select : R.drawable.map_icon_sport_normal;
         }
-        if (serviceType.equals(getString(R.string.str_science))){
+        if (serviceType.equals(getString(R.string.str_science))) {
             return isSelect ? R.drawable.map_icon_science_select : R.drawable.map_icon_science_normal;
         }
         return R.drawable.map_icon_day_care_normal;
@@ -251,35 +269,28 @@ public class NearServiceActivity extends AYActivity {
             closeProcessDialog();
 
             //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
-            if(location.getErrorCode() == 0){
+            if (location.getErrorCode() == 0) {
 
                 //定位类型  location.getLocationType()
                 //经    度  location.getLongitude()
                 //纬    度  location.getLatitude()
 
-                double latitude=location.getLatitude();
-                double longitude=location.getLongitude();
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
 
                 aMap.getUiSettings().setZoomControlsEnabled(false);
                 //设置默认缩放比例 3-19
                 aMap.moveCamera(CameraUpdateFactory.zoomTo(13));
-                aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(latitude,longitude)));
+                aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(latitude, longitude)));
                 markerOption = new MarkerOptions();
-                markerOption.position(new LatLng(latitude,longitude));
+                markerOption.position(new LatLng(latitude, longitude));
                 markerOption.icon(BitmapDescriptorFactory
                         .fromResource(R.drawable.location_icon));
-                markerOption.anchor(0.5f,0.5f);
+                markerOption.anchor(0.5f, 0.5f);
                 Marker marker = aMap.addMarker(markerOption);
                 locMarkerId = marker.getId();
-                try {
-                    String json="{\"token\":\""+ AYPrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+ AYPrefUtils.getUserId()+"\"," +
-                            "\"pin\":{\"latitude\":"+latitude+",\"longitude\":"+longitude+"}}}";
 
-                    JSONObject object = new JSONObject(json);
-                    facades.get("AYMapCommonFacade").execute("AYGetNearServiceCmd",object);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                presenter.getNearService(latitude, longitude);
 
             } else {
                 StringBuilder sb = new StringBuilder();
@@ -297,53 +308,46 @@ public class NearServiceActivity extends AYActivity {
         }
     };
 
-    public void AYGetNearServiceCmdSuccess(JSONObject args) {
+    @Override
+    public void onGetNearServiceSuccess(NearServiceDomainBean bean) {
         closeProcessDialog();
-        NearServiceServerBean serverBean = JSON.parseObject(args.toString(), NearServiceServerBean.class);
+        addMarkers(bean);
+    }
 
-        uiBean = new NearServiceUiBean(serverBean);
-        if (uiBean.isSuccess){
-            addMarkers(uiBean);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+ uiBean.code+")");
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(iv_current_location, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 
-    public void AYGetNearServiceCmdFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(iv_current_location,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    private void addMarkers(NearServiceUiBean uiBean) {
+    private void addMarkers(NearServiceDomainBean bean) {
 
         showPopUpWindow();
-        for (int i = 0; i < uiBean.services.size(); i++) {
+        for (int i = 0; i < bean.services.size(); i++) {
 
             markerOption = new MarkerOptions();
-            markerOption.position(new LatLng(uiBean.services.get(i).pin.latitude,uiBean.services.get(i).pin.longitude));
-            markerOption.anchor(0.5f,0.5f);//必须加这个
+            markerOption.position(new LatLng(bean.services.get(i).pin.latitude, bean.services.get(i).pin.longitude));
+            markerOption.anchor(0.5f, 0.5f);//必须加这个
 
             Marker marker = aMap.addMarker(markerOption);
-            marker.setObject(uiBean.services.get(i));
-//            LogUtils.d("xcx","markerId== "+marker.getId());
-            if (i==0){//展示第一个
-                lastClickMarker=marker.getId();
-                NearServiceServerBean.ResultBean.ServicesBean sb = uiBean.services.get(0);
-                marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(sb.service_type,true)));
+            marker.setObject(bean.services.get(i));
+            //            LogUtils.d("xcx","markerId== "+marker.getId());
+            if (i == 0) {//展示第一个
+                lastClickMarker = marker.getId();
+                NearServiceDomainBean.ServicesBean sb = bean.services.get(0);
+                marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(sb.service_type, true)));
                 sv_near_photo.setImageURI(OSSUtils.getSignedUrl(sb.service_image));
                 tv_near_title.setText(sb.service_leaf);
                 StringBuilder s = new StringBuilder();
-                if (sb.service_leaf.contains("看顾")){
+                if (sb.service_leaf.contains("看顾")) {
                     s.append(sb.brand_name)
                             .append("的")
                             .append(sb.service_leaf);
-                }else {
+                } else {
                     s.append(sb.brand_name)
                             .append("的")
                             .append(sb.service_leaf)
@@ -351,11 +355,11 @@ public class NearServiceActivity extends AYActivity {
                 }
                 tv_near_dec.setText(s.toString());
                 tv_near_location.setText(sb.address);
-            }else {
+            } else {
                 marker.setIcon(BitmapDescriptorFactory
-                        .fromResource(getImageResId(uiBean.services.get(i).service_type,false)));
+                        .fromResource(getImageResId(bean.services.get(i).service_type, false)));
             }
-            markers.put(marker.getId(),marker);
+            markers.put(marker.getId(), marker);
         }
 
     }
@@ -368,7 +372,7 @@ public class NearServiceActivity extends AYActivity {
             tv_near_dec = view.findViewById(R.id.tv_near_dec);
             tv_near_location = view.findViewById(R.id.tv_near_location);
         }
-        if (popupWindow == null){
+        if (popupWindow == null) {
             popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindow.setFocusable(true);// 取得焦点
             //注意  要是点击外部空白处弹框消息  那么必须给弹框设置一个背景色  不然是不起作用的
@@ -408,16 +412,19 @@ public class NearServiceActivity extends AYActivity {
         mv_near_map.onDestroy();
         stopLocation();
         destroyLocation();
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 
     /**
      * 停止定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void stopLocation(){
+    private void stopLocation() {
         // 停止定位
         if (locationClient != null) {
             locationClient.stopLocation();
@@ -427,11 +434,10 @@ public class NearServiceActivity extends AYActivity {
     /**
      * 销毁定位
      *
-     * @since 2.8.0
      * @author hongming.wang
-     *
+     * @since 2.8.0
      */
-    private void destroyLocation(){
+    private void destroyLocation() {
         if (null != locationClient) {
             /**
              * 如果AMapLocationClient是在当前Activity实例化的，
@@ -444,18 +450,13 @@ public class NearServiceActivity extends AYActivity {
     }
 
     @Override
-    protected void bindingFragments() {
-
-    }
-
-    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
         mv_near_map.onSaveInstanceState(outState);
     }
 
-    public  String formatUTC(long l, String strPattern) {
+    public String formatUTC(long l, String strPattern) {
         SimpleDateFormat sdf = null;
         if (TextUtils.isEmpty(strPattern)) {
             strPattern = "yyyy-MM-dd HH:mm:ss";
@@ -473,12 +474,13 @@ public class NearServiceActivity extends AYActivity {
 
     /**
      * 获取GPS状态的字符串
+     *
      * @param statusCode GPS状态码
      * @return
      */
-    private void showLocationDialog(int statusCode){
+    private void showLocationDialog(int statusCode) {
         String str = "";
-        switch (statusCode){
+        switch (statusCode) {
             case AMapLocationQualityReport.GPS_STATUS_OK:
                 str = "GPS状态正常";
                 break;
@@ -525,4 +527,5 @@ public class NearServiceActivity extends AYActivity {
         dialog.show();
 
     }
+
 }

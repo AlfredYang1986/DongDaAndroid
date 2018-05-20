@@ -1,9 +1,6 @@
 package com.blackmirror.dongda.ui.activity.Landing;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
@@ -14,8 +11,8 @@ import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
-import com.blackmirror.dongda.ui.activity.enrol.ChooseEnrolLocActivity;
-import com.blackmirror.dongda.ui.base.AYActivity;
+import com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.DongdaApplication;
@@ -35,9 +32,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class LandingActivity extends AYActivity implements WeChatLoginContract.View{
+public class LandingActivity extends BaseActivity implements WeChatLoginContract.View{
 
-    final static String TAG = "Landing Activity";
     private TextView tv_phone_login;
     private TextView tv_wechat_login;
     private Disposable errorDb;
@@ -46,19 +42,17 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
-        //在setContentView之后调用
-        DeviceUtils.initSystemBarColor(this);
-        initInject();
-        initView();
-        initData();
-        DongdaApplication.addActivity(this);
-        initListener();
+    protected int getLayoutResId() {
+        return R.layout.activity_landing;
     }
 
-    private void initInject() {
+    @Override
+    protected void init() {
+        DongdaApplication.addActivity(this);
+    }
+
+    @Override
+    protected void initInject() {
         presenter = DaggerLandingComponent.builder()
                 .activity(this)
                 .view(this)
@@ -66,21 +60,23 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
                 .getWeChatLoginPresenter();
     }
 
-    private void initView() {
+    @Override
+    protected void initView() {
         tv_phone_login = findViewById(R.id.tv_phone_login);
         tv_wechat_login = findViewById(R.id.tv_wechat_login);
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
     }
 
-
-    private void initListener() {
+    @Override
+    protected void initListener() {
 
         tv_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, ChooseEnrolLocActivity.class);
+                Intent intent = new Intent(LandingActivity.this, ServiceDetailInfoActivity.class);
                 startActivity(intent);
             }
         });
@@ -211,7 +207,7 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
 
     @Override
     protected void setStatusBarColor() {
-
+        DeviceUtils.initSystemBarColor(this);
     }
 
     private void unSubscribe() {
@@ -231,28 +227,6 @@ public class LandingActivity extends AYActivity implements WeChatLoginContract.V
     protected void onDestroy() {
         super.onDestroy();
         unSubscribe();
-    }
-
-    @Override
-    public String getClassTag() {
-        return TAG;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case AppConstant.PERMISSION_REQUEST:
-                for (int i = 0; i < grantResults.length; i++) {
-                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        LogUtils.d("xcx", permissions[i] + " granted");
-                    } else {
-                        LogUtils.d("xcx", permissions[i] + " denied");
-
-                    }
-                }
-                break;
-        }
     }
 
 }

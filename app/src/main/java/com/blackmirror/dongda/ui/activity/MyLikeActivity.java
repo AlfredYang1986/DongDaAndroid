@@ -3,7 +3,6 @@ package com.blackmirror.dongda.ui.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,29 +10,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.ui.base.AYActivity;
-import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.adapter.MyLikeListAdapter;
+import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
+import com.blackmirror.dongda.di.component.DaggerMyLikeComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.LikeDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.presenter.MyLikePresenter;
+import com.blackmirror.dongda.ui.Contract;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
-import com.blackmirror.dongda.adapter.MyLikeListAdapter;
-import com.blackmirror.dongda.adapter.itemdecoration.TopItemDecoration;
-import com.blackmirror.dongda.facade.AYFacade;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
-import com.blackmirror.dongda.model.serverbean.QueryLikeServerBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.LikePopUiBean;
-import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-import com.blackmirror.dongda.model.uibean.QueryLikeUiBean;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-public class MyLikeActivity extends AYActivity {
+public class MyLikeActivity extends BaseActivity implements Contract.MyLikeView {
 
     private CoordinatorLayout ctl_root;
     private RecyclerView rv_my_like;
@@ -42,17 +34,24 @@ public class MyLikeActivity extends AYActivity {
     private MyLikeListAdapter adapter;
     private int clickLikePos;
     private AlertDialog dialog;
+    private MyLikePresenter presenter;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_my_like);
-        initView();
-        initData();
-        initListener();
+    protected int getLayoutResId() {
+        return R.layout.activity_my_like;
     }
 
-    private void initView() {
+    @Override
+    protected void initInject() {
+        presenter = DaggerMyLikeComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getMyLikePresenter();
+    }
+
+    @Override
+    protected void initView() {
         ctl_root = findViewById(R.id.ctl_root);
         rv_my_like = findViewById(R.id.rv_my_like);
         iv_home_head_back = findViewById(R.id.iv_home_head_back);
@@ -60,11 +59,13 @@ public class MyLikeActivity extends AYActivity {
         tv_home_head_title.setText(R.string.my_collection);
     }
 
-    private void initData() {
+    @Override
+    protected void initData() {
         getLikeData();
     }
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,64 +75,67 @@ public class MyLikeActivity extends AYActivity {
     }
 
     private void getLikeData() {
-        try {
-            showProcessDialog();
-            AYFacade facade = facades.get("QueryServiceFacade");
-            String json="{\"token\":\""+ AYPrefUtils.getAuthToken()+"\",\"condition\":{\"user_id\":\""+ AYPrefUtils.getUserId()+"\"}}";
-            JSONObject object = new JSONObject(json);
-            facade.execute("AYLikeQueryCommand",object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        showProcessDialog();
+        presenter.getLikeData();
     }
 
-    /**
-     * 收藏列表
-     * @param args
-     */
-    public void AYLikeQueryCommandSuccess(JSONObject args){
+    @Override
+    public void onGetLikeDataSuccess(LikeDomainBean bean) {
         closeProcessDialog();
-        final QueryLikeServerBean serverBean = JSON.parseObject(args.toString(), QueryLikeServerBean.class);
-        QueryLikeUiBean bean = new QueryLikeUiBean(serverBean);
-        if (bean.isSuccess){
-            adapter = new MyLikeListAdapter(MyLikeActivity.this, bean.services);
-            rv_my_like.setLayoutManager(new LinearLayoutManager(MyLikeActivity.this));
-            rv_my_like.setAdapter(adapter);
-            rv_my_like.addItemDecoration(new TopItemDecoration(40,40));
-            adapter.setOnLikeListClickListener(new MyLikeListAdapter.OnLikeListClickListener() {
-                @Override
-                public void onItemLikeListClick(View view, int position, String service_id) {
-                    Intent intent = new Intent(MyLikeActivity.this, ServiceDetailInfoActivity.class);
-                    intent.putExtra("service_id",service_id);
-                    startActivity(intent);
-                }
+        adapter = new MyLikeListAdapter(MyLikeActivity.this, bean);
+        rv_my_like.setLayoutManager(new LinearLayoutManager(MyLikeActivity.this));
+        rv_my_like.setAdapter(adapter);
+        rv_my_like.addItemDecoration(new TopItemDecoration(40, 40));
+        adapter.setOnLikeListClickListener(new MyLikeListAdapter.OnLikeListClickListener() {
+            @Override
+            public void onItemLikeListClick(View view, int position, String service_id) {
+                Intent intent = new Intent(MyLikeActivity.this, ServiceDetailInfoActivity.class);
+                intent.putExtra("service_id", service_id);
+                startActivity(intent);
+            }
 
-                @Override
-                public void onItemLikeClick(View view, int position, QueryLikeServerBean
-                        .ResultBean.ServicesBean likeBean) {
-                    clickLikePos=position;
-                    showConfirmUnLikeDialog(position, likeBean);
-//                    sendLikeData(likeBean);
-                }
-            });
-        }else {
-            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
-        }
+            @Override
+            public void onItemLikeClick(View view, int position, LikeDomainBean.ServicesBean likeBean) {
+                clickLikePos = position;
+                showConfirmUnLikeDialog(position, likeBean);
+                //                    sendLikeData(likeBean);
+            }
+        });
+
     }
 
-    public void AYLikeQueryCommandFailed(JSONObject args) {
-
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
         closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code== AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
+        adapter.notifyItemChanged(clickLikePos, true);
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        closeProcessDialog();
+        adapter.removeItem(clickLikePos);
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
         }
     }
 
-    private void showConfirmUnLikeDialog(int position, final QueryLikeServerBean.ResultBean.ServicesBean bean) {
+    private void sendLikeData(LikeDomainBean.ServicesBean bean) {
+        showProcessDialog();
+        if (bean.is_collected) {//已收藏 点击取消
+            presenter.likePop(bean.service_id);
+        } else {
+            presenter.likePush(bean.service_id);
+        }
+    }
+
+    private void showConfirmUnLikeDialog(int position, final LikeDomainBean.ServicesBean bean) {
         dialog = new AlertDialog.Builder(MyLikeActivity.this)
                 .setCancelable(false)
                 .setTitle(R.string.dlg_tips)
@@ -153,86 +157,12 @@ public class MyLikeActivity extends AYActivity {
 
     }
 
-    private void sendLikeData(QueryLikeServerBean.ResultBean.ServicesBean bean) {
-        String t= AYPrefUtils.getAuthToken();
-        String u= AYPrefUtils.getUserId();
-        showProcessDialog();
-        if (bean.is_collected){//已收藏 点击取消
-            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePopCommand",object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
-        }else {
-            String json="{\"token\":\""+t+"\",\"condition\": {\"user_id\":\""+u+"\",\"service_id\":\""+bean.service_id+"\"},\"collections\":{\"user_id\": \""+u+"\",\"service_id\":\""+bean.service_id+"\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("QueryServiceFacade").execute("AYLikePushCommand",object);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
-        }
-    }
-
-    /**
-     * 收藏相关
-     * @param args
-     */
-    public void AYLikePushCommandSuccess(JSONObject args){
-        closeProcessDialog();
-        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
-        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess){
-            adapter.notifyItemChanged(clickLikePos,true);
-        }else {
-            ToastUtils.showShortToast(pushUiBean.message+"("+pushUiBean.code+")");
-        }
-    }
-
-    public void AYLikePushCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
-    /**
-     * 取消收藏相关
-     * @param args
-     */
-    public void AYLikePopCommandSuccess(JSONObject args){
-        closeProcessDialog();
-        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
-        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess){
-//            adapter.notifyItemChanged(clickLikePos,false);
-            adapter.removeItem(clickLikePos);
-        }else {
-            ToastUtils.showShortToast(popUiBean.message+"("+popUiBean.code+")");
-        }
-    }
-
-    public void AYLikePopCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(ctl_root,uiBean.message);
-        }else {
-            ToastUtils.showShortToast(uiBean.message+"("+uiBean.code+")");
-        }
-    }
-
     @Override
-    protected void bindingFragments() {
-
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dialog !=null && dialog.isShowing()){
+            dialog.dismiss();
+            dialog = null;
+        }
     }
 }

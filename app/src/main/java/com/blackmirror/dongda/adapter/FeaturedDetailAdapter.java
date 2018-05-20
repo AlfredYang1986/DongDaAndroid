@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
 import com.blackmirror.dongda.utils.DensityUtils;
 import com.blackmirror.dongda.utils.OSSUtils;
-import com.blackmirror.dongda.model.serverbean.CareMoreServerBean;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.interfaces.DraweeController;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -22,6 +22,7 @@ import com.facebook.imagepipeline.common.ResizeOptions;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,8 @@ import java.util.List;
  */
 public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<CareMoreServerBean.ResultBean.ServicesBean> list;
+    private CareMoreDomainBean bean;
+    private List<CareMoreDomainBean.ServicesBean> list;
     protected Context context;
     public String title;
     public String content;
@@ -47,9 +49,14 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.listener = listener;
     }
 
-    public FeaturedDetailAdapter(Context context, List<CareMoreServerBean.ResultBean.ServicesBean> list) {
+    public FeaturedDetailAdapter(Context context, CareMoreDomainBean bean) {
         this.context = context;
-        this.list = list;
+        this.bean = bean;
+        if (bean == null || bean.services == null){
+            list = new ArrayList<>();
+        }else {
+            list = bean.services;
+        }
     }
 
     @Override
@@ -84,7 +91,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             hierarchy.setRoundingParams(roundingParams);
             vh.sv_featured_detail_photo.setHierarchy(hierarchy);*/
 
-            CareMoreServerBean.ResultBean.ServicesBean servicesBean = list.get(position-1);
+            CareMoreDomainBean.ServicesBean servicesBean = list.get(position-1);
 
 
             String url= OSSUtils.getSignedUrl(servicesBean.service_image,30*60);
@@ -140,7 +147,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
-    private void initListener(final NormalViewHolder holder, int position, final CareMoreServerBean.ResultBean.ServicesBean servicesBean) {
+    private void initListener(final NormalViewHolder holder, int position, final CareMoreDomainBean.ServicesBean servicesBean) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,8 +161,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-                    listener.onItemDetailLikeClick(holder.fl_featured_detail_like, holder
-                            .getAdapterPosition(),servicesBean);
+                    listener.onItemDetailLikeClick(holder.fl_featured_detail_like, holder.getAdapterPosition(),servicesBean);
                 }
             }
         });
@@ -239,8 +245,7 @@ public class FeaturedDetailAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public interface OnDetailListClickListener {
         void onItemDetailListClick(View view, int position, String service_id);
 
-        void onItemDetailLikeClick(View view, int position, CareMoreServerBean.ResultBean
-                .ServicesBean servicesBean);
+        void onItemDetailLikeClick(View view, int position, CareMoreDomainBean.ServicesBean servicesBean);
     }
 
 }

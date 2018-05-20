@@ -133,6 +133,45 @@ public class CareListActivity extends BaseActivity implements ListMoreContract.V
         });
     }
 
+    @Override
+    public void onGetServiceMoreDataSuccess(CareMoreDomainBean bean) {
+        closeProcessDialog();
+        if (sl_care_list.getState().opening) {
+            sl_care_list.finishLoadMore();
+            sl_care_list.finishRefresh();
+        }
+        setDataToRecyclerView(bean);
+    }
+
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, true);
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        adapter.notifyItemChanged(clickLikePos, false);
+
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (sl_care_list.getState().opening) {
+            sl_care_list.finishLoadMore(false);
+            sl_care_list.finishRefresh(false);
+        }
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
+        }
+    }
+
     private void setDataToRecyclerView(CareMoreDomainBean bean) {
 
         if (bean.isSuccess) {
@@ -193,42 +232,5 @@ public class CareListActivity extends BaseActivity implements ListMoreContract.V
         super.onDestroy();
     }
 
-
-    @Override
-    public void onGetServiceMoreDataSuccess(CareMoreDomainBean bean) {
-        if (sl_care_list.getState().opening) {
-            sl_care_list.finishLoadMore();
-            sl_care_list.finishRefresh();
-        }
-        setDataToRecyclerView(bean);
-    }
-
-    @Override
-    public void onLikePushSuccess(LikePushDomainBean bean) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        adapter.notifyItemChanged(clickLikePos, true);
-    }
-
-    @Override
-    public void onLikePopSuccess(LikePopDomainBean bean) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        adapter.notifyItemChanged(clickLikePos, false);
-
-    }
-
-    @Override
-    public void onGetDataError(BaseDataBean bean) {
-        if (sl_care_list.getState().opening) {
-            sl_care_list.finishLoadMore(false);
-            sl_care_list.finishRefresh(false);
-        }
-        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, bean.message);
-        } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
-        }
-    }
 
 }

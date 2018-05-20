@@ -52,7 +52,7 @@
             app:layout_constraintLeft_toLeftOf="@id/tv_brand_loc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="B座1号楼3层"
+            android:text=""
             android:textColor="#FFA6A6A6"
             android:textSize="15sp"
             />

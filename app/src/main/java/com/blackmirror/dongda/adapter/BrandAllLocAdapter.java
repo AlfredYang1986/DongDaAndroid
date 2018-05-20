@@ -35,17 +35,17 @@ public class BrandAllLocAdapter extends RecyclerView.Adapter<BrandAllLocAdapter.
     @Override
     public void onBindViewHolder(BrandAllLocHolder holder, int position) {
         holder.tv_brand_loc.setText(bean.locations.get(position).address);
-        initListener(holder, position,bean);
+        initListener(holder, position,bean.locations.get(position));
 
     }
 
-    private void initListener(final BrandAllLocHolder holder, final int position, final BrandAllLocDomainBean servicesBean) {
+    private void initListener(final BrandAllLocHolder holder, final int position, final BrandAllLocDomainBean.LocationsBean bean) {
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (listener != null) {
-//                    listener.onItemClick(holder.itemView,holder.getAdapterPosition(),servicesBean.service_id);
+                    listener.onItemClick(holder.itemView,holder.getAdapterPosition(),bean);
                 }
             }
         });
@@ -53,7 +53,7 @@ public class BrandAllLocAdapter extends RecyclerView.Adapter<BrandAllLocAdapter.
 
     @Override
     public int getItemCount() {
-        if (bean.locations != null) {
+        if (bean != null && bean.locations != null) {
             return bean.locations.size();
         }
         return 0;
@@ -74,7 +74,7 @@ public class BrandAllLocAdapter extends RecyclerView.Adapter<BrandAllLocAdapter.
 
     public interface OnItemClickListener {
 
-        void onItemClick(View view, int position, String service_id);
+        void onItemClick(View view, int position, BrandAllLocDomainBean.LocationsBean bean);
 
     }
 

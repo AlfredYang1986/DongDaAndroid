@@ -16,7 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alibaba.fastjson.JSON;
 import com.amap.api.maps2d.AMap;
 import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.MapView;
@@ -26,20 +25,19 @@ import com.amap.api.maps2d.model.MarkerOptions;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.adapter.AddrDecInfoAdapter;
 import com.blackmirror.dongda.adapter.PhotoDetailAdapter;
+import com.blackmirror.dongda.di.component.DaggerServiceDetailInfoComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.DetailInfoDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.model.DetailInfoServiceImagesBean;
 import com.blackmirror.dongda.model.ServiceDetailPhotoBean;
 import com.blackmirror.dongda.model.ServiceProfileBean;
-import com.blackmirror.dongda.model.serverbean.ErrorInfoServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePopServerBean;
-import com.blackmirror.dongda.model.serverbean.LikePushServerBean;
-import com.blackmirror.dongda.model.serverbean.ServiceDetailInfoServerBean;
-import com.blackmirror.dongda.model.uibean.ErrorInfoUiBean;
-import com.blackmirror.dongda.model.uibean.LikePopUiBean;
-import com.blackmirror.dongda.model.uibean.LikePushUiBean;
-import com.blackmirror.dongda.model.uibean.SafeUiBean;
-import com.blackmirror.dongda.model.uibean.ServiceDetailInfoUiBean;
-import com.blackmirror.dongda.ui.base.AYActivity;
+import com.blackmirror.dongda.model.SafeUiBean;
+import com.blackmirror.dongda.presenter.DetailInfoPresenter;
+import com.blackmirror.dongda.ui.Contract;
+import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.ui.view.SlidingTabLayout;
-import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.CalUtils;
 import com.blackmirror.dongda.utils.DeviceUtils;
@@ -49,15 +47,12 @@ import com.blackmirror.dongda.utils.StringUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class ServiceDetailInfoActivity extends AYActivity implements View.OnClickListener {
+public class ServiceDetailInfoActivity extends BaseActivity implements View.OnClickListener, Contract.DetailInfoView{
 
     private ViewPager vp_detail_photo;
     private SlidingTabLayout tl_detail_tab;
@@ -87,7 +82,6 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     private MapView mv_detail_location;
     private AMap aMap;
     private MarkerOptions markerOption;
-    private ServiceDetailInfoUiBean uiBean;
     private boolean isNeedRefresh;
     private CoordinatorLayout ctl_root;
     private Toolbar tb_toolbar;
@@ -100,20 +94,36 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
     private TextView tv_addr_safe;
     private View view_line_4;
     private int randomInt;
+    private DetailInfoPresenter presenter;
+    private DetailInfoDomainBean bean;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_info);
+    protected void init(Bundle savedInstanceState) {
         service_id = getIntent().getStringExtra("service_id");
-        setTitle("");
         initView(savedInstanceState);
-        initData();
-        initListener();
-        DeviceUtils.initSystemBarColor(this);
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_detail_info;
+    }
+
+    @Override
+    protected void initInject() {
+        presenter = DaggerServiceDetailInfoComponent.builder()
+                .activity(this)
+                .view(this)
+                .build()
+                .getDetailInfoPresenter();
+    }
+
+    @Override
+    protected void initView() {
+
     }
 
     private void initView(Bundle savedInstanceState) {
+        setTitle("");
         ctl_root = findViewById(R.id.ctl_root);
         vp_detail_photo = findViewById(R.id.vp_detail_photo);
         tl_detail_tab = findViewById(R.id.tl_detail_tab);
@@ -169,19 +179,13 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         aMap.moveCamera(CameraUpdateFactory.zoomTo(15));*/
     }
 
-    private void initData() {
-        try {
-            showProcessDialog();
-            String json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"service_id\":\"" + service_id + "\"}}";
-            JSONObject object = new JSONObject(json);
-            facades.get("AYDetailInfoFacade").execute("AYGetDetailInfoCmd", object);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
+    @Override
+    protected void initData() {
+        presenter.getDetailInfo(service_id);
     }
 
-    private void initListener() {
+    @Override
+    protected void initListener() {
         iv_detail_back.setOnClickListener(this);
         iv_detail_tb_back.setOnClickListener(this);
         tv_dec_more.setOnClickListener(this);
@@ -203,7 +207,7 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                     }
                 } else {//其他状态
                     if (status != AppConstant.OTHER_STATUS) {
-                        status = AppConstant.CLOSE_STATUS;
+                        status = AppConstant.OTHER_STATUS;
                         hideTb();
                     }
                 }
@@ -223,30 +227,30 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
                 if (tv_dec_more.getText().equals(getString(R.string.open_dec_more))) {
                     tv_dec_more.setText(R.string.close_dec_more);
                     tv_service_dec_content.setMaxLines(100);
-                    tv_service_dec_content.setText(uiBean.service.description);
+                    tv_service_dec_content.setText(bean.description);
                 } else {
                     tv_dec_more.setText(getString(R.string.open_dec_more));
                     tv_service_dec_content.setMaxLines(4);
-                    tv_service_dec_content.setText(uiBean.service.description);
+                    tv_service_dec_content.setText(bean.description);
                 }
 
                 break;
             case R.id.iv_detail_tb_like:
             case R.id.iv_detail_like:
-                if (uiBean != null && uiBean.isSuccess) {
+                if (bean != null && bean.isSuccess) {
                     sendLikeData();
                 }
                 break;
             case R.id.sv_teacher_bg:
-                ServiceProfileBean bean = new ServiceProfileBean();
+                ServiceProfileBean sb = new ServiceProfileBean();
                 Intent intent = new Intent(ServiceDetailInfoActivity.this, ServiceProfileActivity
                         .class);
-                if (uiBean != null && uiBean.isSuccess) {
+                if (bean != null && bean.isSuccess) {
 
-                    bean.res_id = randomInt;
-                    bean.brand_tag = uiBean.service.brand.brand_tag;
-                    bean.brand_name = uiBean.service.brand.brand_name;
-                    bean.about_brand = uiBean.service.brand.about_brand;
+                    sb.res_id = randomInt;
+                    sb.brand_tag = bean.brand_tag;
+                    sb.brand_name = bean.brand_name;
+                    sb.about_brand = bean.about_brand;
 
                 }
                 intent.putExtra("bean",bean);
@@ -255,23 +259,59 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         }
     }
 
+    @Override
+    public void onGetDetailInfoSuccess(DetailInfoDomainBean dbean) {
+        closeProcessDialog();
+        bean = dbean;
+        setData(dbean);
+    }
+
+
+    @Override
+    public void onLikePushSuccess(LikePushDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        this.bean.is_collected = true;
+        iv_detail_like.setImageResource(R.drawable.like_selected);
+    }
+
+    @Override
+    public void onLikePopSuccess(LikePopDomainBean bean) {
+        isNeedRefresh = true;
+        closeProcessDialog();
+        this.bean.is_collected = false;
+        iv_detail_like.setImageResource(R.drawable.home_art_like);
+    }
+
+    @Override
+    public void onGetDataError(BaseDataBean bean) {
+        closeProcessDialog();
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(ctl_root, bean.message);
+        } else {
+            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
+        }
+    }
+
     private void showTb() {
+        DeviceUtils.setStatusBarColor(this);
         tb_toolbar.setVisibility(View.VISIBLE);
         tb_toolbar.setBackgroundColor(getResources().getColor(R.color.sys_bar_white));
         cl_tb_content.setVisibility(View.VISIBLE);
     }
 
     private void hideTb() {
+        DeviceUtils.initSystemBarColor(this);
         tb_toolbar.setVisibility(View.GONE);
         tb_toolbar.setBackgroundColor(Color.TRANSPARENT);
         cl_tb_content.setVisibility(View.GONE);
     }
 
 
-    private void addMarkers(ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.PinBean pin) {
+    private void addMarkers(double latitude, double longitude) {
 
         //设置默认缩放比例 3-19
-        LatLng latLng = new LatLng(pin.latitude, pin.longitude);
+        LatLng latLng = new LatLng(latitude, longitude);
         aMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
         aMap.moveCamera(CameraUpdateFactory.zoomTo(14));
         markerOption = new MarkerOptions();
@@ -282,9 +322,9 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         aMap.addMarker(markerOption);
     }
 
-    private void setData(ServiceDetailInfoUiBean bean) {
+    private void setData(DetailInfoDomainBean bean) {
 
-        if (bean.service.is_collected) {
+        if (bean.is_collected) {
             iv_detail_like.setImageResource(R.drawable.like_selected);
         } else {
             iv_detail_like.setImageResource(R.drawable.home_art_like);
@@ -293,17 +333,20 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         List<ServiceDetailPhotoBean> tabList = new ArrayList<>();
 
 
-        for (ServiceDetailInfoServerBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean image : bean.service.location.location_images) {
+        for (DetailInfoDomainBean.LocationImagesBean image : bean.location_images) {
             tabList.add(new ServiceDetailPhotoBean(image.tag, image.image));
             tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
         }
 
-        List<ServiceDetailInfoServerBean.ResultBean.ServiceBean.ServiceImagesBean> array = new ArrayList<>();
+        List<DetailInfoServiceImagesBean> array = new ArrayList<>();
 
-        for (ServiceDetailInfoServerBean.ResultBean.ServiceBean.ServiceImagesBean image : bean.service.service_images) {
+        for (DetailInfoDomainBean.ServiceImagesBean image : bean.service_images) {
 
             if (StringUtils.isNumber(image.tag)) {
-                array.add(image);
+                DetailInfoServiceImagesBean sb = new DetailInfoServiceImagesBean();
+                sb.image = image.image;
+                sb.tag = image.tag;
+                array.add(sb);
             } else {
                 tabList.add(new ServiceDetailPhotoBean(image.tag, image.image));
                 tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag));
@@ -326,68 +369,68 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         vp_detail_photo.addOnPageChangeListener(new SlidingTabLayout.MyTabLayoutOnPageChangeListener(tl_detail_tab));
         tl_detail_tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_detail_photo));
 
-        tv_detail_content.setText("\"" + bean.service.punchline + "\"");//第一个描述
+        tv_detail_content.setText("\"" + bean.punchline + "\"");//第一个描述
 
         StringBuilder sb = new StringBuilder();
 
-        if (bean.service.service_type.contains(getString(R.string.str_care))) {
-            sb.append(bean.service.service_leaf);
+        if (bean.service_type.contains(getString(R.string.str_care))) {
+            sb.append(bean.service_leaf);
             tv_detail_type.setVisibility(View.VISIBLE);
         } else {
-            sb.append(bean.service.service_type)
+            sb.append(bean.service_type)
                     .append("·")
-                    .append(bean.service.service_leaf)
-                    .append(bean.service.category);
+                    .append(bean.service_leaf)
+                    .append(bean.category);
             tv_detail_type.setVisibility(View.GONE);
         }
 
         tv_detail_course.setText(sb.toString());//课程
-        tv_detail_type.setText(bean.service.service_tags.get(0));//名校团队
+        tv_detail_type.setText(bean.service_tags.get(0));//名校团队
 
         StringBuilder range = new StringBuilder();
-        range.append(bean.service.min_age)
+        range.append(bean.min_age)
                 .append("-")
-                .append(bean.service.max_age)
+                .append(bean.max_age)
                 .append(getString(R.string.str_age));
         tv_age_range.setText(range.toString());//年龄范围
 
-        checkClassMaxStu(bean.service.class_max_stu);
+        checkClassMaxStu(bean.class_max_stu);
 
-        tv_class_mb_no.setText(bean.service.class_max_stu + "");//班级人数
+        tv_class_mb_no.setText(bean.class_max_stu + "");//班级人数
 
-        int m = CalUtils.getGongyue(bean.service.class_max_stu, bean.service.teacher_num);
+        int m = CalUtils.getGongyue(bean.class_max_stu, bean.teacher_num);
         StringBuilder radio = new StringBuilder();
-        radio.append(bean.service.teacher_num / m)
+        radio.append(bean.teacher_num / m)
                 .append(":")
-                .append(bean.service.class_max_stu);
+                .append(bean.class_max_stu);
         tv_t_s_ratio.setText(radio.toString());
 
 
-        tv_course_name.setText(bean.service.brand.brand_name);//课程名称
-        tv_teacher_name.setText(String.format(getString(R.string.str_teacher),bean.service.brand.brand_name));//
+        tv_course_name.setText(bean.brand_name);//课程名称
+        tv_teacher_name.setText(String.format(getString(R.string.str_teacher),bean.brand_name));//
 
         Random random = new Random();
         randomInt = random.nextInt(10);
         randomInt = randomInt > 9 || randomInt < 0 ? 0 : randomInt;
         sv_teacher_bg.setImageURI(OtherUtils.resourceIdToUri(ServiceDetailInfoActivity.this, AppConstant.teacher_bg_res_id[randomInt]));
 
-        tv_brand_tag.setText(bean.service.brand.brand_tag);//
+        tv_brand_tag.setText(bean.brand_tag);//
 
-        tv_service_dec_content.setText(bean.service.description);
+        tv_service_dec_content.setText(bean.description);
 
-        tv_service_dec_content_more.setText(bean.service.brand.about_brand);
+        tv_service_dec_content_more.setText(bean.about_brand);
 
         StringBuilder type = new StringBuilder();
-        for (int i = 0; i < bean.service.operation.size(); i++) {
+        for (int i = 0; i < bean.operation.size(); i++) {
             type.append("#")
-                    .append(bean.service.operation.get(i))
+                    .append(bean.operation.get(i))
                     .append("# ");
         }
         tv_service_type.setText(type.toString());//
 
         List<SafeUiBean> list = new ArrayList<>();
-        for (int i = 0; i < bean.service.location.friendliness.size(); i++) {
-            String s = bean.service.location.friendliness.get(i);
+        for (int i = 0; i < bean.friendliness.size(); i++) {
+            String s = bean.friendliness.get(i);
             SafeUiBean b = new SafeUiBean();
             b.dec = s;
             if (s.equals(getString(R.string.new_wind_sys))) {
@@ -431,9 +474,9 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
             rv_addr_safe.setAdapter(decInfoAdapter);
         }
 
-        tv_service_location.setText(bean.service.location.address);
+        tv_service_location.setText(bean.address);
 
-        addMarkers(bean.service.location.pin);
+        addMarkers(bean.latitude,bean.longitude);
     }
 
     /**
@@ -459,110 +502,12 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
         }
     }
 
-    public void AYGetDetailInfoCmdSuccess(JSONObject args) {
-        closeProcessDialog();
-        ServiceDetailInfoServerBean serverBean = JSON.parseObject(args.toString(), ServiceDetailInfoServerBean.class);
-        uiBean = new ServiceDetailInfoUiBean(serverBean);
-        if (uiBean.isSuccess) {
-            setData(uiBean);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
-    public void AYGetDetailInfoCmdFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
-    /**
-     * 收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePushCommandSuccess(JSONObject args) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePushServerBean serverBean = JSON.parseObject(args.toString(), LikePushServerBean.class);
-        LikePushUiBean pushUiBean = new LikePushUiBean(serverBean);
-        if (pushUiBean.isSuccess) {
-            uiBean.service.is_collected = true;
-            iv_detail_like.setImageResource(R.drawable.like_selected);
-        } else {
-            ToastUtils.showShortToast(pushUiBean.message + "(" + pushUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePushCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
-    /**
-     * 取消收藏相关
-     *
-     * @param args
-     */
-    public void AYLikePopCommandSuccess(JSONObject args) {
-        isNeedRefresh = true;
-        closeProcessDialog();
-        LikePopServerBean serverBean = JSON.parseObject(args.toString(), LikePopServerBean.class);
-        LikePopUiBean popUiBean = new LikePopUiBean(serverBean);
-        if (popUiBean.isSuccess) {
-            uiBean.service.is_collected = false;
-            iv_detail_like.setImageResource(R.drawable.home_art_like);
-        } else {
-            ToastUtils.showShortToast(popUiBean.message + "(" + popUiBean.code + ")");
-        }
-    }
-
-    public void AYLikePopCommandFailed(JSONObject args) {
-        closeProcessDialog();
-        ErrorInfoServerBean serverBean = JSON.parseObject(args.toString(), ErrorInfoServerBean.class);
-        ErrorInfoUiBean uiBean = new ErrorInfoUiBean(serverBean);
-        if (uiBean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, uiBean.message);
-        } else {
-            ToastUtils.showShortToast(uiBean.message + "(" + uiBean.code + ")");
-        }
-    }
-
     private void sendLikeData() {
-        String t = AYPrefUtils.getAuthToken();
-        String u = AYPrefUtils.getUserId();
         showProcessDialog();
-        if (uiBean.service.is_collected) {//已收藏 点击取消
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + service_id + "\"}," +
-                    "\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("AYDetailInfoFacade").execute("AYLikePopCommand", object);
-            } catch (Exception e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+        if (bean.is_collected) {//已收藏 点击取消
+            presenter.likePop(bean.service_id);
         } else {
-            String json = "{\"token\":\"" + t + "\",\"condition\": {\"user_id\":\"" + u + "\",\"service_id\":\"" + service_id + "\"}," +
-                    "\"collections\":{\"user_id\": \"" + u + "\",\"service_id\":\"" + service_id + "\"}}";
-            try {
-                JSONObject object = new JSONObject(json);
-                facades.get("AYDetailInfoFacade").execute("AYLikePushCommand", object);
-            } catch (Exception e) {
-                e.printStackTrace();
-                closeProcessDialog();
-            }
+            presenter.likePush(bean.service_id);
         }
     }
 
@@ -596,14 +541,14 @@ public class ServiceDetailInfoActivity extends AYActivity implements View.OnClic
 
 
     @Override
-    protected void bindingFragments() {
-
-    }
-
-    @Override
     public void onBackPressed() {
         setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
         super.onBackPressed();
 
     }
+
+    @Override
+    protected void setStatusBarColor() {
+    }
+
 }

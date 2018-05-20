@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.model.uibean.SafeUiBean;
+import com.blackmirror.dongda.model.SafeUiBean;
 
 import java.util.List;
 

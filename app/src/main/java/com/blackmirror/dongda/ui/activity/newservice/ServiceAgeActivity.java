@@ -1,14 +1,24 @@
 package com.blackmirror.dongda.ui.activity.newservice;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.CustomListener;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.ui.base.BaseActivity;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.StringUtils;
+import com.blackmirror.dongda.utils.ToastUtils;
+
+import java.util.ArrayList;
 
 public class ServiceAgeActivity extends BaseActivity implements View.OnClickListener{
 
@@ -18,6 +28,9 @@ public class ServiceAgeActivity extends BaseActivity implements View.OnClickList
     private TextView tv_choose_min_age;
     private ConstraintLayout cl_choose_max_age;
     private TextView tv_choose_max_age;
+    private ArrayList<String> ageMin;
+    private ArrayList<String> ageMax;
+    private OptionsPickerView pvCustomOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +59,95 @@ public class ServiceAgeActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void initData() {
+        ageMin = new ArrayList<>();
+        ageMax = new ArrayList<>();
+
+        ageMin.add("0");
+        ageMin.add("0.5");
+        ageMin.add("1");
+        ageMin.add("1.5");
+        ageMin.add("2");
+        ageMin.add("2.5");
+        ageMin.add("3");
+        ageMin.add("3.5");
+        ageMin.add("4");
+        ageMin.add("4.5");
+        ageMin.add("5");
+        ageMin.add("5.5");
+        ageMin.add("6");
+        ageMin.add("6.5");
+        ageMin.add("7");
+        ageMin.add("7.5");
+        ageMin.add("8");
+        ageMin.add("8.5");
+        ageMin.add("9");
+        ageMin.add("9.5");
+        ageMin.add("10");
+        ageMin.add("10.5");
+        ageMin.add("11");
+        ageMin.add("11.5");
+        ageMin.add("12");
+
+        ageMax.addAll(ageMin);
+
+        /**
+         * @description
+         *
+         * 注意事项：
+         * 自定义布局中，id为 optionspicker 或者 timepicker 的布局以及其子控件必须要有，否则会报空指针。
+         * 具体可参考demo 里面的两个自定义layout布局。
+         */
+        pvCustomOptions = new OptionsPickerBuilder(this, new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                //返回的分别是三个级别的选中位置
+                if (options2<=options1){
+                    options2 = options1;
+                }
+                String min = ageMin.get(options1);
+                String max = ageMax.get(options2);
+
+                LogUtils.d("ageMin: " + min + "  ageMax: " + max + " options3=" + options3);
+                tv_choose_min_age.setText(min);
+                tv_choose_min_age.setTextColor(Color.parseColor("#FF404040"));
+                tv_choose_min_age.setTextSize(22);
+
+                tv_choose_max_age.setText(max);
+                tv_choose_max_age.setTextColor(Color.parseColor("#FF404040"));
+                tv_choose_max_age.setTextSize(22);
+
+                tv_next.setTextColor(Color.parseColor("#FF59D5C7"));
+            }
+        })
+                .setLayoutRes(R.layout.wheelview_pick_age, new CustomListener() {
+                    @Override
+                    public void customLayout(View v) {
+                        final TextView tv_save_pick = v.findViewById(R.id.tv_save_pick);
+                        tv_save_pick.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                pvCustomOptions.returnData();
+                                pvCustomOptions.dismiss();
+                            }
+                        });
+
+
+                    }
+                })
+                .setSelectOptions(0, 0)
+                .setContentTextSize(23)
+                .build();
+
+        pvCustomOptions.setNPicker(ageMin, ageMax, null);//添加数据
 
     }
 
     @Override
     protected void initListener() {
-
+        iv_back.setOnClickListener(this);
+        tv_next.setOnClickListener(this);
+        cl_choose_min_age.setOnClickListener(this);
+        cl_choose_max_age.setOnClickListener(this);
     }
 
     @Override
@@ -61,12 +157,36 @@ public class ServiceAgeActivity extends BaseActivity implements View.OnClickList
                 finish();
                 break;
             case R.id.tv_next:
+                double min = StringUtils.getDoubleValue(tv_choose_min_age.getText().toString());
+                double max = StringUtils.getDoubleValue(tv_choose_max_age.getText().toString());
+
+                if (min < 0 || max < 0) {
+                    ToastUtils.showShortToast("请选择年龄!");
+                    return;
+                }
+
+                if (min > max) {
+                    ToastUtils.showShortToast("最大年龄选择错误!");
+                    return;
+                }
+
                 Intent intent = new Intent(ServiceAgeActivity.this, ServiceTeacherNumActivity.class);
+                intent.putExtra("service_id",getIntent().getStringExtra("service_id"));
+                intent.putExtra("min_age", min+"");
+                intent.putExtra("max_age", max+"");
+                intent.putExtra("locations",getIntent().getStringExtra("locations"));
+                intent.putExtra("service_leaf",getIntent().getStringExtra("service_leaf"));
+                intent.putExtra("service_image",getIntent().getStringExtra("service_image"));
+                intent.putExtra("address",getIntent().getStringExtra("address"));
                 startActivity(intent);
                 break;
             case R.id.cl_choose_min_age:
+                pvCustomOptions.setSelectOptions(0, 0);
+                pvCustomOptions.show();
                 break;
             case R.id.cl_choose_max_age:
+                pvCustomOptions.setSelectOptions(0, 0);
+                pvCustomOptions.show();
                 break;
         }
     }
