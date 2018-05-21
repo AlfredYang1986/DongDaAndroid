@@ -7,7 +7,8 @@
 
 package com.blackmirror.dongda.utils;
 
-import org.apache.commons.codec.binary.Base64;
+
+import android.util.Base64;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,14 +19,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class BinaryUtil {
     public static String toBase64String(byte[] binaryData) {
-        return new String(Base64.encodeBase64(binaryData));
+        return new String(Base64.encode(binaryData,Base64.DEFAULT));
     }
 
     /**
      * decode base64 string
      */
     public static byte[] fromBase64String(String base64String) {
-        return Base64.decodeBase64(base64String.getBytes());
+        return Base64.decode(base64String,Base64.DEFAULT);
     }
 
     /**

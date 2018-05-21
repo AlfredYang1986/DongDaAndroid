@@ -20,7 +20,7 @@ public class SendSmsResponseBean extends BaseResponseBean {
 
         public RegBean reg;
 
-        public static class RegBean {
+        public static class RegBean implements Serializable{
             /**
              * phone : 17610279929
              * code : 1111

@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.data.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,10 +15,10 @@ public class NearServiceResponseBean extends BaseResponseBean {
 
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         public List<ServicesBean> services;
 
-        public static class ServicesBean {
+        public static class ServicesBean implements Serializable{
             /**
              * service_tags : ["国学"]
              * is_collected : false
@@ -50,7 +51,7 @@ public class NearServiceResponseBean extends BaseResponseBean {
             public List<String> service_tags;
             public List<String> operation;
 
-            public static class PinBean {
+            public static class PinBean implements Serializable{
                 /**
                  * latitude : 39.67801284790039
                  * longitude : 116.32026672363281
@@ -59,50 +60,8 @@ public class NearServiceResponseBean extends BaseResponseBean {
                 public double latitude;
                 public double longitude;
 
-                @Override
-                public String toString() {
-                    return "PinBean{" +
-                            "latitude=" + latitude +
-                            ", longitude=" + longitude +
-                            '}';
-                }
             }
 
-            @Override
-            public String toString() {
-                return "ServicesBean{" +
-                        "is_collected=" + is_collected +
-                        ", punchline='" + punchline + '\'' +
-                        ", service_leaf='" + service_leaf + '\'' +
-                        ", brand_id='" + brand_id + '\'' +
-                        ", location_id='" + location_id + '\'' +
-                        ", service_image='" + service_image + '\'' +
-                        ", brand_name='" + brand_name + '\'' +
-                        ", service_type='" + service_type + '\'' +
-                        ", address='" + address + '\'' +
-                        ", category='" + category + '\'' +
-                        ", pin=" + pin +
-                        ", service_id='" + service_id + '\'' +
-                        ", service_tags=" + service_tags +
-                        ", operation=" + operation +
-                        '}';
-            }
         }
-
-        @Override
-        public String toString() {
-            return "ResultBean{" +
-                    "services=" + services +
-                    '}';
-        }
-    }
-
-    @Override
-    public String toString() {
-        return "NearServiceServerBean{" +
-                "result=" + result +
-                ", status='" + status + '\'' +
-                ", error=" + error +
-                '}';
     }
 }

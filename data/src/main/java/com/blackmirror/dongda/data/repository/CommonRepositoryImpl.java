@@ -4,6 +4,7 @@ import android.text.TextUtils;
 
 import com.blackmirror.dongda.data.model.response.CareMoreResponseBean;
 import com.blackmirror.dongda.data.model.response.DetailInfoResponseBean;
+import com.blackmirror.dongda.data.model.response.LikePopResponseBean;
 import com.blackmirror.dongda.data.model.response.LikePushResponseBean;
 import com.blackmirror.dongda.data.model.response.LikeResponseBean;
 import com.blackmirror.dongda.data.model.response.NearServiceResponseBean;
@@ -66,9 +67,9 @@ public class CommonRepositoryImpl implements CommonRepository {
     @Override
     public Observable<LikePopDomainBean> likePop(String service_id) {
         return CommonApi.likePop(service_id)
-                .map(new Function<LikePushResponseBean, LikePopDomainBean>() {
+                .map(new Function<LikePopResponseBean, LikePopDomainBean>() {
                     @Override
-                    public LikePopDomainBean apply(LikePushResponseBean bean) throws Exception {
+                    public LikePopDomainBean apply(LikePopResponseBean bean) throws Exception {
                         LikePopDomainBean b = new LikePopDomainBean();
                         if (bean == null || bean.result == null) {
                             return b;

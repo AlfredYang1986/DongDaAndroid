@@ -6,12 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.DensityUtils;
+import com.blackmirror.dongda.utils.LogUtils;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -63,6 +62,7 @@ public class SlidingTabLayout extends TabLayout{
      * 最后一个tab露出百分比
      */
     private float mLastTabVisibleRatio = RATIO_DEFAULT_LAST_VISIBLE_TAB;
+    private static LinearLayout tabStrip;
 
     public SlidingTabLayout(Context context) {
         super(context);
@@ -77,12 +77,12 @@ public class SlidingTabLayout extends TabLayout{
         //reflectiveModifyTabWidth();
 
         //方案2：异步修改Tab宽度
-        post(new Runnable() {
+       /* post(new Runnable() {
             @Override
             public void run() {
                 resetTabParams();
             }
-        });
+        });*/
     }
 
     private void reflectiveModifyTabWidth() {
@@ -162,23 +162,21 @@ public class SlidingTabLayout extends TabLayout{
      * 重设tab宽度
      */
     private void resetTabParams() {
-        LinearLayout tabStrip = getTabStrip();
+        tabStrip = getTabStrip();
         if (tabStrip == null) {
             return;
         }
-        for (int i = 0; i < tabStrip.getChildCount(); i++) {
+        /*for (int i = 0; i < tabStrip.getChildCount(); i++) {
             LinearLayout tabView = (LinearLayout) tabStrip.getChildAt(i);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams((int) (mScreenWidth / (mTabVisibleCount + mLastTabVisibleRatio)), LinearLayout.LayoutParams
                     .WRAP_CONTENT);
-            params.gravity= Gravity.BOTTOM;
-            params.bottomMargin= DensityUtils.dp2px(10);
             tabView.setLayoutParams(params);
             //tab中的图标可以超出父容器
             tabView.setClipChildren(false);
             tabView.setClipToPadding(false);
 
-            tabView.setPadding(0, 0, 0, 0);
-        }
+            tabView.setPadding(0, 30, 0, 30);
+        }*/
         initTranslationParams(tabStrip, mScreenWidth);
     }
 
@@ -191,10 +189,34 @@ public class SlidingTabLayout extends TabLayout{
         }
         tabWidth = (int) (screenWidth / (mTabVisibleCount + mLastTabVisibleRatio));
         View firstView = llTab.getChildAt(0);
+        int count = llTab.getChildCount();
+        LogUtils.d("count "+count);
+
         if (firstView != null) {
-            this.mInitTranslationX = (firstView.getLeft() + tabWidth / 2 - this.mSlideIcon.getWidth() / 2);
-            this.mInitTranslationY = (getBottom() - getTop() - this.mSlideIcon.getHeight());
+            LogUtils.d("firstView.getLeft() "+firstView.getLeft());
+
+            this.mInitTranslationX = (firstView.getLeft() + firstView.getRight() / 2 - firstView.getLeft() / 2-this.mSlideIcon.getWidth() / 2);
+
+        }else {
+            LogUtils.d("为空了呢 ");
+
         }
+        LogUtils.d("getBottom "+getBottom());
+        LogUtils.d("llTab.getLeft() "+llTab.getLeft());
+        LogUtils.d("getBottom "+getBottom());
+//        this.mInitTranslationX = (llTab.getLeft()+(llTab.getRight() - llTab.getLeft())/2);
+
+        this.mInitTranslationY = (getBottom() -getTop()- this.mSlideIcon.getHeight());
+        invalidate();
+    }
+
+    public void initIcon(){
+        post(new Runnable() {
+            @Override
+            public void run() {
+                resetTabParams();
+            }
+        });
     }
 
     public static class MyTabLayoutOnPageChangeListener extends TabLayoutOnPageChangeListener{
@@ -209,8 +231,19 @@ public class SlidingTabLayout extends TabLayout{
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             final TabLayout tabLayout = mTabLayoutRef.get();
-            if (tabLayout != null) {
-                mTranslationX = (int) ((position + positionOffset) * tabWidth);
+            LogUtils.d("position "+position);
+            LogUtils.d("positionOffset "+positionOffset);
+            LogUtils.d("positionOffsetPixels "+positionOffsetPixels);
+
+            if (tabStrip == null){
+                return;
+            }
+
+            View v = tabStrip.getChildAt(position);
+            if (v != null){
+                int left = tabStrip.getChildAt(position).getLeft();
+                int right = tabStrip.getChildAt(position).getRight();
+                mTranslationX = (int) (left+positionOffset*(right - left));
                 tabLayout.invalidate();
             }
         }

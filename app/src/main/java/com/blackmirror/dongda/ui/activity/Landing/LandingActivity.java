@@ -11,7 +11,6 @@ import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
-import com.blackmirror.dongda.ui.activity.ServiceDetailInfoActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
@@ -76,7 +75,7 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
         tv_phone_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LandingActivity.this, ServiceDetailInfoActivity.class);
+                Intent intent = new Intent(LandingActivity.this, PhoneInputActivity.class);
                 startActivity(intent);
             }
         });

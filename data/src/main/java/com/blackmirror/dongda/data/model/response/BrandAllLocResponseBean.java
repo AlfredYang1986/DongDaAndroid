@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.data.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,10 +15,10 @@ public class BrandAllLocResponseBean extends BaseResponseBean {
 
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         public List<LocationsBean> locations;
 
-        public static class LocationsBean {
+        public static class LocationsBean implements Serializable {
             /**
              * location_images : [{"tag":"生活区","image":"654e1931-91f6-4e29-8a0f-58c505cf2c4b"},{"tag":"阅读区","image":"cb45c31c-f3fd-4b4e-b1c3-ddde845a2505"}]
              * location_id : 5a66fdea59a6270918508f26
@@ -32,7 +33,7 @@ public class BrandAllLocResponseBean extends BaseResponseBean {
             public List<LocationImagesBean> location_images;
             public List<String> friendliness;
 
-            public static class PinBean {
+            public static class PinBean implements Serializable {
                 /**
                  * latitude : 39.87063980102539
                  * longitude : 116.39083862304688
@@ -42,7 +43,7 @@ public class BrandAllLocResponseBean extends BaseResponseBean {
                 public double longitude;
             }
 
-            public static class LocationImagesBean {
+            public static class LocationImagesBean implements Serializable {
                 /**
                  * tag : 生活区
                  * image : 654e1931-91f6-4e29-8a0f-58c505cf2c4b

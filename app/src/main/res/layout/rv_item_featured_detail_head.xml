@@ -1,57 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="wrap_content">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <ImageView
-        android:scaleType="centerCrop"
-         android:id="@+id/iv_featured_detail_bg"
-        android:background="@drawable/coverlist_bg_theme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/iv_featured_detail_bg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/coverlist_bg_theme"
+            android:scaleType="centerCrop"/>
 
-    <TextView
-         android:id="@+id/tv_featured_detail_content"
-        app:layout_constraintTop_toTopOf="@id/iv_featured_detail_bg"
-        app:layout_constraintBottom_toBottomOf="@id/iv_featured_detail_bg"
-        app:layout_constraintLeft_toLeftOf="@id/iv_featured_detail_bg"
-        app:layout_constraintRight_toRightOf="@id/iv_featured_detail_bg"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:maxLines="1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="准备好爱与耐心，自律才能自由"
-        android:textColor="#FFFFFFFF"
-        android:textSize="17sp"
-        />
+        <TextView
+            android:id="@+id/tv_featured_detail_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="准备好爱与耐心，自律才能自由"
+            android:textColor="#FFFFFFFF"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_featured_detail_bg"
+            app:layout_constraintLeft_toLeftOf="@id/iv_featured_detail_bg"
+            app:layout_constraintRight_toRightOf="@id/iv_featured_detail_bg"
+            app:layout_constraintTop_toTopOf="@id/iv_featured_detail_bg"
+            />
 
-    <TextView
-         android:id="@+id/tv_item_head_content"
-        android:singleLine="false"
-         app:layout_constraintLeft_toLeftOf="@id/iv_featured_detail_bg"
-         app:layout_constraintRight_toRightOf="@id/iv_featured_detail_bg"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="16dp"
-         android:layout_marginBottom="26dp"
-        app:layout_constraintTop_toBottomOf="@id/iv_featured_detail_bg"
-         app:layout_constraintBottom_toBottomOf="parent"
-        android:inputType="textMultiLine"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="「妈妈，帮帮我，让我可以自己做」\n
+        <TextView
+            android:id="@+id/tv_item_head_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="26dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:singleLine="false"
+            android:text="「妈妈，帮帮我，让我可以自己做」\n
 「孩子能做，就别插手」\n
 追随孩子，Aid to life，蒙特梭利教育（Montessori），是意大利心理学家玛丽亚 · 蒙特梭利发展的教育方法。强调独立，有限度的自由和对孩子天然的心理、生理及社会性发展的尊重。"
-        android:textColor="#FF737373"
-        android:textSize="14sp"
-        />
+            android:textColor="#FF737373"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="@id/iv_featured_detail_bg"
+            app:layout_constraintRight_toRightOf="@id/iv_featured_detail_bg"
+            app:layout_constraintTop_toBottomOf="@id/iv_featured_detail_bg"
+            />
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
 </android.support.constraint.ConstraintLayout>

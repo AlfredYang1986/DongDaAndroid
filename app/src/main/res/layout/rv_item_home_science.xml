@@ -44,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:ellipsize="end"
-        android:inputType="textMultiLine"
         android:maxLines="2"
         android:singleLine="false"
         android:text="费因机器人俱乐部的机器人课程"

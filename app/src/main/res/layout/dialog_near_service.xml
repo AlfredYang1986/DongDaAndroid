@@ -45,7 +45,6 @@
         android:layout_marginRight="14dp"
         app:layout_constraintLeft_toRightOf="@id/sv_near_photo"
         app:layout_constraintTop_toBottomOf="@id/tv_near_title"
-        android:inputType="textMultiLine"
         android:maxLines="2"
         android:ellipsize="end"
         android:layout_width="0dp"

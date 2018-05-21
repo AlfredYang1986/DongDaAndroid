@@ -40,6 +40,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private AnimationDrawable animationDrawable;
     private ImageView iv_anim;
     private ConstraintLayout cl_content;
+    private Disposable animDisposable;
 
     @Override
     protected int getLayoutResId() {
@@ -114,12 +115,15 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         animationDrawable.start();
         iv_anim.setVisibility(View.VISIBLE);
         cl_content.setVisibility(View.GONE);
-        Observable.timer(1000,TimeUnit.MILLISECONDS,Schedulers.io())
+        animDisposable = Observable.timer(1000, TimeUnit.MILLISECONDS, Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        if (animationDrawable != null && animationDrawable.isRunning()){
+                        if (animDisposable!=null && !animDisposable.isDisposed()){
+                            animDisposable.dispose();
+                        }
+                        if (animationDrawable != null && animationDrawable.isRunning()) {
                             animationDrawable.stop();
                             iv_anim.clearAnimation();
                             iv_anim.setVisibility(View.GONE);
@@ -166,6 +170,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         if (disposable!=null && !disposable.isDisposed()){
             disposable.dispose();
             disposable=null;
+        }
+        if (animDisposable!=null && !animDisposable.isDisposed()){
+            animDisposable.dispose();
+            animDisposable = null;
         }
         closeDialog();
     }

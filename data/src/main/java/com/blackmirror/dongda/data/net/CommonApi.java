@@ -5,6 +5,7 @@ import com.blackmirror.dongda.data.model.request.ApplyServiceRequestBean;
 import com.blackmirror.dongda.data.model.request.BrandAllLocRequestBean;
 import com.blackmirror.dongda.data.model.request.DetailInfoRequestBean;
 import com.blackmirror.dongda.data.model.request.EnrolRequestBean;
+import com.blackmirror.dongda.data.model.request.LikePopRequestBean;
 import com.blackmirror.dongda.data.model.request.LikePushRequestBean;
 import com.blackmirror.dongda.data.model.request.LikeRequestBean;
 import com.blackmirror.dongda.data.model.request.LocAllServiceRequestBean;
@@ -16,6 +17,7 @@ import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
 import com.blackmirror.dongda.data.model.response.CareMoreResponseBean;
 import com.blackmirror.dongda.data.model.response.DetailInfoResponseBean;
 import com.blackmirror.dongda.data.model.response.EnrolResponseBean;
+import com.blackmirror.dongda.data.model.response.LikePopResponseBean;
 import com.blackmirror.dongda.data.model.response.LikePushResponseBean;
 import com.blackmirror.dongda.data.model.response.LikeResponseBean;
 import com.blackmirror.dongda.data.model.response.LocAllServiceResponseBean;
@@ -79,19 +81,19 @@ public class CommonApi extends AYRemoteApi {
 //        return execute(bean, LikePushResponseBean.class);
     }
 
-    public static Observable<LikePushResponseBean> likePop(String service_id) {
-        final LikePushRequestBean bean = new LikePushRequestBean();
+    public static Observable<LikePopResponseBean> likePop(String service_id) {
+        final LikePopRequestBean bean = new LikePopRequestBean();
         bean.json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + AYPrefUtils.getUserId() + "\",\"service_id\":\"" + service_id + "\"},\"collections\":{\"user_id\": \"" + AYPrefUtils.getUserId() + "\",\"service_id\":\"" + service_id + "\"}}";
         bean.url = DataConstant.LIKE_POP_URL;
 
-        return OSSInfoApi.getOssInfo().flatMap(new Function<OssInfoResponseBean, Observable<LikePushResponseBean>>() {
+        return OSSInfoApi.getOssInfo().flatMap(new Function<OssInfoResponseBean, Observable<LikePopResponseBean>>() {
             @Override
-            public Observable<LikePushResponseBean> apply(OssInfoResponseBean b) throws Exception {
+            public Observable<LikePopResponseBean> apply(OssInfoResponseBean b) throws Exception {
                 if ("ok".equals(b.status)){
-                    return execute(bean, LikePushResponseBean.class);
+                    return execute(bean, LikePopResponseBean.class);
                 }
-                LikePushResponseBean sb = new LikePushResponseBean();
-                sb.error = new LikePushResponseBean.ErrorBean();
+                LikePopResponseBean sb = new LikePopResponseBean();
+                sb.error = new LikePopResponseBean.ErrorBean();
                 if (b!=null && b.error!=null){
                     sb.error.code = b.error.code;
                     sb.error.message = b.error.message;

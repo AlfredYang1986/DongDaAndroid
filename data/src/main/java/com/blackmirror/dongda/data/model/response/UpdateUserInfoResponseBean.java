@@ -1,5 +1,7 @@
 package com.blackmirror.dongda.data.model.response;
 
+import java.io.Serializable;
+
 /**
  * Created by xcx on 2018/5/10.
  */
@@ -11,14 +13,14 @@ public class UpdateUserInfoResponseBean extends BaseResponseBean {
 
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         /**
          * profile : {"screen_name":"xcx","description":"qwertydf","has_auth_phone":1,"owner_name":"","is_service_provider":0,"user_id":"2737d748bce21504447cf27d7b1f4f99","company":"","screen_photo":"","date":1522736121280,"token":"bearer2737d748bce21504447cf27d7b1f4f99","address":"asdfgh","contact_no":"","social_id":""}
          */
 
         public ProfileBean profile;
 
-        public static class ProfileBean {
+        public static class ProfileBean implements Serializable{
             /**
              * screen_name : xcx
              * description : qwertydf

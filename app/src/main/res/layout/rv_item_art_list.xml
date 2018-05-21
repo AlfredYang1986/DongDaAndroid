@@ -40,7 +40,6 @@
     <TextView
         app:layout_goneMarginTop="13dp"
         android:maxLines="2"
-        android:inputType="textMultiLine"
         android:ellipsize="end"
         app:layout_constraintRight_toRightOf="@id/sv_art_list_photo"
         android:layout_marginTop="2dp"

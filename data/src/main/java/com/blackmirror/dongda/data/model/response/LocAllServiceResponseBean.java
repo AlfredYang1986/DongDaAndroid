@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.data.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -14,10 +15,10 @@ public class LocAllServiceResponseBean extends BaseResponseBean {
 
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         public List<ServicesBean> services;
 
-        public static class ServicesBean {
+        public static class ServicesBean implements Serializable{
             /**
              * service_tags : ["多元智能"]
              * punchline : 让孩子多一份对不同文化的理解和习得,丰富学前孩子的体验,打开世界多元文化的窗口。

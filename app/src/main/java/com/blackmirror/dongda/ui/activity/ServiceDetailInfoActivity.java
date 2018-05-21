@@ -253,7 +253,7 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
                     sb.about_brand = bean.about_brand;
 
                 }
-                intent.putExtra("bean",bean);
+                intent.putExtra("bean",sb);
                 startActivity(intent);
                 break;
         }
@@ -368,6 +368,7 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
         //        tl_detail_tab.setupWithViewPager(vp_detail_photo);
         vp_detail_photo.addOnPageChangeListener(new SlidingTabLayout.MyTabLayoutOnPageChangeListener(tl_detail_tab));
         tl_detail_tab.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(vp_detail_photo));
+        tl_detail_tab.initIcon();
 
         tv_detail_content.setText("\"" + bean.punchline + "\"");//第一个描述
 

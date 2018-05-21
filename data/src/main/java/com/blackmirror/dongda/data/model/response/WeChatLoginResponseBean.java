@@ -1,5 +1,7 @@
 package com.blackmirror.dongda.data.model.response;
 
+import java.io.Serializable;
+
 /**
  * Created by Ruge on 2018-04-19 下午6:08
  */
@@ -11,7 +13,7 @@ public class WeChatLoginResponseBean extends BaseResponseBean {
 
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         /**
          * user : {"screen_name":"xcx","has_auth_phone":1,"current_device_type":"","is_service_provider":0,"user_id":"2737d748bce21504447cf27d7b1f4f99","screen_photo":"","current_device_id":""}
          * auth_token : bearer2737d748bce21504447cf27d7b1f4f99
@@ -20,7 +22,7 @@ public class WeChatLoginResponseBean extends BaseResponseBean {
         public UserBean user;
         public String auth_token;
 
-        public static class UserBean {
+        public static class UserBean implements Serializable{
             /**
              * screen_name : xcx
              * has_auth_phone : 1

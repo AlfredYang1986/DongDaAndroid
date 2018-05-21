@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.data.model.response;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -12,10 +13,10 @@ public class SearchServiceResponseBean extends BaseResponseBean {
 
     public ResultBean result;
 
-    public static class ResultBean {
+    public static class ResultBean implements Serializable {
         public List<HomepageServicesBean> homepage_services;
 
-        public static class HomepageServicesBean {
+        public static class HomepageServicesBean implements Serializable{
             /**
              * service_type : 看顾
              * totalCount : 619
@@ -26,7 +27,7 @@ public class SearchServiceResponseBean extends BaseResponseBean {
             public int totalCount;
             public List<ServicesBean> services;//对应主页的四个标签 0 看顾 1 艺术 2 运动 3 科学
 
-            public static class ServicesBean {
+            public static class ServicesBean implements Serializable{
                 /**
                  * service_tags : ["德国BMBF"]
                  * is_collected : false
@@ -57,7 +58,7 @@ public class SearchServiceResponseBean extends BaseResponseBean {
                 public List<String> service_tags;
                 public List<String> operation;
 
-                public static class PinBean {
+                public static class PinBean implements Serializable{
                     /**
                      * latitude : 39.96918487548828
                      * longitude : 116.48291778564453

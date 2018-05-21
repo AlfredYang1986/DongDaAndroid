@@ -143,6 +143,8 @@
     <string name="str_setting">设置</string>
     <string name="change_order_mode">切换为预定模式</string>
     <string name="clear_cache">清除缓存</string>
+    <string name="str_beijing">北京</string>
+    <string name="str_logout">退出登录</string>
 
 
 </resources>
