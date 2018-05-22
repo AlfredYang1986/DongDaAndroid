@@ -400,7 +400,9 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void refreshHeadPhoto(int resultCode, Intent data) {
-        LogUtils.d("img_url ayhome "+data.getStringExtra("img_url"));
+        if (data!=null) {
+            LogUtils.d("img_url ayhome " + data.getStringExtra("img_url"));
+        }
         if (resultCode == RESULT_OK){
             String img_url = data.getStringExtra("img_url");
             sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url));

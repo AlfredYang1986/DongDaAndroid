@@ -39,6 +39,7 @@ ext{
 
     //其他库的版本
     supportLibVersion = "26.1.0"
+    constraintLayoutVersion = "1.0.2"
     frescoVersion = "1.8.1"
     rxJavaVersion = "2.1.10"
     rxAndroidVersion = "2.0.2"

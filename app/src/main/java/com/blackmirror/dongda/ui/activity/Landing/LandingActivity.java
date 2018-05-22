@@ -169,6 +169,10 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
 
     //授权
     private void authorize(Platform plat, int type) {
+        if (!plat.isClientValid()){
+            ToastUtils.showShortToast("您还未安装微信!");
+            return;
+        }
         if (plat.isAuthValid()) { //如果授权就删除授权资料
             plat.removeAccount(true);
         }

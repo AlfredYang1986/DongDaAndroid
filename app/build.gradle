@@ -2,13 +2,23 @@ apply plugin: 'com.android.application'
 // 添加插件
 apply plugin: "com.mob.sdk"
 
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
 android {
     signingConfigs {
         release {
-            keyAlias 'dd'
-            keyPassword '123456'
-            storeFile file('/Users/alfredyang/Desktop/dd.jks')
-            storePassword '123456'
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
         }
     }
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -27,7 +37,7 @@ android {
             debuggable true
         }
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "true" //不显示log
+            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
             zipAlignEnabled true     //Zipalign优化
             shrinkResources true    // 移除无用的resource文件
             minifyEnabled true     //混淆
@@ -60,10 +70,9 @@ MobSDK {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    implementation 'com.android.support.constraint:constraint-layout:' + rootProject.ext.constraintLayoutVersion
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'junit:junit:4.12'
     implementation 'com.android.support:appcompat-v7:' + rootProject.ext.supportLibVersion
     implementation 'com.android.support:support-v4:' + rootProject.ext.supportLibVersion
@@ -74,7 +83,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
     implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.ext.rxAndroidVersion
     implementation 'com.squareup.okhttp3:okhttp:' + rootProject.ext.okhttpVersion
-    implementation 'com.facebook.stetho:stetho:1.5.0'
+//    implementation 'com.facebook.stetho:stetho:1.5.0'
     //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     //    implementation 'com.aliyun.dpa:oss-android-sdk:+'
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion
@@ -87,8 +96,8 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
     implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
     implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project(':domain')
     implementation project(':device')
     implementation project(':data')

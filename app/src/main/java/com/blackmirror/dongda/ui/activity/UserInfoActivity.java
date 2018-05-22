@@ -172,8 +172,7 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
             cl_apply_service.setVisibility(View.VISIBLE);
             cl_enrol_class.setVisibility(View.GONE);
             cl_change_service.setVisibility(View.GONE);
-        }
-        if (bean.is_service_provider == 1) {
+        }else if (bean.is_service_provider == 1) {
             if (AYPrefUtils.getSettingFlag().equals("3")){
                 cl_apply_service.setVisibility(View.GONE);
                 cl_enrol_class.setVisibility(View.VISIBLE);
@@ -184,15 +183,6 @@ public class UserInfoActivity extends BaseActivity implements View.OnClickListen
                 cl_change_service.setVisibility(View.VISIBLE);
             }
         }
-        /*if (AYPrefUtils.getSettingFlag().equals("3")){
-            cl_apply_service.setVisibility(View.GONE);
-            cl_enrol_class.setVisibility(View.VISIBLE);
-            cl_change_service.setVisibility(View.GONE);
-        }else if (AYPrefUtils.getSettingFlag().equals("2")){
-            cl_apply_service.setVisibility(View.GONE);
-            cl_enrol_class.setVisibility(View.GONE);
-            cl_change_service.setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override

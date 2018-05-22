@@ -1,6 +1,5 @@
 package com.blackmirror.dongda.utils;
 
-import com.facebook.stetho.common.LogUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,7 +34,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtil.d(TAG,"获取文件大小失败!");
+            LogUtils.d(TAG,"获取文件大小失败!");
         }
         return FormetFileSize(blockSize, SIZETYPE_MB);
     }
@@ -58,7 +57,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtil.d(TAG,"获取文件大小失败!");
+            LogUtils.d(TAG,"获取文件大小失败!");
         }
         return FormetFileSize(blockSize, sizeType);
     }
@@ -80,7 +79,7 @@ public class FileUtils {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            LogUtil.d(TAG,"获取文件大小失败!");
+            LogUtils.d(TAG,"获取文件大小失败!");
         }
         return FormetFileSize(blockSize);
     }
@@ -100,7 +99,7 @@ public class FileUtils {
             size = fis.available();
         } else {
             file.createNewFile();
-            LogUtil.d(TAG,"获取文件大小不存在!");
+            LogUtils.d(TAG,"获取文件大小不存在!");
         }
         return size;
     }
