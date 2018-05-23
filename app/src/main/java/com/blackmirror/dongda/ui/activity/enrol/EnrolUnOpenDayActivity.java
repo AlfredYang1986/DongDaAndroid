@@ -10,7 +10,6 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.adapter.UnOpenDateAdapter;
 import com.blackmirror.dongda.model.UnOpenDateBean;
 import com.blackmirror.dongda.ui.base.BaseActivity;
-import com.blackmirror.dongda.utils.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -108,7 +107,6 @@ public class EnrolUnOpenDayActivity extends BaseActivity {
         adapter.setOnDateClickListener(new UnOpenDateAdapter.OnDateClickListener() {
             @Override
             public void onItemDateClick(View view, int position,boolean isSelect) {
-                ToastUtils.showShortToast(position+"");
             }
         });
     }
@@ -166,7 +164,6 @@ public class EnrolUnOpenDayActivity extends BaseActivity {
         adapter.setOnDateClickListener(new UnOpenDateAdapter.OnDateClickListener() {
             @Override
             public void onItemDateClick(View view, int position,boolean isSelect) {
-                ToastUtils.showShortToast(position+"");
             }
         });
     }
@@ -182,7 +179,7 @@ public class EnrolUnOpenDayActivity extends BaseActivity {
         tv_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                finish();
             }
         });
     }

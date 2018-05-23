@@ -16,7 +16,8 @@ public class DataConstant {
     /**
      * url地址
       */
-    public static final String BASE_URL="http://192.168.100.115:9000";
+//    public static final String BASE_URL="http://192.168.100.115:9000";
+    public static final String BASE_URL="http://altlys.com:9000";
 
     //收藏
     public static final String LIKE_PUSH_URL=BASE_URL+"/al/collections/push";

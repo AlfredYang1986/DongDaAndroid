@@ -64,13 +64,19 @@ public class ChooseEnrolLocActivity extends BaseActivity implements EnrolContrac
 
     @Override
     protected void initData() {
-        presenter.getBrandAllLocation("5a66fdea59a6270918508f25");
+//        presenter.getBrandAllLocation("5a66fdea59a6270918508f25");
+        presenter.getBrandAllLocation("");
         initLocation();
     }
 
     @Override
     protected void initListener() {
-
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     private void initLocation() {

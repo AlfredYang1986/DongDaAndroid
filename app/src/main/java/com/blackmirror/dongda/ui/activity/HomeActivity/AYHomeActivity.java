@@ -405,6 +405,7 @@ public class AYHomeActivity extends BaseActivity implements View.OnClickListener
         }
         if (resultCode == RESULT_OK){
             String img_url = data.getStringExtra("img_url");
+            img_uuid = img_url;
             sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url));
         }
     }

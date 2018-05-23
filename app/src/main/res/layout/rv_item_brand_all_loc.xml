@@ -37,7 +37,6 @@
             android:ellipsize="end"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="朝阳区酒仙桥52号院东方科技园"
             android:textColor="#FF404040"
             android:textSize="15sp"
             />

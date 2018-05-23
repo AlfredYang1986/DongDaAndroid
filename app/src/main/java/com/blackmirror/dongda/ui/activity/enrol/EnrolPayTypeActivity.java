@@ -143,6 +143,7 @@ public class EnrolPayTypeActivity extends BaseActivity implements View.OnClickLi
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"));
                     this.data = data;
                 }else {
+                    rb_mb_pay.setChecked(false);
                     rb_time_pay.setChecked(false);
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"));
                 }
@@ -155,6 +156,7 @@ public class EnrolPayTypeActivity extends BaseActivity implements View.OnClickLi
                     this.data = data;
                 }else {
                     rb_mb_pay.setChecked(false);
+                    rb_time_pay.setChecked(false);
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"));
                 }
                 break;

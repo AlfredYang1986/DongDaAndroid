@@ -86,7 +86,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
-            android:text="朝阳区酒仙桥52号院"
             android:textColor="#FF404040"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
