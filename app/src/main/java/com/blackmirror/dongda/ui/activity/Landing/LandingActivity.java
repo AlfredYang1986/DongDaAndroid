@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.ui.activity.Landing;
 
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.view.View;
@@ -7,12 +8,15 @@ import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.di.component.DaggerLandingComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.UpLoadWeChatIconDomainBean;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.CalUtils;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.DongdaApplication;
 import com.blackmirror.dongda.utils.LogUtils;
@@ -20,7 +24,6 @@ import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
@@ -31,13 +34,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 
-public class LandingActivity extends BaseActivity implements WeChatLoginContract.View{
+public class LandingActivity extends BaseActivity implements WeChatLoginContract.View {
 
     private TextView tv_phone_login;
     private TextView tv_wechat_login;
     private Disposable errorDb;
     private Disposable cancelDb;
     private WeChatLoginPresenter presenter;
+    private String userIcon;
 
 
     @Override
@@ -90,14 +94,6 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
     }
 
     private void weChatLogin() {
-       /* if (!AYApplication.weChatApi.isWXAppInstalled()) {
-            Toast.makeText(getApplicationContext(), "您还未安装微信!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        final SendAuth.Req req = new SendAuth.Req();
-        req.scope = "snsapi_userinfo";
-        req.state = "dongda_wx_login";
-        AYApplication.weChatApi.sendReq(req);*/
         showProcessDialog(getString(R.string.logining_process), true);
         Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
         wechat.setPlatformActionListener(new MyPlatformActionListener());
@@ -106,27 +102,19 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
 
     }
 
-    class MyPlatformActionListener implements PlatformActionListener{
+    class MyPlatformActionListener implements PlatformActionListener {
 
         @Override
         public void onComplete(Platform platform, int i, HashMap<String, Object> map) {
             platform.setPlatformActionListener(null);
             String userId = platform.getDb().getUserId();//获取用户账号
             String userName = platform.getDb().getUserName();//获取用户名字
-            String userIcon = platform.getDb().getUserIcon();//获取用户头像
+            //获取用户头像
+            userIcon = platform.getDb().getUserIcon();
             String userGender = platform.getDb().getUserGender(); //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
             String token = platform.getDb().getToken();
 
-
-            final Map<String, String> m = new HashMap<>();
-
-            m.put("provide_uid", userId);
-            m.put("provide_token", token);
-            m.put("provide_screen_name", userName);
-            m.put("provide_name", "wechat");
-            m.put("provide_screen_photo", userIcon);
-
-            presenter.weChatLogin(userId,token,userName,"wechat",userIcon);
+            presenter.weChatLogin(userId, token, userName, "wechat", userIcon);
 
         }
 
@@ -169,43 +157,70 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
 
     //授权
     private void authorize(Platform plat, int type) {
-        if (!plat.isClientValid()){
+        if (!plat.isClientValid()) {
             ToastUtils.showShortToast("您还未安装微信!");
             return;
-        }
-        if (plat.isAuthValid()) { //如果授权就删除授权资料
-            plat.removeAccount(true);
         }
         plat.showUser(null);//授权并获取用户信息
     }
 
     /**
      * 服务器成功回调
+     *
      * @param bean
      */
     @Override
     public void weChatLoginSuccess(WeChatLoginBean bean) {
+
+        Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
+        if (!TextUtils.isEmpty(bean.screen_photo)){//有头像 直接登录
+            closeProcessDialog();
+            intent.putExtra("img_uuid", bean.screen_photo);
+            startActivity(intent);
+            DongdaApplication.finishAllActivity();
+        }else {
+            String img_uuid = CalUtils.getUUID32();
+            if (userIcon.contains("132")){
+                userIcon = userIcon.substring(0,userIcon.lastIndexOf("132"))+0;
+            }
+            presenter.upLoadWeChatIcon(userIcon, img_uuid);
+        }
+
+    }
+
+    @Override
+    public void onUpLoadWeChatIconSuccess(UpLoadWeChatIconDomainBean bean) {
         closeProcessDialog();
 
         Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
-        intent.putExtra("img_uuid",bean.screen_photo);
+        intent.putExtra("img_uuid", bean.imgUUID);
         startActivity(intent);
         DongdaApplication.finishAllActivity();
     }
 
     /**
      * 服务器失败回调
+     *
      * @param bean
      */
     @Override
-    public void weChatLoginError(WeChatLoginBean bean) {
+    public void onError(BaseDataBean bean) {
         closeProcessDialog();
         LogUtils.d("LandingActivity wechat failed ");
-        if (bean.code==AppConstant.NET_WORK_UNAVAILABLE){
-            SnackbarUtils.show(tv_phone_login,bean.message);
-        }else {
-            ToastUtils.showShortToast(bean.message+"("+bean.code+")");
+        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(tv_phone_login, bean.message);
+            return;
         }
+        if (bean.code == AppConstant.UPLOAD_WECHAT_ERROR){
+            Intent intent = new Intent(LandingActivity.this, AYHomeActivity.class);
+            intent.putExtra("img_uuid", "");
+            startActivity(intent);
+            DongdaApplication.finishAllActivity();
+            return;
+        }
+
+        ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
+
     }
 
     @Override
@@ -229,7 +244,17 @@ public class LandingActivity extends BaseActivity implements WeChatLoginContract
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LogUtils.d("landing onDestroy");
         unSubscribe();
     }
 
+    @Override
+    public void onBackPressed() {
+        //杀死Application
+        String packName = getPackageName();
+        ActivityManager activityMgr = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        activityMgr.killBackgroundProcesses(packName);
+        android.os.Process.killProcess(android.os.Process.myPid());
+        super.onBackPressed();
+    }
 }

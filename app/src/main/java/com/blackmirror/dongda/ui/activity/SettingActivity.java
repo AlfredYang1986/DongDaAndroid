@@ -15,11 +15,14 @@ import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.FileUtils;
-import com.blackmirror.dongda.utils.LogUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
+import com.mob.MobSDK;
 
 import java.util.concurrent.TimeUnit;
 
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -187,11 +190,17 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         closeDialog();
+                        Platform weChat = ShareSDK.getPlatform(Wechat.NAME);
+                        weChat.getDb().removeAccount();
+                        weChat.removeAccount(true);
+                        ShareSDK.deleteCache();
+                        MobSDK.clearUser();
+                        AYPrefUtils.setUserId("");
+                        AYPrefUtils.setAuthToken("");
                         Intent intent = new Intent(SettingActivity.this, LandingActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);
-                        LogUtils.d("xcx hahaha" );
-                        AYApplication.addActivity(SettingActivity.this);
+                        finish();
                         AYApplication.finishAllActivity();
                     }
                 })

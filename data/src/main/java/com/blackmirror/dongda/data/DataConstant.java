@@ -11,6 +11,7 @@ public class DataConstant {
     public static final int SOCKET_TIMEOUT_EXCEPTION=-101;
     public static final int CONNECT_EXCEPTION=-102;
     public static final int OTHER_EXCEPTION=-103;
+    public static final int UPLOAD_WECHAT_ERROR=-104;
 
 
     /**

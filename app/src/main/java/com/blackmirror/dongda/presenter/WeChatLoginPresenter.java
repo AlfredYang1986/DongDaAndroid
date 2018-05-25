@@ -1,10 +1,15 @@
 package com.blackmirror.dongda.presenter;
 
 
+import com.blackmirror.dongda.domain.Interactor.UpLoadWeChatIconUseCase;
 import com.blackmirror.dongda.domain.Interactor.WeChatLoginUseCase;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
+import com.blackmirror.dongda.domain.model.UpLoadWeChatIconDomainBean;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.utils.AYPrefUtils;
+import com.blackmirror.dongda.utils.AppConstant;
+import com.blackmirror.dongda.utils.LogUtils;
 
 import javax.inject.Inject;
 
@@ -17,6 +22,8 @@ public class WeChatLoginPresenter implements WeChatLoginContract.WeChatLoginPres
 
     @Inject
     WeChatLoginUseCase weChat;
+    @Inject
+    UpLoadWeChatIconUseCase upLoadWeChatIconUseCase;
 
     private WeChatLoginContract.View view;
 
@@ -44,13 +51,59 @@ public class WeChatLoginPresenter implements WeChatLoginContract.WeChatLoginPres
                             AYPrefUtils.setAuthToken(bean.auth_token);
                             view.weChatLoginSuccess(bean);
                         }else {
-                            view.weChatLoginError(bean);
+                            view.onError(bean);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        view.weChatLoginError(null);
+                        LogUtils.e(WeChatLoginPresenter.class,e);
+                        if (view == null){
+                            return;
+                        }
+                        BaseDataBean bean = new BaseDataBean();
+                        bean.code = AppConstant.NET_UNKNOWN_ERROR;
+                        bean.message = e.getMessage();
+                        view.onError(bean);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    @Override
+    public void upLoadWeChatIcon(String userIcon, String imgUUID) {
+        upLoadWeChatIconUseCase.upLoadWeChatIcon(userIcon, imgUUID)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UpLoadWeChatIconDomainBean>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(UpLoadWeChatIconDomainBean bean) {
+                        if (bean.isSuccess){
+                            view.onUpLoadWeChatIconSuccess(bean);
+                        }else {
+                            view.onError(bean);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtils.e(WeChatLoginPresenter.class,e);
+                        if (view == null){
+                            return;
+                        }
+                        BaseDataBean bean = new BaseDataBean();
+                        bean.code = AppConstant.NET_UNKNOWN_ERROR;
+                        bean.message = e.getMessage();
+                        view.onError(bean);
                     }
 
                     @Override

@@ -16,6 +16,7 @@ import com.blackmirror.dongda.domain.model.UserInfoDomainBean;
 import com.blackmirror.dongda.presenter.UserInfoPresenter;
 import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
 import com.blackmirror.dongda.ui.base.BaseActivity;
+import com.blackmirror.dongda.utils.AYPrefUtils;
 import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.DeviceUtils;
 import com.blackmirror.dongda.utils.LogUtils;
@@ -23,6 +24,11 @@ import com.blackmirror.dongda.utils.OSSUtils;
 import com.blackmirror.dongda.utils.SnackbarUtils;
 import com.blackmirror.dongda.utils.ToastUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.mob.MobSDK;
+
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 
 public class UserAboutMeActivity extends BaseActivity implements View.OnClickListener, UserInfoContract.View {
 
@@ -135,6 +141,13 @@ public class UserAboutMeActivity extends BaseActivity implements View.OnClickLis
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         closeDialog();
+                        Platform weChat = ShareSDK.getPlatform(Wechat.NAME);
+                        weChat.getDb().removeAccount();
+                        weChat.removeAccount(true);
+                        ShareSDK.deleteCache();
+                        MobSDK.clearUser();
+                        AYPrefUtils.setUserId("");
+                        AYPrefUtils.setAuthToken("");
                         Intent intent = new Intent(UserAboutMeActivity.this, LandingActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(intent);

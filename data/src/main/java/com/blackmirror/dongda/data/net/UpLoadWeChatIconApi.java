@@ -4,7 +4,7 @@ package com.blackmirror.dongda.data.net;
 import com.blackmirror.dongda.base.AYApplication;
 import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.request.UploadImageRequestBean;
-import com.blackmirror.dongda.data.model.response.BaseResponseBean;
+import com.blackmirror.dongda.data.model.response.DownloadWeChatIconResponseBean;
 import com.blackmirror.dongda.data.model.response.OssInfoResponseBean;
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean;
 import com.blackmirror.dongda.utils.AYPrefUtils;
@@ -28,10 +28,19 @@ import okhttp3.Response;
 /**
  * Created by alfredyang on 23/05/2017.
  */
-public  class UpLoadFileApi extends AYRemoteApi {
+public  class UpLoadWeChatIconApi extends AYRemoteApi {
 
 
-    protected static Observable<UpLoadImgResponseBean> execute(final UploadImageRequestBean requestBean, final Class<UpLoadImgResponseBean> myClass) {
+    public static Observable<UpLoadImgResponseBean> uploadWeChatImage(String userIcon, String imgUUID){
+        UploadImageRequestBean requestBean = new UploadImageRequestBean();
+        requestBean.userIcon = userIcon;
+        requestBean.imgUUID = imgUUID;
+        return upload(requestBean,UpLoadImgResponseBean.class);
+    }
+
+
+    protected static Observable<UpLoadImgResponseBean> upload(final UploadImageRequestBean requestBean, final Class<UpLoadImgResponseBean> myClass) {
+
         return Observable.just(requestBean)
                 .map(new Function<UploadImageRequestBean, OssInfoResponseBean>() {
                     @Override
@@ -54,22 +63,74 @@ public  class UpLoadFileApi extends AYRemoteApi {
                             return bean;
                         }
                     }
-                }).map(new Function<OssInfoResponseBean, UpLoadImgResponseBean>() {
+                }).map(new Function<OssInfoResponseBean, DownloadWeChatIconResponseBean>() {
                     @Override
-                    public UpLoadImgResponseBean apply(OssInfoResponseBean bean) throws Exception {
+                    public DownloadWeChatIconResponseBean apply(OssInfoResponseBean bean) throws Exception {
 //                        LogUtils.d("flag", "做网络请求前的json数据: " + q.json.toString());
+                        Request request = new Request.Builder().url(requestBean.userIcon).get().build();
+                        return getIcon(request);
+                    }
+                }).map(new Function<DownloadWeChatIconResponseBean, UpLoadImgResponseBean>() {
+                    @Override
+                    public UpLoadImgResponseBean apply(DownloadWeChatIconResponseBean bean) throws Exception {
                         if ("ok".equals(bean.status)) {
+                            requestBean.userIconData = bean.userIcon;
                             return executeUpload(requestBean);
                         } else {
                             int code = bean.error == null ? DataConstant.NET_UNKNOWN_ERROR : bean.error.code;
-                            String message = bean.error == null ? "" : bean.error.message;
+//                            String message = bean.error == null ? "" : bean.error.message;
+                            String message = "获取微信头像失败";
                             return getUploadErrorData(code,message);
                         }
                     }
                 });
     }
 
+    private static DownloadWeChatIconResponseBean getIcon(Request request) {
+        //        LogUtils.d("flag","做网络请求前的json数据: "+args.toString());
+        int error_code;
+        String error_message;
+        DownloadWeChatIconResponseBean bean = new DownloadWeChatIconResponseBean();
+        try {
+            Response response = httpClient.newCall(request).execute();
+            if (response.isSuccessful()){
+                bean.status = "ok";
+                bean.userIcon = response.body().bytes();
+            }else {
+                bean.error = new DownloadWeChatIconResponseBean.ErrorBean();
+                bean.error.code = response.code();
+                bean.error.message = response.message();
+            }
+            response.close();
+            return bean;
 
+        } catch (ConnectTimeoutException e1) {
+            error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION;
+            error_message = e1.getMessage();
+            LogUtils.e(AYRemoteApi.class, "ConnectTimeoutException: ", e1);
+
+        } catch (SocketTimeoutException e2) {//服务器响应超时
+            error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION;
+            error_message = e2.getMessage();
+            LogUtils.e(AYRemoteApi.class, "SocketTimeoutException: ", e2);
+
+        } catch (ConnectException e3) {//服务器请求超时
+            error_code = DataConstant.CONNECT_EXCEPTION;
+            error_message = e3.getMessage();
+            LogUtils.e(AYRemoteApi.class, "ConnectException: ", e3);
+
+        } catch (Exception e4) {
+            error_code = DataConstant.OTHER_EXCEPTION;
+            error_message = e4.getMessage();
+            LogUtils.e(AYRemoteApi.class, "Exception: ", e4);
+
+        }
+
+        bean.error = new DownloadWeChatIconResponseBean.ErrorBean();
+        bean.error.code = error_code;
+        bean.error.message = error_message;
+        return bean;
+    }
 
     private static UpLoadImgResponseBean executeUpload(UploadImageRequestBean requestBean) {
 
@@ -109,9 +170,13 @@ public  class UpLoadFileApi extends AYRemoteApi {
         requestBuilder.addHeader("Authorization", signature);
 
         File file = new File(path);
-        RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
-        requestBuilder = requestBuilder.method("PUT", body);
-
+        if (requestBean.userIconData == null || requestBean.userIconData.length == 0) {
+            RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), file);
+            requestBuilder = requestBuilder.method("PUT", body);
+        }else {
+            RequestBody body = RequestBody.create(MediaType.parse("image/jpeg"), requestBean.userIconData);
+            requestBuilder = requestBuilder.method("PUT", body);
+        }
 
         try {
             Response response = httpClient.newCall(requestBuilder.build()).execute();
@@ -133,22 +198,22 @@ public  class UpLoadFileApi extends AYRemoteApi {
         } catch (ConnectTimeoutException e1) {
             error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION;
             error_message = e1.getMessage();
-            LogUtils.e(UpLoadFileApi.class, "ConnectTimeoutException: ", e1);
+            LogUtils.e(UpLoadWeChatIconApi.class, "ConnectTimeoutException: ", e1);
 
         } catch (SocketTimeoutException e2) {//服务器响应超时
             error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION;
             error_message = e2.getMessage();
-            LogUtils.e(UpLoadFileApi.class, "SocketTimeoutException: ", e2);
+            LogUtils.e(UpLoadWeChatIconApi.class, "SocketTimeoutException: ", e2);
 
         } catch (ConnectException e3) {//服务器请求超时
             error_code = DataConstant.CONNECT_EXCEPTION;
             error_message = e3.getMessage();
-            LogUtils.e(UpLoadFileApi.class, "ConnectException: ", e3);
+            LogUtils.e(UpLoadWeChatIconApi.class, "ConnectException: ", e3);
 
         } catch (Exception e4) {
             error_code = DataConstant.OTHER_EXCEPTION;
             error_message = e4.getMessage();
-            LogUtils.e(UpLoadFileApi.class, "Exception: ", e4);
+            LogUtils.e(UpLoadWeChatIconApi.class, "Exception: ", e4);
 
         }
 
@@ -164,31 +229,6 @@ public  class UpLoadFileApi extends AYRemoteApi {
         bean.error = errorBean;
 
         return bean;
-    }
-
-
-    private static <P extends BaseResponseBean> P getErrorData(Class clz) {
-        return getErrorData(clz, DataConstant.NET_UNKNOWN_ERROR);
-    }
-
-    private static <P extends BaseResponseBean> P getErrorData(Class clz, int code) {
-        return getErrorData(clz, code, "");
-    }
-
-    private static <P extends BaseResponseBean> P getErrorData(Class clz, int code, String message) {
-        P obj = null;
-
-        try {
-            obj = (P) clz.newInstance();
-            obj.error = new P.ErrorBean();
-            obj.error.code = code;
-            obj.error.message = message;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return obj;
     }
 
 }

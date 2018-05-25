@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -70,6 +71,7 @@ public class NearServiceActivity extends BaseActivity implements Contract.NearSe
     private AlertDialog dialog;
     private String locMarkerId;
     private NearServicePresenter presenter;
+    private ConstraintLayout cl_root;
 
     //设置定位回调监听
     //mLocationClient.setLocationListener(mLocationListener);
@@ -280,7 +282,7 @@ public class NearServiceActivity extends BaseActivity implements Contract.NearSe
 
                 aMap.getUiSettings().setZoomControlsEnabled(false);
                 //设置默认缩放比例 3-19
-                aMap.moveCamera(CameraUpdateFactory.zoomTo(13));
+                aMap.moveCamera(CameraUpdateFactory.zoomTo(13.2f));
                 aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(latitude, longitude)));
                 markerOption = new MarkerOptions();
                 markerOption.position(new LatLng(latitude, longitude));
@@ -367,6 +369,7 @@ public class NearServiceActivity extends BaseActivity implements Contract.NearSe
     private void showPopUpWindow() {
         if (view == null) {
             view = View.inflate(NearServiceActivity.this, R.layout.dialog_near_service, null);
+            cl_root = view.findViewById(R.id.cl_root);
             sv_near_photo = view.findViewById(R.id.sv_near_photo);
             tv_near_title = view.findViewById(R.id.tv_near_title);
             tv_near_dec = view.findViewById(R.id.tv_near_dec);
@@ -374,13 +377,17 @@ public class NearServiceActivity extends BaseActivity implements Contract.NearSe
         }
         if (popupWindow == null) {
             popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            popupWindow.setFocusable(true);// 取得焦点
+            // 取得焦点
+            // true时，点击返回键先消失 PopupWindow
+            // 但是设置为true时setOutsideTouchable，setTouchable方法就失效了（点击外部不消失，内容区域也不响应事件）
+            // false时PopupWindow不处理返回键
+            popupWindow.setFocusable(false);
             //注意  要是点击外部空白处弹框消息  那么必须给弹框设置一个背景色  不然是不起作用的
             popupWindow.setBackgroundDrawable(new BitmapDrawable());
-            //点击外部消失
+            //点击外部消失 setOutsideTouchable设置生效的前提是setTouchable(true)和setFocusable(false)
             popupWindow.setOutsideTouchable(false);
-            //设置可以点击
-            popupWindow.setTouchable(false);
+            //设置可以点击 设置为true之后，PopupWindow内容区域 才可以响应点击事件
+            popupWindow.setTouchable(true);
             animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0, Animation.RELATIVE_TO_PARENT, 0,
                     Animation.RELATIVE_TO_PARENT, 1, Animation.RELATIVE_TO_PARENT, 0);
             animation.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -528,4 +535,8 @@ public class NearServiceActivity extends BaseActivity implements Contract.NearSe
 
     }
 
+    @Override
+    protected void setStatusBarColor() {
+        DeviceUtils.initSystemBarColor(this);
+    }
 }

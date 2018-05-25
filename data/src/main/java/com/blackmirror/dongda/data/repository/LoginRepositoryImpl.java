@@ -1,12 +1,19 @@
 package com.blackmirror.dongda.data.repository;
 
+import com.blackmirror.dongda.data.DataConstant;
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean;
 import com.blackmirror.dongda.data.model.response.PhoneLoginResponseBean;
 import com.blackmirror.dongda.data.model.response.SendSmsResponseBean;
+import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean;
 import com.blackmirror.dongda.data.model.response.WeChatLoginResponseBean;
 import com.blackmirror.dongda.data.net.LoginApi;
+import com.blackmirror.dongda.data.net.UpLoadWeChatIconApi;
+import com.blackmirror.dongda.data.net.UpdateUserInfoApi;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
+import com.blackmirror.dongda.domain.model.UpLoadWeChatIconDomainBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
 import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 import com.blackmirror.dongda.domain.repository.LoginRepository;
 import com.blackmirror.dongda.utils.AYPrefUtils;
@@ -28,14 +35,14 @@ public class LoginRepositoryImpl implements LoginRepository {
                         SendSmsBean bean = new SendSmsBean();
                         if (responseBean != null && "ok".equals(responseBean.status)) {
                             bean.isSuccess = true;
-                            if ( responseBean.result != null && responseBean.result.reg != null) {
-                                bean.phone=responseBean.result.reg.phone;
-//                                bean.code=responseBean.result.reg.code;
-                                bean.reg_token=responseBean.result.reg.reg_token;
-                                bean.is_reg=responseBean.result.reg.is_reg;
+                            if (responseBean.result != null && responseBean.result.reg != null) {
+                                bean.phone = responseBean.result.reg.phone;
+                                //                                bean.code=responseBean.result.reg.code;
+                                bean.reg_token = responseBean.result.reg.reg_token;
+                                bean.is_reg = responseBean.result.reg.is_reg;
                             }
                         } else {
-                            if (responseBean!=null && responseBean.error!=null) {
+                            if (responseBean != null && responseBean.error != null) {
                                 bean.code = responseBean.error.code;
                                 bean.message = responseBean.error.message;
                             }
@@ -58,13 +65,13 @@ public class LoginRepositoryImpl implements LoginRepository {
                                 bean.auth_token = responseBean.result.auth_token;
                             }
                             if (responseBean.result != null && responseBean.result.user != null) {
-                                bean.screen_name=responseBean.result.user.screen_name;
-                                bean.has_auth_phone=responseBean.result.user.has_auth_phone;
-                                bean.current_device_type=responseBean.result.user.current_device_type;
-                                bean.is_service_provider=responseBean.result.user.is_service_provider;
-                                bean.user_id=responseBean.result.user.user_id;
-                                bean.screen_photo=responseBean.result.user.screen_photo;
-                                bean.current_device_id=responseBean.result.user.current_device_id;
+                                bean.screen_name = responseBean.result.user.screen_name;
+                                bean.has_auth_phone = responseBean.result.user.has_auth_phone;
+                                bean.current_device_type = responseBean.result.user.current_device_type;
+                                bean.is_service_provider = responseBean.result.user.is_service_provider;
+                                bean.user_id = responseBean.result.user.user_id;
+                                bean.screen_photo = responseBean.result.user.screen_photo;
+                                bean.current_device_id = responseBean.result.user.current_device_id;
                             }
                         } else {
                             if (bean != null && responseBean.error != null) {
@@ -73,7 +80,7 @@ public class LoginRepositoryImpl implements LoginRepository {
                             }
                         }
                         //插入数据库
-                        if (bean.isSuccess){
+                        if (bean.isSuccess) {
                             AYPrefUtils.setUserId(bean.user_id);
                             AYPrefUtils.setAuthToken(bean.auth_token);
 
@@ -122,7 +129,7 @@ public class LoginRepositoryImpl implements LoginRepository {
                             }
                         }
                         //插入数据库
-                        if (bean.isSuccess){
+                        if (bean.isSuccess) {
 
                             AYPrefUtils.setUserId(bean.user_id);
                             AYPrefUtils.setAuthToken(bean.auth_token);
@@ -138,6 +145,43 @@ public class LoginRepositoryImpl implements LoginRepository {
 
                         return bean;
                     }
+                });
+    }
+
+    @Override
+    public Observable<UpLoadWeChatIconDomainBean> upLoadWeChatIcon(String userIcon, final String imgUUID) {
+        return UpLoadWeChatIconApi.uploadWeChatImage(userIcon, imgUUID)
+                .flatMap(new Function<UpLoadImgResponseBean, Observable<UpLoadWeChatIconDomainBean>>() {
+                    @Override
+                    public Observable<UpLoadWeChatIconDomainBean> apply(UpLoadImgResponseBean bean) throws Exception {
+
+                        if ("ok".equals(bean.status)) {
+                            UpdateUserInfoDomainBean ub = new UpdateUserInfoDomainBean();
+                            ub.json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + imgUUID + "\"}}";
+
+                            return UpdateUserInfoApi.updateUserInfo(ub).map(new Function<UpdateUserInfoBean, UpLoadWeChatIconDomainBean>() {
+                                @Override
+                                public UpLoadWeChatIconDomainBean apply(UpdateUserInfoBean bean) throws Exception {
+                                    UpLoadWeChatIconDomainBean db = new UpLoadWeChatIconDomainBean();
+                                    if (bean.isSuccess) {
+                                        db.isSuccess = true;
+                                        db.imgUUID = bean.screen_photo;
+                                    } else {
+                                        db.code = bean.code;
+                                        db.message = bean.message;
+                                    }
+                                    return db;
+                                }
+                            });
+                        } else {
+                            UpLoadWeChatIconDomainBean db = new UpLoadWeChatIconDomainBean();
+                            db.code = DataConstant.UPLOAD_WECHAT_ERROR;
+                            db.message = "上传微信头像失败!";
+                            return Observable.just(db);
+                        }
+                    }
+
+
                 });
     }
 }

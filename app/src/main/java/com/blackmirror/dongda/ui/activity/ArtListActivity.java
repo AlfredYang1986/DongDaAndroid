@@ -193,8 +193,9 @@ public class ArtListActivity extends BaseActivity implements ListMoreContract.Vi
                         @Override
                         public void onItemArtListClick(View view, int position, String service_id) {
                             Intent intent = new Intent(ArtListActivity.this, ServiceDetailInfoActivity.class);
+                            clickLikePos = position;
                             intent.putExtra("service_id",service_id);
-                            startActivity(intent);
+                            startActivityForResult(intent,AppConstant.ART_LIST_REQUEST_CODE);
                         }
 
                         @Override
@@ -226,6 +227,18 @@ public class ArtListActivity extends BaseActivity implements ListMoreContract.Vi
             presenter.likePush(bean.service_id);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+            isNeedRefresh = true;
+            boolean isLike = data.getBooleanExtra("is_like",false);
+            adapter.notifyItemChanged(clickLikePos, isLike);
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {

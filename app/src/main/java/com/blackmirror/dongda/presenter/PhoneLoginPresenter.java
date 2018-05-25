@@ -5,9 +5,11 @@ import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.domain.Interactor.PhoneLoginUseCase;
 import com.blackmirror.dongda.domain.Interactor.SendSmsUseCase;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
 import com.blackmirror.dongda.ui.PhoneLoginContract;
+import com.blackmirror.dongda.utils.AppConstant;
 import com.blackmirror.dongda.utils.LogUtils;
 
 import javax.inject.Inject;
@@ -50,8 +52,14 @@ public class PhoneLoginPresenter implements PhoneLoginContract.PhoneLoginPresent
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtils.d("phoneLogin error");
-                        view.loginError(null);
+                        LogUtils.e(PhoneLoginPresenter.class,e);
+                        if (view == null){
+                            return;
+                        }
+                        BaseDataBean bean = new BaseDataBean();
+                        bean.code = AppConstant.NET_UNKNOWN_ERROR;
+                        bean.message = e.getMessage();
+                        view.onError(bean);
                     }
 
                     @Override
@@ -80,8 +88,14 @@ public class PhoneLoginPresenter implements PhoneLoginContract.PhoneLoginPresent
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtils.d("sendSms error");
-                        view.sendSmsError(null);
+                        LogUtils.e(PhoneLoginPresenter.class,e);
+                        if (view == null){
+                            return;
+                        }
+                        BaseDataBean bean = new BaseDataBean();
+                        bean.code = AppConstant.NET_UNKNOWN_ERROR;
+                        bean.message = e.getMessage();
+                        view.onError(bean);
                     }
 
                     @Override

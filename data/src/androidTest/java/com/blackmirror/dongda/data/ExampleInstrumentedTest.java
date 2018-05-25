@@ -5,8 +5,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.blackmirror.dongda.data.repository.ApplyAndEnrolRepositoryImpl;
-import com.blackmirror.dongda.data.utils.LogUtils;
 import com.blackmirror.dongda.domain.model.ApplyServiceDomainBean;
+import com.blackmirror.dongda.utils.LogUtils;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -23,6 +23,8 @@ public class AppConstant {
     public static final int FEATURE_DETAIL_REQUEST_CODE =116;
     public static final int ABOUT_USER_REQUEST_CODE =117;
     public static final int EDIT_USER_REQUEST_CODE =118;
+    public static final int CARE_LIST_REQUEST_CODE =119;
+    public static final int ART_LIST_REQUEST_CODE =119;
 
     public static final int NO_GPS_PERMISSION =12;
 
@@ -37,10 +39,7 @@ public class AppConstant {
      */
     public static final int NET_UNKNOWN_ERROR=-9999;
     public static final int NET_WORK_UNAVAILABLE=10010;
-    public static final int CONNECT_TIMEOUT_EXCEPTION=-100;
-    public static final int SOCKET_TIMEOUT_EXCEPTION=-101;
-    public static final int CONNECT_EXCEPTION=-102;
-    public static final int OTHER_EXCEPTION=-103;
+    public static final int UPLOAD_WECHAT_ERROR=-104;
 
 
     public static final int HOME_ART_ADAPTER=1;//1 art 2 sport 3 science

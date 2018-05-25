@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.ui.activity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,6 +36,7 @@ public class MyLikeActivity extends BaseActivity implements Contract.MyLikeView 
     private int clickLikePos;
     private AlertDialog dialog;
     private MyLikePresenter presenter;
+    private boolean isNeedRefresh;
 
     @Override
     protected int getLayoutResId() {
@@ -69,6 +71,7 @@ public class MyLikeActivity extends BaseActivity implements Contract.MyLikeView 
         iv_home_head_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
                 finish();
             }
         });
@@ -106,12 +109,14 @@ public class MyLikeActivity extends BaseActivity implements Contract.MyLikeView 
 
     @Override
     public void onLikePushSuccess(LikePushDomainBean bean) {
+        isNeedRefresh = true;
         closeProcessDialog();
         adapter.notifyItemChanged(clickLikePos, true);
     }
 
     @Override
     public void onLikePopSuccess(LikePopDomainBean bean) {
+        isNeedRefresh = true;
         closeProcessDialog();
         adapter.removeItem(clickLikePos);
     }
@@ -155,6 +160,12 @@ public class MyLikeActivity extends BaseActivity implements Contract.MyLikeView 
                 }).create();
         dialog.show();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     @Override

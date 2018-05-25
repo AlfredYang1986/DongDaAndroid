@@ -96,6 +96,7 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
     private int randomInt;
     private DetailInfoPresenter presenter;
     private DetailInfoDomainBean bean;
+    private boolean isLike;
 
     @Override
     protected void init(Bundle savedInstanceState) {
@@ -220,7 +221,7 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
         switch (v.getId()) {
             case R.id.iv_detail_tb_back:
             case R.id.iv_detail_back:
-                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+                setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED,getIntent().putExtra("is_like",isLike));
                 finish();
                 break;
             case R.id.tv_dec_more:
@@ -272,6 +273,7 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
         isNeedRefresh = true;
         closeProcessDialog();
         this.bean.is_collected = true;
+        isLike = true;
         iv_detail_like.setImageResource(R.drawable.like_selected);
     }
 
@@ -280,6 +282,7 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
         isNeedRefresh = true;
         closeProcessDialog();
         this.bean.is_collected = false;
+        isLike = false;
         iv_detail_like.setImageResource(R.drawable.home_art_like);
     }
 
@@ -543,13 +546,14 @@ public class ServiceDetailInfoActivity extends BaseActivity implements View.OnCl
 
     @Override
     public void onBackPressed() {
-        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED);
+        setResult(isNeedRefresh ? Activity.RESULT_OK : Activity.RESULT_CANCELED,getIntent().putExtra("is_like",isLike));
         super.onBackPressed();
 
     }
 
     @Override
     protected void setStatusBarColor() {
+        DeviceUtils.initSystemBarColor(this);
     }
 
 }

@@ -11,6 +11,7 @@ import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean;
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.di.component.DaggerPhoneInputComponent;
+import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
 import com.blackmirror.dongda.domain.model.SendSmsBean;
 import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
@@ -204,16 +205,6 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
     @Override
-    public void loginError(com.blackmirror.dongda.domain.model.PhoneLoginBean bean) {
-        closeProcessDialog();
-        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(sms_code, bean.message);
-        } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
-        }
-    }
-
-    @Override
     public void sendSmsSuccess(SendSmsBean bean) {
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
         closeProcessDialog();
@@ -221,7 +212,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
     @Override
-    public void sendSmsError(com.blackmirror.dongda.domain.model.SendSmsBean bean) {
+    public void onError(BaseDataBean bean) {
         closeProcessDialog();
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(sms_code, bean.message);

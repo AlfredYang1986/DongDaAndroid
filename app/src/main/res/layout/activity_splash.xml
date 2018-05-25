@@ -9,6 +9,7 @@
     android:gravity="bottom|center"
     tools:context=".ui.activity.SplashActivity">
     <ImageView
+         android:id="@+id/iv_icon"
         android:background="@drawable/dongda_2x"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

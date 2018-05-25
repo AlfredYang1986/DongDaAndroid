@@ -428,6 +428,8 @@ public class EditUserInfoActivity extends BaseActivity implements View.OnClickLi
 
     public void displayImage(Uri uri, SimpleDraweeView draweeView) {
 
+        Fresco.getImagePipeline().evictFromCache(uri);
+
         ImageRequest request = ImageRequestBuilder.newBuilderWithSource(uri)
                 .setResizeOptions(new ResizeOptions(DensityUtils.getScreenWidthPx(), DensityUtils.dp2px(250)))
                 .build();

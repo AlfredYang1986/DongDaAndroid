@@ -35,9 +35,10 @@ android {
         debug {
             //混淆
             debuggable true
+            signingConfig signingConfigs.release
         }
         release {
-            buildConfigField "boolean", "LOG_DEBUG", "false" //不显示log
+            buildConfigField "boolean", "LOG_DEBUG", "true" //不显示log
             zipAlignEnabled true     //Zipalign优化
             shrinkResources true    // 移除无用的resource文件
             minifyEnabled true     //混淆
@@ -83,7 +84,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
     implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.ext.rxAndroidVersion
     implementation 'com.squareup.okhttp3:okhttp:' + rootProject.ext.okhttpVersion
-//    implementation 'com.facebook.stetho:stetho:1.5.0'
+    //    implementation 'com.facebook.stetho:stetho:1.5.0'
     //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     //    implementation 'com.aliyun.dpa:oss-android-sdk:+'
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion
@@ -96,8 +97,8 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
     implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
     implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
-//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
-//    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project(':domain')
     implementation project(':device')
     implementation project(':data')

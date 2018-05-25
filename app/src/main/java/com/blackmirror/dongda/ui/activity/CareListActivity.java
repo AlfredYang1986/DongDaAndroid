@@ -197,7 +197,8 @@ public class CareListActivity extends BaseActivity implements ListMoreContract.V
                 public void onItemCareListClick(View view, int position, String service_id) {
                     Intent intent = new Intent(CareListActivity.this, ServiceDetailInfoActivity.class);
                     intent.putExtra("service_id", service_id);
-                    startActivity(intent);
+                    clickLikePos = position;
+                    startActivityForResult(intent,AppConstant.CARE_LIST_REQUEST_CODE);
                 }
 
                 @Override
@@ -220,6 +221,18 @@ public class CareListActivity extends BaseActivity implements ListMoreContract.V
             presenter.likePush(bean.service_id);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK){
+            isNeedRefresh = true;
+            boolean isLike = data.getBooleanExtra("is_like",false);
+            adapter.notifyItemChanged(clickLikePos, isLike);
+        }
+
+    }
+
 
     @Override
     public void onBackPressed() {
