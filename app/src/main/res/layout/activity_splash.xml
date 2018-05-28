@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="bottom|center"
+    tools:context=".ui.activity.SplashActivity">
+    <ImageView
+         android:id="@+id/iv_icon"
+        android:background="@drawable/dongda_2x"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        />
+
+    <TextView
+        android:layout_marginBottom="24dp"
+        android:textSize="13sp"
+        android:textColor="#FF59D5C7"
+        android:text="@string/str_landing_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

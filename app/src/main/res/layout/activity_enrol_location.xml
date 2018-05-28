@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF7F9FA"
+    tools:context=".ui.activity.enrol.EnrolLocationActivity">
+
+   <include layout="@layout/activity_enrol_header"/>
+
+    <TextView
+         android:id="@+id/tv_enrol_addr_dec"
+        android:layout_marginTop="14dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        android:textStyle="bold"
+        android:typeface="sans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你想要招生的场地是"
+        android:textColor="#FF404040"
+        android:textSize="24sp"
+        />
+
+    <TextView
+         android:id="@+id/tv_cur_loc_dec"
+        app:layout_constraintTop_toBottomOf="@id/tv_enrol_addr_dec"
+        app:layout_constraintLeft_toLeftOf="@id/tv_enrol_addr_dec"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="当前位置"
+        android:textColor="#FF404040"
+        android:textSize="15sp"
+        />
+
+
+    <android.support.v7.widget.CardView
+        android:clickable="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="17dp"
+        android:layout_marginRight="17dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_cur_loc_dec"
+        android:background="#FFFFFFFF"
+        android:id="@+id/cv_service_root"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="3dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        >
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                app:layout_constraintTop_toTopOf="@id/tv_cur_location"
+                app:layout_constraintBottom_toBottomOf="@id/tv_cur_location"
+                android:id="@+id/iv_loc"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/icon_location_theme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:id="@+id/tv_cur_location"
+                app:layout_constraintLeft_toRightOf="@id/iv_loc"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="29dp"
+                android:layout_marginBottom="27dp"
+                android:layout_width="139dp"
+                android:layout_height="21dp"
+                android:text="朝阳区酒仙桥52号院"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                />
+
+            <ImageView
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_cur_location"
+                app:layout_constraintBottom_toBottomOf="@id/tv_cur_location"
+                android:background="@drawable/icon_arrowr_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@id/cv_service_root"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="已有场地"
+        android:textColor="#FF404040"
+        android:textSize="15sp"
+        />
+
+
+
+</android.support.constraint.ConstraintLayout>

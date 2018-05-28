@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#FFFFFFFF"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.enrol.EnrolAgeActivity">
+
+    <include layout="@layout/activity_enrol_student_header"/>
+
+    <View
+        android:id="@+id/view_1"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="#FF59D5C7"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/view_2"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        app:layout_constraintVertical_chainStyle="spread_inside"
+        />
+
+    <View
+        android:id="@+id/view_2"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="2dp"
+        android:background="#FFD8D8D8"
+        app:layout_constraintLeft_toRightOf="@id/view_1"
+        app:layout_constraintRight_toLeftOf="@id/view_3"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+    <View
+        android:id="@+id/view_3"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginLeft="2dp"
+        android:background="#FFD8D8D8"
+        app:layout_constraintLeft_toRightOf="@id/view_2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+
+    <TextView
+         android:id="@+id/tv_enrol_age_dec1"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:typeface="sans"
+        app:layout_constraintTop_toBottomOf="@id/view_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="本次招生的孩子年龄是"
+        android:textColor="#FF404040"
+        android:textSize="24sp"
+        />
+
+    <TextView
+         android:id="@+id/tv_enrol_age_dec2"
+        app:layout_constraintLeft_toLeftOf="@id/tv_enrol_age_dec1"
+        app:layout_constraintTop_toBottomOf="@id/tv_enrol_age_dec1"
+        android:layout_marginTop="2dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="不同孩子年龄的课程可能会对应不同的收费"
+        android:textColor="#FFA6A6A6"
+        android:textSize="15sp"
+        />
+
+    <android.support.constraint.ConstraintLayout
+         android:id="@+id/cl_choose_low_age"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="@id/tv_enrol_age_dec1"
+        app:layout_constraintTop_toBottomOf="@id/tv_enrol_age_dec2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cl_choose_age_shape"
+        >
+
+        <TextView
+             android:id="@+id/tv_choose_low_age"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请选择"
+            android:textColor="#FFD9D9D9"
+            android:textSize="15sp"
+            />
+
+        <TextView
+            android:layout_marginLeft="14dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="33dp"
+            app:layout_constraintTop_toTopOf="@id/tv_choose_low_age"
+            app:layout_constraintBottom_toBottomOf="@id/tv_choose_low_age"
+            app:layout_constraintLeft_toRightOf="@id/tv_choose_low_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="岁"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <TextView
+        app:layout_constraintTop_toTopOf="@id/cl_choose_low_age"
+        app:layout_constraintBottom_toBottomOf="@id/cl_choose_low_age"
+        app:layout_constraintLeft_toRightOf="@id/cl_choose_low_age"
+        app:layout_constraintRight_toLeftOf="@id/cl_choose_large_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textColor="#FF404040"
+        android:textSize="22sp"
+        />
+
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_marginRight="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/cl_choose_large_age"
+        android:layout_marginTop="40dp"
+        app:layout_constraintTop_toBottomOf="@id/tv_enrol_age_dec2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cl_choose_age_shape"
+        >
+
+        <TextView
+            android:id="@+id/tv_choose_large_age"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="22dp"
+            android:layout_marginBottom="21dp"
+            android:layout_marginLeft="32dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请选择"
+            android:textColor="#FFD9D9D9"
+            android:textSize="15sp"
+            />
+
+        <TextView
+
+            android:layout_marginLeft="14dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginRight="33dp"
+            app:layout_constraintTop_toTopOf="@id/tv_choose_large_age"
+            app:layout_constraintBottom_toBottomOf="@id/tv_choose_large_age"
+            app:layout_constraintLeft_toRightOf="@id/tv_choose_large_age"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="岁"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+
+
+</android.support.constraint.ConstraintLayout>
