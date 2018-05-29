@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
+    tools:context=".ui.activity.UserInfoActivity">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:background="#FFF7F9FA"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+    <ImageView
+        android:id="@+id/iv_home_head_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/icon_back_black"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_user_photo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="20dp"
+        app:actualImageScaleType="focusCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:placeholderImage="@drawable/avatar_0"
+        app:placeholderImageScaleType="focusCrop"
+        app:roundAsCircle="true"/>
+
+    <TextView
+        android:id="@+id/tv_user_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="线瓣妈妈"
+        android:textColor="#FF404040"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@id/sv_user_photo"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sv_user_photo"
+        />
+
+    <android.support.constraint.ConstraintLayout
+         android:id="@+id/cl_apply_service"
+        android:visibility="visible"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_join_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="19dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:text="@string/apply_to_service"
+            android:textColor="#FF404040"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            />
+
+        <View
+            android:id="@+id/view_line_1"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_join_service"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_apply_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="@string/setting"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_1"
+            />
+
+        <View
+            android:id="@+id/view_line_2"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_apply_setting"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.constraint.ConstraintLayout
+         android:id="@+id/cl_enrol_class"
+        android:visibility="gone"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:gravity="center"
+            android:background="@drawable/btn_enrol_selector"
+            android:id="@+id/tv_enrol_class"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="发布招生"
+            android:textColor="@drawable/bt_enrol_text_selector"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            />
+
+        <TextView
+            android:layout_marginTop="24dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_enrol_class"
+            android:id="@+id/tv_my_brand"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="19dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:text="我的品牌"
+            android:textColor="#FF404040"
+            android:textSize="18sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            />
+
+        <View
+            android:id="@+id/view_line_11"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_my_brand"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_enrol_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="@string/setting"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_11"
+            />
+
+        <View
+            android:id="@+id/view_line_22"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_enrol_setting"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+    <android.support.constraint.ConstraintLayout
+         android:id="@+id/cl_change_service"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/tv_change_to_service"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="19dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="20dp"
+            android:text="切换为服务模式"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+
+            />
+
+        <View
+            android:id="@+id/view_line_111"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_change_to_service"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_change_service_setting"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="@string/setting"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_111"
+            />
+
+        <View
+            android:id="@+id/view_line_222"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_change_service_setting"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.constraint.ConstraintLayout>

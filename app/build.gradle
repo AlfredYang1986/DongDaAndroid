@@ -1,43 +1,105 @@
 apply plugin: 'com.android.application'
+// 添加插件
+apply plugin: "com.mob.sdk"
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+def keystoreProperties = new Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '27.0.3'
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
     defaultConfig {
         applicationId "com.blackmirror.dongda"
-        minSdkVersion 16
-        targetSdkVersion 23
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
+        debug {
+            //混淆
+            debuggable true
+            signingConfig signingConfigs.release
+        }
         release {
-            minifyEnabled false
+            buildConfigField "boolean", "LOG_DEBUG", "true" //不显示log
+            zipAlignEnabled true     //Zipalign优化
+            shrinkResources true    // 移除无用的resource文件
+            minifyEnabled true     //混淆
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        dexOptions {
+            javaMaxHeapSize "4g"
         }
     }
+}
+MobSDK {
+    appKey "252704f3d1440"
+    appSecret "78c9af280d38f79cc137cc87b92a3376"
+
+    ShareSDK {
+        version "3.1.4"
+        gui false
+        //平台配置信息
+        devInfo {
+            Wechat {
+                appId "wx66d179d99c9ba7d6"
+                appSecret "469c1beed3ecaa3a836767a5999beeb1"
+            }
+
+        }
+    }
+
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    implementation 'com.android.support.constraint:constraint-layout:' + rootProject.ext.constraintLayoutVersion
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'junit:junit:4.12'
-    implementation 'in.srain.cube:ptr-load-more:1.0.6'
-    implementation 'com.facebook.fresco:fresco:1.8.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.10'
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:support-v4:26.1.0'
-    implementation 'com.android.support:cardview-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.facebook.stetho:stetho:1.5.0'
-    implementation 'com.facebook.stetho:stetho-okhttp3:1.5.0'
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-    implementation 'com.alibaba:fastjson:1.2.46'
-    implementation 'com.alibaba:fastjson:1.1.68.android'
+    implementation 'com.android.support:appcompat-v7:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:support-v4:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:cardview-v7:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:design:' + rootProject.ext.supportLibVersion
+    implementation 'com.android.support:recyclerview-v7:' + rootProject.ext.supportLibVersion
+    implementation 'com.facebook.fresco:fresco:' + rootProject.ext.frescoVersion
+    implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
+    implementation 'io.reactivex.rxjava2:rxandroid:' + rootProject.ext.rxAndroidVersion
+    implementation 'com.squareup.okhttp3:okhttp:' + rootProject.ext.okhttpVersion
+    //    implementation 'com.facebook.stetho:stetho:1.5.0'
+    //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+    //    implementation 'com.aliyun.dpa:oss-android-sdk:+'
+    implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion
+    implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonAndroidVersion
+    //1.0.5 当1.1.0出现问题可以回退到1.0.5.1
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:' + rootProject.ext.SmartRefreshLayoutVersion
+    //没有使用特殊Header，可以不加这行
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
+    implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
+    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
+    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
+    implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
+    //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    implementation project(':domain')
+    implementation project(':device')
+    implementation project(':data')
 }

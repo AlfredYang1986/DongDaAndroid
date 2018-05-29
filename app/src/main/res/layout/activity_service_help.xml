@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
+    tools:context=".ui.activity.apply.ServiceHelpActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/sys_bar_white"
+        app:contentInsetStart="0dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/icon_close_tips"
+            />
+
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tb_toolbar">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_help_care"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/str_care"
+                android:textColor="#FF404040"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <com.blackmirror.dongda.ui.view.AlignTextView
+                android:id="@+id/tv_help_care_dec"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#FF737373"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_help_care"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_help_care"
+                />
+
+            <TextView
+                android:id="@+id/tv_help_class"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="42dp"
+                android:text="@string/str_class"
+                android:textColor="#FF404040"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_help_care_dec"
+                />
+
+            <com.blackmirror.dongda.ui.view.AlignTextView
+                android:id="@+id/tv_help_class_dec"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:text="阿斯顿发生大大声大声的空间来看。国际嘎达科技的噶破打开。打个卡的京东到家，的感慨；大概；就"
+                android:textColor="#FF737373"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_help_class"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_help_class"
+                />
+
+            <TextView
+                android:id="@+id/tv_help_experience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="42dp"
+                android:text="@string/str_experience"
+                android:textColor="#FF404040"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:typeface="sans"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_help_class_dec"
+                />
+
+            <com.blackmirror.dongda.ui.view.AlignTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="8dp"
+                android:text="噶考虑过建档立卡国家根据，打个卡了。国际嘎达科技的噶破打开。打个卡的京东到家，的感慨；大概；就"
+                android:textColor="#FF737373"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_help_care"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_help_experience"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.constraint.ConstraintLayout>

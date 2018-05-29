@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
+    tools:context=".ui.activity.enrol.EnrolSuccessActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:contentInsetStart="0dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+    <ImageView
+        android:layout_marginLeft="10dp"
+        android:padding="10dp"
+        android:id="@+id/iv_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_close_tips"
+        />
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.constraint.Guideline
+         android:id="@+id/gl_1"
+        app:layout_constraintGuide_percent="0.385"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ImageView
+         android:id="@+id/iv_enrol_success"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gl_1"
+        android:background="@drawable/icon_succeed_enrol"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_enrol_success"
+        android:layout_marginTop="41dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="发布成功!"
+        android:textColor="#FF59D5C7"
+        android:textSize="24sp"
+        />
+
+</android.support.constraint.ConstraintLayout>

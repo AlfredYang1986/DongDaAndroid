@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/enrol_bg"
+    tools:context=".ui.activity.enrol.EnrolServiceActivity">
+
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFF7F9FA"
+        app:contentInsetStart="0dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:background="@drawable/icon_back_black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tv_enrol_service_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="16dp"
+        android:text="为以下服务发布招生"
+        android:textColor="#FF404040"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:typeface="sans"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+
+    <android.support.v7.widget.CardView
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_enrol_service_dec"
+        android:background="#FFFFFFFF"
+        android:id="@+id/cv_service_root"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cl_service_root"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/iv_service_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/icon_location"
+                app:layout_constraintBottom_toBottomOf="@id/tv_service_location"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_service_location"/>
+
+            <TextView
+                android:id="@+id/tv_service_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="16dp"
+                android:text="朝阳区酒仙桥路"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                app:layout_constraintLeft_toRightOf="@id/iv_service_location"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sv_service_photo"
+                android:layout_width="116dp"
+                android:layout_height="72dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="33dp"
+                app:actualImageScaleType="focusCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_service_location"
+                app:roundedCornerRadius="2dp"/>
+
+
+            <TextView
+                android:id="@+id/tv_service_brand"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:text="品牌名称加服务leaf"
+                android:textColor="#FF404040"
+                android:textSize="15sp"
+                app:layout_constraintBottom_toBottomOf="@id/sv_service_photo"
+                app:layout_constraintLeft_toRightOf="@id/sv_service_photo"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sv_service_photo"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_start_enrol"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_enrol_selector"
+        android:text="开始招生"
+        android:textColor="@drawable/bt_enrol_text_selector"
+        android:textSize="17sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_service_root"/>
+
+
+</android.support.constraint.ConstraintLayout>

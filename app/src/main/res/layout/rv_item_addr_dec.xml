@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <ImageView
+        app:layout_constraintLeft_toLeftOf="@id/tv_item_addr_dec"
+        app:layout_constraintRight_toRightOf="@id/tv_item_addr_dec"
+         android:id="@+id/iv_item_addr_photo"
+        android:background="@drawable/safe_power"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="38dp"
+        android:layout_marginTop="10.5dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_item_addr_photo"
+         android:id="@+id/tv_item_addr_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新风系统"
+        android:textColor="#FF737373"
+        android:textSize="15sp"
+        />
+</android.support.constraint.ConstraintLayout>
