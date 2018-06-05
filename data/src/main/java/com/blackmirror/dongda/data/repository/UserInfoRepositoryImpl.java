@@ -1,17 +1,12 @@
 package com.blackmirror.dongda.data.repository;
 
-import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
 import com.blackmirror.dongda.data.model.response.UserInfoResponseBean;
 import com.blackmirror.dongda.data.net.CommonApi;
 import com.blackmirror.dongda.data.net.UpdateUserInfoApi;
-import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
-import com.blackmirror.dongda.domain.model.UpdateUserInfoBean;
-import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
-import com.blackmirror.dongda.domain.model.UserInfoDomainBean;
-import com.blackmirror.dongda.domain.repository.UserInfoRepository;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.blackmirror.dongda.kdomain.model.UpdateUserInfoBean;
+import com.blackmirror.dongda.kdomain.model.UpdateUserInfoDomainBean;
+import com.blackmirror.dongda.kdomain.model.UserInfoDomainBean;
+import com.blackmirror.dongda.kdomain.repository.UserInfoRepository;
 
 import io.reactivex.Observable;
 import io.reactivex.functions.Function;
