@@ -7,7 +7,7 @@ import com.blackmirror.dongda.domain.model.WeChatLoginBean;
 
 import io.reactivex.Observable;
 
-public interface LoginRepository extends Repository {
+interface LoginRepository3 extends Repository {
 
     Observable<SendSmsBean> sendSms(String phone);
 

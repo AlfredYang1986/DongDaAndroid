@@ -42,7 +42,7 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
     api project(':base')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':kdomain')
+    implementation project(':domain')
 }
 repositories {
     mavenCentral()

@@ -5,11 +5,11 @@ import com.blackmirror.dongda.data.model.response.BrandAllLocResponseBean;
 import com.blackmirror.dongda.data.model.response.EnrolResponseBean;
 import com.blackmirror.dongda.data.model.response.LocAllServiceResponseBean;
 import com.blackmirror.dongda.data.net.CommonApi;
-import com.blackmirror.dongda.kdomain.model.ApplyServiceDomainBean;
-import com.blackmirror.dongda.kdomain.model.BrandAllLocDomainBean;
-import com.blackmirror.dongda.kdomain.model.EnrolDomainBean;
-import com.blackmirror.dongda.kdomain.model.LocAllServiceDomainBean;
-import com.blackmirror.dongda.kdomain.repository.ApplyAndEnrolRepository;
+import com.blackmirror.dongda.domain.model.ApplyServiceDomainBean;
+import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.domain.model.EnrolDomainBean;
+import com.blackmirror.dongda.domain.model.LocAllServiceDomainBean;
+import com.blackmirror.dongda.domain.repository.ApplyAndEnrolRepository;
 
 import java.util.ArrayList;
 import java.util.List;

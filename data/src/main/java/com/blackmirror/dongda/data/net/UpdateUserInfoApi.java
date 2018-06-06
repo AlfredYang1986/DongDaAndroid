@@ -10,8 +10,8 @@ import com.blackmirror.dongda.data.model.response.OssInfoResponseBean;
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean;
 import com.blackmirror.dongda.data.model.response.UpdateUserInfoResponseBean;
 import com.blackmirror.dongda.data.repository.DbRepository;
-import com.blackmirror.dongda.kdomain.model.UpdateUserInfoBean;
-import com.blackmirror.dongda.kdomain.model.UpdateUserInfoDomainBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoBean;
+import com.blackmirror.dongda.domain.model.UpdateUserInfoDomainBean;
 import com.blackmirror.dongda.utils.AYPrefUtils;
 
 import io.reactivex.Observable;

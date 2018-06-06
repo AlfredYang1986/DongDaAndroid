@@ -10,14 +10,14 @@ import com.blackmirror.dongda.data.model.response.LikeResponseBean;
 import com.blackmirror.dongda.data.model.response.NearServiceResponseBean;
 import com.blackmirror.dongda.data.model.response.SearchServiceResponseBean;
 import com.blackmirror.dongda.data.net.CommonApi;
-import com.blackmirror.dongda.kdomain.model.CareMoreDomainBean;
-import com.blackmirror.dongda.kdomain.model.DetailInfoDomainBean;
-import com.blackmirror.dongda.kdomain.model.HomepageDomainBean;
-import com.blackmirror.dongda.kdomain.model.LikeDomainBean;
-import com.blackmirror.dongda.kdomain.model.LikePopDomainBean;
-import com.blackmirror.dongda.kdomain.model.LikePushDomainBean;
-import com.blackmirror.dongda.kdomain.model.NearServiceDomainBean;
-import com.blackmirror.dongda.kdomain.repository.CommonRepository;
+import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
+import com.blackmirror.dongda.domain.model.DetailInfoDomainBean;
+import com.blackmirror.dongda.domain.model.HomepageDomainBean;
+import com.blackmirror.dongda.domain.model.LikeDomainBean;
+import com.blackmirror.dongda.domain.model.LikePopDomainBean;
+import com.blackmirror.dongda.domain.model.LikePushDomainBean;
+import com.blackmirror.dongda.domain.model.NearServiceDomainBean;
+import com.blackmirror.dongda.domain.repository.CommonRepository;
 
 import java.util.ArrayList;
 

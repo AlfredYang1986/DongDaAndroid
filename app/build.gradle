@@ -104,7 +104,6 @@ dependencies {
     implementation project(':device')
     implementation project(':data')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation project(':kdomain')
 }
 repositories {
     mavenCentral()

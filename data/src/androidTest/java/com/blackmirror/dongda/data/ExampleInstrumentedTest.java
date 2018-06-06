@@ -4,8 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.blackmirror.dongda.data.repository.ApplyAndEnrolRepositoryImpl;
-import com.blackmirror.dongda.domain.model.ApplyServiceDomainBean;
+import com.blackmirror.dongda.data.repository.LoginRepositoryImpl;
+import com.blackmirror.dongda.domain.model.SendSmsBean;
 import com.blackmirror.dongda.utils.LogUtils;
 
 import org.junit.Test;
@@ -33,20 +33,21 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void test(){
-        ApplyAndEnrolRepositoryImpl repository = new ApplyAndEnrolRepositoryImpl();
-        repository.apply("fff","xxx","","17610279929","北京")
-                .subscribe(new Observer<ApplyServiceDomainBean>() {
+        LoginRepositoryImpl repository = new LoginRepositoryImpl();
+
+        repository.sendSms("17610279929")
+                .subscribe(new Observer<SendSmsBean>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(ApplyServiceDomainBean bean) {
+                    public void onNext(SendSmsBean bean) {
                         if (bean.isSuccess){
                             LogUtils.d("onNext success");
                         }else {
-                            LogUtils.d("onNext fail");
+                            LogUtils.d("onNext fail "+bean.code+" "+bean.message);
                         }
                     }
 
