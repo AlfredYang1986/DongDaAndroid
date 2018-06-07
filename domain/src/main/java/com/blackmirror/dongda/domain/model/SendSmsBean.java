@@ -9,4 +9,17 @@ public class SendSmsBean extends BaseDataBean {
     public String phone;
     public String reg_token;
     public int is_reg;
+
+    @Override
+    public String toString() {
+        return "SendSmsBean{" +
+                "status='" + status + '\'' +
+                ", phone='" + phone + '\'' +
+                ", reg_token='" + reg_token + '\'' +
+                ", is_reg=" + is_reg +
+                ", code=" + code +
+                ", message='" + message + '\'' +
+                ", isSuccess=" + isSuccess +
+                '}';
+    }
 }

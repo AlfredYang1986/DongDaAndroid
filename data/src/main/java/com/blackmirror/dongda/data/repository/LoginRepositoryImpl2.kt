@@ -20,7 +20,7 @@ import io.reactivex.Observable
 /**
  * Create By Ruge at 2018-06-06
  */
-class LoginRepositoryImpl : LoginRepository {
+class LoginRepositoryImpl2 : LoginRepository {
 
     override fun sendSms(phone: String): Observable<SendSmsBean> {
         return sendSMS(phone).map { it ->
