@@ -38,7 +38,7 @@ fun <P : BaseResponseBean, Q : BaseRequestBean> execute(q: Q, myClass: Class<P>)
 
 fun <P : BaseResponseBean> executeRequest2(request: Request, myClass: Class<P>): P {
     //        LogUtils.d("flag","做网络请求前的json数据: "+args.toString());
-    var  error_code: Int?
+    var error_code: Int?
     var error_message: String?
 
     try {
@@ -75,22 +75,22 @@ fun <P : BaseResponseBean> executeRequest2(request: Request, myClass: Class<P>):
         error_message = e3.message
 //        LogUtils.e(AYRemoteApi.class, "ConnectException: ", e3);
 
-    } catch (e4:Exception ) {
-        error_code = DataConstant.OTHER_EXCEPTION;
+    } catch (e4: Exception) {
+        error_code = DataConstant.OTHER_EXCEPTION
         error_message = e4.message
 //        LogUtils.e(AYRemoteApi.class, "Exception: ", e4);
 
     }
-    var obj :P? = null
+    var obj: P? = null
 
     try {
         obj = myClass.newInstance()
         /*obj.error = P.ErrorBean ()
         obj.error.code = error_code;
         obj.error.message = error_message;*/
-    } catch (e:InstantiationException ) {
+    } catch (e: InstantiationException) {
         e.printStackTrace()
-    } catch (e:IllegalAccessException ) {
+    } catch (e: IllegalAccessException) {
         e.printStackTrace()
     }
     return obj!!
