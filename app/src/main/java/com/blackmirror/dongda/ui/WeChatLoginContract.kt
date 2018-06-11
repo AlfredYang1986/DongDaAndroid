@@ -1,9 +1,9 @@
 package com.blackmirror.dongda.ui
 
 
-import com.blackmirror.dongda.domain.model.BaseDataBean
-import com.blackmirror.dongda.domain.model.UpLoadWeChatIconDomainBean
-import com.blackmirror.dongda.domain.model.WeChatLoginBean
+import com.blackmirror.dongda.kdomain.model.BaseDataBean
+import com.blackmirror.dongda.kdomain.model.UpLoadWeChatIconDomainBean
+import com.blackmirror.dongda.kdomain.model.WeChatLoginBean
 
 class WeChatLoginContract {
 

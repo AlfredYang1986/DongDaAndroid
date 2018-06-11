@@ -33,18 +33,18 @@ public class LoginRepositoryImpl implements LoginRepository {
                     @Override
                     public SendSmsBean apply(SendSmsResponseBean responseBean) throws Exception {
                         SendSmsBean bean = new SendSmsBean();
-                        if (responseBean != null && "ok".equals(responseBean.status)) {
+                        if (responseBean != null && "ok".equals(responseBean.getStatus())) {
                             bean.isSuccess = true;
-                            if (responseBean.result != null && responseBean.result.reg != null) {
-                                bean.phone = responseBean.result.reg.getPhone();
+                            if (responseBean.getResult() != null && responseBean.getResult().getReg() != null) {
+                                bean.phone = responseBean.getResult().getReg().getPhone();
                                 //                                bean.code=responseBean.result.reg.code;
-                                bean.reg_token = responseBean.result.reg.getReg_token();
-                                bean.is_reg = responseBean.result.reg.getIs_reg();
+                                bean.reg_token = responseBean.getResult().getReg().getReg_token();
+                                bean.is_reg = responseBean.getResult().getReg().is_reg();
                             }
                         } else {
-                            if (responseBean != null && responseBean.error != null) {
-                                bean.code = responseBean.error.code;
-                                bean.message = responseBean.error.message;
+                            if (responseBean != null && responseBean.getError() != null) {
+                                bean.code = responseBean.getError().getCode();
+                                bean.message = responseBean.getError().getMessage();
                             }
                         }
                         return bean;
@@ -59,7 +59,7 @@ public class LoginRepositoryImpl implements LoginRepository {
                     @Override
                     public PhoneLoginBean apply(PhoneLoginResponseBean responseBean) throws Exception {
                         PhoneLoginBean bean = new PhoneLoginBean();
-                        if (bean != null && "ok".equals(responseBean.status)) {
+                        if (bean != null && "ok".equals(responseBean.getStatus())) {
                             bean.isSuccess = true;
                             if (responseBean.result != null) {
                                 bean.auth_token = responseBean.result.auth_token;
@@ -74,9 +74,9 @@ public class LoginRepositoryImpl implements LoginRepository {
                                 bean.current_device_id = responseBean.result.user.current_device_id;
                             }
                         } else {
-                            if (bean != null && responseBean.error != null) {
-                                bean.code = responseBean.error.code;
-                                bean.message = responseBean.error.message;
+                            if (bean != null && responseBean.getError() != null) {
+                                bean.code = responseBean.getError().getCode();
+                                bean.message = responseBean.getError().getMessage();
                             }
                         }
                         //插入数据库
@@ -105,9 +105,9 @@ public class LoginRepositoryImpl implements LoginRepository {
                     @Override
                     public WeChatLoginBean apply(WeChatLoginResponseBean responseBean) throws Exception {
                         WeChatLoginBean bean = new WeChatLoginBean();
-                        bean.isSuccess = "ok".equals(responseBean.status);
+                        bean.isSuccess = "ok".equals(responseBean.getStatus());
 
-                        if ("ok".equals(responseBean.status)) {
+                        if ("ok".equals(responseBean.getStatus())) {
                             bean.isSuccess = true;
                             if (responseBean.result != null) {
                                 bean.auth_token = responseBean.result.auth_token;
@@ -123,9 +123,9 @@ public class LoginRepositoryImpl implements LoginRepository {
                             }
 
                         } else {
-                            if (responseBean.error != null) {
-                                bean.code = responseBean.error.code;
-                                bean.message = responseBean.error.message;
+                            if (responseBean.getError() != null) {
+                                bean.code = responseBean.getError().getCode();
+                                bean.message = responseBean.getError().getMessage();
                             }
                         }
                         //插入数据库
@@ -155,7 +155,7 @@ public class LoginRepositoryImpl implements LoginRepository {
                     @Override
                     public Observable<UpLoadWeChatIconDomainBean> apply(UpLoadImgResponseBean bean) throws Exception {
 
-                        if ("ok".equals(bean.status)) {
+                        if ("ok".equals(bean.getStatus())) {
                             UpdateUserInfoDomainBean ub = new UpdateUserInfoDomainBean();
                             ub.json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + imgUUID + "\"}}";
 

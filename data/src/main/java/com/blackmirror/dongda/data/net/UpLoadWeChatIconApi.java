@@ -50,16 +50,16 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
                             Request request = new Request.Builder()
                                     .url(DataConstant.OSS_INFO_URL).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json.toString())).build();
                             OssInfoResponseBean bean = executeRequest(request, OssInfoResponseBean.class);
-                            if (bean != null && "ok".equals(bean.status) && bean.result != null && bean.result.OssConnectInfo != null) {
-                                AYPrefUtils.setAccesskeyId(bean.result.OssConnectInfo.accessKeyId);
-                                AYPrefUtils.setSecurityToken(bean.result.OssConnectInfo.SecurityToken);
-                                AYPrefUtils.setAccesskeySecret(bean.result.OssConnectInfo.accessKeySecret);
-                                AYPrefUtils.setExpiration(bean.result.OssConnectInfo.Expiration);
+                            if (bean != null && "ok".equals(bean.getStatus()) && bean.getResult() != null && bean.getResult().getOssConnectInfo() != null) {
+                                AYPrefUtils.setAccesskeyId(bean.getResult().getOssConnectInfo().getAccessKeyId());
+                                AYPrefUtils.setSecurityToken(bean.getResult().getOssConnectInfo().getSecurityToken());
+                                AYPrefUtils.setAccesskeySecret(bean.getResult().getOssConnectInfo().getAccessKeySecret());
+                                AYPrefUtils.setExpiration(bean.getResult().getOssConnectInfo().getExpiration());
                             }
                             return bean;
                         } else {
                             OssInfoResponseBean bean = new OssInfoResponseBean();
-                            bean.status = "ok";
+                            bean.setStatus("ok");
                             return bean;
                         }
                     }
@@ -73,11 +73,11 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
                 }).map(new Function<DownloadWeChatIconResponseBean, UpLoadImgResponseBean>() {
                     @Override
                     public UpLoadImgResponseBean apply(DownloadWeChatIconResponseBean bean) throws Exception {
-                        if ("ok".equals(bean.status)) {
-                            requestBean.userIconData = bean.userIcon;
+                        if ("ok".equals(bean.getStatus())) {
+                            requestBean.userIconData = bean.getUserIcon();
                             return executeUpload(requestBean);
                         } else {
-                            int code = bean.error == null ? DataConstant.NET_UNKNOWN_ERROR : bean.error.code;
+                            int code = bean.getError() == null ? DataConstant.NET_UNKNOWN_ERROR : bean.getError().getCode();
 //                            String message = bean.error == null ? "" : bean.error.message;
                             String message = "获取微信头像失败";
                             return getUploadErrorData(code,message);
@@ -94,12 +94,13 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
         try {
             Response response = httpClient.newCall(request).execute();
             if (response.isSuccessful()){
-                bean.status = "ok";
-                bean.userIcon = response.body().bytes();
+                bean.setStatus("ok");
+                bean.setUserIcon(response.body().bytes());
             }else {
-                bean.error = new DownloadWeChatIconResponseBean.ErrorBean();
-                bean.error.code = response.code();
-                bean.error.message = response.message();
+               /* bean.ErrorBean bean1 = new DownloadWeChatIconResponseBean.ErrorBean();
+                bean.getError() =
+                bean.setError(); = response.code();
+                bean.error.message = response.message();*/
             }
             response.close();
             return bean;
@@ -126,9 +127,9 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
 
         }
 
-        bean.error = new DownloadWeChatIconResponseBean.ErrorBean();
+        /*bean.error = new DownloadWeChatIconResponseBean.ErrorBean();
         bean.error.code = error_code;
-        bean.error.message = error_message;
+        bean.error.message = error_message;*/
         return bean;
     }
 
@@ -182,14 +183,14 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
             Response response = httpClient.newCall(requestBuilder.build()).execute();
             UpLoadImgResponseBean bean = new UpLoadImgResponseBean();
             if (response.isSuccessful()) {
-                bean.status = "ok";
+                bean.setStatus("ok");
                 bean.img_uuid = requestBean.imgUUID;
 
             } else {
-                UpLoadImgResponseBean.ErrorBean errorBean = new UpLoadImgResponseBean.ErrorBean();
+               /* UpLoadImgResponseBean.ErrorBean errorBean = new bean.ErrorBean();
                 errorBean.code = response.code();
                 errorBean.message = response.message();
-                bean.error = errorBean;
+                bean.error = errorBean;*/
 
             }
             response.close();
@@ -223,10 +224,10 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
 
     private static UpLoadImgResponseBean getUploadErrorData(int error_code, String error_message){
         UpLoadImgResponseBean bean = new UpLoadImgResponseBean();
-        UpLoadImgResponseBean.ErrorBean errorBean = new UpLoadImgResponseBean.ErrorBean();
+       /* UpLoadImgResponseBean.ErrorBean errorBean = new UpLoadImgResponseBean.ErrorBean();
         errorBean.code = error_code;
         errorBean.message = error_message;
-        bean.error = errorBean;
+        bean.error = errorBean;*/
 
         return bean;
     }

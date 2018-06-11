@@ -2,6 +2,7 @@ package com.blackmirror.dongda.data.repository
 
 import com.blackmirror.dongda.data.model.response.PhoneLoginResponseBean
 import com.blackmirror.dongda.data.model.response.SendSmsResponseBean
+import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
 import com.blackmirror.dongda.data.model.response.WeChatLoginResponseBean
 import io.reactivex.Observable
 
@@ -18,9 +19,14 @@ fun phoneLogin(phone: String, code: String, reg_token: String, login: (String, S
 }
 
 fun weChatLogin(provide_uid: String, provide_token: String, provide_screen_name: String,
-                provide_name: String, provide_screen_photo: String,wlogin:(String,String,String,String,String)->Observable<WeChatLoginResponseBean>): Observable<WeChatLoginResponseBean> {
-    return wlogin(provide_uid,provide_token,provide_screen_name,provide_name,provide_screen_photo)
+                provide_name: String, provide_screen_photo: String, wlogin: (String, String, String, String, String) -> Observable<WeChatLoginResponseBean>): Observable<WeChatLoginResponseBean> {
+    return wlogin(provide_uid, provide_token, provide_screen_name, provide_name, provide_screen_photo)
 }
+
+fun upLoadWeChatIcon(userIcon: String, imgUUID: String, upload: (String, String) -> Observable<UpLoadImgResponseBean>): Observable<UpLoadImgResponseBean> {
+    return upload(userIcon, imgUUID)
+}
+
 
 
 

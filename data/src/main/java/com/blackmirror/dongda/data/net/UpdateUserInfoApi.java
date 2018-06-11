@@ -48,7 +48,7 @@ public class UpdateUserInfoApi extends AYRemoteApi {
                     public Observable<UpdateUserInfoBean> apply(UpLoadImgResponseBean bean) throws Exception {
                         UpdateUserInfoBean infoBean = new UpdateUserInfoBean();
                         //修改用户信息
-                        if ("ok".equals(bean.status)) {
+                        if ("ok".equals(bean.getStatus())) {
                             final UpdateUserInfoRequestBean b = new UpdateUserInfoRequestBean();
                             b.json = requestBean.json;
                             b.imgUUID = requestBean.imgUUID;
@@ -71,7 +71,7 @@ public class UpdateUserInfoApi extends AYRemoteApi {
                                         }
                                     });
                         }else {
-                            if (bean!=null && bean.error!=null){
+                            if (bean!=null && bean.getError()!=null){
 
                                 infoBean.code = bean.error.code;
                                 infoBean.message = bean.error.message;
@@ -121,7 +121,7 @@ public class UpdateUserInfoApi extends AYRemoteApi {
     }
 
     private static void trans2UpdateUserInfoBean(UpdateUserInfoResponseBean bean, UpdateUserInfoBean infoBean) {
-        if (bean != null && "ok".equals(bean.status)) {
+        if (bean != null && "ok".equals(bean.getStatus())) {
             infoBean.isSuccess = true;
             if (bean.result != null && bean.result.profile != null) {
                 infoBean.screen_name = bean.result.profile.screen_name;
@@ -139,9 +139,9 @@ public class UpdateUserInfoApi extends AYRemoteApi {
                 infoBean.social_id = bean.result.profile.social_id;
             }
         } else {
-            if (bean != null && bean.error != null) {
-                infoBean.code = bean.error.code;
-                infoBean.message = bean.error.message;
+            if (bean != null && bean.getError() != null) {
+                infoBean.code = bean.getError().getCode();
+                infoBean.message = bean.getError().getMessage();
             }
         }
     }

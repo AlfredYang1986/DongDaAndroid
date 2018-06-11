@@ -88,9 +88,9 @@ public class AYRemoteApi extends BaseApi {
 
         try {
             obj = (P) myClass.newInstance();
-            obj.error = new P.ErrorBean();
+            /*obj.error = new obj.ErrorBean();
             obj.error.code = error_code;
-            obj.error.message = error_message;
+            obj.error.message = error_message;*/
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -112,8 +112,8 @@ public class AYRemoteApi extends BaseApi {
 
         try {
             obj = (P) clz.newInstance();
-            obj.error = new P.ErrorBean();
-            obj.error.code = DataConstant.NET_UNKNOWN_ERROR;
+            /*obj.error = new P.ErrorBean();
+            obj.error.code = DataConstant.NET_UNKNOWN_ERROR;*/
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
