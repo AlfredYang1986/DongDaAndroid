@@ -26,7 +26,7 @@ val httpClient = OkHttpClient.Builder()
         .build()
 
 
-fun <P : BaseResponseBean, Q : BaseRequestBean> execute(q: Q, myClass: Class<P>): Observable<P> {
+inline fun <P : BaseResponseBean, Q : BaseRequestBean> execute(q: Q, myClass: Class<P>): Observable<P> {
     return Observable.just(q).map { q ->
         val request: Request = Request.Builder()
                 .url(q.url)
@@ -85,9 +85,10 @@ fun <P : BaseResponseBean> executeRequest2(request: Request, myClass: Class<P>):
 
     try {
         obj = myClass.newInstance()
-        /*obj.error = P.ErrorBean ()
-        obj.error.code = error_code;
-        obj.error.message = error_message;*/
+
+        obj.error = obj.ErrorBean()
+        obj.error!!.code = error_code!!
+        obj.error!!.message = error_message!!
     } catch (e: InstantiationException) {
         e.printStackTrace()
     } catch (e: IllegalAccessException) {

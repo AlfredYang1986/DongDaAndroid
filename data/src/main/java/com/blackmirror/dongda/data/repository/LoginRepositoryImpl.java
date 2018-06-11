@@ -36,10 +36,10 @@ public class LoginRepositoryImpl implements LoginRepository {
                         if (responseBean != null && "ok".equals(responseBean.status)) {
                             bean.isSuccess = true;
                             if (responseBean.result != null && responseBean.result.reg != null) {
-                                bean.phone = responseBean.result.reg.phone;
+                                bean.phone = responseBean.result.reg.getPhone();
                                 //                                bean.code=responseBean.result.reg.code;
-                                bean.reg_token = responseBean.result.reg.reg_token;
-                                bean.is_reg = responseBean.result.reg.is_reg;
+                                bean.reg_token = responseBean.result.reg.getReg_token();
+                                bean.is_reg = responseBean.result.reg.getIs_reg();
                             }
                         } else {
                             if (responseBean != null && responseBean.error != null) {

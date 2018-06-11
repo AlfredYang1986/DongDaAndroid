@@ -61,8 +61,8 @@ public  class UpLoadFileApi extends AYRemoteApi {
                         if ("ok".equals(bean.status)) {
                             return executeUpload(requestBean);
                         } else {
-                            int code = bean.error == null ? DataConstant.NET_UNKNOWN_ERROR : bean.error.code;
-                            String message = bean.error == null ? "" : bean.error.message;
+                            int code = bean.error == null ? DataConstant.NET_UNKNOWN_ERROR : bean.error.getCode();
+                            String message = bean.error == null ? "" : bean.error.getMessage();
                             return getUploadErrorData(code,message);
                         }
                     }
@@ -122,8 +122,8 @@ public  class UpLoadFileApi extends AYRemoteApi {
 
             } else {
                 UpLoadImgResponseBean.ErrorBean errorBean = new UpLoadImgResponseBean.ErrorBean();
-                errorBean.code = response.code();
-                errorBean.message = response.message();
+                errorBean.setCode(response.code());
+                errorBean.setMessage(response.message());
                 bean.error = errorBean;
 
             }
@@ -159,8 +159,8 @@ public  class UpLoadFileApi extends AYRemoteApi {
     private static UpLoadImgResponseBean getUploadErrorData(int error_code, String error_message){
         UpLoadImgResponseBean bean = new UpLoadImgResponseBean();
         UpLoadImgResponseBean.ErrorBean errorBean = new UpLoadImgResponseBean.ErrorBean();
-        errorBean.code = error_code;
-        errorBean.message = error_message;
+        errorBean.setCode(error_code);
+        errorBean.setMessage(error_message);
         bean.error = errorBean;
 
         return bean;
@@ -181,8 +181,8 @@ public  class UpLoadFileApi extends AYRemoteApi {
         try {
             obj = (P) clz.newInstance();
             obj.error = new P.ErrorBean();
-            obj.error.code = code;
-            obj.error.message = message;
+            obj.error.setCode(code);
+            obj.error.setMessage(message);
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {

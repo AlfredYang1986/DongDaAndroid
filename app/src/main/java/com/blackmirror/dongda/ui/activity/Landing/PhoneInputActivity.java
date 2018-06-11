@@ -13,7 +13,7 @@ import com.blackmirror.dongda.data.model.request.SendSmsRequestBean;
 import com.blackmirror.dongda.di.component.DaggerPhoneInputComponent;
 import com.blackmirror.dongda.domain.model.BaseDataBean;
 import com.blackmirror.dongda.domain.model.PhoneLoginBean;
-import com.blackmirror.dongda.domain.model.SendSmsBean;
+import com.blackmirror.dongda.kdomain.model.SendSmsKdBean;
 import com.blackmirror.dongda.presenter.PhoneLoginPresenter;
 import com.blackmirror.dongda.ui.PhoneLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
@@ -42,7 +42,7 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     private Button sms_code;
     private Disposable mSms_disposable;
     private Button next_step;
-    private SendSmsBean bean;
+    private SendSmsKdBean bean;
     private PhoneLoginPresenter presenter;
 
     @Override
@@ -157,10 +157,10 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
         }
 
 
-        if (bean != null && bean.isSuccess) {
+        if (bean != null && bean.isSuccess()) {
             PhoneLoginRequestBean requestBean = new PhoneLoginRequestBean();
-            requestBean.reg_token = bean.reg_token;
-            requestBean.phone_number = bean.phone;
+            requestBean.reg_token = bean.getReg_token();
+            requestBean.phone_number = bean.getPhone();
             requestBean.code = code;
             showProcessDialog(getString(R.string.logining_process));
             presenter.login(requestBean);
@@ -205,10 +205,10 @@ public class PhoneInputActivity extends BaseActivity implements PhoneLoginContra
     }
 
     @Override
-    public void sendSmsSuccess(SendSmsBean bean) {
+    public void sendSmsSuccess(SendSmsKdBean bean) {
         ToastUtils.showShortToast(getString(R.string.send_sms_code_success));
         closeProcessDialog();
-        this.bean = bean == null ? new SendSmsBean():bean;
+        this.bean = bean == null ? new SendSmsKdBean():bean;
     }
 
     @Override

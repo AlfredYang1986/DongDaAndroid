@@ -36,7 +36,6 @@ android {
         debug {
             //混淆
             debuggable true
-            signingConfig signingConfigs.release
         }
         release {
             buildConfigField "boolean", "LOG_DEBUG", "true" //不显示log
@@ -71,6 +70,8 @@ MobSDK {
 }
 
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
+    compile 'com.android.support:support-annotations:27.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:' + rootProject.ext.constraintLayoutVersion
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -102,9 +103,12 @@ dependencies {
     //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project(':domain')
     implementation project(':device')
-    implementation project(':data')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':kdomain')
+    testCompile project(path: ':data')
 }
 repositories {
     mavenCentral()
 }
+
+apply plugin: 'kotlin-android-extensions'
