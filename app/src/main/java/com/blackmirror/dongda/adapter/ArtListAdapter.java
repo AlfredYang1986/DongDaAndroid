@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.domain.model.CareMoreDomainBean;
+import com.blackmirror.dongda.kdomain.model.CareMoreDomainBean;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 

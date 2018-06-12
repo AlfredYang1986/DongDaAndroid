@@ -14,12 +14,11 @@ open class BaseResponseBean : Serializable {
 
     var error: ErrorBean? = null
 
-    inner class ErrorBean : Serializable {
+    class ErrorBean : Serializable {
         /**
          * code : -9005
          * message : token过期
          */
-
         var code: Int = 0
         var message: String? = null//错误信息
     }

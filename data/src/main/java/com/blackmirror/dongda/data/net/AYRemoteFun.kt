@@ -85,8 +85,7 @@ fun <P : BaseResponseBean> executeRequest2(request: Request, myClass: Class<P>):
 
     try {
         obj = myClass.newInstance()
-
-        obj.error = obj.ErrorBean()
+        obj.error = BaseResponseBean.ErrorBean()
         obj.error!!.code = error_code!!
         obj.error!!.message = error_message!!
     } catch (e: InstantiationException) {

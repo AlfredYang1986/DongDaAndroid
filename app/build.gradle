@@ -101,7 +101,6 @@ dependencies {
     implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
     //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    implementation project(':domain')
     implementation project(':device')
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':kdomain')

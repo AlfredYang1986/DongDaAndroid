@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.domain.model.HomepageDomainBean;
+import com.blackmirror.dongda.kdomain.model.HomepageDomainBean;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
@@ -40,9 +40,9 @@ public class HomeCareAdapter extends RecyclerView.Adapter<HomeCareAdapter.HomeCa
     @Override
     public void onBindViewHolder(HomeCareViewHolder holder, int position) {
 
-        HomepageDomainBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.services.get(position);
+        HomepageDomainBean.HomepageServicesBean.ServicesBean servicesBean = this.bean.getServices().get(position);
 
-        String url = OSSUtils.getSignedUrl(servicesBean.service_image, 30 * 60);
+        String url = OSSUtils.getSignedUrl(servicesBean.getService_image(), 30 * 60);
         holder.sv_care_photo.setImageURI(url);
 
         holder.tv_care_name.setText(this.bean.services.get(position).service_tags.get(0));

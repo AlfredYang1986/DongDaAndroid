@@ -3,6 +3,7 @@ package com.blackmirror.dongda.data.net
 import com.blackmirror.dongda.base.AYApplication
 import com.blackmirror.dongda.data.DataConstant
 import com.blackmirror.dongda.data.model.request.UploadImageRequestBean
+import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.DownloadWeChatIconResponseBean
 import com.blackmirror.dongda.data.model.response.OssInfoResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
@@ -76,7 +77,7 @@ private fun getIcon2(request: Request): DownloadWeChatIconResponseBean {
             bean.status = "ok"
             bean.userIcon = response.body()!!.bytes()
         } else {
-            bean.error = bean.ErrorBean()
+            bean.error = BaseResponseBean.ErrorBean()
             bean.error!!.code = response.code()
             bean.error!!.message = response.message()
         }
@@ -105,7 +106,7 @@ private fun getIcon2(request: Request): DownloadWeChatIconResponseBean {
 
     }
 
-    bean.error = bean.ErrorBean()
+    bean.error = BaseResponseBean.ErrorBean()
     bean.error!!.code = error_code
     bean.error!!.message = error_message!!
     return bean
@@ -165,7 +166,7 @@ private fun executeUpload2(requestBean: UploadImageRequestBean): UpLoadImgRespon
             bean.img_uuid = requestBean.imgUUID
 
         } else {
-            val errorBean = bean.ErrorBean()
+            val errorBean = BaseResponseBean.ErrorBean()
             errorBean.code = response.code()
             errorBean.message = response.message()
             bean.error = errorBean
@@ -202,7 +203,7 @@ private fun executeUpload2(requestBean: UploadImageRequestBean): UpLoadImgRespon
 
 private fun getUploadErrorData2(error_code: Int, error_message: String?): UpLoadImgResponseBean {
     val bean = UpLoadImgResponseBean()
-    val errorBean = bean.ErrorBean()
+    val errorBean = BaseResponseBean.ErrorBean()
     errorBean.code = error_code
     errorBean.message = error_message
     bean.error = errorBean

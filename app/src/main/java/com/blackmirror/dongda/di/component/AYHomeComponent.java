@@ -2,8 +2,8 @@ package com.blackmirror.dongda.di.component;
 
 import com.blackmirror.dongda.di.module.CommonModule;
 import com.blackmirror.dongda.presenter.HomePresenter;
-import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
-import com.blackmirror.dongda.ui.activity.HomeActivity.HomeContract;
+import com.blackmirror.dongda.ui.activity.homeActivity.AYHomeActivity;
+import com.blackmirror.dongda.ui.activity.homeActivity.HomeContract;
 
 import dagger.BindsInstance;
 import dagger.Component;

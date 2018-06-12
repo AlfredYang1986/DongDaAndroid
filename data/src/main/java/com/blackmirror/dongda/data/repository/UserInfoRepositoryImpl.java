@@ -29,18 +29,18 @@ public class UserInfoRepositoryImpl implements UserInfoRepository {
                         if ("ok".equals(bean.getStatus())) {
                             ub.isSuccess = true;
                             if (bean.result != null && bean.result.profile != null) {
-                                ub.screen_name = bean.result.profile.screen_name;
-                                ub.description = bean.result.profile.description;
-                                ub.has_auth_phone = bean.result.profile.has_auth_phone;
-                                ub.owner_name = bean.result.profile.owner_name;
-                                ub.is_service_provider = bean.result.profile.is_service_provider;
-                                ub.user_id = bean.result.profile.user_id;
-                                ub.company = bean.result.profile.company;
-                                ub.screen_photo = bean.result.profile.screen_photo;
-                                ub.date = bean.result.profile.date;
-                                ub.address = bean.result.profile.address;
-                                ub.contact_no = bean.result.profile.contact_no;
-                                ub.social_id = bean.result.profile.social_id;
+                                ub.screen_name = bean.result.profile.getScreen_name();
+                                ub.description = bean.result.profile.getDescription();
+                                ub.has_auth_phone = bean.result.profile.getHas_auth_phone();
+                                ub.owner_name = bean.result.profile.getOwner_name();
+                                ub.is_service_provider = bean.result.profile.getIs_service_provider();
+                                ub.user_id = bean.result.profile.getUser_id();
+                                ub.company = bean.result.profile.getCompany();
+                                ub.screen_photo = bean.result.profile.getScreen_photo();
+                                ub.date = bean.result.profile.getDate();
+                                ub.address = bean.result.profile.getAddress();
+                                ub.contact_no = bean.result.profile.getContact_no();
+                                ub.social_id = bean.result.profile.getSocial_id();
                             }
                         } else if (bean.getError() != null) {
                             ub.code = bean.getError().getCode();

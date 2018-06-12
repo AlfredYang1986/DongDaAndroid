@@ -53,15 +53,15 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.HomeActivity.AYHomeActivity">
+        <activity android:name=".ui.activity.homeActivity.AYHomeActivity">
         </activity>
-        <activity android:name=".ui.activity.Landing.PhoneInputActivity">
+        <activity android:name=".ui.activity.landing.PhoneInputActivity">
         </activity>
-        <activity android:name=".ui.activity.Landing.NameInputActivity">
+        <activity android:name=".ui.activity.landing.NameInputActivity">
         </activity>
-        <activity android:name=".ui.activity.Landing.PhotoChangeActivity">
+        <activity android:name=".ui.activity.landing.PhotoChangeActivity">
         </activity>
-        <activity android:name=".ui.activity.Landing.LandingActivity">
+        <activity android:name=".ui.activity.landing.LandingActivity">
         </activity>
         <activity android:name=".ui.activity.FeaturedDetailActivity"/>
         <!-- 高德地图 -->

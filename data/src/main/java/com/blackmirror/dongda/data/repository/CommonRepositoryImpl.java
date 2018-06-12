@@ -48,7 +48,7 @@ public class CommonRepositoryImpl implements CommonRepository {
                     @Override
                     public LikePushDomainBean apply(LikePushResponseBean bean) throws Exception {
                         LikePushDomainBean b = new LikePushDomainBean();
-                        if (bean == null || bean.result == null) {
+                        if (bean == null || bean.getResult() == null) {
                             return b;
                         }
                         if ("ok".equals(bean.status)) {
@@ -71,7 +71,7 @@ public class CommonRepositoryImpl implements CommonRepository {
                     @Override
                     public LikePopDomainBean apply(LikePopResponseBean bean) throws Exception {
                         LikePopDomainBean b = new LikePopDomainBean();
-                        if (bean == null || bean.result == null) {
+                        if (bean == null || bean.getResult() == null) {
                             return b;
                         }
                         if ("ok".equals(bean.status)) {
@@ -169,18 +169,18 @@ public class CommonRepositoryImpl implements CommonRepository {
         }
 
         if (service.location !=null && service.location.pin!=null){
-            domainBean.latitude = service.location.pin.latitude;
-            domainBean.longitude = service.location.pin.longitude;
+            domainBean.latitude = service.location.pin.getLatitude();
+            domainBean.longitude = service.location.pin.getLongitude();
         }
 
         domainBean.location_images = new ArrayList<>();
 
-        if (service.location != null && service.location.location_images != null) {
-            for (int i = 0; i < service.location.location_images.size(); i++) {
+        if (service.location != null && service.location.getLocation_images() != null) {
+            for (int i = 0; i < service.location.getLocation_images().size(); i++) {
                 DetailInfoDomainBean.LocationImagesBean dlb = new DetailInfoDomainBean.LocationImagesBean();
-                DetailInfoResponseBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean lb = service.location.location_images.get(i);
-                dlb.tag = lb.tag;
-                dlb.image = lb.image;
+                DetailInfoResponseBean.ResultBean.ServiceBean.LocationBean.LocationImagesBean lb = service.location.getLocation_images().get(i);
+                dlb.tag = lb.getTag();
+                dlb.image = lb.getImage();
                 domainBean.location_images.add(dlb);
             }
         }
@@ -193,11 +193,11 @@ public class CommonRepositoryImpl implements CommonRepository {
 
         if (service.brand != null) {
 
-            domainBean.brand_id = service.brand.brand_id;
-            domainBean.date = service.brand.date;
-            domainBean.brand_name = service.brand.brand_name;
-            domainBean.brand_tag = service.brand.brand_tag;
-            domainBean.about_brand = service.brand.about_brand;
+            domainBean.brand_id = service.brand.getBrand_id();
+            domainBean.date = service.brand.getDate();
+            domainBean.brand_name = service.brand.getBrand_name();
+            domainBean.brand_tag = service.brand.getBrand_tag();
+            domainBean.about_brand = service.brand.getAbout_brand();
         }
 
         domainBean.max_age = service.max_age;
@@ -213,8 +213,8 @@ public class CommonRepositoryImpl implements CommonRepository {
             for (int i = 0; i < service.service_images.size(); i++) {
                 DetailInfoDomainBean.ServiceImagesBean dsb = new DetailInfoDomainBean.ServiceImagesBean();
                 DetailInfoResponseBean.ResultBean.ServiceBean.ServiceImagesBean sb = service.service_images.get(i);
-                dsb.tag = sb.tag;
-                dsb.image = sb.image;
+                dsb.tag = sb.getTag();
+                dsb.image = sb.getImage();
                 domainBean.service_images.add(dsb);
             }
         }
@@ -262,17 +262,17 @@ public class CommonRepositoryImpl implements CommonRepository {
             b.category = sb.category;
             NearServiceDomainBean.ServicesBean.PinBean pin = new NearServiceDomainBean.ServicesBean.PinBean();
             if (sb.pin != null) {
-                pin.latitude = sb.pin.latitude;
-                pin.longitude = sb.pin.longitude;
+                pin.latitude = sb.pin.getLatitude();
+                pin.longitude = sb.pin.getLongitude();
                 b.pin = pin;
             } else {
                 b.pin = pin;
             }
 
-            b.service_id = sb.service_id;
+            b.service_id = sb.getService_id();
 
-            b.service_tags = sb.service_tags != null ? sb.service_tags : new ArrayList<String>();
-            b.operation = sb.operation != null ? sb.operation : new ArrayList<String>();
+            b.service_tags = sb.getService_tags() != null ? sb.getService_tags() : new ArrayList<String>();
+            b.operation = sb.getOperation() != null ? sb.getOperation() : new ArrayList<String>();
 
             domainBean.services.add(b);
 
@@ -318,17 +318,17 @@ public class CommonRepositoryImpl implements CommonRepository {
             b.category = sb.category;
             LikeDomainBean.ServicesBean.PinBean pin = new LikeDomainBean.ServicesBean.PinBean();
             if (sb.pin != null) {
-                pin.latitude = sb.pin.latitude;
-                pin.longitude = sb.pin.longitude;
+                pin.latitude = sb.pin.getLatitude();
+                pin.longitude = sb.pin.getLongitude();
                 b.pin = pin;
             } else {
                 b.pin = pin;
             }
 
-            b.service_id = sb.service_id;
+            b.service_id = sb.getService_id();
 
-            b.service_tags = sb.service_tags != null ? sb.service_tags : new ArrayList<String>();
-            b.operation = sb.operation != null ? sb.operation : new ArrayList<String>();
+            b.service_tags = sb.getService_tags() != null ? sb.getService_tags() : new ArrayList<String>();
+            b.operation = sb.getOperation() != null ? sb.getOperation() : new ArrayList<String>();
 
             domainBean.services.add(b);
 
@@ -374,17 +374,17 @@ public class CommonRepositoryImpl implements CommonRepository {
             b.category = sb.category;
             CareMoreDomainBean.ServicesBean.PinBean pin = new CareMoreDomainBean.ServicesBean.PinBean();
             if (sb.pin != null) {
-                pin.latitude = sb.pin.latitude;
-                pin.longitude = sb.pin.longitude;
+                pin.latitude = sb.pin.getLatitude();
+                pin.longitude = sb.pin.getLongitude();
                 b.pin = pin;
             } else {
                 b.pin = pin;
             }
 
-            b.service_id = sb.service_id;
+            b.service_id = sb.getService_id();
 
-            b.service_tags = sb.service_tags != null ? sb.service_tags : new ArrayList<String>();
-            b.operation = sb.operation != null ? sb.operation : new ArrayList<String>();
+            b.service_tags = sb.getService_tags() != null ? sb.getService_tags() : new ArrayList<String>();
+            b.operation = sb.getOperation() != null ? sb.getOperation() : new ArrayList<String>();
 
             domainBean.services.add(b);
 
@@ -442,15 +442,15 @@ public class CommonRepositoryImpl implements CommonRepository {
 
                 HomepageDomainBean.HomepageServicesBean.ServicesBean.PinBean pin = new HomepageDomainBean.HomepageServicesBean.ServicesBean.PinBean();
                 if (s.pin != null) {
-                    pin.latitude = s.pin.latitude;
-                    pin.longitude = s.pin.longitude;
+                    pin.latitude = s.pin.getLatitude();
+                    pin.longitude = s.pin.getLongitude();
                     d.pin = pin;
                 } else {
                     d.pin = pin;
                 }
 
-                d.service_tags = s.service_tags != null ? s.service_tags : new ArrayList<String>();
-                d.operation = s.operation != null ? s.operation : new ArrayList<String>();
+                d.service_tags = s.getService_tags() != null ? s.getService_tags() : new ArrayList<String>();
+                d.operation = s.getOperation() != null ? s.getOperation() : new ArrayList<String>();
 
                 b.services.add(d);
 

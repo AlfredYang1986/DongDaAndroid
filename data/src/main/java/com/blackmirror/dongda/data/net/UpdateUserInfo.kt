@@ -2,15 +2,13 @@ package com.blackmirror.dongda.data.net
 
 import android.text.TextUtils
 import com.blackmirror.dongda.data.DataConstant
-import com.blackmirror.dongda.data.model.db.UserInfoDbBean
 import com.blackmirror.dongda.data.model.request.UpDateBean
 import com.blackmirror.dongda.data.model.request.UpdateUserInfoRequestBean
 import com.blackmirror.dongda.data.model.request.UploadImageRequestBean
+import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
 import com.blackmirror.dongda.data.model.response.UpdateUserInfoResponseBean
-import com.blackmirror.dongda.data.repository.DbRepository
 import com.blackmirror.dongda.domain.model.UpdateUserInfoBean
-import com.blackmirror.dongda.utils.AYPrefUtils
 import io.reactivex.Observable
 
 /**
@@ -23,85 +21,87 @@ import io.reactivex.Observable
  *
  * @param bean
  */
-fun updateUserInfo2(bean: UpDateBean): Observable<UpdateUserInfoBean> {
+fun updateUserInfo2(bean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     if (!TextUtils.isEmpty(bean.imgUUID)) {//需要上传图片
         return updateUserInfoWithPhoto2(bean)
     } else {//不需要
         return updateUserInfoWithOutPhoto2(bean)
     }
+
+
 }
 
-private fun updateUserInfoWithPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfoBean> {
+fun <T, R> T.updateUserInfo3(block: (T) -> R): R {
+    return block(this)
+}
+
+fun xcx(bean: UpDateBean) {
+    bean.updateUserInfo3 {
+        if (!TextUtils.isEmpty(bean.imgUUID)) {//需要上传图片
+            updateUserInfoWithPhoto2(bean)
+        } else {//不需要
+            updateUserInfoWithOutPhoto2(bean)
+        }
+    }
+}
+
+
+fun updateUserInfoWithPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     val bean = UploadImageRequestBean()
     bean.json = requestBean.json
     bean.imgUUID = requestBean.imgUUID
     bean.url = DataConstant.UPDATE_USER_INFO_URL
-    return execute3(bean, UpLoadImgResponseBean::class.java)
-            .flatMap {
-                val infoBean = UpdateUserInfoBean()
-                //修改用户信息
-                if ("ok" == it.status) {
-                    val b = UpdateUserInfoRequestBean()
-                    b.json = requestBean.json
-                    b.imgUUID = requestBean.imgUUID
-                    b.url = DataConstant.UPDATE_USER_INFO_URL
-                    execute(b, UpdateUserInfoResponseBean::class.java)
-                            .map { bean ->
-                                val infoBean = UpdateUserInfoBean()
-                                trans2UpdateUserInfoBean2(bean, infoBean)
+    return getOssInfo2().map {
+        val infoBean = UpLoadImgResponseBean()
+        if ("ok" == it.status) {
+            executeUpload3(bean)
+        } else {
+            infoBean.error = BaseResponseBean.ErrorBean()
+            infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            infoBean.error?.message = it.error?.message ?: ""
+            infoBean
+        }
+    }.flatMap {
+        val infoBean = UpdateUserInfoResponseBean()
+        //修改用户信息
+        if ("ok" == it.status) {
+            val b = UpdateUserInfoRequestBean()
+            b.json = requestBean.json
+            b.imgUUID = requestBean.imgUUID
+            b.url = DataConstant.UPDATE_USER_INFO_URL
+            execute(b, UpdateUserInfoResponseBean::class.java)
 
-                                val dbBean = UserInfoDbBean()
-                                dbBean.is_current = 1//目前没什么卵用
-                                dbBean.screen_name = infoBean.screen_name
-                                dbBean.screen_photo = infoBean.screen_photo
-                                dbBean.user_id = infoBean.user_id
-                                dbBean.auth_token = AYPrefUtils.getAuthToken()
-                                DbRepository.updateProfile(dbBean)
-                                infoBean
-                            }
-                } else {
+        } else {
+            infoBean.error = BaseResponseBean.ErrorBean()
+            infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            infoBean.error?.message = it.error?.message ?: ""
 
-                    infoBean.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
-                    infoBean.message = it.error?.message ?: ""
-
-                    Observable.just(infoBean)
-                }
-            }
+            Observable.just(infoBean)
+        }
+    }
 }
 
-private fun updateUserInfoWithOutPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfoBean> {
+fun updateUserInfoWithOutPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     val b = UpdateUserInfoRequestBean()
     b.json = requestBean.json
     b.url = DataConstant.UPDATE_USER_INFO_URL
 
     return getOssInfo2()
             .flatMap({
-                val infoBean = UpdateUserInfoBean()
+                val infoBean = UpdateUserInfoResponseBean()
                 if ("ok" == it.status) {
                     execute(b, UpdateUserInfoResponseBean::class.java)
-                            .map { bean ->
-                                trans2UpdateUserInfoBean2(bean, infoBean)
-
-                                val dbBean = UserInfoDbBean()
-                                dbBean.is_current = 1//目前没什么卵用
-                                dbBean.screen_name = infoBean.screen_name
-                                dbBean.screen_photo = infoBean.screen_photo
-                                dbBean.user_id = infoBean.user_id
-                                dbBean.auth_token = AYPrefUtils.getAuthToken()
-                                DbRepository.updateProfile(dbBean)
-                                infoBean
-                            }
                 } else {
-
-                    infoBean.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
-                    infoBean.message = it.error?.message ?: ""
+                    infoBean.error = BaseResponseBean.ErrorBean()
+                    infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+                    infoBean.error?.message = it.error?.message ?: ""
                     Observable.just(infoBean)
                 }
             })
 
 }
 
-private fun trans2UpdateUserInfoBean2(bean: UpdateUserInfoResponseBean?, infoBean: UpdateUserInfoBean) {
+fun trans2UpdateUserInfoBean2(bean: UpdateUserInfoResponseBean?, infoBean: UpdateUserInfoBean) {
 
     infoBean.isSuccess = bean != null && "ok" == bean.status
 
@@ -121,6 +121,6 @@ private fun trans2UpdateUserInfoBean2(bean: UpdateUserInfoResponseBean?, infoBea
         infoBean.social_id = social_id
     }
 
-    infoBean.code = bean?.error?.code?:DataConstant.NET_UNKNOWN_ERROR
-    infoBean.message = bean?.error?.message?:""
+    infoBean.code = bean?.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+    infoBean.message = bean?.error?.message ?: ""
 }

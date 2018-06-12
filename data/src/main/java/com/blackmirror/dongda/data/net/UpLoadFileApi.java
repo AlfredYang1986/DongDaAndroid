@@ -118,7 +118,7 @@ public  class UpLoadFileApi extends AYRemoteApi {
             UpLoadImgResponseBean bean = new UpLoadImgResponseBean();
             if (response.isSuccessful()) {
                 bean.status = "ok";
-                bean.img_uuid = requestBean.imgUUID;
+                bean.setImg_uuid(requestBean.imgUUID);
 
             } else {
                 UpLoadImgResponseBean.ErrorBean errorBean = new UpLoadImgResponseBean.ErrorBean();

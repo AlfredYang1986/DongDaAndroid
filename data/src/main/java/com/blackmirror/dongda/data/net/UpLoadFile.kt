@@ -57,7 +57,7 @@ fun execute3(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgRespon
 }
 
 
-private fun executeUpload3(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
+ fun executeUpload3(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
 
     val error_code: Int
     val error_message: String?
@@ -107,7 +107,7 @@ private fun executeUpload3(requestBean: UploadImageRequestBean): UpLoadImgRespon
             bean.img_uuid = requestBean.imgUUID
 
         } else {
-            val errorBean = bean.ErrorBean()
+            val errorBean = BaseResponseBean.ErrorBean()
             errorBean.code = response.code()
             errorBean.message = response.message()
             bean.error = errorBean
@@ -144,7 +144,7 @@ private fun executeUpload3(requestBean: UploadImageRequestBean): UpLoadImgRespon
 
 private fun getUploadErrorData3(error_code: Int, error_message: String?): UpLoadImgResponseBean {
     val bean = UpLoadImgResponseBean()
-    val errorBean = bean.ErrorBean()
+    val errorBean = BaseResponseBean.ErrorBean()
     errorBean.code = error_code
     errorBean.message = error_message
     bean.error = errorBean
@@ -166,7 +166,7 @@ private fun <P : BaseResponseBean> getErrorData3(clz: Class<*>, code: Int, messa
 
     try {
         obj = clz.newInstance() as P
-        obj.error = obj.ErrorBean()
+        obj.error = BaseResponseBean.ErrorBean()
         obj.error!!.code = code
         obj.error!!.message = message
     } catch (e: InstantiationException) {

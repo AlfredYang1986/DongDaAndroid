@@ -73,7 +73,25 @@ public class CommonApi extends AYRemoteApi {
                 if (b!=null && b.error!=null){
                     sb.error.code = b.error.code;
                     sb.error.message = b.error.message;
-                }
+                }final LikePushRequestBean bean = new LikePushRequestBean();
+                bean.json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\": {\"user_id\":\"" + AYPrefUtils.getUserId() + "\",\"service_id\":\"" + service_id + "\"},\"collections\":{\"user_id\": \"" + AYPrefUtils.getUserId() + "\",\"service_id\":\"" + service_id + "\"}}";
+                bean.url = DataConstant.LIKE_PUSH_URL;
+
+                return OSSInfoApi.getOssInfo().flatMap(new Function<OssInfoResponseBean, Observable<LikePushResponseBean>>() {
+                    @Override
+                    public Observable<LikePushResponseBean> apply(OssInfoResponseBean b) throws Exception {
+                        if ("ok".equals(b.status)){
+                            return execute(bean, LikePushResponseBean.class);
+                        }
+                        LikePushResponseBean sb = new LikePushResponseBean();
+                        sb.error = new LikePushResponseBean.ErrorBean();
+                        if (b!=null && b.error!=null){
+                            sb.error.code = b.error.code;
+                            sb.error.message = b.error.message;
+                        }
+                        return Observable.just(sb);
+                    }
+                });
                 return Observable.just(sb);
             }
         });

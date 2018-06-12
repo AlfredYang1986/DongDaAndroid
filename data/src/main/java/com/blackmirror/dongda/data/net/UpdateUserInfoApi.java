@@ -124,19 +124,19 @@ public class UpdateUserInfoApi extends AYRemoteApi {
         if (bean != null && "ok".equals(bean.getStatus())) {
             infoBean.isSuccess = true;
             if (bean.result != null && bean.result.profile != null) {
-                infoBean.screen_name = bean.result.profile.screen_name;
-                infoBean.description = bean.result.profile.description;
-                infoBean.has_auth_phone = bean.result.profile.has_auth_phone;
-                infoBean.owner_name = bean.result.profile.owner_name;
-                infoBean.is_service_provider = bean.result.profile.is_service_provider;
-                infoBean.user_id = bean.result.profile.user_id;
-                infoBean.company = bean.result.profile.company;
-                infoBean.screen_photo = bean.result.profile.screen_photo;
-                infoBean.date = bean.result.profile.date;
-                infoBean.token = bean.result.profile.token;
-                infoBean.address = bean.result.profile.address;
-                infoBean.contact_no = bean.result.profile.contact_no;
-                infoBean.social_id = bean.result.profile.social_id;
+                infoBean.screen_name = bean.result.profile.getScreen_name();
+                infoBean.description = bean.result.profile.getDescription();
+                infoBean.has_auth_phone = bean.result.profile.getHas_auth_phone();
+                infoBean.owner_name = bean.result.profile.getOwner_name();
+                infoBean.is_service_provider = bean.result.profile.getIs_service_provider();
+                infoBean.user_id = bean.result.profile.getUser_id();
+                infoBean.company = bean.result.profile.getCompany();
+                infoBean.screen_photo = bean.result.profile.getScreen_photo();
+                infoBean.date = bean.result.profile.getDate();
+                infoBean.token = bean.result.profile.getToken();
+                infoBean.address = bean.result.profile.getAddress();
+                infoBean.contact_no = bean.result.profile.getContact_no();
+                infoBean.social_id = bean.result.profile.getSocial_id();
             }
         } else {
             if (bean != null && bean.getError() != null) {

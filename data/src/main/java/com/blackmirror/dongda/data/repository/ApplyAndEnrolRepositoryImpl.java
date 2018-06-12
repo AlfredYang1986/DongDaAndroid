@@ -33,7 +33,7 @@ public class ApplyAndEnrolRepositoryImpl implements ApplyAndEnrolRepository {
                         }
                         if ("ok".equals(bean.status)) {
                             domainBean.isSuccess = true;
-                            domainBean.apply_id = bean.result != null ? bean.result.apply_id : "";
+                            domainBean.apply_id = bean.result != null ? bean.result.getApply_id() : "";
                         } else {
                             domainBean.code = bean.error != null ? bean.error.code : domainBean.code;
                             domainBean.message = bean.error != null ? bean.error.message : "";
@@ -107,7 +107,7 @@ public class ApplyAndEnrolRepositoryImpl implements ApplyAndEnrolRepository {
                         }
                         if ("ok".equals(bean.status)) {
                             db.isSuccess = true;
-                            db.recruit_id = bean.result != null ? bean.result.recruit_id : "";
+                            db.recruit_id = bean.result != null ? bean.result.getRecruit_id() : "";
                         } else {
                             db.code = bean.error != null ? bean.error.code : db.code;
                             db.message = bean.error != null ? bean.error.message : "";

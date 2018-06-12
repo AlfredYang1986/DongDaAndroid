@@ -184,7 +184,7 @@ public  class UpLoadWeChatIconApi extends AYRemoteApi {
             UpLoadImgResponseBean bean = new UpLoadImgResponseBean();
             if (response.isSuccessful()) {
                 bean.setStatus("ok");
-                bean.img_uuid = requestBean.imgUUID;
+                bean.setImg_uuid(requestBean.imgUUID);
 
             } else {
                /* UpLoadImgResponseBean.ErrorBean errorBean = new bean.ErrorBean();

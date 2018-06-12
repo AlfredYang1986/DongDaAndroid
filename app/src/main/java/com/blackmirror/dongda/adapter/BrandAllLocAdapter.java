@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.domain.model.BrandAllLocDomainBean;
+import com.blackmirror.dongda.kdomain.model.BrandAllLocDomainBean;
 
 public class BrandAllLocAdapter extends RecyclerView.Adapter<BrandAllLocAdapter.BrandAllLocHolder> {
 

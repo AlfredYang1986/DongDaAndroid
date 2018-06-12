@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.domain.model.LikeDomainBean;
+import com.blackmirror.dongda.kdomain.model.LikeDomainBean;
 import com.blackmirror.dongda.utils.OSSUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 
