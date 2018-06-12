@@ -8,7 +8,6 @@ import com.blackmirror.dongda.data.model.request.UploadImageRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
 import com.blackmirror.dongda.data.model.response.UpdateUserInfoResponseBean
-import com.blackmirror.dongda.domain.model.UpdateUserInfoBean
 import io.reactivex.Observable
 
 /**
@@ -101,6 +100,7 @@ fun updateUserInfoWithOutPhoto2(requestBean: UpDateBean): Observable<UpdateUserI
 
 }
 
+/*
 fun trans2UpdateUserInfoBean2(bean: UpdateUserInfoResponseBean?, infoBean: UpdateUserInfoBean) {
 
     infoBean.isSuccess = bean != null && "ok" == bean.status
@@ -123,4 +123,4 @@ fun trans2UpdateUserInfoBean2(bean: UpdateUserInfoResponseBean?, infoBean: Updat
 
     infoBean.code = bean?.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
     infoBean.message = bean?.error?.message ?: ""
-}
+}*/

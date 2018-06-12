@@ -100,7 +100,7 @@ fun execute3(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgRespon
 
 
     try {
-        val response = BaseApi.httpClient.newCall(requestBuilder.build()).execute()
+        val response = httpClient.newCall(requestBuilder.build()).execute()
         val bean = UpLoadImgResponseBean()
         if (response.isSuccessful) {
             bean.status = "ok"
@@ -119,22 +119,22 @@ fun execute3(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgRespon
     } catch (e1: ConnectTimeoutException) {
         error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION
         error_message = e1.message
-        LogUtils.e(UpLoadFileApi::class.java, "ConnectTimeoutException: ", e1)
+//        LogUtils.e(upload::class.java, "ConnectTimeoutException: ", e1)
 
     } catch (e2: SocketTimeoutException) {//服务器响应超时
         error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION
         error_message = e2.message
-        LogUtils.e(UpLoadFileApi::class.java, "SocketTimeoutException: ", e2)
+//        LogUtils.e(UpLoadFileApi::class.java, "SocketTimeoutException: ", e2)
 
     } catch (e3: ConnectException) {//服务器请求超时
         error_code = DataConstant.CONNECT_EXCEPTION
         error_message = e3.message
-        LogUtils.e(UpLoadFileApi::class.java, "ConnectException: ", e3)
+//        LogUtils.e(UpLoadFileApi::class.java, "ConnectException: ", e3)
 
     } catch (e4: Exception) {
         error_code = DataConstant.OTHER_EXCEPTION
         error_message = e4.message
-        LogUtils.e(UpLoadFileApi::class.java, "Exception: ", e4)
+//        LogUtils.e(UpLoadFileApi::class.java, "Exception: ", e4)
 
     }
 

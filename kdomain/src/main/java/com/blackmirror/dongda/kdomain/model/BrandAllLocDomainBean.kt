@@ -4,7 +4,7 @@ package com.blackmirror.dongda.kdomain.model
  * Create By Ruge at 2018-05-15
  */
 class BrandAllLocDomainBean : BaseDataBean() {
-    var locations: List<LocationsBean>? = null
+    var locations: MutableList<LocationsBean>? = null
 
     class LocationsBean {
         /**
@@ -18,8 +18,8 @@ class BrandAllLocDomainBean : BaseDataBean() {
         var location_id: String? = null
         var address: String? = null
         var pin: PinBean? = null
-        var location_images: List<LocationImagesBean>? = null
-        var friendliness: List<String>? = null
+        var location_images: MutableList<LocationImagesBean>? = null
+        var friendliness: MutableList<String>? = null
 
         class PinBean {
             /**

@@ -13,7 +13,6 @@
             <option value="$PROJECT_DIR$/base" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/device" />
-            <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/kdomain" />
           </set>
         </option>

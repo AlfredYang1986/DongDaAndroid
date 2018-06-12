@@ -4,7 +4,7 @@ package com.blackmirror.dongda.kdomain.model
  * Create By Ruge at 2018-05-15
  */
 class LocAllServiceDomainBean : BaseDataBean() {
-    var services: List<ServicesBean>? = null
+    var services: MutableList<ServicesBean>? = null
 
     class ServicesBean {
         /**
@@ -24,8 +24,8 @@ class LocAllServiceDomainBean : BaseDataBean() {
         var service_type: String? = null
         var category: String? = null
         var service_id: String? = null
-        var service_tags: List<String>? = null
-        var operation: List<String>? = null
+        var service_tags: MutableList<String>? = null
+        var operation: MutableList<String>? = null
 
         override fun toString(): String {
             return "ServicesBean{" +

@@ -83,7 +83,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
                 AYApplication.finishActivity(this)
             }
             R.id.tv_user_logout -> showLogOutDialog()
-            R.id.iv_about_edit -> EditUserInfoActivity.startActivityForResult(this@UserAboutMeActivity, bean!!.screen_photo, bean!!.screen_name, bean!!.description, AppConstant.EDIT_USER_REQUEST_CODE)
+            R.id.iv_about_edit -> EditUserInfoActivity.startActivityForResult(this@UserAboutMeActivity, bean!!.screen_photo!!, bean!!.screen_name!!, bean!!.description!!, AppConstant.EDIT_USER_REQUEST_CODE)
         }
     }
 

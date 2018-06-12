@@ -6,9 +6,7 @@ import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder
-import com.bigkoo.pickerview.listener.CustomListener
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener
 import com.bigkoo.pickerview.view.OptionsPickerView
 import com.blackmirror.dongda.R
@@ -16,8 +14,6 @@ import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.LogUtils
 import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
-
-import java.util.ArrayList
 
 class EnrolAgeActivity : BaseActivity(), View.OnClickListener {
 
@@ -28,9 +24,9 @@ class EnrolAgeActivity : BaseActivity(), View.OnClickListener {
     private lateinit var cl_choose_large_age: ConstraintLayout
     private lateinit var tv_choose_large_age: TextView
 
-    private val ageMin = ArrayList<String>()
-    private val ageMax = ArrayList<String>()
-    private var pvCustomOptions: OptionsPickerView<*>? = null
+    private val ageMin = mutableListOf<String>()
+    private val ageMax = mutableListOf<String>()
+    private var pvCustomOptions: OptionsPickerView<String>? = null
 
 
     override val layoutResId: Int

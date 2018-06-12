@@ -61,27 +61,23 @@ fun getLocAllServiceImpl(json: String, locations: String): Observable<LocAllServ
         db.services = ArrayList()
         db.isSuccess = "ok" == it.status
 
-        if ("ok" == it.status) {
-            db.isSuccess = true
-            if (it.result != null && it.result.services != null) {
-                for (i in it.result.services.indices) {
-                    val dsb = LocAllServiceDomainBean.ServicesBean()
-                    val sb = it.result.services.get(i)
-                    dsb.punchline = sb.punchline
-                    dsb.service_leaf = sb.service_leaf
-                    dsb.service_image = sb.service_image
-                    dsb.service_type = sb.service_type
-                    dsb.category = sb.category
-                    dsb.service_id = sb.service_id
-                    dsb.service_tags = if (sb.service_tags == null) ArrayList() else sb.service_tags
-                    dsb.operation = if (sb.operation == null) ArrayList() else sb.operation
-                    (db.services as ArrayList<LocAllServiceDomainBean.ServicesBean>).add(dsb)
-                }
-            }
-        } else {
-            db.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
-            db.message = it.error?.message ?: ""
+        it.result?.services?.forEach {
+            val dsb = LocAllServiceDomainBean.ServicesBean()
+            val sb = it
+            dsb.punchline = sb.punchline
+            dsb.service_leaf = sb.service_leaf
+            dsb.service_image = sb.service_image
+            dsb.service_type = sb.service_type
+            dsb.category = sb.category
+            dsb.service_id = sb.service_id
+            dsb.service_tags = if (sb.service_tags == null) mutableListOf() else sb.service_tags
+            dsb.operation = if (sb.operation == null) mutableListOf() else sb.operation
+            db.services!!.add(dsb)
         }
+
+        db.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        db.message = it.error?.message ?: ""
+
         db
     }
 }
@@ -193,13 +189,48 @@ private fun transLoc2DomainBean(bean: BrandAllLocResponseBean, domainBean: Brand
         return
     }
     domainBean.isSuccess = true
-    val locations = ArrayList<BrandAllLocDomainBean.LocationsBean>()
-    domainBean.locations = locations
+//    val locations = ArrayList<BrandAllLocDomainBean.LocationsBean>()
+    domainBean.locations = mutableListOf()
     if (bean.result == null) {
         return
     }
 
-    for (i in bean.result.locations.indices) {
+    bean.result?.locations?.forEach out@{lb->
+//        val lb = it
+        val dlb = BrandAllLocDomainBean.LocationsBean()
+
+        dlb.location_id = lb.location_id
+        dlb.address = lb.address
+
+        val pin = BrandAllLocDomainBean.LocationsBean.PinBean()
+        if (lb.pin != null) {
+            pin.latitude = lb.pin!!.latitude
+            pin.longitude = lb.pin!!.longitude
+        }
+        dlb.pin = pin
+
+        dlb.friendliness = if (lb.friendliness == null) mutableListOf() else lb.friendliness!!
+
+        dlb.location_images = mutableListOf()
+        if (lb.location_images == null) {
+            domainBean.locations!!.add(dlb)
+            return@out
+        }
+
+        lb.location_images?.forEach {ib->
+//            val ib = lb.location_images[j]
+            val dib = BrandAllLocDomainBean.LocationsBean.LocationImagesBean()
+            dib.image = ib.image
+            dib.tag = ib.tag
+            dlb.location_images!!.add(dib)
+        }
+
+
+        domainBean.locations!!.add(dlb)
+
+    }
+
+    /*for (i in bean.result.locations.indices) {
         val lb = bean.result.locations[i]
         val dlb = BrandAllLocDomainBean.LocationsBean()
 
@@ -231,5 +262,5 @@ private fun transLoc2DomainBean(bean: BrandAllLocResponseBean, domainBean: Brand
 
         (domainBean.locations as ArrayList<BrandAllLocDomainBean.LocationsBean>).add(dlb)
 
-    }
+    }*/
 }

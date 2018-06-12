@@ -64,7 +64,7 @@ class UserInfoPresenter @Inject constructor() : UserInfoContract.Presenter {
 
     }
 
-    override fun setView(view: UserInfoContract.View?) {
+    override fun setView(view: UserInfoContract.View) {
     }
 
     override fun destroy() {

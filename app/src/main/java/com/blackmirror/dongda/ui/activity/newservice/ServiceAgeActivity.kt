@@ -2,14 +2,11 @@ package com.blackmirror.dongda.ui.activity.newservice
 
 import android.content.Intent
 import android.graphics.Color
-import android.os.Bundle
 import android.support.constraint.ConstraintLayout
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder
-import com.bigkoo.pickerview.listener.CustomListener
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener
 import com.bigkoo.pickerview.view.OptionsPickerView
 import com.blackmirror.dongda.R
@@ -17,8 +14,7 @@ import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.LogUtils
 import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
-
-import java.util.ArrayList
+import java.util.*
 
 class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
 
@@ -29,9 +25,9 @@ class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
     private lateinit var cl_choose_max_age: ConstraintLayout
     private lateinit var tv_choose_max_age: TextView
 
-    private var ageMin: ArrayList<String>? = null
-    private var ageMax: ArrayList<String>? = null
-    private var pvCustomOptions: OptionsPickerView<*>? = null
+    private var ageMin: MutableList<String> = mutableListOf()
+    private var ageMax: MutableList<String> = mutableListOf()
+    private var pvCustomOptions: OptionsPickerView<String>? = null
 
     override val layoutResId: Int
         get() = R.layout.activity_service_age
@@ -54,33 +50,33 @@ class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
         ageMin = ArrayList()
         ageMax = ArrayList()
 
-        ageMin!!.add("0")
-        ageMin!!.add("0.5")
-        ageMin!!.add("1")
-        ageMin!!.add("1.5")
-        ageMin!!.add("2")
-        ageMin!!.add("2.5")
-        ageMin!!.add("3")
-        ageMin!!.add("3.5")
-        ageMin!!.add("4")
-        ageMin!!.add("4.5")
-        ageMin!!.add("5")
-        ageMin!!.add("5.5")
-        ageMin!!.add("6")
-        ageMin!!.add("6.5")
-        ageMin!!.add("7")
-        ageMin!!.add("7.5")
-        ageMin!!.add("8")
-        ageMin!!.add("8.5")
-        ageMin!!.add("9")
-        ageMin!!.add("9.5")
-        ageMin!!.add("10")
-        ageMin!!.add("10.5")
-        ageMin!!.add("11")
-        ageMin!!.add("11.5")
-        ageMin!!.add("12")
+        ageMin.add("0")
+        ageMin.add("0.5")
+        ageMin.add("1")
+        ageMin.add("1.5")
+        ageMin.add("2")
+        ageMin.add("2.5")
+        ageMin.add("3")
+        ageMin.add("3.5")
+        ageMin.add("4")
+        ageMin.add("4.5")
+        ageMin.add("5")
+        ageMin.add("5.5")
+        ageMin.add("6")
+        ageMin.add("6.5")
+        ageMin.add("7")
+        ageMin.add("7.5")
+        ageMin.add("8")
+        ageMin.add("8.5")
+        ageMin.add("9")
+        ageMin.add("9.5")
+        ageMin.add("10")
+        ageMin.add("10.5")
+        ageMin.add("11")
+        ageMin.add("11.5")
+        ageMin.add("12")
 
-        ageMax!!.addAll(ageMin)
+        ageMax.addAll(ageMin)
 
         /**
          * @description
@@ -95,8 +91,8 @@ class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
             if (options2 <= options1) {
                 options2 = options1
             }
-            val min = ageMin!![options1]
-            val max = ageMax!![options2]
+            val min = ageMin[options1]
+            val max = ageMax[options2]
 
             LogUtils.d("ageMin: $min  ageMax: $max options3=$options3")
             tv_choose_min_age.text = min

@@ -1,24 +1,23 @@
-package com.blackmirror.dongda.data.model.response;
+package com.blackmirror.dongda.data.model.response
 
-import java.io.Serializable;
-import java.util.List;
+import java.io.Serializable
 
 /**
  * Create By Ruge at 2018-05-15
  */
-public class LocAllServiceResponseBean extends BaseResponseBean {
+class LocAllServiceResponseBean : BaseResponseBean() {
 
 
     /**
      * result : {"services":[{"service_tags":["多元智能"],"punchline":"让孩子多一份对不同文化的理解和习得,丰富学前孩子的体验,打开世界多元文化的窗口。","service_leaf":"日间看顾","operation":["幼小衔接"],"service_image":"57d7dd88-a04e-43ea-9766-aa12df22a58e","service_type":"看顾","category":"看顾","service_id":"5a66fdea59a6270918508f2c"},{"service_tags":["多元智能"],"punchline":"爱是一切教育的灵魂,为孩子们创造全英文Daycare环境。","service_leaf":"日间看顾","operation":[""],"service_image":"787890c8-ac2b-4fd1-bd5d-535907a3c54e","service_type":"看顾","category":"看顾","service_id":"5a66fdea59a6270918508f27"}]}
      */
 
-    public ResultBean result;
+    var result: ResultBean? = null
 
-    public static class ResultBean implements Serializable {
-        public List<ServicesBean> services;
+    class ResultBean : Serializable {
+        var services: List<ServicesBean>? = null
 
-        public static class ServicesBean implements Serializable{
+        class ServicesBean : Serializable {
             /**
              * service_tags : ["多元智能"]
              * punchline : 让孩子多一份对不同文化的理解和习得,丰富学前孩子的体验,打开世界多元文化的窗口。
@@ -30,14 +29,14 @@ public class LocAllServiceResponseBean extends BaseResponseBean {
              * service_id : 5a66fdea59a6270918508f2c
              */
 
-            public String punchline;
-            public String service_leaf;
-            public String service_image;
-            public String service_type;
-            public String category;
-            public String service_id;
-            public List<String> service_tags;
-            public List<String> operation;
+            var punchline: String? = null
+            var service_leaf: String? = null
+            var service_image: String? = null
+            var service_type: String? = null
+            var category: String? = null
+            var service_id: String? = null
+            var service_tags: MutableList<String>? = null
+            var operation: MutableList<String>? = null
         }
     }
 }

@@ -72,7 +72,7 @@ private fun getIcon2(request: Request): DownloadWeChatIconResponseBean {
     val error_message: String?
     val bean = DownloadWeChatIconResponseBean()
     try {
-        val response = BaseApi.httpClient.newCall(request).execute()
+        val response = httpClient.newCall(request).execute()
         if (response.isSuccessful) {
             bean.status = "ok"
             bean.userIcon = response.body()!!.bytes()
@@ -87,22 +87,22 @@ private fun getIcon2(request: Request): DownloadWeChatIconResponseBean {
     } catch (e1: ConnectTimeoutException) {
         error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION
         error_message = e1.message
-        LogUtils.e(AYRemoteApi::class.java, "ConnectTimeoutException: ", e1)
+//        LogUtils.e(AYRemoteApi::class.java, "ConnectTimeoutException: ", e1)
 
     } catch (e2: SocketTimeoutException) {//服务器响应超时
         error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION
         error_message = e2.message
-        LogUtils.e(AYRemoteApi::class.java, "SocketTimeoutException: ", e2)
+//        LogUtils.e(AYRemoteApi::class.java, "SocketTimeoutException: ", e2)
 
     } catch (e3: ConnectException) {//服务器请求超时
         error_code = DataConstant.CONNECT_EXCEPTION
         error_message = e3.message
-        LogUtils.e(AYRemoteApi::class.java, "ConnectException: ", e3)
+//        LogUtils.e(AYRemoteApi::class.java, "ConnectException: ", e3)
 
     } catch (e4: Exception) {
         error_code = DataConstant.OTHER_EXCEPTION
         error_message = e4.message
-        LogUtils.e(AYRemoteApi::class.java, "Exception: ", e4)
+//        LogUtils.e(AYRemoteApi::class.java, "Exception: ", e4)
 
     }
 
@@ -159,7 +159,7 @@ private fun executeUpload2(requestBean: UploadImageRequestBean): UpLoadImgRespon
     }
 
     try {
-        val response = BaseApi.httpClient.newCall(requestBuilder.build()).execute()
+        val response = httpClient.newCall(requestBuilder.build()).execute()
         val bean = UpLoadImgResponseBean()
         if (response.isSuccessful) {
             bean.status = "ok"
@@ -178,22 +178,22 @@ private fun executeUpload2(requestBean: UploadImageRequestBean): UpLoadImgRespon
     } catch (e1: ConnectTimeoutException) {
         error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION
         error_message = e1.message
-        LogUtils.e(UpLoadWeChatIconApi::class.java, "ConnectTimeoutException: ", e1)
+//        LogUtils.e(UpLoadWeChatIconApi::class.java, "ConnectTimeoutException: ", e1)
 
     } catch (e2: SocketTimeoutException) {//服务器响应超时
         error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION
         error_message = e2.message
-        LogUtils.e(UpLoadWeChatIconApi::class.java, "SocketTimeoutException: ", e2)
+//        LogUtils.e(UpLoadWeChatIconApi::class.java, "SocketTimeoutException: ", e2)
 
     } catch (e3: ConnectException) {//服务器请求超时
         error_code = DataConstant.CONNECT_EXCEPTION
         error_message = e3.message
-        LogUtils.e(UpLoadWeChatIconApi::class.java, "ConnectException: ", e3)
+//        LogUtils.e(UpLoadWeChatIconApi::class.java, "ConnectException: ", e3)
 
     } catch (e4: Exception) {
         error_code = DataConstant.OTHER_EXCEPTION
         error_message = e4.message
-        LogUtils.e(UpLoadWeChatIconApi::class.java, "Exception: ", e4)
+//        LogUtils.e(UpLoadWeChatIconApi::class.java, "Exception: ", e4)
 
     }
 

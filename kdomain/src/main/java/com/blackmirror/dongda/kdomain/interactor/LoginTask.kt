@@ -132,13 +132,11 @@ fun uploadWeChatImageImpl(userIcon: String, imgUUID: String): Observable<UpLoadW
 
                      updateUserInfo2(ub).map { bean ->
                         val db = UpLoadWeChatIconDomainBean()
-                        if (bean.isSuccess) {
-                            db.isSuccess = true
-                            db.imgUUID = bean.screen_photo
-                        } else {
-                            db.code = bean.code
-                            db.message = bean.message
-                        }
+                         db.isSuccess = bean.status == "ok"
+                         db.imgUUID =bean.img_uuid
+                         db.code = bean.error?.code?:DataConstant.NET_UNKNOWN_ERROR
+                         db.message = bean.error?.message?:""
+
                         db
                     }
                 } else {

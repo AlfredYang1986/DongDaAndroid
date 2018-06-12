@@ -15,6 +15,7 @@ import javax.inject.Inject
  * Create By Ruge at 2018-06-11
  */
 class PhoneLoginPresenter @Inject constructor(val view: PhoneLoginContract.View) : PhoneLoginContract.PhoneLoginPresenter{
+
     override fun login(bean: PhoneLoginRequestBean) {
         phoneLoginImpl(bean.phone_number,bean.code,bean.reg_token)
                 .subscribeOn(Schedulers.io())
@@ -50,7 +51,7 @@ class PhoneLoginPresenter @Inject constructor(val view: PhoneLoginContract.View)
                 })
     }
 
-    override fun setView(view: PhoneLoginContract.View?) {
+    override fun setView(view: PhoneLoginContract.View) {
 
     }
 
