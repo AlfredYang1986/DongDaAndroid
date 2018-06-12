@@ -2,9 +2,9 @@ package com.blackmirror.dongda.presenter
 
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean
-import com.blackmirror.dongda.domain.model.BaseDataBean
 import com.blackmirror.dongda.kdomain.interactor.getSmsFromServer
 import com.blackmirror.dongda.kdomain.interactor.phoneLoginImpl
+import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.PhoneLoginContract
 import com.blackmirror.dongda.utils.AppConstant
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,11 +20,15 @@ class PhoneLoginPresenter @Inject constructor(val view: PhoneLoginContract.View)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    view?.loginSuccess(it)
+                    if (it.isSuccess) {
+                        view.loginSuccess(it)
+                    } else {
+                        view.onError(it)
+                    }
                 },{val bean = BaseDataBean()
                     bean.code = AppConstant.NET_UNKNOWN_ERROR
                     bean.message = it.message
-                    view?.onError(bean)})
+                    view.onError(bean)})
 
     }
 
@@ -33,12 +37,16 @@ class PhoneLoginPresenter @Inject constructor(val view: PhoneLoginContract.View)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    view?.sendSmsSuccess(it)
+                    if (it.isSuccess) {
+                        view.sendSmsSuccess(it)
+                    } else {
+                        view.onError(it)
+                    }
                 },{
                     val bean = BaseDataBean()
                     bean.code = AppConstant.NET_UNKNOWN_ERROR
                     bean.message = it.message
-                    view?.onError(bean)
+                    view.onError(bean)
                 })
     }
 

@@ -23,17 +23,17 @@ public class OSSInfoApi extends AYRemoteApi {
             return execute(bean,OssInfoResponseBean.class).doOnNext(new Consumer<OssInfoResponseBean>() {
                 @Override
                 public void accept(OssInfoResponseBean bean) throws Exception {
-                    if (bean != null && "ok".equals(bean.status) && bean.result != null && bean.result.OssConnectInfo != null) {
-                        AYPrefUtils.setAccesskeyId(bean.result.OssConnectInfo.accessKeyId);
-                        AYPrefUtils.setSecurityToken(bean.result.OssConnectInfo.SecurityToken);
-                        AYPrefUtils.setAccesskeySecret(bean.result.OssConnectInfo.accessKeySecret);
-                        AYPrefUtils.setExpiration(bean.result.OssConnectInfo.Expiration);
+                    if (bean != null && "ok".equals(bean.getStatus()) && bean.getResult() != null && bean.getResult().getOssConnectInfo() != null) {
+                        AYPrefUtils.setAccesskeyId(bean.getResult().getOssConnectInfo().getAccessKeyId());
+                        AYPrefUtils.setSecurityToken(bean.getResult().getOssConnectInfo().getSecurityToken());
+                        AYPrefUtils.setAccesskeySecret(bean.getResult().getOssConnectInfo().getAccessKeySecret());
+                        AYPrefUtils.setExpiration(bean.getResult().getOssConnectInfo().getExpiration());
                     }
                 }
             });
         } else {
             OssInfoResponseBean b = new OssInfoResponseBean();
-            b.status = "ok";
+            b.setStatus("ok");
             return Observable.just(b);
         }
     }

@@ -2,19 +2,18 @@ package com.blackmirror.dongda.kdomain.interactor
 
 import com.blackmirror.dongda.data.DataConstant
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean
-import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean
-import com.blackmirror.dongda.data.model.request.SendSmsRequestBean
-import com.blackmirror.dongda.data.model.request.WeChatLoginRequestBean
+import com.blackmirror.dongda.data.model.request.*
 import com.blackmirror.dongda.data.model.response.PhoneLoginResponseBean
 import com.blackmirror.dongda.data.model.response.SendSmsResponseBean
+import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
 import com.blackmirror.dongda.data.model.response.WeChatLoginResponseBean
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.repository.DbRepository
-import com.blackmirror.dongda.data.repository.getSMS
-import com.blackmirror.dongda.data.repository.phoneLogin
-import com.blackmirror.dongda.data.repository.weChatLogin
+import com.blackmirror.dongda.data.net.updateUserInfo2
+import com.blackmirror.dongda.data.net.upload2
+import com.blackmirror.dongda.data.repository.*
 import com.blackmirror.dongda.kdomain.model.PhoneLoginBean
 import com.blackmirror.dongda.kdomain.model.SendSmsKdBean
+import com.blackmirror.dongda.kdomain.model.UpLoadWeChatIconDomainBean
 import com.blackmirror.dongda.kdomain.model.WeChatLoginBean
 import com.blackmirror.dongda.utils.AYPrefUtils
 import io.reactivex.Observable
@@ -79,7 +78,7 @@ fun phoneLoginImpl(phone: String, code: String, reg_token: String): Observable<P
             dbBean.auth_token = bean.auth_token
             DbRepository.insertProfile(dbBean)
         }
-        return@map bean
+        bean
     }
 }
 
@@ -122,6 +121,40 @@ fun weChatLoginImpl(provide_uid: String, provide_token: String, provide_screen_n
 
                 bean
             }
+}
+
+fun uploadWeChatImageImpl(userIcon: String, imgUUID: String): Observable<UpLoadWeChatIconDomainBean> {
+    return upLoadWeChatIcon(userIcon,imgUUID,ul)
+            .flatMap {
+                if ("ok" == it.status) {
+                    val ub = UpDateBean()
+                    ub.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_photo\":\"$imgUUID\"}}"
+
+                     updateUserInfo2(ub).map { bean ->
+                        val db = UpLoadWeChatIconDomainBean()
+                        if (bean.isSuccess) {
+                            db.isSuccess = true
+                            db.imgUUID = bean.screen_photo
+                        } else {
+                            db.code = bean.code
+                            db.message = bean.message
+                        }
+                        db
+                    }
+                } else {
+                    val db = UpLoadWeChatIconDomainBean()
+                    db.code = DataConstant.UPLOAD_WECHAT_ERROR
+                    db.message = "上传微信头像失败!"
+                     Observable.just(db)
+                }
+            }
+}
+
+val ul=fun(userIcon: String, imgUUID: String): Observable<UpLoadImgResponseBean> {
+    val requestBean = UploadImageRequestBean()
+    requestBean.userIcon = userIcon
+    requestBean.imgUUID = imgUUID
+    return upload2(requestBean, UpLoadImgResponseBean::class.java)
 }
 
 val wl = fun(provide_uid: String, provide_token: String, provide_screen_name: String, provide_name: String, provide_screen_photo: String): Observable<WeChatLoginResponseBean> {

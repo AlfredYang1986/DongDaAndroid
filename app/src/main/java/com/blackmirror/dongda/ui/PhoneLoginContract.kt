@@ -2,7 +2,7 @@ package com.blackmirror.dongda.ui
 
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean
-import com.blackmirror.dongda.domain.model.BaseDataBean
+import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.kdomain.model.PhoneLoginBean
 import com.blackmirror.dongda.kdomain.model.SendSmsKdBean
 

@@ -26,7 +26,7 @@ public class UserInfoRepositoryImpl implements UserInfoRepository {
                         if (bean == null) {
                             return ub;
                         }
-                        if ("ok".equals(bean.status)) {
+                        if ("ok".equals(bean.getStatus())) {
                             ub.isSuccess = true;
                             if (bean.result != null && bean.result.profile != null) {
                                 ub.screen_name = bean.result.profile.screen_name;
@@ -42,9 +42,9 @@ public class UserInfoRepositoryImpl implements UserInfoRepository {
                                 ub.contact_no = bean.result.profile.contact_no;
                                 ub.social_id = bean.result.profile.social_id;
                             }
-                        } else if (bean.error != null) {
-                            ub.code = bean.error.code;
-                            ub.message = bean.error.message;
+                        } else if (bean.getError() != null) {
+                            ub.code = bean.getError().getCode();
+                            ub.message = bean.getError().getMessage();
 
                         }
                         return ub;

@@ -13,9 +13,9 @@ import android.widget.ImageView;
 
 import com.blackmirror.dongda.R;
 import com.blackmirror.dongda.di.component.DaggerSplashComponent;
-import com.blackmirror.dongda.domain.model.BaseDataBean;
-import com.blackmirror.dongda.domain.model.UpLoadWeChatIconDomainBean;
-import com.blackmirror.dongda.domain.model.WeChatLoginBean;
+import com.blackmirror.dongda.kdomain.model.BaseDataBean;
+import com.blackmirror.dongda.kdomain.model.UpLoadWeChatIconDomainBean;
+import com.blackmirror.dongda.kdomain.model.WeChatLoginBean;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
 import com.blackmirror.dongda.ui.activity.HomeActivity.AYHomeActivity;
@@ -167,7 +167,7 @@ public class SplashActivity extends BaseActivity implements WeChatLoginContract.
         closeProcessDialog();
 
         Intent intent = new Intent(SplashActivity.this, AYHomeActivity.class);
-        intent.putExtra("img_uuid", bean.screen_photo);
+        intent.putExtra("img_uuid", bean.getScreen_photo());
         startActivity(intent);
         finish();
     }
@@ -180,10 +180,10 @@ public class SplashActivity extends BaseActivity implements WeChatLoginContract.
     @Override
     public void onError(BaseDataBean bean) {
         closeProcessDialog();
-        if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_icon, bean.message);
+        if (bean.getCode() == AppConstant.NET_WORK_UNAVAILABLE) {
+            SnackbarUtils.show(iv_icon, bean.getMessage());
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")");
+            ToastUtils.showShortToast(bean.getMessage() + "(" + bean.getCode() + ")");
         }
     }
 }
