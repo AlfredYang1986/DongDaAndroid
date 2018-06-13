@@ -5,7 +5,6 @@ import android.content.Intent
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
@@ -166,7 +165,20 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
                     rv_art_list.layoutManager = GridLayoutManager(this@ArtListActivity, 2)
                     rv_art_list.adapter = adapter
                     rv_art_list.addItemDecoration(GridItemDecoration(16, 16, 15, 48, 44, 2))
-                    adapter!!.setOnArtListClickListener(object : ArtListAdapter.OnArtListClickListener {
+
+                    adapter!!.setOnArtListClickListener({
+                        view,position,service_id->
+                        val intent = Intent(this@ArtListActivity, ServiceDetailInfoActivity::class.java)
+                        clickLikePos = position
+                        intent.putExtra("service_id", service_id)
+                        startActivityForResult(intent, AppConstant.ART_LIST_REQUEST_CODE)
+                    },{
+                        view,position,servicesBean->
+                        clickLikePos = position
+                        sendLikeData(servicesBean)
+                    })
+
+                    /*adapter!!.setOnArtListClickListener(object : ArtListAdapter.OnArtListClickListener {
                         override fun onItemArtListClick(view: View, position: Int, service_id: String) {
                             val intent = Intent(this@ArtListActivity, ServiceDetailInfoActivity::class.java)
                             clickLikePos = position
@@ -178,7 +190,7 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
                             clickLikePos = position
                             sendLikeData(servicesBean)
                         }
-                    })
+                    })*/
 
                 } else {
                     adapter!!.setRefreshData(bean.services)

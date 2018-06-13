@@ -18,7 +18,7 @@ class HomepageDomainBean : BaseDataBean() {
 
         var service_type: String? = null
         var totalCount: Int = 0
-        var services: List<ServicesBean>? = null//对应主页的四个标签 0 看顾 1 艺术 2 运动 3 科学
+        var services: MutableList<ServicesBean>? = null//对应主页的四个标签 0 看顾 1 艺术 2 运动 3 科学
 
         class ServicesBean {
             /**
@@ -48,8 +48,8 @@ class HomepageDomainBean : BaseDataBean() {
             var category: String? = null
             var pin: PinBean? = null
             var service_id: String? = null
-            var service_tags: List<String>? = null
-            var operation: List<String>? = null
+            var service_tags: MutableList<String>? = null
+            var operation: MutableList<String>? = null
 
             class PinBean {
                 /**

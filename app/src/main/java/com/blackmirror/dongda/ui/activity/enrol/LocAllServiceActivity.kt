@@ -6,7 +6,6 @@ import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
-import android.view.View
 import android.widget.ImageView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.adapter.LocAllServiceAdapter
@@ -68,30 +67,28 @@ class LocAllServiceActivity : BaseActivity(), EnrolContract.View {
         val adapter = LocAllServiceAdapter(this, bean)
         rv_service.layoutManager = LinearLayoutManager(this)
         rv_service.adapter = adapter
-        adapter.setOnItemClickListener(object : LocAllServiceAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int, bean: LocAllServiceDomainBean.ServicesBean) {
-                val intent = Intent()
-                val sb = StringBuilder()
-                if (bean.service_tags != null && bean.service_tags!!.size != 0 && !TextUtils.isEmpty(bean.service_tags!![0])) {
-                    sb.append(bean.service_tags!![0])
-                            .append("的")
-                }
-                sb.append(bean.service_leaf)
-                intent.putExtra("locations", locations)
-                intent.putExtra("service_leaf", sb.toString())
-                intent.putExtra("service_image", bean.service_image)
-                intent.putExtra("service_id", bean.service_id)
-                intent.putExtra("address", getIntent().getStringExtra("address"))
-
-                if (bean.service_type!!.contains("看顾")) {
-                    intent.setClass(this@LocAllServiceActivity, ServiceAgeActivity::class.java)
-                } else {
-                    intent.setClass(this@LocAllServiceActivity, EnrolAgeActivity::class.java)
-                }
-
-                startActivity(intent)
+        adapter.setOnItemClickListener { view, position, bean ->
+            val intent = Intent()
+            val sb = StringBuilder()
+            if (bean.service_tags != null && bean.service_tags!!.size != 0 && !TextUtils.isEmpty(bean.service_tags!![0])) {
+                sb.append(bean.service_tags!![0])
+                        .append("的")
             }
-        })
+            sb.append(bean.service_leaf)
+            intent.putExtra("locations", locations)
+            intent.putExtra("service_leaf", sb.toString())
+            intent.putExtra("service_image", bean.service_image)
+            intent.putExtra("service_id", bean.service_id)
+            intent.putExtra("address", getIntent().getStringExtra("address"))
+
+            if (bean.service_type!!.contains("看顾")) {
+                intent.setClass(this@LocAllServiceActivity, ServiceAgeActivity::class.java)
+            } else {
+                intent.setClass(this@LocAllServiceActivity, EnrolAgeActivity::class.java)
+            }
+
+            startActivity(intent)
+        }
     }
 
     override fun onEnrolSuccess(bean: EnrolDomainBean) {

@@ -150,7 +150,7 @@ private fun executeUpload2(requestBean: UploadImageRequestBean): UpLoadImgRespon
     requestBuilder.addHeader("Authorization", signature)
 
     val file = File(path)
-    if (requestBean.userIconData == null || requestBean.userIconData.size == 0) {
+    if (requestBean.userIconData == null || requestBean.userIconData?.size == 0) {
         val body = RequestBody.create(MediaType.parse("image/jpeg"), file)
         requestBuilder = requestBuilder.method("PUT", body)
     } else {

@@ -4,7 +4,7 @@ package com.blackmirror.dongda.kdomain.model
  * Create By Ruge at 2018-05-11
  */
 class CareMoreDomainBean : BaseDataBean() {
-    var services: List<ServicesBean>? = null
+    var services: MutableList<ServicesBean>? = null
 
     class ServicesBean {
         /**

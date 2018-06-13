@@ -102,8 +102,8 @@ private fun tran2DomainBean(bean: SearchServiceResponseBean, domainBean: Homepag
                 d.pin = pin
             }
 
-            d.service_tags = if (s.service_tags != null) s.service_tags else ArrayList()
-            d.operation = if (s.operation != null) s.operation else ArrayList()
+            d.service_tags = if (s.service_tags != null) s.service_tags else mutableListOf()
+            d.operation = if (s.operation != null) s.operation else mutableListOf()
 
             (b.services as ArrayList<HomepageDomainBean.HomepageServicesBean.ServicesBean>).add(d)
 

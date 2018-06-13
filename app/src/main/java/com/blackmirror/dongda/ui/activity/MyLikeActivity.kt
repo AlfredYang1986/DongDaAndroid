@@ -6,7 +6,6 @@ import android.content.Intent
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
@@ -78,20 +77,16 @@ class MyLikeActivity : BaseActivity(), Contract.MyLikeView {
         rv_my_like.layoutManager = LinearLayoutManager(this@MyLikeActivity)
         rv_my_like.adapter = adapter
         rv_my_like.addItemDecoration(TopItemDecoration(40, 40))
-        adapter!!.setOnLikeListClickListener(object : MyLikeListAdapter.OnLikeListClickListener {
-            override fun onItemLikeListClick(view: View, position: Int, service_id: String) {
-                val intent = Intent(this@MyLikeActivity, ServiceDetailInfoActivity::class.java)
-                intent.putExtra("service_id", service_id)
-                startActivity(intent)
-            }
-
-            override fun onItemLikeClick(view: View, position: Int, likeBean: LikeDomainBean.ServicesBean) {
-                clickLikePos = position
-                showConfirmUnLikeDialog(position, likeBean)
-                //                    sendLikeData(likeBean);
-            }
+        adapter?.setOnLikeListClickListener({
+            view,position,service_id->
+            val intent = Intent(this@MyLikeActivity, ServiceDetailInfoActivity::class.java)
+            intent.putExtra("service_id", service_id)
+            startActivity(intent)
+        },{
+            view,position,likeBean->
+            clickLikePos = position
+            showConfirmUnLikeDialog(position, likeBean)
         })
-
     }
 
     override fun onLikePushSuccess(bean: LikePushDomainBean) {

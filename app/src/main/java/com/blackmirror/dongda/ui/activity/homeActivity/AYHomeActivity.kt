@@ -133,19 +133,11 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
         rv_featured_theme.adapter = adapter
         rv_featured_theme.addItemDecoration(SpacesItemDecoration(10))
 
-
-        adapter.setOnItemClickListener(object : FeaturedThemeAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int) {
-
-                val intent = Intent(this@AYHomeActivity, FeaturedDetailActivity::class.java)
-                intent.putExtra("pos", position)
-                startActivityForResult(intent, AppConstant.FEATURE_DETAIL_REQUEST_CODE)
-            }
-
-            override fun onItemLongClick(view: View, position: Int) {
-
-            }
-        })
+        adapter.setOnItemClickListener { view, position ->
+            val intent = Intent(this@AYHomeActivity, FeaturedDetailActivity::class.java)
+            intent.putExtra("pos", position)
+            startActivityForResult(intent, AppConstant.FEATURE_DETAIL_REQUEST_CODE)
+        }
     }
 
     private fun initCare(bean: HomepageDomainBean.HomepageServicesBean) {
@@ -158,7 +150,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             rv_home_care.adapter = careAdapter
             rv_home_care.addItemDecoration(SpacesItemDecoration(8))
 
-            careAdapter!!.setOnCareClickListener { view, position, service_id ->
+            careAdapter?.setOnCareClickListener { view, position, service_id ->
                 //                    startActivityForResult(new Intent(AYHomeActivity.this, CareListActivity.class));
                 val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
                 intent.putExtra("service_id", service_id)
@@ -179,23 +171,15 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             rv_home_art.layoutManager = manager
             rv_home_art.adapter = artAdapter
             rv_home_art.addItemDecoration(SpacesItemDecoration(8))
-            artAdapter!!.setOnItemClickListener(object : HomeArtAdapter.OnItemClickListener {
-                override fun onArtLikeClick(view: View, position: Int, bean: HomepageDomainBean.HomepageServicesBean.ServicesBean) {
-                    //                    ToastUtils.showShortToast("点击了收藏");
-                    clickLikePos = position
-                    clickAdapter = AppConstant.HOME_ART_ADAPTER
-                    sendLikeData(bean)
-                }
-
-                override fun onItemClick(view: View, position: Int, service_id: String) {
-                    val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
-                    intent.putExtra("service_id", service_id)
-                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-                }
-
-                override fun onItemLongClick(view: View, position: Int) {
-
-                }
+            artAdapter!!.setOnItemClickListener({ view, position, service_id ->
+                val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
+                intent.putExtra("service_id", service_id)
+                startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
+            }, {
+                view, position, ServicesBean->
+                clickLikePos = position
+                clickAdapter = AppConstant.HOME_ART_ADAPTER
+                sendLikeData(ServicesBean)
             })
         } else {
             artAdapter!!.setRefreshData(bean.services)
@@ -212,18 +196,16 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             rv_home_sport.layoutManager = manager
             rv_home_sport.adapter = sportAdapter
             rv_home_sport.addItemDecoration(SpacesItemDecoration(8))
-            sportAdapter!!.setOnItemClickListener(object : HomeSportAdapter.OnItemClickListener {
-                override fun onSportLikeClick(view: View, position: Int, servicesBean: HomepageDomainBean.HomepageServicesBean.ServicesBean) {
-                    sendLikeData(servicesBean)
-                    clickLikePos = position
-                    clickAdapter = AppConstant.HOME_SPORT_ADAPTER
-                }
-
-                override fun onSportItemClick(view: View, position: Int, service_id: String) {
-                    val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
-                    intent.putExtra("service_id", service_id)
-                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-                }
+            sportAdapter?.setOnItemClickListener({
+                view,position,service_id->
+                val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
+                intent.putExtra("service_id", service_id)
+                startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
+            },{
+                view,position,servicesBean->
+                sendLikeData(servicesBean)
+                clickLikePos = position
+                clickAdapter = AppConstant.HOME_SPORT_ADAPTER
             })
         } else {
             sportAdapter!!.setRefreshData(bean.services)
@@ -239,18 +221,16 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             rv_home_science.layoutManager = manager
             rv_home_science.adapter = scienceAdapter
             rv_home_science.addItemDecoration(SpacesItemDecoration(8))
-            scienceAdapter!!.setOnItemClickListener(object : HomeScienceAdapter.OnItemClickListener {
-                override fun onScienceLikeClick(view: View, position: Int, servicesBean: HomepageDomainBean.HomepageServicesBean.ServicesBean) {
-                    clickLikePos = position
-                    clickAdapter = AppConstant.HOME_SCIENCE_ADAPTER
-                    sendLikeData(servicesBean)
-                }
-
-                override fun onScienceItemClick(view: View, position: Int, service_id: String) {
-                    val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
-                    intent.putExtra("service_id", service_id)
-                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-                }
+            scienceAdapter?.setOnItemClickListener({
+                view,position,service_id->
+                val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
+                intent.putExtra("service_id", service_id)
+                startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
+            },{
+                view,position,servicesBean->
+                clickLikePos = position
+                clickAdapter = AppConstant.HOME_SCIENCE_ADAPTER
+                sendLikeData(servicesBean)
             })
         } else {
             sportAdapter!!.setRefreshData(bean.services)

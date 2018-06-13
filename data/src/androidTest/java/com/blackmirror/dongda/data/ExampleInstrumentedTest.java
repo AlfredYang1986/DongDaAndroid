@@ -4,14 +4,8 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.blackmirror.dongda.domain.model.SendSmsBean;
-import com.blackmirror.dongda.utils.LogUtils;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 import static org.junit.Assert.assertEquals;
 
@@ -28,39 +22,6 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.blackmirror.dongda.data.test", appContext.getPackageName());
-    }
-
-    @Test
-    public void test(){
-        LoginRepositoryImpl repository = new LoginRepositoryImpl();
-
-        repository.sendSms("17610279929")
-                .subscribe(new Observer<SendSmsBean>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(SendSmsBean bean) {
-                        if (bean.isSuccess){
-                            LogUtils.d("onNext success");
-                        }else {
-                            LogUtils.d("onNext fail "+bean.code+" "+bean.message);
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtils.d("onError "+e.getMessage());
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
     }
 
 }

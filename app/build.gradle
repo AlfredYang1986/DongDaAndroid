@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 // 添加插件
 apply plugin: "com.mob.sdk"
 apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
@@ -76,7 +77,6 @@ kapt {
 
 dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.1'
-    compile 'com.android.support:support-annotations:27.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:' + rootProject.ext.constraintLayoutVersion
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
@@ -102,17 +102,15 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
     implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
     kapt 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
-    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
+//    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
     implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
     //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
     implementation project(':device')
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':kdomain')
-    testCompile project(path: ':data')
 }
 repositories {
     mavenCentral()
 }
 
-apply plugin: 'kotlin-android-extensions'

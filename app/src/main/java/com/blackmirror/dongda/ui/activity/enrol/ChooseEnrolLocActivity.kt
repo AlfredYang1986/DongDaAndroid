@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.amap.api.location.AMapLocationClient
@@ -246,13 +245,12 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
         val adapter = BrandAllLocAdapter(this, bean)
         rv_brand_loc_list.layoutManager = LinearLayoutManager(this)
         rv_brand_loc_list.adapter = adapter
-        adapter.setOnItemClickListener(object : BrandAllLocAdapter.OnItemClickListener {
-            override fun onItemClick(view: View, position: Int, bean: BrandAllLocDomainBean.LocationsBean) {
-                val intent = Intent(this@ChooseEnrolLocActivity, LocAllServiceActivity::class.java)
-                intent.putExtra("locations", bean.location_id)
-                intent.putExtra("address", bean.address)
-                startActivity(intent)
-            }
+
+        adapter.setOnItemClickListener({view,position,lb->
+            val intent = Intent(this@ChooseEnrolLocActivity, LocAllServiceActivity::class.java)
+            intent.putExtra("locations", lb.location_id)
+            intent.putExtra("address", lb.address)
+            startActivity(intent)
         })
     }
 

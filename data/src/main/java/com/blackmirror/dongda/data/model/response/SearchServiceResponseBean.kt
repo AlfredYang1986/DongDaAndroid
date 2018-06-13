@@ -13,7 +13,7 @@ class SearchServiceResponseBean : BaseResponseBean() {
     var result: ResultBean? = null
 
     class ResultBean : Serializable {
-        var homepage_services: List<HomepageServicesBean>? = null
+        var homepage_services: MutableList<HomepageServicesBean>? = null
 
         class HomepageServicesBean : Serializable {
             /**
@@ -54,8 +54,8 @@ class SearchServiceResponseBean : BaseResponseBean() {
                 var category: String? = null
                 var pin: PinBean? = null
                 var service_id: String? = null
-                var service_tags: List<String>? = null
-                var operation: List<String>? = null
+                var service_tags: MutableList<String>? = null
+                var operation: MutableList<String>? = null
 
                 class PinBean : Serializable {
                     /**

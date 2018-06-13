@@ -6,10 +6,8 @@ import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.Toolbar
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.adapter.FeaturedDetailAdapter
 import com.blackmirror.dongda.di.component.DaggerFeaturedDetailComponent
@@ -176,21 +174,20 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
             rv_featured_detail.adapter = adapter
 
 
-            adapter!!.setOnDetailListClickListener(object : FeaturedDetailAdapter.OnDetailListClickListener {
-                override fun onItemDetailListClick(view: View, position: Int, service_id: String) {
-                    val intent = Intent(this@FeaturedDetailActivity, ServiceDetailInfoActivity::class.java)
-                    intent.putExtra("service_id", service_id)
-                    startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-                }
-
-                override fun onItemDetailLikeClick(view: View, position: Int, servicesBean: CareMoreDomainBean.ServicesBean) {
-                    clickLikePos = position
-                    sendLikeData(servicesBean)
-                }
+            adapter?.setOnDetailListClickListener({
+                view,position,service_id->
+                val intent = Intent(this@FeaturedDetailActivity, ServiceDetailInfoActivity::class.java)
+                intent.putExtra("service_id", service_id)
+                startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
+            },{
+                view,position,servicesBean->
+                clickLikePos = position
+                sendLikeData(servicesBean)
             })
 
+
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

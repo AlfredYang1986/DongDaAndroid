@@ -304,7 +304,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
 
 
         for (image in bean.location_images!!) {
-            tabList.add(ServiceDetailPhotoBean(image.tag, image.image))
+            tabList.add(ServiceDetailPhotoBean(image.tag!!, image.image!!))
             tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag))
         }
 
@@ -318,7 +318,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
                 sb.tag = image.tag
                 array.add(sb)
             } else {
-                tabList.add(ServiceDetailPhotoBean(image.tag, image.image))
+                tabList.add(ServiceDetailPhotoBean(image.tag!!, image.image!!))
                 tl_detail_tab.addTab(tl_detail_tab.newTab().setText(image.tag))
             }
         }
@@ -326,7 +326,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
         Collections.sort(array)
 
         for (i in array.indices) {
-            tabList.add(ServiceDetailPhotoBean(array[i].tag, array[i].image))
+            tabList.add(ServiceDetailPhotoBean(array[i].tag!!, array[i].image!!))
             tl_detail_tab.addTab(tl_detail_tab.newTab().setText(array[i].tag))
         }
 

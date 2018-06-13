@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
@@ -170,21 +169,20 @@ class CareListActivity : BaseActivity(), ListMoreContract.View {
                 adapter!!.setMoreData(bean.services)
             }
 
-            adapter!!.setOnCareListClickListener(object : CareListAdapter.OnCareListClickListener {
-                override fun onItemCareListClick(view: View, position: Int, service_id: String) {
-                    val intent = Intent(this@CareListActivity, ServiceDetailInfoActivity::class.java)
-                    intent.putExtra("service_id", service_id)
-                    clickLikePos = position
-                    startActivityForResult(intent, AppConstant.CARE_LIST_REQUEST_CODE)
-                }
-
-                override fun onItemCareLikeClick(view: View, position: Int, servicesBean: CareMoreDomainBean.ServicesBean) {
-                    clickLikePos = position
-                    sendLikeData(servicesBean)
-                }
+            adapter?.setOnCareListClickListener({
+                view,position,service_id->
+                val intent = Intent(this@CareListActivity, ServiceDetailInfoActivity::class.java)
+                intent.putExtra("service_id", service_id)
+                clickLikePos = position
+                startActivityForResult(intent, AppConstant.CARE_LIST_REQUEST_CODE)
+            },{
+                view,position,servicesBean->
+                clickLikePos = position
+                sendLikeData(servicesBean)
             })
+
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

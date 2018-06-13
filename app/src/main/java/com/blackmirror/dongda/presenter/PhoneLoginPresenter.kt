@@ -17,7 +17,7 @@ import javax.inject.Inject
 class PhoneLoginPresenter @Inject constructor(val view: PhoneLoginContract.View) : PhoneLoginContract.PhoneLoginPresenter{
 
     override fun login(bean: PhoneLoginRequestBean) {
-        phoneLoginImpl(bean.phone_number,bean.code,bean.reg_token)
+        phoneLoginImpl(bean.phone_number!!, bean.code!!,bean.reg_token!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -34,7 +34,7 @@ class PhoneLoginPresenter @Inject constructor(val view: PhoneLoginContract.View)
     }
 
     override fun sendSms(bean: SendSmsRequestBean) {
-        getSmsFromServer(bean.phone_number)
+        getSmsFromServer(bean.phone_number!!)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
