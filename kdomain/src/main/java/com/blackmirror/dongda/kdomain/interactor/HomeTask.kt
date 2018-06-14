@@ -6,7 +6,7 @@ import com.blackmirror.dongda.data.model.request.SearchServiceRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.SearchServiceResponseBean
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.net.getOssInfo2
+import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.searchHomeData
 import com.blackmirror.dongda.kdomain.model.HomepageDomainBean
 import com.blackmirror.dongda.utils.AYPrefUtils
@@ -32,7 +32,7 @@ var sh = fun(): Observable<SearchServiceResponseBean> {
     bean.json = "{ \"token\": \"${AYPrefUtils.getAuthToken()}\", \"condition\": { \"user_id\": \"${AYPrefUtils.getUserId()}\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}"
     bean.url = DataConstant.HOME_PAGE_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, SearchServiceResponseBean::class.java)
         }

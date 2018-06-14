@@ -163,6 +163,8 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
         } else {
             val intent = Intent(this@PhoneInputActivity, AYHomeActivity::class.java)
             intent.putExtra("img_uuid", bean.screen_photo)
+            AYPrefUtils.setImgUuid(bean.screen_photo)
+            AYPrefUtils.setIsPhoneLogin("phone")
             startActivity(intent)
             DongdaApplication.finishAllActivity()
         }

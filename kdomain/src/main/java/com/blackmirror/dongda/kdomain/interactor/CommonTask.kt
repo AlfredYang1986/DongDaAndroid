@@ -10,7 +10,7 @@ import com.blackmirror.dongda.data.model.response.CareMoreResponseBean
 import com.blackmirror.dongda.data.model.response.DetailInfoResponseBean
 import com.blackmirror.dongda.data.model.response.NearServiceResponseBean
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.net.getOssInfo2
+import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.getDetailInfo
 import com.blackmirror.dongda.data.repository.getNearService
 import com.blackmirror.dongda.data.repository.getServiceMoreData
@@ -65,7 +65,7 @@ val ns = fun(latitude: Double, longitude: Double): Observable<NearServiceRespons
 
     bean.url = DataConstant.NEAR_SERVICE_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, NearServiceResponseBean::class.java)
         }
@@ -86,7 +86,7 @@ val md = fun(skipCount: Int, takeCount: Int, serviceType: String): Observable<Ca
 
     bean.url = DataConstant.SERVICE_MORE_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, CareMoreResponseBean::class.java)
         }
@@ -106,7 +106,7 @@ val di = fun(service_id: String): Observable<DetailInfoResponseBean> {
 
     bean.url = DataConstant.SERVICE_DETAIL_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, DetailInfoResponseBean::class.java)
         }

@@ -32,12 +32,12 @@ inline fun <P : BaseResponseBean, Q : BaseRequestBean> execute(q: Q, myClass: Cl
                 .url(q.url)
                 .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), q.json.toString()))
                 .build()
-        executeRequest2(request, myClass)
+        LogUtils.d("flag","做网络请求前的json数据: ${q.json.toString()}")
+        executeRequest(request, myClass)
     }
 }
 
-fun <P : BaseResponseBean> executeRequest2(request: Request, myClass: Class<P>): P {
-    //        LogUtils.d("flag","做网络请求前的json数据: "+args.toString());
+fun <P : BaseResponseBean> executeRequest(request: Request, myClass: Class<P>): P {
     var error_code: Int?
     var error_message: String?
 

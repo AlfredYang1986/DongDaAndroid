@@ -10,7 +10,7 @@ import com.blackmirror.dongda.data.model.response.LikePopResponseBean
 import com.blackmirror.dongda.data.model.response.LikePushResponseBean
 import com.blackmirror.dongda.data.model.response.LikeResponseBean
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.net.getOssInfo2
+import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.getMyLikeData
 import com.blackmirror.dongda.data.repository.likePop2Server
 import com.blackmirror.dongda.data.repository.likePush2Server
@@ -68,7 +68,7 @@ val like = fun(): Observable<LikeResponseBean> {
 
     bean.url = DataConstant.LIKE_QUERY_LIST_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, LikeResponseBean::class.java)
         }
@@ -85,7 +85,7 @@ val pop = fun(service_id: String): Observable<LikePopResponseBean> {
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"}}"
     bean.url = DataConstant.LIKE_POP_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, LikePopResponseBean::class.java)
         }
@@ -102,7 +102,7 @@ val lp = fun(service_id: String): Observable<LikePushResponseBean> {
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id \"}}"
     bean.url = DataConstant.LIKE_PUSH_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, LikePushResponseBean::class.java)
         }

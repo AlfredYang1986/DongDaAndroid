@@ -143,6 +143,8 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
             closeProcessDialog()
             intent.putExtra("img_uuid", bean.screen_photo)
             startActivity(intent)
+            AYPrefUtils.setImgUuid(bean.screen_photo)
+            AYPrefUtils.setIsPhoneLogin("weChat")
             DongdaApplication.finishAllActivity()
         } else {
             val img_uuid = CalUtils.getUUID32()
@@ -160,6 +162,8 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
         val intent = Intent(this@LandingActivity, AYHomeActivity::class.java)
         intent.putExtra("img_uuid", bean.imgUUID)
         startActivity(intent)
+        AYPrefUtils.setImgUuid(bean.imgUUID)
+        AYPrefUtils.setIsPhoneLogin("weChat")
         DongdaApplication.finishAllActivity()
     }
 

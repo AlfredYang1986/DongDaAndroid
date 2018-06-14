@@ -5,8 +5,8 @@ import com.blackmirror.dongda.data.DataConstant
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean
 import com.blackmirror.dongda.data.model.request.UpDateBean
 import com.blackmirror.dongda.data.model.response.UpdateUserInfoResponseBean
-import com.blackmirror.dongda.data.net.updateUserInfoWithOutPhoto2
-import com.blackmirror.dongda.data.net.updateUserInfoWithPhoto2
+import com.blackmirror.dongda.data.net.updateUserInfoWithOutPhoto
+import com.blackmirror.dongda.data.net.updateUserInfoWithPhoto
 import com.blackmirror.dongda.data.repository.DbRepository
 import com.blackmirror.dongda.data.repository.updateUserInfo
 import com.blackmirror.dongda.kdomain.model.UpdateUserInfoBean
@@ -38,9 +38,9 @@ fun updateUserInfoImpl(bean: UpdateUserInfoDomainBean): Observable<UpdateUserInf
 
 val update=fun(bean:UpDateBean): Observable<UpdateUserInfoResponseBean> {
     if (!TextUtils.isEmpty(bean.imgUUID)) {//需要上传图片
-        return updateUserInfoWithPhoto2(bean)
+        return updateUserInfoWithPhoto(bean)
     } else {//不需要
-        return updateUserInfoWithOutPhoto2(bean)
+        return updateUserInfoWithOutPhoto(bean)
     }
 }
 

@@ -124,6 +124,8 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
         ToastUtils.showShortToast(R.string.update_user_info_success)
         val intent = Intent(this@PhotoChangeActivity, AYHomeActivity::class.java)
         intent.putExtra("img_uuid", bean.screen_photo)
+        AYPrefUtils.setImgUuid(bean.screen_photo)
+        AYPrefUtils.setIsPhoneLogin("phone")
         startActivity(intent)
         AYApplication.finishAllActivity()
     }

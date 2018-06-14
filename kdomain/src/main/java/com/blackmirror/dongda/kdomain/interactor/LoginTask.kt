@@ -8,8 +8,8 @@ import com.blackmirror.dongda.data.model.response.SendSmsResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
 import com.blackmirror.dongda.data.model.response.WeChatLoginResponseBean
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.net.updateUserInfo2
-import com.blackmirror.dongda.data.net.upload2
+import com.blackmirror.dongda.data.net.updateUserInfo
+import com.blackmirror.dongda.data.net.upload
 import com.blackmirror.dongda.data.repository.*
 import com.blackmirror.dongda.kdomain.model.PhoneLoginBean
 import com.blackmirror.dongda.kdomain.model.SendSmsKdBean
@@ -130,7 +130,7 @@ fun uploadWeChatImageImpl(userIcon: String, imgUUID: String): Observable<UpLoadW
                     val ub = UpDateBean()
                     ub.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_photo\":\"$imgUUID\"}}"
 
-                     updateUserInfo2(ub).map { bean ->
+                     updateUserInfo(ub).map { bean ->
                         val db = UpLoadWeChatIconDomainBean()
                          db.isSuccess = bean.status == "ok"
                          db.imgUUID =bean.img_uuid
@@ -152,7 +152,7 @@ val ul=fun(userIcon: String, imgUUID: String): Observable<UpLoadImgResponseBean>
     val requestBean = UploadImageRequestBean()
     requestBean.userIcon = userIcon
     requestBean.imgUUID = imgUUID
-    return upload2(requestBean, UpLoadImgResponseBean::class.java)
+    return upload(requestBean, UpLoadImgResponseBean::class.java)
 }
 
 val wl = fun(provide_uid: String, provide_token: String, provide_screen_name: String, provide_name: String, provide_screen_photo: String): Observable<WeChatLoginResponseBean> {

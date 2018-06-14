@@ -48,7 +48,6 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
     private lateinit var tv_save_user_info: TextView
     private lateinit var iv_take_photo: ImageView
     private lateinit var sv_user_photo: SimpleDraweeView
-    private lateinit var tv_user_about_name: TextView
     private lateinit var tv_user_about_me: TextView
     private lateinit var tl_service_name: FrameLayout
     private lateinit var tl_service_dec: FrameLayout
@@ -95,7 +94,6 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         tv_save_user_info = findViewById(R.id.tv_save_user_info)
         iv_take_photo = findViewById(R.id.iv_take_photo)
         sv_user_photo = findViewById(R.id.sv_user_photo)
-        tv_user_about_name = findViewById(R.id.tv_user_about_name)
         tv_user_about_me = findViewById(R.id.tv_user_about_me)
         tl_service_name = findViewById(R.id.tl_service_name)
         tl_service_dec = findViewById(R.id.tl_service_dec)
@@ -267,7 +265,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         startActivityForResult(intent, AppConstant.TAKE_PHOTO)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 AppConstant.CHOOSE_PIC//从相册选择图片
@@ -307,9 +305,9 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
 
     // 4.4及以上系统使用这个方法处理图片 相册图片返回的不再是真实的Uri,而是分装过的Uri
     @TargetApi(19)
-    private fun handleImageOnKitKat(data: Intent) {
+    private fun handleImageOnKitKat(data: Intent?) {
         imagePath = null
-        val uri = data.data
+        val uri = data?.data
         LogUtils.d("xcx", "handleImageOnKitKat: uri is " + uri!!)
         if (DocumentsContract.isDocumentUri(this, uri)) {
             // 如果是document类型的Uri，则通过document id处理
@@ -332,8 +330,8 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         cropPhoto(uri)
     }
 
-    private fun handleImageBeforeKitKat(data: Intent) {
-        val uri = data.data
+    private fun handleImageBeforeKitKat(data: Intent?) {
+        val uri = data?.data
         imagePath = getImagePath(uri, null)
         cropPhoto(uri)
     }

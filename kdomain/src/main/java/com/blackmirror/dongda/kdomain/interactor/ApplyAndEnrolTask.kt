@@ -7,7 +7,7 @@ import com.blackmirror.dongda.data.model.request.EnrolRequestBean
 import com.blackmirror.dongda.data.model.request.LocAllServiceRequestBean
 import com.blackmirror.dongda.data.model.response.*
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.net.getOssInfo2
+import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.applyService
 import com.blackmirror.dongda.data.repository.enrolStudent
 import com.blackmirror.dongda.data.repository.getBrandAllLocation
@@ -105,7 +105,7 @@ val el = fun(json: String): Observable<EnrolResponseBean> {
 
     bean.url = DataConstant.ENROL_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, EnrolResponseBean::class.java)
         }
@@ -129,7 +129,7 @@ val bl = fun(json: String, locations: String): Observable<LocAllServiceResponseB
 
     bean.url = DataConstant.LOC_ALL_SERVICE_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, LocAllServiceResponseBean::class.java)
         }
@@ -148,7 +148,7 @@ val addr = fun(brand_id: String): Observable<BrandAllLocResponseBean> {
 
     bean.url = DataConstant.BRAND_ALL_LOC_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, BrandAllLocResponseBean::class.java)
         }
@@ -167,7 +167,7 @@ val apply = fun(brand_name: String, name: String, category: String, phone: Strin
 
     bean.url = DataConstant.APPLY_SERVICE_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, ApplyServiceResponseBean::class.java)
         }

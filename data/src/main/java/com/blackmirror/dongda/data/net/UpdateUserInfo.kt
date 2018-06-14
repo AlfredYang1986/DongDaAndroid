@@ -20,40 +20,25 @@ import io.reactivex.Observable
  *
  * @param bean
  */
-fun updateUserInfo2(bean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
+fun updateUserInfo(bean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     if (!TextUtils.isEmpty(bean.imgUUID)) {//需要上传图片
-        return updateUserInfoWithPhoto2(bean)
+        return updateUserInfoWithPhoto(bean)
     } else {//不需要
-        return updateUserInfoWithOutPhoto2(bean)
+        return updateUserInfoWithOutPhoto(bean)
     }
 
 
 }
 
-fun <T, R> T.updateUserInfo3(block: (T) -> R): R {
-    return block(this)
-}
-
-fun xcx(bean: UpDateBean) {
-    bean.updateUserInfo3 {
-        if (!TextUtils.isEmpty(bean.imgUUID)) {//需要上传图片
-            updateUserInfoWithPhoto2(bean)
-        } else {//不需要
-            updateUserInfoWithOutPhoto2(bean)
-        }
-    }
-}
-
-
-fun updateUserInfoWithPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
+fun updateUserInfoWithPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     val bean = UploadImageRequestBean()
     bean.json = requestBean.json
     bean.imgUUID = requestBean.imgUUID
     bean.url = DataConstant.UPDATE_USER_INFO_URL
-    return getOssInfo2().map {
+    return getOssInfo().map {
         val infoBean = UpLoadImgResponseBean()
         if ("ok" == it.status) {
-            executeUpload3(bean)
+            executeUpload(bean)
         } else {
             infoBean.error = BaseResponseBean.ErrorBean()
             infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
@@ -80,12 +65,12 @@ fun updateUserInfoWithPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfo
     }
 }
 
-fun updateUserInfoWithOutPhoto2(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
+fun updateUserInfoWithOutPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     val b = UpdateUserInfoRequestBean()
     b.json = requestBean.json
     b.url = DataConstant.UPDATE_USER_INFO_URL
 
-    return getOssInfo2()
+    return getOssInfo()
             .flatMap({
                 val infoBean = UpdateUserInfoResponseBean()
                 if ("ok" == it.status) {

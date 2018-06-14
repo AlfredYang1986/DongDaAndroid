@@ -5,7 +5,7 @@ import com.blackmirror.dongda.data.model.request.UserInfoRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.UserInfoResponseBean
 import com.blackmirror.dongda.data.net.execute
-import com.blackmirror.dongda.data.net.getOssInfo2
+import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.queryUserInfo
 import com.blackmirror.dongda.kdomain.model.UserInfoDomainBean
 import com.blackmirror.dongda.utils.AYPrefUtils
@@ -50,7 +50,7 @@ val qu = fun(): Observable<UserInfoResponseBean> {
 
     bean.url = DataConstant.QUERY_USER_INFO_URL
 
-    return getOssInfo2().flatMap {
+    return getOssInfo().flatMap {
         if ("ok" == it.status) {
             return@flatMap execute(bean, UserInfoResponseBean::class.java)
         }

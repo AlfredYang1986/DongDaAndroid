@@ -12,11 +12,11 @@ import com.blackmirror.dongda.R
 import com.blackmirror.dongda.model.SafeUiBean
 
 class AddrDecInfoAdapter(protected var context: Context, private val list: List<SafeUiBean>?) : RecyclerView.Adapter<AddrDecInfoAdapter.AddrInfoViewHolder>() {
-    private var listener: OnCareClickListener? = null
 
+    private var item:((View,Int)->Unit)?=null
 
-    fun setOnCareClickListener(listener: OnCareClickListener) {
-        this.listener = listener
+    fun setOnCareClickListener(l:((View,Int)->Unit)?=null) {
+        item=l
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddrInfoViewHolder {
@@ -36,10 +36,7 @@ class AddrDecInfoAdapter(protected var context: Context, private val list: List<
 
     private fun initListener(holder: AddrInfoViewHolder, position: Int) {
         holder.itemView.setOnClickListener {
-            if (listener != null) {
-                val pos = holder.adapterPosition
-                listener!!.onItemCareClick(holder.itemView, pos)
-            }
+            item?.invoke(holder.itemView, holder.adapterPosition)
         }
     }
 
@@ -57,11 +54,6 @@ class AddrDecInfoAdapter(protected var context: Context, private val list: List<
             iv_item_addr_photo = itemView.findViewById(R.id.iv_item_addr_photo)
             tv_item_addr_dec = itemView.findViewById(R.id.tv_item_addr_dec)
         }
-    }
-
-
-    interface OnCareClickListener {
-        fun onItemCareClick(view: View, position: Int)
     }
 
 }

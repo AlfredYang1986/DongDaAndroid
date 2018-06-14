@@ -114,7 +114,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
     }
 
     private fun initHomeData() {
-        presenter!!.getHomePageData()
+        presenter?.getHomePageData()
     }
 
     private fun initSubject() {
@@ -297,9 +297,15 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
         }//                SnackbarUtils.show(ctl_root,"hahaha ");
     }
 
-    private fun needsRefreshHomeData(requestCode: Int, resultCode: Int, data: Intent) {
+    private fun needsRefreshHomeData(requestCode: Int, resultCode: Int, data: Intent?) {
         when (requestCode) {
-            AppConstant.CARE_MORE_REQUEST_CODE, AppConstant.ART_MORE_REQUEST_CODE, AppConstant.SPORT_MORE_REQUEST_CODE, AppConstant.SCIENCE_REQUEST_CODE, AppConstant.MY_LIKE_REQUEST_CODE, AppConstant.FEATURE_DETAIL_REQUEST_CODE, AppConstant.SERVICE_DETAIL_REQUEST_CODE -> if (resultCode == Activity.RESULT_OK) {
+            AppConstant.CARE_MORE_REQUEST_CODE,
+            AppConstant.ART_MORE_REQUEST_CODE,
+            AppConstant.SPORT_MORE_REQUEST_CODE,
+            AppConstant.SCIENCE_REQUEST_CODE,
+            AppConstant.MY_LIKE_REQUEST_CODE,
+            AppConstant.FEATURE_DETAIL_REQUEST_CODE,
+            AppConstant.SERVICE_DETAIL_REQUEST_CODE -> if (resultCode == Activity.RESULT_OK) {
                 //                    sl_home_refresh.setRefreshing(false);
                 sl_home_refresh.isRefreshing = true
                 initHomeData()
@@ -320,7 +326,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
         if (resultCode == Activity.RESULT_OK) {
             val img_url = data!!.getStringExtra("img_url")
             img_uuid = img_url
-            sv_head_pic!!.setImageURI(OSSUtils.getSignedUrl(img_url))
+            sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url))
         }
     }
 
@@ -374,7 +380,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         needsRefreshHomeData(requestCode, resultCode, data)
     }

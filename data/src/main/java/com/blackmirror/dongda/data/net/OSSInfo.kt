@@ -10,7 +10,7 @@ import io.reactivex.Observable
 /**
  * Created by xcx on 2018/6/11.
  */
-fun getOssInfo2(): Observable<OssInfoResponseBean> {
+fun getOssInfo(): Observable<OssInfoResponseBean> {
 
     if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
         val bean = OssInfoRequestBean()

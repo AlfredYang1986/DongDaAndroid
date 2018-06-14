@@ -81,6 +81,8 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
 
     private fun init2Landing() {
         val weChat = ShareSDK.getPlatform(Wechat.NAME)
+
+
         if (TextUtils.isEmpty(AYPrefUtils.getAuthToken())) {
             disposable = Observable.timer(1500, TimeUnit.MILLISECONDS, Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -91,15 +93,25 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
                         finish()
                     }
         } else {
-            if (weChat.isAuthValid) {
-                showProcessDialog()
-                val userId = weChat.db.userId//获取用户账号
-                val userName = weChat.db.userName//获取用户名字
-                val userIcon = weChat.db.userIcon//获取用户头像
-                val userGender = weChat.db.userGender //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
-                val token = weChat.db.token
+            if (!TextUtils.isEmpty(AYPrefUtils.getIsPhoneLogin()) && AYPrefUtils.getIsPhoneLogin() == "phone") {
+                val intent = Intent(this@SplashActivity, AYHomeActivity::class.java)
+                intent.putExtra("img_uuid", AYPrefUtils.getImgUuid())
+                startActivity(intent)
+                finish()
+            }else {
+                if (weChat.isAuthValid) {
+                    showProcessDialog()
+                    val userId = weChat.db.userId//获取用户账号
+                    val userName = weChat.db.userName//获取用户名字
+                    val userIcon = weChat.db.userIcon//获取用户头像
+                    val userGender = weChat.db.userGender //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
+                    val token = weChat.db.token
 
-                presenter?.weChatLogin(userId, token, userName, "wechat", userIcon)
+                    presenter?.weChatLogin(userId, token, userName, "wechat", userIcon)
+                }else{
+                    startActivity(Intent(this@SplashActivity, LandingActivity::class.java))
+                    finish()
+                }
             }
         }
 
