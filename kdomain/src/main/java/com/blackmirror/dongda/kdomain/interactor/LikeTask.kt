@@ -1,7 +1,10 @@
 package com.blackmirror.dongda.kdomain.interactor
 
 import android.text.TextUtils
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.LIKE_POP_URL
+import com.blackmirror.dongda.data.LIKE_PUSH_URL
+import com.blackmirror.dongda.data.LIKE_QUERY_LIST_URL
+import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
 import com.blackmirror.dongda.data.model.request.LikePopRequestBean
 import com.blackmirror.dongda.data.model.request.LikePushRequestBean
 import com.blackmirror.dongda.data.model.request.LikeRequestBean
@@ -32,7 +35,7 @@ fun likePushImpl(service_id: String): Observable<LikePushDomainBean> {
         }
         b.isSuccess = "ok" == it.status
 
-        b.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        b.code = it.error?.code ?: NET_UNKNOWN_ERROR
         b.message = it.error?.message ?: ""
 
         b
@@ -47,7 +50,7 @@ fun likePopImpl(service_id: String): Observable<LikePopDomainBean> {
         }
         b.isSuccess = "ok" == it.status
 
-        b.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        b.code = it.error?.code ?: NET_UNKNOWN_ERROR
         b.message = it.error?.message ?: ""
 
         b
@@ -66,7 +69,7 @@ val like = fun(): Observable<LikeResponseBean> {
     val bean = LikeRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"}}"
 
-    bean.url = DataConstant.LIKE_QUERY_LIST_URL
+    bean.url = LIKE_QUERY_LIST_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -74,7 +77,7 @@ val like = fun(): Observable<LikeResponseBean> {
         }
         val sb = LikeResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -83,7 +86,7 @@ val like = fun(): Observable<LikeResponseBean> {
 val pop = fun(service_id: String): Observable<LikePopResponseBean> {
     val bean = LikePopRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"}}"
-    bean.url = DataConstant.LIKE_POP_URL
+    bean.url = LIKE_POP_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -91,7 +94,7 @@ val pop = fun(service_id: String): Observable<LikePopResponseBean> {
         }
         val sb = LikePopResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -100,7 +103,7 @@ val pop = fun(service_id: String): Observable<LikePopResponseBean> {
 val lp = fun(service_id: String): Observable<LikePushResponseBean> {
     val bean = LikePushRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id \"}}"
-    bean.url = DataConstant.LIKE_PUSH_URL
+    bean.url = LIKE_PUSH_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -109,7 +112,7 @@ val lp = fun(service_id: String): Observable<LikePushResponseBean> {
         val sb = LikePushResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
 
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
 
         Observable.just(sb)

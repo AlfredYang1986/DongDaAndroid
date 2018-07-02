@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.data.net
 
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.OSS_INFO_URL
 import com.blackmirror.dongda.data.model.request.OssInfoRequestBean
 import com.blackmirror.dongda.data.model.response.OssInfoResponseBean
 import com.blackmirror.dongda.utils.AYPrefUtils
@@ -15,7 +15,7 @@ fun getOssInfo(): Observable<OssInfoResponseBean> {
     if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
         val bean = OssInfoRequestBean()
         bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\"}"
-        bean.url = DataConstant.OSS_INFO_URL
+        bean.url = OSS_INFO_URL
         return execute(bean, OssInfoResponseBean::class.java).doOnNext { bean ->
             if ("ok" == bean.status) {
                 bean?.result?.OssConnectInfo?.apply {

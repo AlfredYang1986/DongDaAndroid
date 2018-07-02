@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.model
 
-import com.blackmirror.dongda.utils.StringUtils
+import com.blackmirror.dongda.utils.isNumber
 
 /**
  * Created by xcx on 2018/5/20.
@@ -16,10 +16,10 @@ class DetailInfoServiceImagesBean : Comparable<DetailInfoServiceImagesBean> {
     var image: String? = null
 
     override fun compareTo(o: DetailInfoServiceImagesBean): Int {
-        if (!StringUtils.isNumber(this.tag) || !StringUtils.isNumber(o.tag)) {
-            return -1
+        if (tag == null || o.tag == null || !tag!!.isNumber() || !o.tag!!.isNumber()) {
+            -1
         }
-        return if (Integer.parseInt(this.tag) >= Integer.parseInt(o.tag)) {
+        return if (tag!!.toInt() >= o.tag!!.toInt()) {
             1
         } else {
             -1

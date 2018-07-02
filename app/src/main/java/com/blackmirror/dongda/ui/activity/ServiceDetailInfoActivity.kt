@@ -312,7 +312,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
 
         for (image in bean.service_images!!) {
 
-            if (StringUtils.isNumber(image.tag)) {
+            if (image.tag!!.isNumber()) {
                 val sb = DetailInfoServiceImagesBean()
                 sb.image = image.image
                 sb.tag = image.tag

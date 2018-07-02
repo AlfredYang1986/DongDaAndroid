@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 
 class EnrolMbPayActivity : BaseActivity() {
 
@@ -79,7 +79,7 @@ class EnrolMbPayActivity : BaseActivity() {
                 return@OnClickListener
             }
 
-            val d = (StringUtils.getDoubleValue(mb_price) * 100).toLong()
+            val d = (mb_price.getDoubleValue() * 100).toLong()
 
             intent.putExtra("mb_price", d)
             intent.putExtra("valid_time", valid_time)

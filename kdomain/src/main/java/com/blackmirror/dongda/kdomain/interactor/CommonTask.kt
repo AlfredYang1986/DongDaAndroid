@@ -1,7 +1,10 @@
 package com.blackmirror.dongda.kdomain.interactor
 
 import android.text.TextUtils
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.NEAR_SERVICE_URL
+import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
+import com.blackmirror.dongda.data.SERVICE_DETAIL_URL
+import com.blackmirror.dongda.data.SERVICE_MORE_URL
 import com.blackmirror.dongda.data.model.request.DetailInfoRequestBean
 import com.blackmirror.dongda.data.model.request.NearServiceRequestBean
 import com.blackmirror.dongda.data.model.request.SearchServiceRequestBean
@@ -63,7 +66,7 @@ val ns = fun(latitude: Double, longitude: Double): Observable<NearServiceRespons
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\",\"pin\":{\"latitude\":$latitude,\"longitude\":$longitude}}}"
 
 
-    bean.url = DataConstant.NEAR_SERVICE_URL
+    bean.url = NEAR_SERVICE_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -71,7 +74,7 @@ val ns = fun(latitude: Double, longitude: Double): Observable<NearServiceRespons
         }
         val sb = NearServiceResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -84,7 +87,7 @@ val md = fun(skipCount: Int, takeCount: Int, serviceType: String): Observable<Ca
     val bean = SearchServiceRequestBean()
     bean.json = "{\"skip\" : $skipCount ,\"take\" : $takeCount ,\"token\": \"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_type\": \"$serviceType\"}}"
 
-    bean.url = DataConstant.SERVICE_MORE_URL
+    bean.url = SERVICE_MORE_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -92,7 +95,7 @@ val md = fun(skipCount: Int, takeCount: Int, serviceType: String): Observable<Ca
         }
         val sb = CareMoreResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -104,7 +107,7 @@ val di = fun(service_id: String): Observable<DetailInfoResponseBean> {
 
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"service_id\":\"$service_id\"}}"
 
-    bean.url = DataConstant.SERVICE_DETAIL_URL
+    bean.url = SERVICE_DETAIL_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -112,7 +115,7 @@ val di = fun(service_id: String): Observable<DetailInfoResponseBean> {
         }
         val sb = DetailInfoResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -275,7 +278,7 @@ private fun tran2NearServiceDomainBean(bean: NearServiceResponseBean?, domainBea
 
     domainBean.isSuccess = true
 
-    domainBean.services = ArrayList()
+    domainBean.services = mutableListOf()
     if (bean.result == null || bean.result!!.services == null) {
         return
     }
@@ -308,7 +311,8 @@ private fun tran2NearServiceDomainBean(bean: NearServiceResponseBean?, domainBea
         b.service_tags = if (sb.service_tags != null) sb.service_tags else ArrayList()
         b.operation = if (sb.operation != null) sb.operation else ArrayList()
 
-        (domainBean.services as ArrayList<NearServiceDomainBean.ServicesBean>).add(b)
+//        (domainBean.services as ArrayList<NearServiceDomainBean.ServicesBean>).add(b)
+        domainBean.services!!.add(b)
 
     }
 

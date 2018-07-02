@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 
 class ServiceFlexibleActivity : BaseActivity() {
 
@@ -67,7 +67,7 @@ class ServiceFlexibleActivity : BaseActivity() {
                 return@OnClickListener
             }
 
-            val d = (StringUtils.getDoubleValue(hour_price) * 100).toLong()
+            val d = (hour_price.getDoubleValue() * 100).toLong()
 
             intent.putExtra("hour_price", d)
             intent.putExtra("min_buy_hour", min_buy_hour)

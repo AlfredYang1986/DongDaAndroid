@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 
 class ServiceFixedActivity : BaseActivity() {
 
@@ -68,8 +68,8 @@ class ServiceFixedActivity : BaseActivity() {
                 return@OnClickListener
             }
 
-            val all = (StringUtils.getDoubleValue(all_month_price) * 100).toLong()
-            val mid = (StringUtils.getDoubleValue(mid_month_price) * 100).toLong()
+            val all = (all_month_price.getDoubleValue() * 100).toLong()
+            val mid = (mid_month_price.getDoubleValue() * 100).toLong()
 
             intent.putExtra("all_month_price", all)
             intent.putExtra("mid_month_price", mid)

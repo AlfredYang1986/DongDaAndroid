@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.kdomain.interactor
 
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.*
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean
 import com.blackmirror.dongda.data.model.request.*
 import com.blackmirror.dongda.data.model.response.PhoneLoginResponseBean
@@ -36,7 +36,7 @@ fun getSmsFromServer(phone: String): Observable<SendSmsKdBean> {
                     bean.is_reg = is_reg
                 }
 
-                bean.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+                bean.code = it.error?.code ?: NET_UNKNOWN_ERROR
                 bean.message = it.error?.message ?: ""
                 bean
             }
@@ -62,7 +62,7 @@ fun phoneLoginImpl(phone: String, code: String, reg_token: String): Observable<P
                 bean.current_device_id = current_device_id
             }
         } else {
-            bean.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            bean.code = it.error?.code ?: NET_UNKNOWN_ERROR
             bean.message = it.error?.message ?: ""
         }
         //插入数据库
@@ -100,7 +100,7 @@ fun weChatLoginImpl(provide_uid: String, provide_token: String, provide_screen_n
                     bean.current_device_id = current_device_id
                 }
 
-                bean.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+                bean.code = it.error?.code ?: NET_UNKNOWN_ERROR
                 bean.message = it.error?.message ?: ""
 
 
@@ -134,14 +134,14 @@ fun uploadWeChatImageImpl(userIcon: String, imgUUID: String): Observable<UpLoadW
                         val db = UpLoadWeChatIconDomainBean()
                          db.isSuccess = bean.status == "ok"
                          db.imgUUID =bean.img_uuid
-                         db.code = bean.error?.code?:DataConstant.NET_UNKNOWN_ERROR
+                         db.code = bean.error?.code?:NET_UNKNOWN_ERROR
                          db.message = bean.error?.message?:""
 
                         db
                     }
                 } else {
                     val db = UpLoadWeChatIconDomainBean()
-                    db.code = DataConstant.UPLOAD_WECHAT_ERROR
+                    db.code = UPLOAD_WECHAT_ERROR
                     db.message = "上传微信头像失败!"
                      Observable.just(db)
                 }
@@ -160,7 +160,7 @@ val wl = fun(provide_uid: String, provide_token: String, provide_screen_name: St
     val json = "{\"third\":{\"provide_uid\":\"" + provide_uid + "\",\"provide_token\":\"" + provide_token + "\",\"provide_screen_name\":\"" + provide_screen_name + "\"," +
             "\"provide_name\":\"" + provide_name + "\",\"provide_screen_photo\":\"" + provide_screen_photo + "\"}}"
     bean.json = json
-    bean.url = DataConstant.WECHAT_LOGIN_URL
+    bean.url = WECHAT_LOGIN_URL
     return execute(bean, WeChatLoginResponseBean::class.java)
 }
 
@@ -168,7 +168,7 @@ val pl = fun(phone: String, code: String, reg_token: String): Observable<PhoneLo
     val bean = PhoneLoginRequestBean()
     val json = "{\"phone\":\"$phone\",\"code\":\"$code\",\"reg_token\":\"$reg_token\"}"
     bean.json = json
-    bean.url = DataConstant.AUTH_SMS_CODE_URL
+    bean.url = AUTH_SMS_CODE_URL
     return execute(bean, PhoneLoginResponseBean::class.java)
 }
 
@@ -177,7 +177,7 @@ val sms = fun(phone: String): Observable<SendSmsResponseBean> {
     bean.phone_number = phone
     val json = "{\"phone\":\"$phone\"}"
     bean.json = json
-    bean.url = DataConstant.SEND_SMS_CODE_URL
+    bean.url = SEND_SMS_CODE_URL
     return execute(bean, SendSmsResponseBean::class.java)
 
 }

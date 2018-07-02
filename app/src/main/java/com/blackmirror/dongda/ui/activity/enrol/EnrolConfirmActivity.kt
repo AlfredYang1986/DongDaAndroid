@@ -60,7 +60,8 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
         tv_confirm_brand.text = intent.getStringExtra("service_leaf")
         val min_age = java.lang.Double.parseDouble(intent.getStringExtra("min_age"))
         val max_age = java.lang.Double.parseDouble(intent.getStringExtra("max_age"))
-        tv_child_age.text = StringUtils.formatNumber(min_age) + "-" + StringUtils.formatNumber(max_age) + "岁"
+//        tv_child_age.text = min_age.formatNumber() + "-" + max_age.formatNumber() + "岁"
+        tv_child_age.text = "${min_age.formatNumber()}-${max_age.formatNumber()}岁"
     }
 
     override fun initListener() {

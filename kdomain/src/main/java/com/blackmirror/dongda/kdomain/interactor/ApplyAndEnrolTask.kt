@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.kdomain.interactor
 
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.*
 import com.blackmirror.dongda.data.model.request.ApplyServiceRequestBean
 import com.blackmirror.dongda.data.model.request.BrandAllLocRequestBean
 import com.blackmirror.dongda.data.model.request.EnrolRequestBean
@@ -33,7 +33,7 @@ fun applyServiceImpl(brand_name: String, name: String, category: String, phone: 
             domainBean.isSuccess = true
             domainBean.apply_id = if (it.result != null) it.result!!.apply_id else ""
         } else {
-            domainBean.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            domainBean.code = it.error?.code ?: NET_UNKNOWN_ERROR
             domainBean.message = it.error?.message ?: ""
         }
         domainBean
@@ -75,7 +75,7 @@ fun getLocAllServiceImpl(json: String, locations: String): Observable<LocAllServ
             db.services!!.add(dsb)
         }
 
-        db.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        db.code = it.error?.code ?: NET_UNKNOWN_ERROR
         db.message = it.error?.message ?: ""
 
         db
@@ -92,7 +92,7 @@ fun enrolStudentImpl(json: String): Observable<EnrolDomainBean> {
             db.isSuccess = true
             db.recruit_id = if (it.result != null) it.result!!.recruit_id else ""
         } else {
-            db.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            db.code = it.error?.code ?: NET_UNKNOWN_ERROR
             db.message = it.error?.message ?: ""
         }
          db
@@ -103,7 +103,7 @@ val el = fun(json: String): Observable<EnrolResponseBean> {
     val bean = EnrolRequestBean()
     bean.json = json
 
-    bean.url = DataConstant.ENROL_URL
+    bean.url = ENROL_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -111,7 +111,7 @@ val el = fun(json: String): Observable<EnrolResponseBean> {
         }
         val sb = EnrolResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -127,7 +127,7 @@ val bl = fun(json: String, locations: String): Observable<LocAllServiceResponseB
     val bean = LocAllServiceRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"locations\":[\"$locations\"]}"
 
-    bean.url = DataConstant.LOC_ALL_SERVICE_URL
+    bean.url = LOC_ALL_SERVICE_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -135,7 +135,7 @@ val bl = fun(json: String, locations: String): Observable<LocAllServiceResponseB
         }
         val sb = LocAllServiceResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }
@@ -146,7 +146,7 @@ val addr = fun(brand_id: String): Observable<BrandAllLocResponseBean> {
     val bean = BrandAllLocRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"brand_id\":\"$brand_id\"}"
 
-    bean.url = DataConstant.BRAND_ALL_LOC_URL
+    bean.url = BRAND_ALL_LOC_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -154,7 +154,7 @@ val addr = fun(brand_id: String): Observable<BrandAllLocResponseBean> {
         }
         val sb = BrandAllLocResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just<BrandAllLocResponseBean>(sb)
     }
@@ -165,7 +165,7 @@ val apply = fun(brand_name: String, name: String, category: String, phone: Strin
     val bean = ApplyServiceRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"apply\":{\"brand_name\":\"$brand_name\",\"name\":\"$name\",\"category\":\"$category\",\"phone\":\"$phone\",\"city\":\"$city\"}}"
 
-    bean.url = DataConstant.APPLY_SERVICE_URL
+    bean.url = APPLY_SERVICE_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -173,7 +173,7 @@ val apply = fun(brand_name: String, name: String, category: String, phone: Strin
         }
         val sb = ApplyServiceResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }

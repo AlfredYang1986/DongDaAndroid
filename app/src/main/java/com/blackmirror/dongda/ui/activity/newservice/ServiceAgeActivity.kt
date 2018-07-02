@@ -12,8 +12,8 @@ import com.bigkoo.pickerview.view.OptionsPickerView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 import java.util.*
 
 class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
@@ -131,8 +131,8 @@ class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
         when (v.id) {
             R.id.iv_back -> finish()
             R.id.tv_next -> {
-                val min = StringUtils.getDoubleValue(tv_choose_min_age.text.toString())
-                val max = StringUtils.getDoubleValue(tv_choose_max_age.text.toString())
+                val min = tv_choose_min_age.text.toString().getDoubleValue()
+                val max = tv_choose_max_age.text.toString().getDoubleValue()
 
                 if (min < 0 || max < 0) {
                     ToastUtils.showShortToast("请选择年龄!")

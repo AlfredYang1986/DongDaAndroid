@@ -1,7 +1,8 @@
 package com.blackmirror.dongda.kdomain.interactor
 
 import android.text.TextUtils
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.HOME_PAGE_URL
+import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
 import com.blackmirror.dongda.data.model.request.SearchServiceRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.SearchServiceResponseBean
@@ -30,7 +31,7 @@ fun searchServiceImpl(): Observable<HomepageDomainBean>{
 var sh = fun(): Observable<SearchServiceResponseBean> {
     val bean = SearchServiceRequestBean()
     bean.json = "{ \"token\": \"${AYPrefUtils.getAuthToken()}\", \"condition\": { \"user_id\": \"${AYPrefUtils.getUserId()}\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}"
-    bean.url = DataConstant.HOME_PAGE_URL
+    bean.url = HOME_PAGE_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -38,7 +39,7 @@ var sh = fun(): Observable<SearchServiceResponseBean> {
         }
         val sb = SearchServiceResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code?:DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code?:NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message?:""
 
         return@flatMap Observable.just(sb)

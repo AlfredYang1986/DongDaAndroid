@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.data.model.response
 
-import com.blackmirror.dongda.utils.StringUtils
-
+import com.blackmirror.dongda.utils.isNumber
 import java.io.Serializable
 
 /**
@@ -123,10 +122,10 @@ class DetailInfoResponseBean : BaseResponseBean() {
                 var image: String? = null
 
                 override fun compareTo(o: ServiceImagesBean): Int {
-                    if (!StringUtils.isNumber(this.tag) || !StringUtils.isNumber(o.tag)) {
-                        return -1
+                    if (tag == null || o.tag == null || !tag!!.isNumber() || !o.tag!!.isNumber()) {
+                        -1
                     }
-                    return if (Integer.parseInt(this.tag) >= Integer.parseInt(o.tag)) {
+                    return if (tag!!.toInt() >= o.tag!!.toInt()) {
                         1
                     } else {
                         -1
