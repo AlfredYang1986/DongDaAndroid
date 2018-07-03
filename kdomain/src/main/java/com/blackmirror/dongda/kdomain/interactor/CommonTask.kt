@@ -1,6 +1,5 @@
 package com.blackmirror.dongda.kdomain.interactor
 
-import android.text.TextUtils
 import com.blackmirror.dongda.data.NEAR_SERVICE_URL
 import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
 import com.blackmirror.dongda.data.SERVICE_DETAIL_URL
@@ -22,7 +21,6 @@ import com.blackmirror.dongda.kdomain.model.DetailInfoDomainBean
 import com.blackmirror.dongda.kdomain.model.NearServiceDomainBean
 import com.blackmirror.dongda.utils.AYPrefUtils
 import io.reactivex.Observable
-import java.util.*
 
 /**
  * Create By Ruge at 2018-06-12
@@ -127,7 +125,7 @@ private fun tran2DetailInfoBean(bean: DetailInfoResponseBean, domainBean: Detail
         return
     }
 
-    if (TextUtils.isEmpty(bean.status) || "ok" != bean.status) {
+    if (bean.status.isNullOrEmpty() || "ok" != bean.status) {
         if (bean.error == null) {
             return
         }
@@ -148,7 +146,7 @@ private fun tran2DetailInfoBean(bean: DetailInfoResponseBean, domainBean: Detail
     if (service.location != null) {
         domainBean.location_id = service.location!!.location_id
         domainBean.address = service.location!!.address
-        domainBean.friendliness = if (service.location!!.friendliness == null) ArrayList() else service.location!!.friendliness
+        domainBean.friendliness = if (service.location!!.friendliness == null) mutableListOf() else service.location!!.friendliness
     }
 
     if (service.location != null && service.location!!.pin != null) {
@@ -156,7 +154,7 @@ private fun tran2DetailInfoBean(bean: DetailInfoResponseBean, domainBean: Detail
         domainBean.longitude = service.location!!.pin!!.longitude
     }
 
-    domainBean.location_images = ArrayList()
+    domainBean.location_images = mutableListOf()
 
     if (service.location != null && service.location!!.location_images != null) {
         for (i in 0 until service.location!!.location_images!!.size) {
@@ -164,7 +162,7 @@ private fun tran2DetailInfoBean(bean: DetailInfoResponseBean, domainBean: Detail
             val lb = service.location!!.location_images!![i]
             dlb.tag = lb.tag
             dlb.image = lb.image
-            (domainBean.location_images as ArrayList<DetailInfoDomainBean.LocationImagesBean>).add(dlb)
+            domainBean.location_images!!.add(dlb)
         }
     }
     domainBean.is_collected = service.is_collected
@@ -188,17 +186,17 @@ private fun tran2DetailInfoBean(bean: DetailInfoResponseBean, domainBean: Detail
     domainBean.category = service.category
     domainBean.album = service.album
     domainBean.service_id = service.service_id
-    domainBean.service_tags = if (service.service_tags == null) ArrayList() else service.service_tags
-    domainBean.operation = if (service.operation == null) ArrayList() else service.operation
+    domainBean.service_tags = if (service.service_tags == null) mutableListOf() else service.service_tags
+    domainBean.operation = if (service.operation == null) mutableListOf() else service.operation
 
-    domainBean.service_images = ArrayList()
+    domainBean.service_images = mutableListOf()
     if (service.service_images != null) {
         for (i in service.service_images!!.indices) {
             val dsb = DetailInfoDomainBean.ServiceImagesBean()
             val sb = service.service_images!![i]
             dsb.tag = sb.tag
             dsb.image = sb.image
-            (domainBean.service_images as ArrayList<DetailInfoDomainBean.ServiceImagesBean>).add(dsb)
+            domainBean.service_images!!.add(dsb)
         }
     }
 
@@ -210,7 +208,7 @@ private fun tran2CareMoreDomainBean(bean: CareMoreResponseBean?, domainBean: Car
         return
     }
 
-    if (TextUtils.isEmpty(bean.status) || "ok" != bean.status) {
+    if (bean.status.isNullOrEmpty() || "ok" != bean.status) {
         if (bean.error == null) {
             return
         }
@@ -222,7 +220,7 @@ private fun tran2CareMoreDomainBean(bean: CareMoreResponseBean?, domainBean: Car
 
     domainBean.isSuccess = true
 
-    domainBean.services = ArrayList()
+    domainBean.services = mutableListOf()
     if (bean.result == null || bean.result!!.services == null) {
         return
     }
@@ -252,10 +250,10 @@ private fun tran2CareMoreDomainBean(bean: CareMoreResponseBean?, domainBean: Car
 
         b.service_id = sb.service_id
 
-        b.service_tags = if (sb.service_tags != null) sb.service_tags else ArrayList()
-        b.operation = if (sb.operation != null) sb.operation else ArrayList()
+        b.service_tags = if (sb.service_tags != null) sb.service_tags else mutableListOf()
+        b.operation = if (sb.operation != null) sb.operation else mutableListOf()
 
-        (domainBean.services as ArrayList<CareMoreDomainBean.ServicesBean>).add(b)
+        domainBean.services!!.add(b)
 
     }
 
@@ -266,7 +264,7 @@ private fun tran2NearServiceDomainBean(bean: NearServiceResponseBean?, domainBea
         return
     }
 
-    if (TextUtils.isEmpty(bean.status) || "ok" != bean.status) {
+    if (bean.status.isNullOrEmpty() || "ok" != bean.status) {
         if (bean.error == null) {
             return
         }
@@ -308,8 +306,8 @@ private fun tran2NearServiceDomainBean(bean: NearServiceResponseBean?, domainBea
 
         b.service_id = sb.service_id
 
-        b.service_tags = if (sb.service_tags != null) sb.service_tags else ArrayList()
-        b.operation = if (sb.operation != null) sb.operation else ArrayList()
+        b.service_tags = if (sb.service_tags != null) sb.service_tags else mutableListOf()
+        b.operation = if (sb.operation != null) sb.operation else mutableListOf()
 
 //        (domainBean.services as ArrayList<NearServiceDomainBean.ServicesBean>).add(b)
         domainBean.services!!.add(b)

@@ -259,7 +259,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -340,7 +340,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
         tl_detail_tab.addOnTabSelectedListener(TabLayout.ViewPagerOnTabSelectedListener(vp_detail_photo))
         tl_detail_tab.initIcon()
 
-        tv_detail_content.text = "\"" + bean.punchline + "\""//第一个描述
+        tv_detail_content.text = "${bean.punchline}"//第一个描述
 
         val sb = StringBuilder()
 
@@ -367,9 +367,9 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
 
         checkClassMaxStu(bean.class_max_stu)
 
-        tv_class_mb_no.text = bean.class_max_stu.toString() + ""//班级人数
+        tv_class_mb_no.text = bean.class_max_stu.toString()//班级人数
 
-        val m = CalUtils.getGongyue(bean.class_max_stu, bean.teacher_num)
+        val m = getGongyue(bean.class_max_stu, bean.teacher_num)
         val radio = StringBuilder()
         radio.append(bean.teacher_num / m)
                 .append(":")

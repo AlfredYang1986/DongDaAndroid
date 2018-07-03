@@ -14,7 +14,6 @@ import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.LogUtils
 import com.blackmirror.dongda.utils.ToastUtils
 import com.blackmirror.dongda.utils.getDoubleValue
-import java.util.*
 
 class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
 
@@ -47,8 +46,8 @@ class ServiceAgeActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initData() {
-        ageMin = ArrayList()
-        ageMax = ArrayList()
+        ageMin = mutableListOf()
+        ageMax = mutableListOf()
 
         ageMin.add("0")
         ageMin.add("0.5")

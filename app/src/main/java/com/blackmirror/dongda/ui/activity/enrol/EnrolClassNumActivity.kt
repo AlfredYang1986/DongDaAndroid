@@ -73,11 +73,11 @@ class EnrolClassNumActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_next) {
+                if (s.toString().isNotEmpty() && !can_next) {
                     can_next = true
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_next) {
+                if (s.toString().isEmpty() && can_next) {
                     can_next = false
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

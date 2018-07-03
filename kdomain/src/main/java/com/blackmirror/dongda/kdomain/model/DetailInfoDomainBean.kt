@@ -18,9 +18,9 @@ class DetailInfoDomainBean : BaseDataBean() {
     var category: String? = null
     var album: String? = null
     var service_id: String? = null
-    var service_tags: List<String>? = null
-    var operation: List<String>? = null
-    var service_images: List<ServiceImagesBean>? = null
+    var service_tags: MutableList<String>? = null
+    var operation: MutableList<String>? = null
+    var service_images: MutableList<ServiceImagesBean>? = null
 
     /**
      * location_images : [{"tag":"教学区","image":"8ef2a771-033e-42c3-93af-06850db943c5"},{"tag":"教学区","image":"430043cf-9f64-4fb1-a619-63cf9d0005b1"},{"tag":"家长休息区","image":"de7cd0cf-38d6-453f-9171-4693940d5e0a"},{"tag":"寄存区","image":"2b2d1349-cee9-462b-a170-10fe90182440"},{"tag":"阅读区","image":"ce39cde8-3aad-4e77-a091-0092afb5372d"}]
@@ -32,8 +32,8 @@ class DetailInfoDomainBean : BaseDataBean() {
 
     var location_id: String? = null
     var address: String? = null
-    var location_images: List<LocationImagesBean>? = null
-    var friendliness: List<String>? = null
+    var location_images: MutableList<LocationImagesBean>? = null
+    var friendliness: MutableList<String>? = null
 
     /**
      * latitude : 39.89374923706055

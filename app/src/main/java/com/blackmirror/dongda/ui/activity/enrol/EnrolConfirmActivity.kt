@@ -86,7 +86,7 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
 
     private fun enrol() {
         showProcessDialog()
-        presenter!!.enrol(intent.getStringExtra("json"))
+        presenter?.enrol(intent.getStringExtra("json"))
     }
 
     override fun onGetBrandAllLocationSuccess(bean: BrandAllLocDomainBean) {
@@ -107,7 +107,7 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(tv_child_age, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

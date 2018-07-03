@@ -85,7 +85,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
                 .activity(this)
                 .build()
                 .userInfoPresenter
-        presenter!!.nameInputView = this
+        presenter?.nameInputView = this
     }
 
     override fun initView() {
@@ -140,17 +140,17 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         val bean = UpdateUserInfoDomainBean()
         val json: String
         if (isChangeScreenPhoto) {
-            val img_uuid = CalUtils.getUUID32()
+            val img_uuid = getUUID32()
 
-            json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + input_name + "\",\"screen_photo\":\"" + img_uuid + "\",\"description\":\"" + input_dec + "\"}}"
+            json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_name\":\"$input_name\",\"screen_photo\":\"$img_uuid\",\"description\":\"$input_dec\"}}"
 
             bean.json = json
             bean.imgUUID = img_uuid
-            presenter!!.updateUserInfo(bean)
+            presenter?.updateUserInfo(bean)
         } else {
-            json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + input_name + "\",\"description\":\"" + input_dec + "\"}}"
+            json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_name\":\"$input_name\",\"description\":\"$input_dec\"}}"
             bean.json = json
-            presenter!!.updateUserInfo(bean)
+            presenter?.updateUserInfo(bean)
         }
     }
 
@@ -169,7 +169,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_edit_root, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -385,7 +385,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         return path
     }
 
-    fun displayImage(uri: Uri?, draweeView: SimpleDraweeView?) {
+    fun displayImage(uri: Uri?, draweeView: SimpleDraweeView) {
 
         Fresco.getImagePipeline().evictFromCache(uri)
 
@@ -395,7 +395,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
 
         val controller = Fresco.newDraweeControllerBuilder()
                 .setImageRequest(request)
-                .setOldController(draweeView!!.controller)
+                .setOldController(draweeView.controller)
                 .build()
         draweeView.controller = controller
     }

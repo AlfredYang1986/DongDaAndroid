@@ -9,7 +9,16 @@ import org.junit.Test
 class KotlinTest {
     @Test
     fun testString() {
-        var s="12ss"
+        var s = "12ss"
         println(s.isNumber())
+    }
+
+    @Test
+    fun testNull() {
+        var s: String? = null
+
+
+        var i = if (s != null) s.length else 2
+
     }
 }

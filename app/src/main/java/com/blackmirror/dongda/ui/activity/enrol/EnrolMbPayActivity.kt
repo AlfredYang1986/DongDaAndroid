@@ -95,11 +95,11 @@ class EnrolMbPayActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -122,11 +122,11 @@ class EnrolMbPayActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -143,11 +143,11 @@ class EnrolMbPayActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

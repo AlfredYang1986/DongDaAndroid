@@ -4,12 +4,10 @@ import android.content.Intent
 import android.graphics.Color
 import android.support.design.widget.TextInputEditText
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.ToastUtils
@@ -53,8 +51,8 @@ class ApplyCityActivity : BaseActivity() {
         iv_back.setOnClickListener { finish() }
 
         tv_next.setOnClickListener(View.OnClickListener {
-            val city_name = tet_city_name!!.editableText.toString()
-            if (TextUtils.isEmpty(city_name)) {
+            val city_name = tet_city_name.editableText.toString()
+            if (city_name.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入城市!")
                 return@OnClickListener
             }
@@ -71,11 +69,11 @@ class ApplyCityActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_next) {
+                if (s.toString().isNotEmpty() && !can_next) {
                     can_next = true
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_next) {
+                if (s.toString().isEmpty() && can_next) {
                     can_next = false
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

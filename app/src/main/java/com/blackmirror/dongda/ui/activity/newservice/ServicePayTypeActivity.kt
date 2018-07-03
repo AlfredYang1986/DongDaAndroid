@@ -85,7 +85,7 @@ class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
                     intent.putExtra("min_buy_hour", min_buy_hour)
 
 
-                    val json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"recruit\":{\"service_id\":\"" + service_id + "\",\"age_boundary\":{\"lbl\":" + min_age + ",\"ubl\":" + max_age + "},\"stud_tech\":{\"stud\":" + child_num + ",\"tech\":" + teacher_num + "},\"payment_daily\":{\"price\":" + hour_price + ",\"length\":" + min_buy_hour + "}}}"
+                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_tech\":{\"stud\":$child_num,\"tech\":$teacher_num},\"payment_daily\":{\"price\":$hour_price,\"length\":$min_buy_hour}}}"
                     intent.putExtra("json", json)
 
 
@@ -96,7 +96,7 @@ class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
                     intent.putExtra("all_month_price", all_month_price)
                     intent.putExtra("mid_month_price", mid_month_price)
 
-                    val json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"recruit\":{\"service_id\":\"" + service_id + "\",\"age_boundary\":{\"lbl\":" + min_age + ",\"ubl\":" + max_age + "},\"stud_tech\":{\"stud\":" + child_num + ",\"tech\":" + teacher_num + "},\"payment_monthly\":{\"full_time\":" + all_month_price + ",\"half_time\":" + mid_month_price + "}}}"
+                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_tech\":{\"stud\":$child_num,\"tech\":$teacher_num},\"payment_monthly\":{\"full_time\":$all_month_price,\"half_time\":$mid_month_price}}}"
 
                     intent.putExtra("json", json)
 

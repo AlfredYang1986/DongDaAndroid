@@ -100,7 +100,7 @@ class LocAllServiceActivity : BaseActivity(), EnrolContract.View {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_back, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

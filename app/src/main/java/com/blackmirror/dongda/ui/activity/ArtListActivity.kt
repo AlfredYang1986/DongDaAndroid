@@ -117,7 +117,7 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
     }
 
     private fun getGridListData(skipCount: Int, takeCount: Int) {
-        presenter!!.getServiceMoreData(skipCount, takeCount, serviceType!!)
+        presenter?.getServiceMoreData(skipCount, takeCount, serviceType!!)
     }
 
     override fun onGetServiceMoreDataSuccess(bean: CareMoreDomainBean) {
@@ -150,7 +150,7 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -209,9 +209,9 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
     private fun sendLikeData(bean: CareMoreDomainBean.ServicesBean) {
         showProcessDialog()
         if (bean.is_collected) {//已收藏 点击取消
-            presenter!!.likePop(bean.service_id!!)
+            presenter?.likePop(bean.service_id!!)
         } else {
-            presenter!!.likePush(bean.service_id!!)
+            presenter?.likePush(bean.service_id!!)
         }
     }
 
@@ -230,10 +230,5 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
         setResult(if (isNeedRefresh) Activity.RESULT_OK else Activity.RESULT_CANCELED)
         super.onBackPressed()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 
 }

@@ -65,11 +65,11 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     override fun initListener() {
 
         sms_code.setOnClickListener {
-            LogUtils.d(TAG, "request SMS code from server")
+            LogUtils.d("request SMS code from server")
 
-            val input_phone = et_phone!!.text.toString()
+            val input_phone = et_phone.text.toString()
 
-            if (TextUtils.isEmpty(input_phone)) {
+            if (input_phone.isNullOrEmpty()) {
                 ToastUtils.showShortToast(getString(R.string.phone_not_empty))
                 return@setOnClickListener
             }
@@ -81,7 +81,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
 
             val bean = SendSmsRequestBean()
             bean.phone_number = input_phone
-            presenter!!.sendSms(bean)
+            presenter?.sendSms(bean)
             countDownSmsTime()
         }
 
@@ -98,7 +98,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
                     }
 
                     override fun onNext(aLong: Long) {
-                        sms_code.text = String.format(getString(R.string.sms_count_down), (30 - aLong!!).toString())
+                        sms_code.text = String.format(getString(R.string.sms_count_down), (30 - aLong).toString())
                     }
 
                     override fun onError(e: Throwable) {
@@ -114,14 +114,14 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     }
 
     private fun loginWithPhoneAndCode() {
-        LogUtils.d(TAG, "login with phone code")
+        LogUtils.d("login with phone code")
         val phone = et_phone.text.toString().trim { it <= ' ' }
         val code = et_code.text.toString().trim { it <= ' ' }
-        if (TextUtils.isEmpty(phone) || phone.length != 11) {
+        if (phone.isNullOrEmpty() || phone.length != 11) {
             ToastUtils.showShortToast(R.string.input_phone_error)
             return
         }
-        if (TextUtils.isEmpty(code)) {
+        if (code.isNullOrEmpty()) {
             ToastUtils.showShortToast(getString(R.string.input_code_error))
             return
         }
@@ -133,7 +133,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
             requestBean.phone_number = bean!!.phone
             requestBean.code = code
             showProcessDialog(getString(R.string.logining_process))
-            presenter!!.login(requestBean)
+            presenter?.login(requestBean)
 
         } else {
             ToastUtils.showShortToast(R.string.phone_input_next_step_error)
@@ -148,13 +148,13 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
 
         ToastUtils.showShortToast(R.string.login_success)
 
-        if (TextUtils.isEmpty(bean.screen_name)) {
+        if (bean.screen_name.isNullOrEmpty()) {
 
             val intent = Intent(this@PhoneInputActivity, NameInputActivity::class.java)
             intent.putExtra("has_photo", !TextUtils.isEmpty(bean.screen_photo))
             startActivity(intent)
 
-        } else if (TextUtils.isEmpty(bean.screen_photo)) {
+        } else if (bean.screen_photo.isNullOrEmpty()) {
 
             val intent = Intent(this@PhoneInputActivity, PhotoChangeActivity::class.java)
             intent.putExtra("from", AppConstant.FROM_PHONE_INPUT)
@@ -186,7 +186,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(sms_code, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -201,10 +201,5 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     override fun onBackPressed() {
         DongdaApplication.removeActivity(this)
         super.onBackPressed()
-    }
-
-    companion object {
-
-        internal val TAG = "Phone Input Activity"
     }
 }

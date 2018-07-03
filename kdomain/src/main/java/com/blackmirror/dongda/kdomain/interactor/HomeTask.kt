@@ -12,7 +12,6 @@ import com.blackmirror.dongda.data.repository.searchHomeData
 import com.blackmirror.dongda.kdomain.model.HomepageDomainBean
 import com.blackmirror.dongda.utils.AYPrefUtils
 import io.reactivex.Observable
-import java.util.*
 
 /**
  * Create By Ruge at 2018-06-12
@@ -62,7 +61,7 @@ private fun tran2DomainBean(bean: SearchServiceResponseBean, domainBean: Homepag
 
     domainBean.isSuccess = true
 
-    domainBean.homepage_services = ArrayList()
+    domainBean.homepage_services = mutableListOf()
     if (bean.result == null || bean.result!!.homepage_services == null) {
         return
     }
@@ -74,11 +73,11 @@ private fun tran2DomainBean(bean: SearchServiceResponseBean, domainBean: Homepag
         b.totalCount = sb.totalCount
 
         if (sb.services == null) {
-            (domainBean.homepage_services as ArrayList<HomepageDomainBean.HomepageServicesBean>).add(b)
+            domainBean.homepage_services?.add(b)
             continue
         }
 
-        b.services = ArrayList()
+        b.services = mutableListOf()
 
         for (j in sb.services!!.indices) {
             val s = sb.services!![j]
@@ -106,11 +105,11 @@ private fun tran2DomainBean(bean: SearchServiceResponseBean, domainBean: Homepag
             d.service_tags = if (s.service_tags != null) s.service_tags else mutableListOf()
             d.operation = if (s.operation != null) s.operation else mutableListOf()
 
-            (b.services as ArrayList<HomepageDomainBean.HomepageServicesBean.ServicesBean>).add(d)
+            b.services?.add(d)
 
         }
 
-        (domainBean.homepage_services as ArrayList<HomepageDomainBean.HomepageServicesBean>).add(b)
+        domainBean.homepage_services?.add(b)
     }
 
 }

@@ -73,7 +73,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
 
     private fun getUserInfo() {
         showProcessDialog()
-        presenter!!.queryUserInfo()
+        presenter?.queryUserInfo()
     }
 
     override fun onClick(view: View) {
@@ -105,7 +105,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_about_edit, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

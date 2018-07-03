@@ -137,7 +137,7 @@ private fun tran2LikeDomainBean(bean: LikeResponseBean, domainBean: LikeDomainBe
 
     domainBean.isSuccess = true
 
-    domainBean.services = ArrayList()
+    domainBean.services = mutableListOf()
     if (bean.result == null || bean.result!!.services == null) {
         return
     }
@@ -170,7 +170,7 @@ private fun tran2LikeDomainBean(bean: LikeResponseBean, domainBean: LikeDomainBe
         b.service_tags = if (sb.service_tags != null) sb.service_tags else ArrayList()
         b.operation = if (sb.operation != null) sb.operation else ArrayList()
 
-        (domainBean.services as ArrayList<LikeDomainBean.ServicesBean>).add(b)
+        domainBean.services!!.add(b)
 
     }
 

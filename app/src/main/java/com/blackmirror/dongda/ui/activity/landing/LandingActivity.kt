@@ -33,7 +33,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
     private var errorDb: Disposable? = null
     private var cancelDb: Disposable? = null
     private var presenter: WeChatLoginPresenter? = null
-    private var userIcon: String? = null
+    private var userIcon: String = ""
 
 
     override val layoutResId: Int
@@ -89,7 +89,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
             val userGender = platform.db.userGender //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
             val token = platform.db.token
 
-            presenter!!.weChatLogin(userId, token, userName, "wechat", userIcon!!)
+            presenter?.weChatLogin(userId, token, userName, "wechat", userIcon)
 
         }
 
@@ -102,8 +102,9 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
                             return@Consumer
                         }
                         closeProcessDialog()
-                        if (!TextUtils.isEmpty(s))
+                        if (s.isNotEmpty()) {
                             ToastUtils.showShortToast(s)
+                        }
                     })
         }
 
@@ -147,11 +148,11 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
             AYPrefUtils.setIsPhoneLogin("weChat")
             DongdaApplication.finishAllActivity()
         } else {
-            val img_uuid = CalUtils.getUUID32()
-            if (userIcon!!.contains("132")) {
-                userIcon = userIcon!!.substring(0, userIcon!!.lastIndexOf("132")) + 0
+            val img_uuid = getUUID32()
+            if (userIcon.contains("132")) {
+                userIcon = userIcon.substring(0, userIcon.lastIndexOf("132")) + 0
             }
-            presenter!!.upLoadWeChatIcon(userIcon!!, img_uuid)
+            presenter?.upLoadWeChatIcon(userIcon, img_uuid)
         }
 
     }
@@ -187,7 +188,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
             return
         }
 
-        ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+        ToastUtils.showShortToast("${bean.message}(${bean.code})")
 
     }
 

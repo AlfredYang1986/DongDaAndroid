@@ -38,25 +38,25 @@ fun upload(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgResponse
                             AYPrefUtils.setExpiration(Expiration)
                         }
                     }
-                    bean
+                    return@map bean
                 } else {
                     val bean = OssInfoResponseBean()
                     bean.status = "ok"
-                    bean
+                    return@map bean
                 }
             }.map {
                 //                        LogUtils.d("flag", "做网络请求前的json数据: " + q.json.toString());
                 val request = Request.Builder().url(requestBean.userIcon).get().build()
-                getIcon(request)
+                return@map getIcon(request)
             }.map { bean ->
                 if ("ok" == bean.status) {
                     requestBean.userIconData = bean.userIcon
-                    executeUpload(requestBean)
+                    return@map executeUpload(requestBean)
                 } else {
                     val code = if (bean.error == null) NET_UNKNOWN_ERROR else bean.error!!.code
                     //                            String message = bean.error == null ? "" : bean.error.message;
                     val message = "获取微信头像失败"
-                    getUploadErrorData(code, message)
+                    return@map getUploadErrorData(code, message)
                 }
             }
 }

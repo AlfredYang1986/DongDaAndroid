@@ -39,12 +39,12 @@ fun updateUserInfoWithPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoR
     return getOssInfo().map {
         val infoBean = UpLoadImgResponseBean()
         if ("ok" == it.status) {
-            executeUpload(bean)
+            return@map executeUpload(bean)
         } else {
             infoBean.error = BaseResponseBean.ErrorBean()
             infoBean.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
             infoBean.error?.message = it.error?.message ?: ""
-            infoBean
+            return@map infoBean
         }
     }.flatMap {
         val infoBean = UpdateUserInfoResponseBean()
@@ -54,14 +54,14 @@ fun updateUserInfoWithPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoR
             b.json = requestBean.json
             b.imgUUID = requestBean.imgUUID
             b.url = UPDATE_USER_INFO_URL
-            execute(b, UpdateUserInfoResponseBean::class.java)
+            return@flatMap execute(b, UpdateUserInfoResponseBean::class.java)
 
         } else {
             infoBean.error = BaseResponseBean.ErrorBean()
             infoBean.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
             infoBean.error?.message = it.error?.message ?: ""
 
-            Observable.just(infoBean)
+            return@flatMap Observable.just(infoBean)
         }
     }
 }
@@ -72,17 +72,17 @@ fun updateUserInfoWithOutPhoto(requestBean: UpDateBean): Observable<UpdateUserIn
     b.url = UPDATE_USER_INFO_URL
 
     return getOssInfo()
-            .flatMap({
+            .flatMap{
                 val infoBean = UpdateUserInfoResponseBean()
                 if ("ok" == it.status) {
-                    execute(b, UpdateUserInfoResponseBean::class.java)
+                    return@flatMap execute(b, UpdateUserInfoResponseBean::class.java)
                 } else {
                     infoBean.error = BaseResponseBean.ErrorBean()
                     infoBean.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
                     infoBean.error?.message = it.error?.message ?: ""
-                    Observable.just(infoBean)
+                    return@flatMap Observable.just(infoBean)
                 }
-            })
+            }
 
 }
 

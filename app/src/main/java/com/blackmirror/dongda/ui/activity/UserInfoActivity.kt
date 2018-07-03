@@ -172,7 +172,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(sv_user_photo, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

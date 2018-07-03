@@ -56,9 +56,9 @@ class DetailInfoResponseBean : BaseResponseBean() {
             var category: String? = null
             var album: String? = null
             var service_id: String? = null
-            var service_tags: List<String>? = null
-            var operation: List<String>? = null
-            var service_images: List<ServiceImagesBean>? = null
+            var service_tags: MutableList<String>? = null
+            var operation: MutableList<String>? = null
+            var service_images: MutableList<ServiceImagesBean>? = null
 
             class LocationBean : Serializable {
                 /**
@@ -72,8 +72,8 @@ class DetailInfoResponseBean : BaseResponseBean() {
                 var location_id: String? = null
                 var address: String? = null
                 var pin: PinBean? = null
-                var location_images: List<LocationImagesBean>? = null
-                var friendliness: List<String>? = null
+                var location_images: MutableList<LocationImagesBean>? = null
+                var friendliness: MutableList<String>? = null
 
                 class PinBean : Serializable {
                     /**

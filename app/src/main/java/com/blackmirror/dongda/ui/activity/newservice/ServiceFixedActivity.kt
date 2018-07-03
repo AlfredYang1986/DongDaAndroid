@@ -59,11 +59,11 @@ class ServiceFixedActivity : BaseActivity() {
             val all_month_price = tet_all_month_price.text.toString()
             val mid_month_price = tet_mid_month_price.text.toString()
 
-            if (TextUtils.isEmpty(all_month_price)) {
+            if (all_month_price.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入全日托单月价格!")
                 return@OnClickListener
             }
-            if (TextUtils.isEmpty(mid_month_price)) {
+            if (mid_month_price.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入半日托单月价格!")
                 return@OnClickListener
             }
@@ -83,11 +83,11 @@ class ServiceFixedActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -110,11 +110,11 @@ class ServiceFixedActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

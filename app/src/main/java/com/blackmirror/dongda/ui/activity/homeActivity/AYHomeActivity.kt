@@ -175,8 +175,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
                 val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
                 intent.putExtra("service_id", service_id)
                 startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-            }, {
-                view, position, ServicesBean->
+            }, { view, position, ServicesBean ->
                 clickLikePos = position
                 clickAdapter = AppConstant.HOME_ART_ADAPTER
                 sendLikeData(ServicesBean)
@@ -196,13 +195,11 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             rv_home_sport.layoutManager = manager
             rv_home_sport.adapter = sportAdapter
             rv_home_sport.addItemDecoration(SpacesItemDecoration(8))
-            sportAdapter?.setOnItemClickListener({
-                view,position,service_id->
+            sportAdapter?.setOnItemClickListener({ view, position, service_id ->
                 val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
                 intent.putExtra("service_id", service_id)
                 startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-            },{
-                view,position,servicesBean->
+            }, { view, position, servicesBean ->
                 sendLikeData(servicesBean)
                 clickLikePos = position
                 clickAdapter = AppConstant.HOME_SPORT_ADAPTER
@@ -221,13 +218,11 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             rv_home_science.layoutManager = manager
             rv_home_science.adapter = scienceAdapter
             rv_home_science.addItemDecoration(SpacesItemDecoration(8))
-            scienceAdapter?.setOnItemClickListener({
-                view,position,service_id->
+            scienceAdapter?.setOnItemClickListener({ view, position, service_id ->
                 val intent = Intent(this@AYHomeActivity, ServiceDetailInfoActivity::class.java)
                 intent.putExtra("service_id", service_id)
                 startActivityForResult(intent, AppConstant.SERVICE_DETAIL_REQUEST_CODE)
-            },{
-                view,position,servicesBean->
+            }, { view, position, servicesBean ->
                 clickLikePos = position
                 clickAdapter = AppConstant.HOME_SCIENCE_ADAPTER
                 sendLikeData(servicesBean)
@@ -347,26 +342,38 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
     override fun onLikePushSuccess(bean: LikePushDomainBean) {
         closeProcessDialog()
 
-        if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
+        when (clickAdapter) {
+            AppConstant.HOME_ART_ADAPTER -> artAdapter!!.notifyItemChanged(clickLikePos, true)
+            AppConstant.HOME_SPORT_ADAPTER -> sportAdapter!!.notifyItemChanged(clickLikePos, true)
+            AppConstant.HOME_SCIENCE_ADAPTER -> scienceAdapter!!.notifyItemChanged(clickLikePos, true)
+        }
+
+        /*if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
             artAdapter!!.notifyItemChanged(clickLikePos, true)
         } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
             sportAdapter!!.notifyItemChanged(clickLikePos, true)
         } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
             scienceAdapter!!.notifyItemChanged(clickLikePos, true)
-        }
+        }*/
 
     }
 
     override fun onLikePopSuccess(bean: LikePopDomainBean) {
         closeProcessDialog()
 
-        if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
+        when (clickAdapter) {
+            AppConstant.HOME_ART_ADAPTER -> artAdapter!!.notifyItemChanged(clickLikePos, false)
+            AppConstant.HOME_SPORT_ADAPTER -> sportAdapter!!.notifyItemChanged(clickLikePos, false)
+            AppConstant.HOME_SCIENCE_ADAPTER -> scienceAdapter!!.notifyItemChanged(clickLikePos, false)
+        }
+
+        /*if (clickAdapter == AppConstant.HOME_ART_ADAPTER) {
             artAdapter!!.notifyItemChanged(clickLikePos, false)
         } else if (clickAdapter == AppConstant.HOME_SPORT_ADAPTER) {
             sportAdapter!!.notifyItemChanged(clickLikePos, false)
         } else if (clickAdapter == AppConstant.HOME_SCIENCE_ADAPTER) {
             scienceAdapter!!.notifyItemChanged(clickLikePos, false)
-        }
+        }*/
 
     }
 
@@ -376,7 +383,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

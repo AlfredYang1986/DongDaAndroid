@@ -31,12 +31,12 @@ fun applyServiceImpl(brand_name: String, name: String, category: String, phone: 
         }
         if ("ok" == it.status) {
             domainBean.isSuccess = true
-            domainBean.apply_id = if (it.result != null) it.result!!.apply_id else ""
+            domainBean.apply_id = it.result?.apply_id ?: ""
         } else {
             domainBean.code = it.error?.code ?: NET_UNKNOWN_ERROR
             domainBean.message = it.error?.message ?: ""
         }
-        domainBean
+        return@map domainBean
     }
 }
 
@@ -48,7 +48,7 @@ fun getBrandAllLocationImpl(brand_id: String): Observable<BrandAllLocDomainBean>
     return getBrandAllLocation(brand_id, addr).map {
         val domainBean = BrandAllLocDomainBean()
         transLoc2DomainBean(it, domainBean)
-        domainBean
+        return@map domainBean
     }
 }
 
@@ -56,7 +56,7 @@ fun getLocAllServiceImpl(json: String, locations: String): Observable<LocAllServ
     return getLocAllService(json, locations, bl).map {
         val db = LocAllServiceDomainBean()
         if (it == null) {
-            db
+            return@map db
         }
         db.services = ArrayList()
         db.isSuccess = "ok" == it.status
@@ -78,7 +78,7 @@ fun getLocAllServiceImpl(json: String, locations: String): Observable<LocAllServ
         db.code = it.error?.code ?: NET_UNKNOWN_ERROR
         db.message = it.error?.message ?: ""
 
-        db
+        return@map db
     }
 }
 
@@ -95,7 +95,7 @@ fun enrolStudentImpl(json: String): Observable<EnrolDomainBean> {
             db.code = it.error?.code ?: NET_UNKNOWN_ERROR
             db.message = it.error?.message ?: ""
         }
-         db
+        return@map db
     }
 }
 
@@ -113,7 +113,7 @@ val el = fun(json: String): Observable<EnrolResponseBean> {
         sb.error = BaseResponseBean.ErrorBean()
         sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
-        Observable.just(sb)
+        return@flatMap Observable.just(sb)
     }
 
 }
@@ -137,7 +137,7 @@ val bl = fun(json: String, locations: String): Observable<LocAllServiceResponseB
         sb.error = BaseResponseBean.ErrorBean()
         sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
-        Observable.just(sb)
+        return@flatMap Observable.just(sb)
     }
 }
 
@@ -156,7 +156,7 @@ val addr = fun(brand_id: String): Observable<BrandAllLocResponseBean> {
         sb.error = BaseResponseBean.ErrorBean()
         sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
-        Observable.just<BrandAllLocResponseBean>(sb)
+        return@flatMap Observable.just<BrandAllLocResponseBean>(sb)
     }
 
 }
@@ -175,7 +175,7 @@ val apply = fun(brand_name: String, name: String, category: String, phone: Strin
         sb.error = BaseResponseBean.ErrorBean()
         sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
-        Observable.just(sb)
+        return@flatMap Observable.just(sb)
     }
 }
 
@@ -195,8 +195,8 @@ private fun transLoc2DomainBean(bean: BrandAllLocResponseBean, domainBean: Brand
         return
     }
 
-    bean.result?.locations?.forEach out@{lb->
-//        val lb = it
+    bean.result?.locations?.forEach out@{ lb ->
+        //        val lb = it
         val dlb = BrandAllLocDomainBean.LocationsBean()
 
         dlb.location_id = lb.location_id
@@ -217,8 +217,8 @@ private fun transLoc2DomainBean(bean: BrandAllLocResponseBean, domainBean: Brand
             return@out
         }
 
-        lb.location_images?.forEach {ib->
-//            val ib = lb.location_images[j]
+        lb.location_images?.forEach { ib ->
+            //            val ib = lb.location_images[j]
             val dib = BrandAllLocDomainBean.LocationsBean.LocationImagesBean()
             dib.image = ib.image
             dib.tag = ib.tag

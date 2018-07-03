@@ -51,7 +51,7 @@ class ApplyPhoneActivity : BaseActivity() {
     override fun initData() {
         user_name = intent.getStringExtra("user_name")
         city_name = intent.getStringExtra("city_name")
-        tv_name_dec.text = "非常好，来自" + city_name + "的" + user_name + "\n我们怎样可以联系到你？"
+        tv_name_dec.text = "非常好，来自${city_name}的${user_name}\n我们怎样可以联系到你？"
         val ss = SpannableString(getString(R.string.apply_input_phone_hint))//定义hint的值
         val ass = AbsoluteSizeSpan(15, true)//设置字体大小 true表示单位是sp
         ss.setSpan(ass, 0, ss.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -63,7 +63,7 @@ class ApplyPhoneActivity : BaseActivity() {
 
         tv_next.setOnClickListener(View.OnClickListener {
             val phone_no = replaceBlank(tet_phone_no.text.toString().trim { it <= ' ' })
-            if (TextUtils.isEmpty(phone_no)) {
+            if (phone_no.isNullOrEmpty()) {
                 ToastUtils.showShortToast("手机号不能为空!")
                 return@OnClickListener
             }
@@ -85,13 +85,15 @@ class ApplyPhoneActivity : BaseActivity() {
 
             }
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s == null || s.length == 0) return
-                if (s.toString().length != 0 && !can_next) {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                if (s.isNullOrEmpty()) {
+                    return
+                }
+                if (s.toString().isNotEmpty() && !can_next) {
                     can_next = true
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_next) {
+                if (s.toString().isEmpty() && can_next) {
                     can_next = false
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

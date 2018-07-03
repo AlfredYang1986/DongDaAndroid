@@ -67,7 +67,7 @@ class NameInputActivity : BaseActivity(), Contract.NameInputView {
     private fun changeName() {
         showProcessDialog()
         val bean = UpdateUserInfoDomainBean()
-        bean.json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + name + "\"}}"
+        bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_name\":\"$name\"}}"
         presenter?.updateUserInfo(bean)
     }
 
@@ -104,10 +104,5 @@ class NameInputActivity : BaseActivity(), Contract.NameInputView {
 
     override fun setStatusBarColor() {
         DeviceUtils.setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
-    }
-
-    companion object {
-
-        internal val TAG = "Name Input Activity"
     }
 }

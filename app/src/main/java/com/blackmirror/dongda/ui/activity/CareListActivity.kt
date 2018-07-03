@@ -28,7 +28,6 @@ import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener
 
 class CareListActivity : BaseActivity(), ListMoreContract.View {
 
-    private val TAG = "CareListActivity"
 
     private lateinit var ctl_root: CoordinatorLayout
     private lateinit var iv_home_head_back: ImageView
@@ -77,7 +76,7 @@ class CareListActivity : BaseActivity(), ListMoreContract.View {
     }
 
     private fun initData(skipCount: Int, takeCount: Int) {
-        presenter!!.getServiceMoreData(skipCount, takeCount, "看顾")
+        presenter?.getServiceMoreData(skipCount, takeCount, "看顾")
     }
 
 
@@ -145,7 +144,7 @@ class CareListActivity : BaseActivity(), ListMoreContract.View {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -190,9 +189,9 @@ class CareListActivity : BaseActivity(), ListMoreContract.View {
     private fun sendLikeData(bean: CareMoreDomainBean.ServicesBean) {
         showProcessDialog()
         if (bean.is_collected) {//已收藏 点击取消
-            presenter!!.likePop(bean.service_id!!)
+            presenter?.likePop(bean.service_id!!)
         } else {
-            presenter!!.likePush(bean.service_id!!)
+            presenter?.likePush(bean.service_id!!)
         }
     }
 
@@ -211,10 +210,5 @@ class CareListActivity : BaseActivity(), ListMoreContract.View {
         setResult(if (isNeedRefresh) Activity.RESULT_OK else Activity.RESULT_CANCELED)
         super.onBackPressed()
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    }
-
 
 }

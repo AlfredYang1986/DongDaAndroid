@@ -24,7 +24,7 @@ import java.net.SocketTimeoutException
  * Created by xcx on 2018/6/11.
  */
 
- fun executeUpload(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
+fun executeUpload(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
 
     val error_code: Int
     val error_message: String?
@@ -61,10 +61,14 @@ import java.net.SocketTimeoutException
     requestBuilder.addHeader("x-oss-security-token", AYPrefUtils.getSecurityToken())
     requestBuilder.addHeader("Authorization", signature)
 
-    val file = File(path)
-    val body = RequestBody.create(MediaType.parse("image/jpeg"), file)
-    requestBuilder = requestBuilder.method("PUT", body)
-
+    if (requestBean.userIconData != null && requestBean.userIconData!!.isNotEmpty()) {
+        val body = RequestBody.create(MediaType.parse("image/jpeg"), requestBean.userIconData)
+        requestBuilder = requestBuilder.method("PUT", body)
+    } else {
+        val file = File(path)
+        val body = RequestBody.create(MediaType.parse("image/jpeg"), file)
+        requestBuilder = requestBuilder.method("PUT", body)
+    }
 
     try {
         val response = httpClient.newCall(requestBuilder.build()).execute()

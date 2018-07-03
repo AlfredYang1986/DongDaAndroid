@@ -157,8 +157,7 @@ val ul=fun(userIcon: String, imgUUID: String): Observable<UpLoadImgResponseBean>
 
 val wl = fun(provide_uid: String, provide_token: String, provide_screen_name: String, provide_name: String, provide_screen_photo: String): Observable<WeChatLoginResponseBean> {
     val bean = WeChatLoginRequestBean()
-    val json = "{\"third\":{\"provide_uid\":\"" + provide_uid + "\",\"provide_token\":\"" + provide_token + "\",\"provide_screen_name\":\"" + provide_screen_name + "\"," +
-            "\"provide_name\":\"" + provide_name + "\",\"provide_screen_photo\":\"" + provide_screen_photo + "\"}}"
+    val json = "{\"third\":{\"provide_uid\":\"$provide_uid\",\"provide_token\":\"$provide_token\",\"provide_screen_name\":\"$provide_screen_name\",\"provide_name\":\"$provide_name\",\"provide_screen_photo\":\"$provide_screen_photo\"}}"
     bean.json = json
     bean.url = WECHAT_LOGIN_URL
     return execute(bean, WeChatLoginResponseBean::class.java)
