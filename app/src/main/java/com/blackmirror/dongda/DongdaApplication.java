@@ -1,12 +1,16 @@
-package com.blackmirror.dongda.utils;
+package com.blackmirror.dongda;
 
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.multidex.MultiDex;
 
 import com.blackmirror.dongda.base.AYApplication;
+import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.MyBitmapMemoryCacheParamsSupplier;
+import com.blackmirror.dongda.utils.MyCacheKeyFactory;
 import com.facebook.cache.disk.DiskCacheConfig;
 import com.facebook.common.memory.MemoryTrimType;
 import com.facebook.common.memory.MemoryTrimmable;
@@ -44,6 +48,12 @@ public class DongdaApplication extends AYApplication {
     }
 
     private void initDagger() {
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
     /**

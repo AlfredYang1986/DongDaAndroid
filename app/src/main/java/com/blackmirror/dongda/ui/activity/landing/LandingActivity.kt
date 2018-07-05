@@ -9,6 +9,7 @@ import cn.sharesdk.framework.Platform
 import cn.sharesdk.framework.PlatformActionListener
 import cn.sharesdk.framework.ShareSDK
 import cn.sharesdk.wechat.friends.Wechat
+import com.blackmirror.dongda.DongdaApplication
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.di.component.DaggerLandingComponent
 import com.blackmirror.dongda.kdomain.model.BaseDataBean

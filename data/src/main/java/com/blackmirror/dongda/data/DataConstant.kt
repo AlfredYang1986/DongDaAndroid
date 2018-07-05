@@ -18,8 +18,8 @@ val UPLOAD_WECHAT_ERROR = -104
 /**
  * url地址
  */
-val BASE_URL = "http://192.168.100.115:9000"
-//    public static final String BASE_URL="http://altlys.com:9000";
+//val BASE_URL = "http://192.168.100.115:9000"
+val BASE_URL = "http://altlys.com:9000"
 
 //收藏
 val LIKE_PUSH_URL = "$BASE_URL/al/collections/push"

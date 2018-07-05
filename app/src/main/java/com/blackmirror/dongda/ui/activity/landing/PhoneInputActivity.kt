@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
+import com.blackmirror.dongda.DongdaApplication
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean
