@@ -37,10 +37,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     }
 
-    protected fun initPreSetContentView() {
-
-    }
-
     protected open fun setStatusBarColor() {
         DeviceUtils.setStatusBarColor(this)
     }

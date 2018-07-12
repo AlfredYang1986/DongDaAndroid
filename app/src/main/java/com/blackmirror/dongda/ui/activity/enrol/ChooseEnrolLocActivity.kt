@@ -117,7 +117,7 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
 
     override fun initData() {
         //        presenter.getBrandAllLocation("5a66fdea59a6270918508f25");
-        presenter!!.getBrandAllLocation("")
+        presenter?.getBrandAllLocation("")
         initLocation()
     }
 
@@ -259,7 +259,7 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(tv_cur_loc, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 }

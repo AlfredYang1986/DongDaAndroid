@@ -94,7 +94,7 @@ class ApplyServiceActivity : BaseActivity(), View.OnClickListener, ApplyContract
 
     private fun apply() {
         showProcessDialog()
-        presenter!!.apply(brand_name!!, user_name!!, "", phone_no!!, city_name!!)
+        presenter?.apply(brand_name!!, user_name!!, "", phone_no!!, city_name!!)
     }
 
     private fun canNext() {
@@ -118,7 +118,7 @@ class ApplyServiceActivity : BaseActivity(), View.OnClickListener, ApplyContract
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(tv_next, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

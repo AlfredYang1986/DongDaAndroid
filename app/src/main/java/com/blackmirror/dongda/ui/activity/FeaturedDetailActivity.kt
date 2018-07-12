@@ -132,7 +132,7 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
     private fun getServerData(skipCount: Int, service_type: String?) {
 
         showProcessDialog()
-        presenter!!.getServiceMoreData(skipCount, 10, service_type!!)
+        presenter?.getServiceMoreData(skipCount, 10, service_type!!)
     }
 
     override fun onGetServiceMoreDataSuccess(bean: CareMoreDomainBean) {
@@ -157,7 +157,7 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_root, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -195,9 +195,9 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
     private fun sendLikeData(bean: CareMoreDomainBean.ServicesBean) {
         showProcessDialog()
         if (bean.is_collected) {//已收藏 点击取消
-            presenter!!.likePop(bean.service_id!!)
+            presenter?.likePop(bean.service_id!!)
         } else {
-            presenter!!.likePush(bean.service_id!!)
+            presenter?.likePush(bean.service_id!!)
         }
     }
 
@@ -215,7 +215,4 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
         super.onBackPressed()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-    }
 }

@@ -32,6 +32,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -79,6 +80,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:' + rootProject.ext.constraintLayoutVersion
+    implementation 'com.android.support:support-v4:26.1.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'junit:junit:4.12'
@@ -109,8 +111,8 @@ dependencies {
     implementation project(':device')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':kdomain')
+    api 'com.android.support:multidex:1.0.3'
 }
 repositories {
     mavenCentral()
 }
-

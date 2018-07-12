@@ -67,7 +67,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
         } else if (flag == 1) {
             tv_change_order_mode.visibility = View.VISIBLE
         }
-        tv_cache_size!!.text = size.toString() + "MB"
+        tv_cache_size.text = "${size}MB"
     }
 
     override fun initListener() {
@@ -133,7 +133,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                     ToastUtils.showShortToast("清除成功!")
                     val path = AYApplication.getAppContext().externalCacheDir!!.path
                     val size = FileUtils.getFileOrFilesSize(path)
-                    tv_cache_size.text = "${size.toString()}MB"
+                    tv_cache_size.text = "${size}MB"
                 })
 
     }

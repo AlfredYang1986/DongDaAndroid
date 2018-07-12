@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 
 class ServiceFixedActivity : BaseActivity() {
 
@@ -59,17 +59,17 @@ class ServiceFixedActivity : BaseActivity() {
             val all_month_price = tet_all_month_price.text.toString()
             val mid_month_price = tet_mid_month_price.text.toString()
 
-            if (TextUtils.isEmpty(all_month_price)) {
+            if (all_month_price.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入全日托单月价格!")
                 return@OnClickListener
             }
-            if (TextUtils.isEmpty(mid_month_price)) {
+            if (mid_month_price.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入半日托单月价格!")
                 return@OnClickListener
             }
 
-            val all = (StringUtils.getDoubleValue(all_month_price) * 100).toLong()
-            val mid = (StringUtils.getDoubleValue(mid_month_price) * 100).toLong()
+            val all = (all_month_price.getDoubleValue() * 100).toLong()
+            val mid = (mid_month_price.getDoubleValue() * 100).toLong()
 
             intent.putExtra("all_month_price", all)
             intent.putExtra("mid_month_price", mid)
@@ -83,11 +83,11 @@ class ServiceFixedActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -110,11 +110,11 @@ class ServiceFixedActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

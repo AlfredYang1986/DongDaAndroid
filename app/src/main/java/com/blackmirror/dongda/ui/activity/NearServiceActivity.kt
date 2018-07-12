@@ -96,7 +96,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
             val marker = aMap!!.addMarker(markerOption)
             locMarkerId = marker.id
 
-            presenter!!.getNearService(latitude, longitude)
+            presenter?.getNearService(latitude, longitude)
 
         } else {
             val sb = StringBuilder()
@@ -141,7 +141,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
         //获取地图控件引用
         mv_near_map = findViewById(R.id.mv_near_map)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)，创建地图
-        mv_near_map!!.onCreate(savedInstanceState)
+        mv_near_map.onCreate(savedInstanceState)
         markers = HashMap()
     }
 
@@ -174,14 +174,14 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
 
     private fun initAMap() {
         if (aMap == null) {
-            aMap = mv_near_map!!.map
+            aMap = mv_near_map.map
         }
 
     }
 
     override fun initListener() {
 
-        iv_near_back!!.setOnClickListener {
+        iv_near_back.setOnClickListener {
             if (locationClient != null) {
                 stopLocation()
                 destroyLocation()
@@ -189,7 +189,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
             }
         }
 
-        iv_current_location!!.setOnClickListener {
+        iv_current_location.setOnClickListener {
             closeProcessDialog()
             markers!!.clear()
             aMap!!.clear()
@@ -242,8 +242,8 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
         val b = marker.`object` as NearServiceDomainBean.ServicesBean
 
         marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(b.service_type!!, true)))
-        sv_near_photo!!.setImageURI(OSSUtils.getSignedUrl(b.service_image))
-        tv_near_title!!.text = b.service_leaf
+        sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image))
+        tv_near_title.text = b.service_leaf
         val s = StringBuilder()
         if (b.service_leaf!!.contains(getString(R.string.str_care))) {
             s.append(b.brand_name)
@@ -255,8 +255,8 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
                     .append(b.service_leaf)
                     .append(b.category)
         }
-        tv_near_dec!!.text = s.toString()
-        tv_near_location!!.text = b.address
+        tv_near_dec.text = s.toString()
+        tv_near_location.text = b.address
         val l = markers!![lastClickMarker]?.getObject() as NearServiceDomainBean.ServicesBean
         markers!![lastClickMarker]?.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(l.service_type!!, false)))
 
@@ -289,7 +289,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_current_location, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -309,8 +309,8 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
                 lastClickMarker = marker.id
                 val sb = bean.services!![0]
                 marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(sb.service_type!!, true)))
-                sv_near_photo!!.setImageURI(OSSUtils.getSignedUrl(sb.service_image))
-                tv_near_title!!.text = sb.service_leaf
+                sv_near_photo.setImageURI(OSSUtils.getSignedUrl(sb.service_image))
+                tv_near_title.text = sb.service_leaf
                 val s = StringBuilder()
                 if (sb.service_leaf!!.contains("看顾")) {
                     s.append(sb.brand_name)
@@ -322,8 +322,8 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
                             .append(sb.service_leaf)
                             .append(sb.category)
                 }
-                tv_near_dec!!.text = s.toString()
-                tv_near_location!!.text = sb.address
+                tv_near_dec.text = s.toString()
+                tv_near_location.text = sb.address
             } else {
                 marker.setIcon(BitmapDescriptorFactory
                         .fromResource(getImageResId(bean.services!![i].service_type!!, false)))

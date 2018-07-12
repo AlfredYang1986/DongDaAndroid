@@ -60,7 +60,8 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
         tv_confirm_brand.text = intent.getStringExtra("service_leaf")
         val min_age = java.lang.Double.parseDouble(intent.getStringExtra("min_age"))
         val max_age = java.lang.Double.parseDouble(intent.getStringExtra("max_age"))
-        tv_child_age.text = StringUtils.formatNumber(min_age) + "-" + StringUtils.formatNumber(max_age) + "岁"
+//        tv_child_age.text = min_age.formatNumber() + "-" + max_age.formatNumber() + "岁"
+        tv_child_age.text = "${min_age.formatNumber()}-${max_age.formatNumber()}岁"
     }
 
     override fun initListener() {
@@ -85,7 +86,7 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
 
     private fun enrol() {
         showProcessDialog()
-        presenter!!.enrol(intent.getStringExtra("json"))
+        presenter?.enrol(intent.getStringExtra("json"))
     }
 
     override fun onGetBrandAllLocationSuccess(bean: BrandAllLocDomainBean) {
@@ -106,7 +107,7 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(tv_child_age, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 

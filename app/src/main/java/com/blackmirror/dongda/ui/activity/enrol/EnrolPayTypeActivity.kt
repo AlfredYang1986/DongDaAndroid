@@ -87,7 +87,7 @@ class EnrolPayTypeActivity : BaseActivity(), View.OnClickListener {
                     //                    length : "按次付费单次课程时长，INT，单位分", == time
                     //                    times : "按次付费最少预定次数, INT, 单位次" == order
 
-                    val json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"recruit\":{\"service_id\":\"" + service_id + "\",\"age_boundary\":{\"lbl\":" + min_age + ",\"ubl\":" + max_age + "},\"stud_boundary\":{\"min\":" + min_num + ",\"max\":" + max_num + "},\"payment_time\":{\"price\":" + price + ",\"length\":" + class_time + ",\"times\":" + order + "}}}"
+                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_boundary\":{\"min\":$min_num,\"max\":$max_num},\"payment_time\":{\"price\":$price,\"length\":$class_time,\"times\":$order}}}"
                     intent.putExtra("json", json)
 
 
@@ -104,7 +104,7 @@ class EnrolPayTypeActivity : BaseActivity(), View.OnClickListener {
                     //                    length : "会员制付费单次课程时长，INT, 单位分", == time
                     //                    period : "会员制付费一学期时长，INT，单位月" == valid_time
 
-                    val json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"recruit\":{\"service_id\":\"" + service_id + "\",\"age_boundary\":{\"lbl\":" + min_age + ",\"ubl\":" + max_age + "},\"stud_boundary\":{\"min\":" + min_num + ",\"max\":" + max_num + "},\"payment_membership\":{\"price\":" + mb_price + ",\"length\":" + time + ",\"period\":" + valid_time + "}}}"
+                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_boundary\":{\"min\":$min_num,\"max\":$max_num},\"payment_membership\":{\"price\":$mb_price,\"length\":$time,\"period\":$valid_time}}}"
                     intent.putExtra("json", json)
 
                 }

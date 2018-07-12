@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.kdomain.interactor
 
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
+import com.blackmirror.dongda.data.QUERY_USER_INFO_URL
 import com.blackmirror.dongda.data.model.request.UserInfoRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.UserInfoResponseBean
@@ -37,7 +38,7 @@ fun queryUserInfoImpl(): Observable<UserInfoDomainBean> {
             ub.social_id = social_id
         }
 
-        ub.code = bean.error?.code?:DataConstant.NET_UNKNOWN_ERROR
+        ub.code = bean.error?.code?:NET_UNKNOWN_ERROR
         ub.message = bean.error?.message?:""
 
          ub
@@ -48,7 +49,7 @@ val qu = fun(): Observable<UserInfoResponseBean> {
     val bean = UserInfoRequestBean()
     bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"}}"
 
-    bean.url = DataConstant.QUERY_USER_INFO_URL
+    bean.url = QUERY_USER_INFO_URL
 
     return getOssInfo().flatMap {
         if ("ok" == it.status) {
@@ -56,7 +57,7 @@ val qu = fun(): Observable<UserInfoResponseBean> {
         }
         val sb = UserInfoResponseBean()
         sb.error = BaseResponseBean.ErrorBean()
-        sb.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+        sb.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
         sb.error?.message = it.error?.message ?: ""
         Observable.just(sb)
     }

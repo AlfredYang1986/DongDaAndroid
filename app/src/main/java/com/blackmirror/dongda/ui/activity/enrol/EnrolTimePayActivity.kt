@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 
 class EnrolTimePayActivity : BaseActivity() {
 
@@ -81,7 +81,7 @@ class EnrolTimePayActivity : BaseActivity() {
                 return@OnClickListener
             }
 
-            val d = (StringUtils.getDoubleValue(price) * 100).toLong()
+            val d = (price.getDoubleValue() * 100).toLong()
 
             intent.putExtra("price", d)
             intent.putExtra("order", order)
@@ -97,11 +97,11 @@ class EnrolTimePayActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -124,11 +124,11 @@ class EnrolTimePayActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -145,11 +145,11 @@ class EnrolTimePayActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

@@ -73,7 +73,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
 
     private fun getUserInfo() {
         showProcessDialog()
-        presenter!!.queryUserInfo()
+        presenter?.queryUserInfo()
     }
 
     override fun onClick(view: View) {
@@ -83,7 +83,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
                 AYApplication.finishActivity(this)
             }
             R.id.tv_user_logout -> showLogOutDialog()
-            R.id.iv_about_edit -> EditUserInfoActivity.startActivityForResult(this@UserAboutMeActivity, bean!!.screen_photo!!, bean!!.screen_name!!, bean!!.description!!, AppConstant.EDIT_USER_REQUEST_CODE)
+            R.id.iv_about_edit -> EditUserInfoActivity.startActivityForResult(this@UserAboutMeActivity, bean?.screen_photo?:"", bean?.screen_name?:"", bean?.description?:"", AppConstant.EDIT_USER_REQUEST_CODE)
         }
     }
 
@@ -105,7 +105,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_about_edit, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -138,7 +138,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
             needsRefresh = true
             getUserInfo()
             img_url = data.getStringExtra("img_url")
-            LogUtils.d("UserAboutMeActivity img_url " + img_url!!)
+            LogUtils.d("UserAboutMeActivity img_url $img_url")
         }
     }
 

@@ -1,7 +1,8 @@
 package com.blackmirror.dongda.data.net
 
 import android.text.TextUtils
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
+import com.blackmirror.dongda.data.UPDATE_USER_INFO_URL
 import com.blackmirror.dongda.data.model.request.UpDateBean
 import com.blackmirror.dongda.data.model.request.UpdateUserInfoRequestBean
 import com.blackmirror.dongda.data.model.request.UploadImageRequestBean
@@ -34,16 +35,16 @@ fun updateUserInfoWithPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoR
     val bean = UploadImageRequestBean()
     bean.json = requestBean.json
     bean.imgUUID = requestBean.imgUUID
-    bean.url = DataConstant.UPDATE_USER_INFO_URL
+    bean.url = UPDATE_USER_INFO_URL
     return getOssInfo().map {
         val infoBean = UpLoadImgResponseBean()
         if ("ok" == it.status) {
-            executeUpload(bean)
+            return@map executeUpload(bean)
         } else {
             infoBean.error = BaseResponseBean.ErrorBean()
-            infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            infoBean.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
             infoBean.error?.message = it.error?.message ?: ""
-            infoBean
+            return@map infoBean
         }
     }.flatMap {
         val infoBean = UpdateUserInfoResponseBean()
@@ -52,15 +53,15 @@ fun updateUserInfoWithPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoR
             val b = UpdateUserInfoRequestBean()
             b.json = requestBean.json
             b.imgUUID = requestBean.imgUUID
-            b.url = DataConstant.UPDATE_USER_INFO_URL
-            execute(b, UpdateUserInfoResponseBean::class.java)
+            b.url = UPDATE_USER_INFO_URL
+            return@flatMap execute(b, UpdateUserInfoResponseBean::class.java)
 
         } else {
             infoBean.error = BaseResponseBean.ErrorBean()
-            infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+            infoBean.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
             infoBean.error?.message = it.error?.message ?: ""
 
-            Observable.just(infoBean)
+            return@flatMap Observable.just(infoBean)
         }
     }
 }
@@ -68,20 +69,20 @@ fun updateUserInfoWithPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoR
 fun updateUserInfoWithOutPhoto(requestBean: UpDateBean): Observable<UpdateUserInfoResponseBean> {
     val b = UpdateUserInfoRequestBean()
     b.json = requestBean.json
-    b.url = DataConstant.UPDATE_USER_INFO_URL
+    b.url = UPDATE_USER_INFO_URL
 
     return getOssInfo()
-            .flatMap({
+            .flatMap{
                 val infoBean = UpdateUserInfoResponseBean()
                 if ("ok" == it.status) {
-                    execute(b, UpdateUserInfoResponseBean::class.java)
+                    return@flatMap execute(b, UpdateUserInfoResponseBean::class.java)
                 } else {
                     infoBean.error = BaseResponseBean.ErrorBean()
-                    infoBean.error?.code = it.error?.code ?: DataConstant.NET_UNKNOWN_ERROR
+                    infoBean.error?.code = it.error?.code ?: NET_UNKNOWN_ERROR
                     infoBean.error?.message = it.error?.message ?: ""
-                    Observable.just(infoBean)
+                    return@flatMap Observable.just(infoBean)
                 }
-            })
+            }
 
 }
 

@@ -100,15 +100,15 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
                 showProcessDialog(getString(R.string.uploading_head_photo))
                 val bean = UpdateUserInfoDomainBean()
                 val json: String
-                val img_uuid = CalUtils.getUUID32()
+                val img_uuid = getUUID32()
                 if (isFromNameInput) {
-                    json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_name\":\"" + name + "\",\"screen_photo\":\"" + img_uuid + "\"}}"
+                    json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_name\":\"$name\",\"screen_photo\":\"$img_uuid\"}}"
                 } else {
-                    json = "{\"token\":\"" + AYPrefUtils.getAuthToken() + "\",\"condition\":{\"user_id\":\"" + AYPrefUtils.getUserId() + "\"},\"profile\":{\"screen_photo\":\"" + img_uuid + "\"}}"
+                    json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_photo\":\"$img_uuid\"}}"
                 }
                 bean.json = json
                 bean.imgUUID = img_uuid
-                presenter!!.updateUserInfo(bean)
+                presenter?.updateUserInfo(bean)
             } else {
                 ToastUtils.showShortToast(getString(R.string.choose_head_photo))
             }
@@ -135,7 +135,7 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(iv_head_photo, bean.message)
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            ToastUtils.showShortToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -411,10 +411,10 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
         startActivityForResult(intent, AppConstant.PICTURE_CUT)
     }
 
-    private fun getImagePath(uri: Uri?, selection: String?): String? {
+    private fun getImagePath(uri: Uri, selection: String?): String? {
         var path: String? = null
         // 通过Uri和selection来获取真实的图片路径
-        val cursor = contentResolver.query(uri!!, null, selection, null, null)
+        val cursor = contentResolver.query(uri, null, selection, null, null)
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA))

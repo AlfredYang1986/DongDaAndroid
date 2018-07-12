@@ -1,6 +1,6 @@
 package com.blackmirror.dongda.data.net
 
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.*
 import com.blackmirror.dongda.data.model.request.UploadImageRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.DownloadWeChatIconResponseBean
@@ -27,7 +27,7 @@ fun upload(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgResponse
                 if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
                     val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\"}"
                     val request = Request.Builder()
-                            .url(DataConstant.OSS_INFO_URL).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)).build()
+                            .url(OSS_INFO_URL).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)).build()
                     val bean = executeRequest(request, OssInfoResponseBean::class.java)
 
                     if (bean.status=="ok"){
@@ -38,25 +38,25 @@ fun upload(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgResponse
                             AYPrefUtils.setExpiration(Expiration)
                         }
                     }
-                    bean
+                    return@map bean
                 } else {
                     val bean = OssInfoResponseBean()
                     bean.status = "ok"
-                    bean
+                    return@map bean
                 }
             }.map {
                 //                        LogUtils.d("flag", "做网络请求前的json数据: " + q.json.toString());
                 val request = Request.Builder().url(requestBean.userIcon).get().build()
-                getIcon(request)
+                return@map getIcon(request)
             }.map { bean ->
                 if ("ok" == bean.status) {
                     requestBean.userIconData = bean.userIcon
-                    executeUpload(requestBean)
+                    return@map executeUpload(requestBean)
                 } else {
-                    val code = if (bean.error == null) DataConstant.NET_UNKNOWN_ERROR else bean.error!!.code
+                    val code = if (bean.error == null) NET_UNKNOWN_ERROR else bean.error!!.code
                     //                            String message = bean.error == null ? "" : bean.error.message;
                     val message = "获取微信头像失败"
-                    getUploadErrorData(code, message)
+                    return@map getUploadErrorData(code, message)
                 }
             }
 }
@@ -81,22 +81,22 @@ private fun getIcon(request: Request): DownloadWeChatIconResponseBean {
         return bean
 
     } catch (e1: ConnectTimeoutException) {
-        error_code = DataConstant.CONNECT_TIMEOUT_EXCEPTION
+        error_code = CONNECT_TIMEOUT_EXCEPTION
         error_message = e1.message
 //        LogUtils.e(AYRemoteApi::class.java, "ConnectTimeoutException: ", e1)
 
     } catch (e2: SocketTimeoutException) {//服务器响应超时
-        error_code = DataConstant.SOCKET_TIMEOUT_EXCEPTION
+        error_code = SOCKET_TIMEOUT_EXCEPTION
         error_message = e2.message
 //        LogUtils.e(AYRemoteApi::class.java, "SocketTimeoutException: ", e2)
 
     } catch (e3: ConnectException) {//服务器请求超时
-        error_code = DataConstant.CONNECT_EXCEPTION
+        error_code = CONNECT_EXCEPTION
         error_message = e3.message
 //        LogUtils.e(AYRemoteApi::class.java, "ConnectException: ", e3)
 
     } catch (e4: Exception) {
-        error_code = DataConstant.OTHER_EXCEPTION
+        error_code = OTHER_EXCEPTION
         error_message = e4.message
 //        LogUtils.e(AYRemoteApi::class.java, "Exception: ", e4)
 

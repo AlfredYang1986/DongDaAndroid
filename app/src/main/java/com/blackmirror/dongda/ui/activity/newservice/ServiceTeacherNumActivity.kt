@@ -62,15 +62,15 @@ class ServiceTeacherNumActivity : BaseActivity() {
             val child_num = tet_child_num.text.toString()
             val location_num = tet_location_num.text.toString()
 
-            if (TextUtils.isEmpty(teacher_num)) {
+            if (teacher_num.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入教师人数!")
                 return@OnClickListener
             }
-            if (TextUtils.isEmpty(child_num)) {
+            if (child_num.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入学生人数!")
                 return@OnClickListener
             }
-            if (TextUtils.isEmpty(location_num)) {
+            if (location_num.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入场地容纳人数!")
                 return@OnClickListener
             }
@@ -96,11 +96,11 @@ class ServiceTeacherNumActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_next) {
+                if (s.toString().isNotEmpty() && !can_next) {
                     can_next = true
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_next) {
+                if (s.toString().isEmpty() && can_next) {
                     can_next = false
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -117,11 +117,11 @@ class ServiceTeacherNumActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_next) {
+                if (s.toString().isNotEmpty() && !can_next) {
                     can_next = true
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_next) {
+                if (s.toString().isEmpty() && can_next) {
                     can_next = false
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -138,11 +138,11 @@ class ServiceTeacherNumActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_next) {
+                if (s.toString().isNotEmpty() && !can_next) {
                     can_next = true
                     tv_next.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_next) {
+                if (s.toString().isEmpty() && can_next) {
                     can_next = false
                     tv_next.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

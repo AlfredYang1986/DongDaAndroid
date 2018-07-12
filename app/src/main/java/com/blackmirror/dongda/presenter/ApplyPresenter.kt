@@ -27,7 +27,6 @@ class ApplyPresenter @Inject constructor(val view: ApplyContract.View?) : ApplyC
                     }
                 }, {
                     LogUtils.e(ApplyPresenter::class.java, it)
-
                     view?.onError(getErrorData(it))
                 })
 

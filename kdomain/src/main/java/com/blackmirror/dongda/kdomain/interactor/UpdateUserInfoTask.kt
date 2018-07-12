@@ -1,7 +1,7 @@
 package com.blackmirror.dongda.kdomain.interactor
 
 import android.text.TextUtils
-import com.blackmirror.dongda.data.DataConstant
+import com.blackmirror.dongda.data.NET_UNKNOWN_ERROR
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean
 import com.blackmirror.dongda.data.model.request.UpDateBean
 import com.blackmirror.dongda.data.model.response.UpdateUserInfoResponseBean
@@ -66,7 +66,7 @@ private fun trans2UpdateUserInfoBean(bean: UpdateUserInfoResponseBean?, infoBean
         infoBean.social_id = social_id
     }
 
-    infoBean.code = bean.error?.code?:DataConstant.NET_UNKNOWN_ERROR
+    infoBean.code = bean.error?.code?:NET_UNKNOWN_ERROR
     infoBean.message = bean.error?.message?:""
 
 }

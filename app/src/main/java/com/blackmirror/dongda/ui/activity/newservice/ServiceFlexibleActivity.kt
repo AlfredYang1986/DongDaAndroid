@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.StringUtils
 import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getDoubleValue
 
 class ServiceFlexibleActivity : BaseActivity() {
 
@@ -58,16 +58,16 @@ class ServiceFlexibleActivity : BaseActivity() {
             val hour_price = tet_hour_price.text.toString()
             val min_buy_hour = tet_min_buy_hour.text.toString()
 
-            if (TextUtils.isEmpty(hour_price)) {
+            if (hour_price.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入每小时服务价格!")
                 return@OnClickListener
             }
-            if (TextUtils.isEmpty(min_buy_hour)) {
+            if (min_buy_hour.isNullOrEmpty()) {
                 ToastUtils.showShortToast("请输入单次最少购买时长!")
                 return@OnClickListener
             }
 
-            val d = (StringUtils.getDoubleValue(hour_price) * 100).toLong()
+            val d = (hour_price.getDoubleValue() * 100).toLong()
 
             intent.putExtra("hour_price", d)
             intent.putExtra("min_buy_hour", min_buy_hour)
@@ -81,11 +81,11 @@ class ServiceFlexibleActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty() && !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }
@@ -108,11 +108,11 @@ class ServiceFlexibleActivity : BaseActivity() {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.toString().length != 0 && !can_save) {
+                if (s.toString().isNotEmpty()&& !can_save) {
                     can_save = true
                     tv_save.setTextColor(Color.parseColor("#FF59D5C7"))
                 }
-                if (s.toString().length == 0 && can_save) {
+                if (s.toString().isEmpty() && can_save) {
                     can_save = false
                     tv_save.setTextColor(Color.parseColor("#FFD9D9D9"))
                 }

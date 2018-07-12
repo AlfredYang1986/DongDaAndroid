@@ -13,9 +13,9 @@ import com.blackmirror.dongda.model.SafeUiBean
 
 class AddrDecInfoAdapter(protected var context: Context, private val list: List<SafeUiBean>?) : RecyclerView.Adapter<AddrDecInfoAdapter.AddrInfoViewHolder>() {
 
-    private var item:((View,Int)->Unit)?=null
+    private var item:(View,Int)->Unit={view,int->}
 
-    fun setOnCareClickListener(l:((View,Int)->Unit)?=null) {
+    fun setOnCareClickListener(l:((View,Int)->Unit)=item) {
         item=l
     }
 

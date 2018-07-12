@@ -1,7 +1,6 @@
 package com.blackmirror.dongda.data.model.response
 
-import com.blackmirror.dongda.utils.StringUtils
-
+import com.blackmirror.dongda.utils.isNumber
 import java.io.Serializable
 
 /**
@@ -57,9 +56,9 @@ class DetailInfoResponseBean : BaseResponseBean() {
             var category: String? = null
             var album: String? = null
             var service_id: String? = null
-            var service_tags: List<String>? = null
-            var operation: List<String>? = null
-            var service_images: List<ServiceImagesBean>? = null
+            var service_tags: MutableList<String>? = null
+            var operation: MutableList<String>? = null
+            var service_images: MutableList<ServiceImagesBean>? = null
 
             class LocationBean : Serializable {
                 /**
@@ -73,8 +72,8 @@ class DetailInfoResponseBean : BaseResponseBean() {
                 var location_id: String? = null
                 var address: String? = null
                 var pin: PinBean? = null
-                var location_images: List<LocationImagesBean>? = null
-                var friendliness: List<String>? = null
+                var location_images: MutableList<LocationImagesBean>? = null
+                var friendliness: MutableList<String>? = null
 
                 class PinBean : Serializable {
                     /**
@@ -123,10 +122,10 @@ class DetailInfoResponseBean : BaseResponseBean() {
                 var image: String? = null
 
                 override fun compareTo(o: ServiceImagesBean): Int {
-                    if (!StringUtils.isNumber(this.tag) || !StringUtils.isNumber(o.tag)) {
-                        return -1
+                    if (tag == null || o.tag == null || !tag!!.isNumber() || !o.tag!!.isNumber()) {
+                        -1
                     }
-                    return if (Integer.parseInt(this.tag) >= Integer.parseInt(o.tag)) {
+                    return if (tag!!.toInt() >= o.tag!!.toInt()) {
                         1
                     } else {
                         -1
