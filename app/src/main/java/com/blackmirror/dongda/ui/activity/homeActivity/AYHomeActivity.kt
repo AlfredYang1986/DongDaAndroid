@@ -228,7 +228,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
                 sendLikeData(servicesBean)
             })
         } else {
-            sportAdapter!!.setRefreshData(bean.services)
+            scienceAdapter!!.setRefreshData(bean.services)
         }
     }
 

@@ -95,9 +95,11 @@ class HomeScienceAdapter(protected var context: Context, internal var bean: Home
         } else 0
     }
 
-    fun setRefreshData(list: List<HomepageDomainBean.HomepageServicesBean.ServicesBean>) {
-        bean.services!!.clear()
-        bean.services!!.addAll(list)
+    fun setRefreshData(list: MutableList<HomepageDomainBean.HomepageServicesBean.ServicesBean>?) {
+        list?.apply {
+            bean.services?.clear()
+            bean.services?.addAll(this)
+        }
         notifyDataSetChanged()
     }
 

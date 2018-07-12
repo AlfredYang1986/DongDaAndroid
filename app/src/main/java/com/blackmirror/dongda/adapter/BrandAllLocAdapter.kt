@@ -13,9 +13,9 @@ import com.blackmirror.dongda.kdomain.model.BrandAllLocDomainBean
 class BrandAllLocAdapter(protected var context: Context, private val bean: BrandAllLocDomainBean?) : RecyclerView.Adapter<BrandAllLocAdapter.BrandAllLocHolder>() {
 
 
-    private var item:((View,Int,BrandAllLocDomainBean.LocationsBean)->Unit)?=null
+    private var item: ((View, Int, BrandAllLocDomainBean.LocationsBean) -> Unit)? = null
 
-    fun setOnItemClickListener(l:((View,Int,BrandAllLocDomainBean.LocationsBean)->Unit)?=null) {
+    fun setOnItemClickListener(l: ((View, Int, BrandAllLocDomainBean.LocationsBean) -> Unit)? = null) {
         this.item = l
     }
 
@@ -39,7 +39,7 @@ class BrandAllLocAdapter(protected var context: Context, private val bean: Brand
 
     override fun getItemCount(): Int {
 
-        return bean?.locations?.size?:0
+        return bean?.locations?.size ?: 0
 
     }
 
