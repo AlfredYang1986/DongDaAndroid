@@ -119,6 +119,114 @@
             app:layout_constraintTop_toBottomOf="@id/tv_apply_setting"
             />
 
+        <TextView
+            android:id="@+id/tv_start_push"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="开始直播"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_2"
+            />
+
+        <View
+            android:id="@+id/view_line_3"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_start_push"
+            />
+
+        <TextView
+            android:id="@+id/tv_record"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="录屏"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_3"
+            />
+
+        <View
+            android:id="@+id/view_line_4"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_record"
+            />
+
+        <TextView
+            android:id="@+id/tv_video"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="短视频"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_4"
+            />
+
+        <View
+            android:id="@+id/view_line_5"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_video"
+            />
+
+        <TextView
+            android:id="@+id/tv_live"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:foreground="?attr/selectableItemBackground"
+            android:paddingBottom="21dp"
+            android:paddingLeft="20dp"
+            android:paddingTop="22dp"
+            android:text="直播列表"
+            android:textColor="#FF404040"
+            android:textSize="15sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_5"
+            />
+
+        <View
+            android:id="@+id/view_line_6"
+            android:layout_width="0dp"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="20dp"
+            android:background="@color/line_bg_color"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_live"
+            />
+
     </android.support.constraint.ConstraintLayout>
 
 

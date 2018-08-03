@@ -67,7 +67,13 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
      */
     private fun requestPermissions() {
 
-        val permissions = arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE)
+        val permissions = arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.READ_PHONE_STATE
+        )
 
         val list = PermissionUtils.checkPermissionWithNoGranted(this@SplashActivity,
                 permissions)

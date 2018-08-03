@@ -44,6 +44,15 @@ interface Contract {
 
     }
 
+    interface UploadVideoView {
+
+        fun onUploadSuccess(bean:UploadVideoDomainBean)
+
+        fun onUploadImgSuccess(bean:UploadVideoImgDomainBean)
+
+        fun onUploadError(bean: BaseDataBean)
+    }
+
     interface LikePresenter {
 
         fun getLikeData()
@@ -66,5 +75,7 @@ interface Contract {
 
         fun likePop(service_id: String)
     }
+
+
 
 }

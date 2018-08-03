@@ -15,6 +15,11 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!--直播和播放相关-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
@@ -156,6 +161,23 @@
         </activity>
         <activity android:name=".TestActivity">
         </activity>
+        <activity
+            android:name=".ui.activity.live.LiveActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ui.activity.live.VideoDetailActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".ui.activity.live.RecordActivity">
+        </activity>
+        <activity android:name=".ui.activity.live.VideoListActivity">
+        </activity>
+        <activity android:name=".ui.activity.live.LiveListActivity">
+        </activity>
+        <activity android:name="com.mabeijianxi.smallvideorecord2.MediaRecorderActivity"/>
     </application>
 
 </manifest>

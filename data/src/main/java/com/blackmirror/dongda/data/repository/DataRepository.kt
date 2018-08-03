@@ -108,6 +108,10 @@ fun <T, R> updateUserInfo(receiver: T, block: T.() -> R): R {
     return receiver.block()
 }
 
+fun uploadVideo(path:String, upload: (String) -> Observable<UpLoadVideoResponseBean>):Observable<UpLoadVideoResponseBean>{
+    return upload(path)
+}
+
 
 
 

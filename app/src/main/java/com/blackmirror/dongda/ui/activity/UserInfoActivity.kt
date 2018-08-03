@@ -1,9 +1,14 @@
 package com.blackmirror.dongda.ui.activity
 
+import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.support.constraint.ConstraintLayout
+import android.support.v4.app.ActivityCompat
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,9 +20,18 @@ import com.blackmirror.dongda.kdomain.model.UserInfoDomainBean
 import com.blackmirror.dongda.presenter.UserInfoPresenter
 import com.blackmirror.dongda.ui.activity.apply.ApplyActivity
 import com.blackmirror.dongda.ui.activity.enrol.ChooseEnrolLocActivity
+import com.blackmirror.dongda.ui.activity.live.LiveActivity
+import com.blackmirror.dongda.ui.activity.live.LiveListActivity
+import com.blackmirror.dongda.ui.activity.live.RecordActivity
+import com.blackmirror.dongda.ui.activity.live.VideoListActivity
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.*
 import com.facebook.drawee.view.SimpleDraweeView
+import com.mabeijianxi.smallvideorecord2.JianXiCamera
+import com.mabeijianxi.smallvideorecord2.Log
+import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity
+import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig.Buidler
+import java.io.File
 
 class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.View {
 
@@ -41,6 +55,11 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
     private lateinit var cl_change_service: ConstraintLayout
     private lateinit var tv_change_to_service: TextView
     private lateinit var tv_change_service_setting: TextView
+
+    private lateinit var tv_start_push: TextView
+    private lateinit var tv_record: TextView
+    private lateinit var tv_video: TextView
+    private lateinit var tv_live: TextView
 
     private var presenter: UserInfoPresenter? = null
     private var needsRefresh: Boolean = false
@@ -77,6 +96,12 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
         cl_change_service = findViewById(R.id.cl_change_service)
         tv_change_to_service = findViewById(R.id.tv_change_to_service)
         tv_change_service_setting = findViewById(R.id.tv_change_service_setting)
+
+        //直播
+        tv_start_push = findViewById(R.id.tv_start_push)
+        tv_record = findViewById(R.id.tv_record)
+        tv_video = findViewById(R.id.tv_video)
+        tv_live = findViewById(R.id.tv_live)
     }
 
     override fun initData() {
@@ -98,6 +123,11 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
 
         tv_change_to_service.setOnClickListener(this)
         tv_change_service_setting.setOnClickListener(this)
+
+        tv_start_push.setOnClickListener(this)
+        tv_record.setOnClickListener(this)
+        tv_video.setOnClickListener(this)
+        tv_live.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -143,8 +173,152 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 startActivity(i)
                 AYApplication.addActivity(this)
             }
+            R.id.tv_start_push->{
+                checkLivePermissions()
+            }
+            R.id.tv_record->{
+                checkRecordPermissions()
+            }
+            R.id.tv_video->{
+                startActivity(Intent(this,VideoListActivity::class.java))
+            }
+            R.id.tv_live->{
+                startActivity(Intent(this,LiveListActivity::class.java))
+            }
         }
     }
+
+    private fun checkRecordPermissions() {
+        //如果是6.0以下的手机，ActivityCompat.checkSelfPermission()会始终等于PERMISSION_GRANTED，
+        // 但是，如果用户关闭了你申请的权限，ActivityCompat.checkSelfPermission(),会导致程序崩溃(java.lang
+        // .RuntimeException: Unknown exception code: 1 msg null)，
+        // 你可以使用try{}catch(){},处理异常，也可以判断系统版本，低于23就不申请权限，直接做你想做的。
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            initRecord()
+            return
+        }
+
+        val p = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+        )
+        val needsGrand = PermissionUtils.checkPermissionWithNoGrantedForArray(this, p)
+
+        if (needsGrand.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, needsGrand, AppConstant.PERMISSION_LIVE)
+        } else {
+            initRecord()
+        }
+    }
+
+    private fun checkLivePermissions() {
+        //如果是6.0以下的手机，ActivityCompat.checkSelfPermission()会始终等于PERMISSION_GRANTED，
+        // 但是，如果用户关闭了你申请的权限，ActivityCompat.checkSelfPermission(),会导致程序崩溃(java.lang
+        // .RuntimeException: Unknown exception code: 1 msg null)，
+        // 你可以使用try{}catch(){},处理异常，也可以判断系统版本，低于23就不申请权限，直接做你想做的。
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            startActivity(Intent(this, LiveActivity::class.java))
+            finish()
+            return
+        }
+
+        val p = arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.CAMERA,
+                Manifest.permission.RECORD_AUDIO
+        )
+        val needsGrand = PermissionUtils.checkPermissionWithNoGrantedForArray(this, p)
+
+        if (needsGrand.isNotEmpty()) {
+            ActivityCompat.requestPermissions(this, needsGrand, AppConstant.PERMISSION_LIVE)
+        } else {
+            startActivity(Intent(this,LiveActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun showGoSettingDialog() {
+
+        val dialog = AlertDialog.Builder(this@UserInfoActivity)
+                .setCancelable(false)
+                .setTitle(R.string.permission_denied)
+                .setMessage(R.string.permisson_denied)
+                .setPositiveButton(getString(R.string.go_permission_setting)) { dialog, which ->
+                    dialog.dismiss()
+                    DeviceUtils.gotoPermissionSetting(this@UserInfoActivity)
+                }
+                .setNegativeButton(getString(R.string.dlg_cancel)) { dialog, which ->
+                    dialog.dismiss()
+                }.create()
+        dialog.show()
+
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
+                                            grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            AppConstant.PERMISSION_LIVE -> {
+                var b = false
+                for (i in grantResults.indices) {
+
+                    if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                        LogUtils.d("xcx", permissions[i] + " granted")
+                        b = true
+                    } else {
+                        LogUtils.d("xcx", permissions[i] + " denied")
+                        b = false
+                        break
+                    }
+                }
+                if (b) {
+                    startActivity(Intent(this, LiveActivity::class.java))
+                    finish()
+                } else {
+                    showGoSettingDialog()
+                }
+            }
+            AppConstant.PERMISSION_RECORD->{
+                initRecord()
+            }
+        }
+    }
+
+    private fun initRecord() {
+//        ToastUtils.showShortToast(externalCacheDir.absolutePath)
+        Log.d("xcx","externalCacheDir: ${externalCacheDir.absolutePath}")
+
+        val path="${externalCacheDir.absolutePath}/video"
+
+        val f=File(path)
+        if (!f.exists()){
+            f.mkdirs()
+        }
+        // 设置拍摄视频缓存路径
+        JianXiCamera.setVideoCachePath("$path/")
+
+        // 初始化拍摄
+        JianXiCamera.initialize(false, null)
+
+        // 录制
+        val config = Buidler()
+                .fullScreen(true)
+                .smallVideoWidth(0)
+                .smallVideoHeight(720)
+                .recordTimeMax(6000)
+                .recordTimeMin(6000)
+                .maxFrameRate(20)
+                .videoBitrate(6000000)
+                .captureThumbnailsTime(1)
+                .build()
+
+        MediaRecorderActivity.goSmallVideoRecorder(this, RecordActivity::class.java.name,config)
+
+    }
+
 
     override fun onQueryUserInfoSuccess(bean: UserInfoDomainBean) {
         closeProcessDialog()

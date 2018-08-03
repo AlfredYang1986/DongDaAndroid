@@ -52,6 +52,9 @@ android {
             javaMaxHeapSize "4g"
         }
     }
+    repositories {
+        flatDir { dirs 'libs', '../live/libs' }
+    }
 }
 MobSDK {
     appKey "252704f3d1440"
@@ -104,7 +107,7 @@ dependencies {
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
     implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
     kapt 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
-//    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
+    //    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
     implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
     //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
@@ -112,6 +115,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation project(':kdomain')
     api 'com.android.support:multidex:1.0.3'
+    implementation project(':player_demo')
+    implementation project(':SmallVideoLib2')
 }
 repositories {
     mavenCentral()

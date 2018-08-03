@@ -38,6 +38,7 @@
     <string name="choose_head_photo">请选择头像!</string>
     <string name="permission_denied">权限拒绝</string>
     <string name="open_camera_permission_setting">请在设置->应用管理->咚哒->权限管理打开相机权限.</string>
+    <string name="permisson_denied">无法获取直播需要的权限,请在设置->应用管理->咚哒->权限管理打开权限.</string>
     <string name="go_permission_setting">设置</string>
     <string name="dlg_confirm">确定</string>
     <string name="dlg_cancel">取消</string>

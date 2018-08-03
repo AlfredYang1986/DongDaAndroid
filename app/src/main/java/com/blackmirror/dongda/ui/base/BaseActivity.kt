@@ -53,16 +53,16 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onDestroy()
     }
 
-    protected fun showProcessDialog(title: String = getString(R.string.dlg_tips), message: String = getString(R.string.dlg_processing), cancelable: Boolean = false) {
+    protected fun showProcessDialog(title: String = getString(R.string.dlg_tips), message: String = getString(R.string.dlg_processing), cancelable: Boolean = true) {
         if (!isViewValid) {
             return
         }
         if (pb == null) {
             pb = ProgressDialog(this)
         }
-        pb?.setCanceledOnTouchOutside(cancelable)//设置在点击Dialog外是否取消Dialog进度条
+        pb?.setCanceledOnTouchOutside(false)//设置在点击Dialog外是否取消Dialog进度条
         pb?.setProgressStyle(ProgressDialog.STYLE_SPINNER)// 设置进度条的形式为圆形转动的进度条
-        pb?.setCancelable(true)// 设置是否可以通过点击Back键取消
+        pb?.setCancelable(cancelable)// 设置是否可以通过点击Back键取消
         //        pb.setCanceledOnTouchOutside(false);//
         pb?.setTitle(title)
         pb?.setMessage(message)
