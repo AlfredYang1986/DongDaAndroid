@@ -3,7 +3,7 @@ package com.blackmirror.dongda.di.component;
 import com.blackmirror.dongda.di.module.LoginModule;
 import com.blackmirror.dongda.presenter.WeChatLoginPresenter;
 import com.blackmirror.dongda.ui.WeChatLoginContract;
-import com.blackmirror.dongda.ui.activity.Landing.LandingActivity;
+import com.blackmirror.dongda.ui.activity.landing.LandingActivity;
 
 import dagger.BindsInstance;
 import dagger.Component;

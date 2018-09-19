@@ -5,6 +5,8 @@ import com.blackmirror.dongda.R;
 public class AppConstant {
 
     public static final int PERMISSION_REQUEST = 10010;
+    public static final int PERMISSION_LIVE = 10010;
+    public static final int PERMISSION_RECORD = 10011;
     public static final int CHOOSE_PIC=10011;
     public static final int PICTURE_CUT=10012;
     public static final int TAKE_PHOTO=10013;

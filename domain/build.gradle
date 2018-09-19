@@ -1,9 +1,0 @@
-apply plugin: 'java-library'
-
-dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'io.reactivex.rxjava2:rxjava:' + rootProject.ext.rxJavaVersion
-}
-
-sourceCompatibility = "1.8"
-targetCompatibility = "1.8"

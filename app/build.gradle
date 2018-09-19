@@ -1,6 +1,9 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 // 添加插件
 apply plugin: "com.mob.sdk"
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android-extensions'
 
 // Create a variable called keystorePropertiesFile, and initialize it to your
 // keystore.properties file, in the rootProject folder.
@@ -29,13 +32,13 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         debug {
             //混淆
             debuggable true
-            signingConfig signingConfigs.release
         }
         release {
             buildConfigField "boolean", "LOG_DEBUG", "true" //不显示log
@@ -48,6 +51,9 @@ android {
         dexOptions {
             javaMaxHeapSize "4g"
         }
+    }
+    repositories {
+        flatDir { dirs 'libs', '../live/libs' }
     }
 }
 MobSDK {
@@ -69,9 +75,15 @@ MobSDK {
 
 }
 
+kapt {
+    generateStubs = true
+}
+
 dependencies {
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:' + rootProject.ext.constraintLayoutVersion
+    implementation 'com.android.support:support-v4:26.1.0'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     testImplementation 'junit:junit:4.12'
@@ -94,12 +106,18 @@ dependencies {
     //没有使用特殊Header，可以不加这行
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:' + rootProject.ext.SmartRefreshHeaderVersion
     implementation 'com.google.dagger:dagger:' + rootProject.ext.daggerVersion
-    annotationProcessor 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
-    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
+    kapt 'com.google.dagger:dagger-compiler:' + rootProject.ext.daggerCompilerVersion
+    //    implementation 'top.zibin:Luban:' + rootProject.ext.lubanVersion
     implementation 'com.contrarywind:Android-PickerView:' + rootProject.ext.PickerViewVersion
     //    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     //    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
-    implementation project(':domain')
     implementation project(':device')
-    implementation project(':data')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation project(':kdomain')
+    api 'com.android.support:multidex:1.0.3'
+    implementation project(':player_demo')
+    implementation project(':SmallVideoLib2')
+}
+repositories {
+    mavenCentral()
 }

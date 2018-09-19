@@ -43,6 +43,24 @@ public class PermissionUtils {
         return list;
     }
 
+    public static String[] checkPermissionWithNoGrantedForArray(AppCompatActivity activity, String[] permissionList) {
+        List<String> list = new ArrayList<>();
+        if (activity == null || permissionList == null) {
+            return new String[0];
+        }
+        for (int i = 0; i < permissionList.length; i++) {
+            if (ContextCompat.checkSelfPermission(activity, permissionList[i]) != PackageManager.PERMISSION_GRANTED) {
+                list.add(permissionList[i]);
+            }
+
+        }
+        String[] arr=new String[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            arr[i] = list.get(i);
+        }
+        return arr;
+    }
+
     public static List<String> checkPermissionAndNeedGranted(AppCompatActivity activity, String[] permissionList) {
         List<String> list = new ArrayList<>();
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){

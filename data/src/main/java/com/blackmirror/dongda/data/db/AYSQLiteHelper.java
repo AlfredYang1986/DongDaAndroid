@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean;
 
 /**
- * Created by alfredyang on 27/05/2017.
+ * Create By Ruge at 2018-06-13
  */
 public class AYSQLiteHelper extends SQLiteOpenHelper {
     private static final String DB_NAME = "dongda.sqlite";
@@ -45,16 +45,16 @@ public class AYSQLiteHelper extends SQLiteOpenHelper {
 
     public long insertProfile(UserInfoDbBean bean) {
         ContentValues cv = new ContentValues();
-        cv.put(COLUM_USER_PROFILE_IS_CURRENT, bean.is_current);
-        cv.put(COLUM_USER_PROFILE_SCREEN_NAME, bean.screen_name);
-        cv.put(COLUM_USER_PROFILE_SCREEN_PHOTO, bean.screen_photo);
-        cv.put(COLUM_USER_PROFILE_USER_ID, bean.user_id);
-        cv.put(COLUM_USER_PROFILE_AUTH_TOKEN, bean.auth_token);
+        cv.put(COLUM_USER_PROFILE_IS_CURRENT, bean.is_current());
+        cv.put(COLUM_USER_PROFILE_SCREEN_NAME, bean.getScreen_name());
+        cv.put(COLUM_USER_PROFILE_SCREEN_PHOTO, bean.getScreen_photo());
+        cv.put(COLUM_USER_PROFILE_USER_ID, bean.getUser_id());
+        cv.put(COLUM_USER_PROFILE_AUTH_TOKEN, bean.getAuth_token());
         return getWritableDatabase().insert(TABLE_USER_PROFILE, null, cv);
     }
 
     public long updateProfile(UserInfoDbBean bean) {
-        String user_id = bean.user_id;
+        String user_id = bean.getUser_id();
         deleteProfile(user_id);
         return insertProfile(bean);
     }
@@ -85,12 +85,13 @@ public class AYSQLiteHelper extends SQLiteOpenHelper {
     protected UserInfoDbBean cursor2Profile(Cursor c) {
         UserInfoDbBean bean = new UserInfoDbBean();
         if (c.moveToNext()) {
-            bean.is_current = c.getInt(c.getColumnIndex(COLUM_USER_PROFILE_IS_CURRENT));
-            bean.user_id = c.getString(c.getColumnIndex(COLUM_USER_PROFILE_USER_ID));
-            bean.auth_token = c.getString(c.getColumnIndex(COLUM_USER_PROFILE_AUTH_TOKEN));
-            bean.screen_name = c.getString(c.getColumnIndex(COLUM_USER_PROFILE_SCREEN_NAME));
-            bean.screen_photo = c.getString(c.getColumnIndex(COLUM_USER_PROFILE_SCREEN_PHOTO));
+            bean.set_current(c.getInt(c.getColumnIndex(COLUM_USER_PROFILE_IS_CURRENT)));
+            bean.setUser_id(c.getString(c.getColumnIndex(COLUM_USER_PROFILE_USER_ID)));
+            bean.setAuth_token(c.getString(c.getColumnIndex(COLUM_USER_PROFILE_AUTH_TOKEN)));
+            bean.setScreen_name( c.getString(c.getColumnIndex(COLUM_USER_PROFILE_SCREEN_NAME)));
+            bean.setScreen_photo(c.getString(c.getColumnIndex(COLUM_USER_PROFILE_SCREEN_PHOTO)));
         }
         return bean;
     }
 }
+

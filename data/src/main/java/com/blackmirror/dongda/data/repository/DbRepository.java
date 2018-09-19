@@ -5,7 +5,7 @@ import com.blackmirror.dongda.data.db.AYSQLiteHelper;
 import com.blackmirror.dongda.data.model.db.UserInfoDbBean;
 
 /**
- * Create By Ruge at 2018-05-09
+ * Create By Ruge at 2018-06-13
  */
 public class DbRepository {
     private AYSQLiteHelper helper;

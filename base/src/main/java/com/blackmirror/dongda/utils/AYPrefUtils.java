@@ -21,6 +21,24 @@ public class AYPrefUtils {
     private static final String ACCESSKEYSECRET="accessKeySecret";
     private static final String EXPIRATION="Expiration";//
     private static final String SETTING_FLAG="setting_flag";//
+    private static final String IS_PHONE_LOGIN="phone_login";//
+    private static final String IMG_UUID="img_uuid";//
+
+    public static void setImgUuid(String uuid){
+        setStringPref(AYApplication.appContext, USER_INFO,IMG_UUID,uuid);
+    }
+
+    public static String getImgUuid(){
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(IMG_UUID,"");
+    }
+
+    public static void setIsPhoneLogin(String flag){
+        setStringPref(AYApplication.appContext, USER_INFO,IS_PHONE_LOGIN,flag);
+    }
+
+    public static String getIsPhoneLogin(){
+        return getSharedPreferences(AYApplication.appContext, USER_INFO).getString(IS_PHONE_LOGIN,"");
+    }
 
     public static void setSettingFlag(String setting_flag){
         setStringPref(AYApplication.appContext, USER_INFO,SETTING_FLAG,setting_flag);
