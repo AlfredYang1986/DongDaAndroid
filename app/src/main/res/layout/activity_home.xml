@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
-     android:id="@+id/ctl_root"
+    android:id="@+id/ctl_root"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorWhiteBackground"
     android:fitsSystemWindows="true"
+    tools:context=".ui.activity.homeActivity.HomeActivity"
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -29,50 +30,38 @@
                 android:layout_height="match_parent">
 
 
-                <com.facebook.drawee.view.SimpleDraweeView
-                    app:placeholderImage="@drawable/default_avatar"
-                    android:id="@+id/sv_head_pic"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    app:actualImageScaleType="centerCrop"
-                    app:layout_constraintBottom_toBottomOf="@id/cl_tb_root"
-                    app:layout_constraintHorizontal_bias="0.042667"
-                    app:layout_constraintLeft_toLeftOf="@id/cl_tb_root"
-                    app:layout_constraintRight_toRightOf="@id/cl_tb_root"
-                    app:layout_constraintTop_toTopOf="@id/cl_tb_root"
-                    app:placeholderImageScaleType="centerCrop"
-                    app:roundAsCircle="true"
-                    />
-
                 <ImageView
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:id="@+id/iv_home_logo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/home_act_logo"
-                    app:layout_constraintBottom_toBottomOf="@id/sv_head_pic"
+                    android:background="@drawable/logo_dongda"
                     app:layout_constraintHorizontal_bias="0.451"
                     app:layout_constraintLeft_toLeftOf="@id/cl_tb_root"
-                    app:layout_constraintRight_toRightOf="@id/cl_tb_root"
-                    app:layout_constraintTop_toTopOf="@id/sv_head_pic"
+                    app:layout_constraintRight_toLeftOf="@id/tv_location"
                     />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="7dp"
-                    android:text="@string/str_beijing"
-                    android:textColor="#FF404040"
-                    android:textSize="13sp"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
                     app:layout_constraintLeft_toRightOf="@id/iv_home_logo"
+                    android:id="@+id/tv_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:text="@string/str_beijing"
+                    android:textColor="#FFB5B6BC"
+                    android:textSize="11sp"
                     />
 
                 <ImageView
                     android:id="@+id/iv_home_like"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:background="@drawable/home_act_like"
+                    android:layout_marginRight="19dp"
+                    android:background="@drawable/icon_search"
                     app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
                     app:layout_constraintRight_toRightOf="@id/cl_tb_root"
                     app:layout_constraintTop_toTopOf="@id/iv_home_logo"/>
@@ -85,279 +74,48 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        android:id="@+id/sl_home_refresh"
+    <com.blackmirror.dongda.ui.view.MyFragmentTabHost
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/fth_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
-
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cl_root"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:paddingBottom="40dp">
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/gl_content_root"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.042667"/>
-
-                <!--android:typeface="sans"
-                    android:textStyle="bold"-->
-                <TextView
-                    android:typeface="sans"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_featured_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="@string/str_featured_subject"
-                    android:textColor="#FF404040"
-                    android:textSize="28sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toTopOf="@id/cl_root"
-                    />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_featured_theme"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="18dp"
-                    app:layout_constraintLeft_toLeftOf="@id/tv_featured_title"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_featured_title"/>
-
-                <TextView
-                    android:typeface="sans"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_home_care"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="@string/str_care"
-                    android:textColor="#FF404040"
-                    android:textSize="22sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/rv_featured_theme"
-
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_care_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/str_care_dec"
-                    android:textColor="#FF737373"
-                    android:textSize="13sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_care"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_care_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/show_more"
-                    android:textColor="#FF59D5C7"
-                    android:textSize="15sp"
-                    android:layout_marginRight="18dp"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_care"
-                    />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_home_care"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_care_content"/>
+            <FrameLayout
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@android:id/tabs"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:id="@android:id/tabcontent"
+                android:layout_width="0dp"
+                android:layout_height="0dp"/>
 
 
-                <TextView
-                    android:typeface="sans"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_home_art"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="45dp"
-                    android:text="@string/str_art"
-                    android:textColor="#FF404040"
-                    android:textSize="22sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/rv_home_care"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_art_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/str_art_dec"
-                    android:textColor="#FF737373"
-                    android:textSize="13sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_art"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_art_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/show_more"
-                    android:textColor="#FF59D5C7"
-                    android:textSize="15sp"
-                    android:layout_marginRight="18dp"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_art"
-                    />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_home_art"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_art_content"/>
+            <TabWidget
+                app:layout_constraintTop_toBottomOf="@android:id/tabcontent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_weight="0"
+                android:layout_marginLeft="49dp"
+                android:layout_marginRight="49dp"
+                android:id="@android:id/tabs"
+                android:layout_width="0dp"
+                android:layout_height="49dp"
+                android:orientation="horizontal"/>
 
 
-                <TextView
-                    android:typeface="sans"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_home_sport"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:text="@string/str_sport"
-                    android:textColor="#FF404040"
-                    android:textSize="22sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/rv_home_art"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_sport_content"
-                    android:layout_width="167dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="@string/str_sport_dec"
-                    android:textColor="#FF737373"
-                    android:textSize="13sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_sport"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_sport_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/show_more"
-                    android:textColor="#FF59D5C7"
-                    android:textSize="15sp"
-                    android:layout_marginRight="18dp"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_sport"
-                    />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_home_sport"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_sport_content"/>
+        </android.support.constraint.ConstraintLayout>
 
 
-                <TextView
-                    android:typeface="sans"
-                    android:textStyle="bold"
-                    android:id="@+id/tv_home_science"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:text="@string/str_science"
-                    android:textColor="#FF404040"
-                    android:textSize="22sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/rv_home_sport"
-                    />
+    </com.blackmirror.dongda.ui.view.MyFragmentTabHost>
 
-                <TextView
-                    android:id="@+id/tv_home_science_content"
-                    android:layout_width="157dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="@string/str_science_dec"
-                    android:textColor="#FF737373"
-                    android:textSize="13sp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_science"
-                    />
-
-                <TextView
-                    android:id="@+id/tv_home_science_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/show_more"
-                    android:textColor="#FF59D5C7"
-                    android:textSize="15sp"
-                    android:layout_marginRight="18dp"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_science"
-                    />
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_home_science"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintLeft_toLeftOf="@id/gl_content_root"
-                    app:layout_constraintRight_toRightOf="@id/cl_root"
-                    app:layout_constraintTop_toBottomOf="@id/tv_home_science_content"/>
-
-
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.NestedScrollView>
-
-    </android.support.v4.widget.SwipeRefreshLayout>
-
-
-    <!--<android.support.design.widget.FloatingActionButton
-        android:src="@drawable/home_btn_nearyou"
-        app:fabSize="auto"
-        app:useCompatPadding="false"
-        android:layout_width="56dp"
-        android:layout_height="56dp"/>-->
-
-    <ImageView
-        android:background="@drawable/iv_shadow_shape"
-        android:id="@+id/iv_home_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right"
-        android:layout_marginBottom="26dp"
-        android:layout_marginRight="20dp"
-        android:src="@drawable/home_btn_nearyou"/>
 
 </android.support.design.widget.CoordinatorLayout>

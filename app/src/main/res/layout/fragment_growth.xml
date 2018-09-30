@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.GrowthFragment">
+
+    <TextView
+        android:id="@+id/tv_kid_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="41dp"
+        android:text="Kent"
+        android:textColor="#FF34384A"
+        android:textSize="26sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/iv_change_kid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/icon_change_kid"
+        app:layout_constraintBottom_toBottomOf="@id/tv_kid_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_kid_name"
+        app:layout_constraintTop_toTopOf="@id/tv_kid_name"/>
+
+
+    <TextView
+        android:id="@+id/tv_year"
+        android:layout_width="30dp"
+        android:layout_height="29dp"
+        android:layout_marginRight="2dp"
+        android:text="24"
+        android:textColor="#FFB5B6BC"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_kid_name"
+        app:layout_constraintRight_toLeftOf="@id/tv_month_week"
+        app:layout_constraintTop_toTopOf="@id/tv_kid_name"
+        />
+
+    <TextView
+        android:id="@+id/tv_month_week"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:text="8月 六"
+        android:textColor="#FFB5B6BC"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_year"
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_wiil_start"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="21dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_kid_name">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/view_line_1"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:background="#FF5464AC"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tv_will_start_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="16dp"
+                android:text="即将开始"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toRightOf="@id/view_line_1"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <View
+                android:id="@+id/view_line_2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#FFF2F2F2"
+                app:layout_constraintLeft_toRightOf="@id/view_line_1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_will_start_dec"
+                />
+
+            <TextView
+                android:id="@+id/tv_will_start_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:layout_marginLeft="14dp"
+                android:layout_marginTop="16dp"
+                android:text="26"
+                android:textColor="#FF5464AC"
+                android:textSize="22sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/view_line_1"
+                app:layout_constraintTop_toBottomOf="@id/view_line_2"
+                />
+
+            <TextView
+                android:id="@+id/tv_will_start_month"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
+                android:text="8月"
+                android:textColor="#FF5464AC"
+                android:textSize="11sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_will_start_day"
+                app:layout_constraintBottom_toBottomOf="@id/tv_will_start_day"
+                app:layout_constraintLeft_toRightOf="@id/tv_will_start_day"
+                />
+
+            <TextView
+                android:id="@+id/tv_will_start_week"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:text="五"
+                android:textColor="#FF5464AC"
+                android:textSize="11sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_will_start_day"
+                app:layout_constraintBottom_toBottomOf="@id/tv_will_start_day"
+                app:layout_constraintLeft_toRightOf="@id/tv_will_start_month"
+                />
+
+            <TextView
+                android:id="@+id/tv_will_start_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="10dp"
+                android:text="认识神奇的生命“小菌菌”"
+                android:textColor="#FF5464AC"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_will_start_week"
+                app:layout_constraintLeft_toRightOf="@id/tv_will_start_week"
+                app:layout_constraintRight_toLeftOf="@id/iv_enter_will_start"
+                />
+
+            <ImageView
+                android:id="@+id/iv_enter_will_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/icon_exp_theme_s"
+                app:layout_constraintBottom_toBottomOf="@id/tv_will_start_title"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_will_start_title"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_time_line"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="35dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_wiil_start"/>
+
+
+</android.support.constraint.ConstraintLayout>

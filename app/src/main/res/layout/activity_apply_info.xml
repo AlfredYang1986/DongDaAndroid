@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.apply.ApplyInfoActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/sys_bar_white"
+        app:contentInsetStart="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <ImageView
+                android:id="@+id/iv_home_head_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:background="@drawable/icon_back_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_home_head_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="申请报名详情"
+                android:textColor="#FF0D0D0D"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_marginBottom="43dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/cl_mp_no_shape">
+
+            <TextView
+                android:id="@+id/tv_condirm"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/tv_tl_tr_4_shape"
+                android:gravity="center"
+                android:paddingBottom="4dp"
+                android:paddingTop="4dp"
+                android:text="已确认"
+                android:textColor="#FFFFFFFF"
+                android:textSize="13sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <com.facebook.drawee.view.SimpleDraweeView
+                android:id="@+id/sv_course_photo"
+                android:layout_width="91dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="24dp"
+                app:actualImageScaleType="focusCrop"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_condirm"
+                app:roundedCornerRadius="2.87dp"
+                />
+
+            <TextView
+                android:id="@+id/tv_course_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="17dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="9dp"
+                android:text="编程"
+                android:textColor="#FF5F6270"
+                android:textSize="12sp"
+                app:layout_constraintLeft_toRightOf="@id/sv_course_photo"
+                app:layout_constraintRight_toLeftOf="@id/iv_enter_course"
+                app:layout_constraintTop_toTopOf="@id/sv_course_photo"
+                />
+
+            <TextView
+                android:id="@+id/tv_course_dec"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="STEM Meeting Up"
+                android:textColor="#FF34384A"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@id/tv_course_name"
+                app:layout_constraintRight_toLeftOf="@id/iv_enter_course"
+                app:layout_constraintTop_toBottomOf="@id/tv_course_name"
+                />
+
+            <ImageView
+                android:id="@+id/iv_enter_course"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/icon_enter_gray"
+                app:layout_constraintBottom_toBottomOf="@id/sv_course_photo"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/sv_course_photo"
+                />
+
+            <View
+                android:id="@+id/view_line_1"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="24dp"
+                android:background="#FFF2F2F2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sv_course_photo"
+                />
+
+            <TextView
+                android:id="@+id/tv_exp_date_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:text="体验时间"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/view_line_1"
+                />
+
+            <TextView
+                android:id="@+id/tv_exp_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:text="2018-07-31 14:00"
+                android:textColor="#FF5F6270"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_exp_date_dec"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_exp_date_dec"
+                />
+
+            <TextView
+                android:id="@+id/tv_exp_loc_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:text="体验场地"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_exp_date_dec"
+                />
+
+            <TextView
+                android:id="@+id/tv_exp_loc"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="42dp"
+                android:layout_marginRight="19dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="朝阳区青年路甘露园中街天鹅湾南区底商雅成三里2号楼107室"
+                android:textColor="#FF5F6270"
+                android:textSize="14sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_exp_loc_dec"
+                app:layout_constraintLeft_toRightOf="@id/tv_exp_loc_dec"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <com.blackmirror.dongda.ui.view.MyCircleView
+                android:id="@+id/mv_dash_line"
+                android:layout_width="0dp"
+                android:layout_height="14dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_exp_loc"/>
+
+            <TextView
+                android:id="@+id/tv_joiner_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="8dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:text="参与者"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mv_dash_line"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="26dp"
+                android:text="共1个"
+                android:textColor="#FFB5B6BC"
+                android:textSize="11sp"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_joiner_dec"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/tv_kid_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:singleLine="true"
+                android:text="Kent"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_joiner_dec"
+                />
+
+            <View
+                 android:id="@+id/view_line_2"
+                android:layout_width="303dp"
+                android:layout_height="1dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginTop="16dp"
+                android:background="#FFF2F2F2"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_kid_name"
+                />
+
+            <TextView
+                 android:id="@+id/tv_phone_dec"
+                app:layout_constraintTop_toBottomOf="@id/view_line_2"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginLeft="16dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="联系方式"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                app:layout_constraintRight_toRightOf="parent"
+                android:layout_marginRight="16dp"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_phone_dec"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="166 4533 8272"
+                android:textColor="#FF5F6270"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginBottom="16dp"
+                 android:id="@+id/tv_confirm_date_dec"
+                app:layout_constraintLeft_toLeftOf="@id/tv_phone_dec"
+                app:layout_constraintTop_toBottomOf="@id/tv_phone_dec"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提交时间"
+                android:textColor="#FF34384A"
+                android:textSize="14sp"
+                />
+
+            <TextView
+                android:layout_marginRight="16dp"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_confirm_date_dec"
+                 android:id="@+id/tv_confirm_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2018-07-24 11:30"
+                android:textColor="#FF5F6270"
+                android:textSize="14sp"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.constraint.ConstraintLayout>

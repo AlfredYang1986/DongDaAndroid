@@ -58,7 +58,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
     private var bean: HomepageDomainBean? = null
 
     override val layoutResId: Int
-        get() = R.layout.activity_home
+        get() = R.layout.activity_ay_home
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +76,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
 
     override fun initView() {
         ctl_root = findViewById(R.id.ctl_root)
-        sv_head_pic = findViewById(R.id.sv_head_pic)
+//        sv_head_pic = findViewById(R.id.sv_head_pic)
         rv_featured_theme = findViewById(R.id.rv_featured_theme)
         rv_home_care = findViewById(R.id.rv_home_care)
         rv_home_art = findViewById(R.id.rv_home_art)
@@ -284,11 +284,11 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
             }
             R.id.iv_home_location -> startActivity(Intent(this@AYHomeActivity, NearServiceActivity::class.java))
             R.id.iv_home_like -> startActivityForResult(Intent(this@AYHomeActivity, MyLikeActivity::class.java), AppConstant.MY_LIKE_REQUEST_CODE)
-            R.id.sv_head_pic -> {
-                //                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
-                AYApplication.addActivity(this)
-                startActivityForResult(Intent(this@AYHomeActivity, UserInfoActivity::class.java), AppConstant.ABOUT_USER_REQUEST_CODE)
-            }
+//            R.id.sv_head_pic -> {
+//                //                startActivityForResult(new Intent(AYHomeActivity.this, UserAboutMeActivity.class), AppConstant.ABOUT_USER_REQUEST_CODE);
+//                AYApplication.addActivity(this)
+//                startActivityForResult(Intent(this@AYHomeActivity, UserInfoActivity::class.java), AppConstant.ABOUT_USER_REQUEST_CODE)
+//            }
         }//                SnackbarUtils.show(ctl_root,"hahaha ");
     }
 

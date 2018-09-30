@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<!--<android.support.v7.widget.CardView
+    android:layout_marginBottom="4dp"
+    android:id="@+id/cv_wiil_start"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="21dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    >-->
+
+
+
+    <android.support.constraint.ConstraintLayout
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/sys_bar_white"
+        android:layout_marginBottom="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/view_line_1"
+            android:layout_width="2dp"
+            android:layout_height="0dp"
+            android:background="#FF5464AC"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="17dp"
+            android:text="26"
+            android:textColor="#FF5464AC"
+            android:textSize="22sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:layout_marginLeft="2dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_day"
+             android:id="@+id/tv_month"
+            app:layout_constraintLeft_toRightOf="@id/tv_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8月"
+            android:textColor="#FF5464AC"
+            android:textSize="11sp"
+            />
+
+        <TextView
+             android:id="@+id/tv_week"
+            app:layout_constraintLeft_toRightOf="@id/tv_month"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_day"
+            android:layout_marginLeft="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="五"
+            android:textColor="#FF5464AC"
+            android:textSize="11sp"
+            />
+
+        <TextView
+            android:singleLine="true"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintLeft_toRightOf="@id/tv_week"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginRight="20dp"
+             android:id="@+id/tv_content"
+            android:layout_marginLeft="24dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="去自然博物馆亲手制作标本"
+            android:textColor="#FF34384A"
+            android:textSize="14sp"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+<!--</android.support.v7.widget.CardView>-->
+</FrameLayout>

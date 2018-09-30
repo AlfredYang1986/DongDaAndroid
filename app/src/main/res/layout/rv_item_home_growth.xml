@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:layout_width="256dp"
+        android:layout_height="106dp"/>
+
+    <TextView
+        android:id="@+id/tv_day"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:text="24"
+        android:textColor="#FF5F6270"
+        android:textSize="22sp"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_month"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:text="8月"
+        android:textColor="#FF5F6270"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_day"
+        app:layout_constraintLeft_toRightOf="@id/tv_day"
+        />
+
+    <com.blackmirror.dongda.ui.view.TimeLineView
+        android:id="@+id/tlv_pl"
+        android:layout_width="6dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tv_month"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="14dp"
+        android:text="14:00"
+        android:textColor="#FFB5B6BC"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_month"
+        app:layout_constraintLeft_toRightOf="@id/tlv_pl"
+        />
+
+    <com.blackmirror.dongda.ui.view.AlignTextView
+        android:id="@+id/tv_dec"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:lines="2"
+        android:maxLines="2"
+        android:text="Kent 报名参加了生物课，期待他能感受到大自然中另一种神奇的生命"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@id/tv_time"
+        app:layout_constraintRight_toRightOf="@id/sv_photo"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
+        />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="认识神奇的生命“小菌菌”"
+        android:textColor="#FFB5B6BC"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@id/tv_time"
+        app:layout_constraintRight_toRightOf="@id/sv_photo"
+        app:layout_constraintTop_toBottomOf="@id/tv_dec"
+        />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_photo"
+        android:layout_width="0dp"
+        android:layout_height="106dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="8dp"
+        app:actualImageScaleType="focusCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@id/tv_time"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        app:roundedCornerRadius="4dp"
+        />
+
+
+</android.support.constraint.ConstraintLayout>

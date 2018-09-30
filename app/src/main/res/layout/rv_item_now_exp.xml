@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="6dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="255dp"
+        android:layout_height="wrap_content">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sv_exp_brand_logo"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="17dp"
+            app:actualImageScaleType="focusCrop"
+            app:backgroundImage="@drawable/joinnow_logo_00"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:roundedCornerRadius="2dp"/>
+
+        <TextView
+            android:id="@+id/tv_exp_project_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:text="HAYA运动馆"
+            android:textColor="#FF5F6270"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/sv_exp_brand_logo"
+            app:layout_constraintLeft_toRightOf="@id/sv_exp_brand_logo"
+            app:layout_constraintTop_toTopOf="@id/sv_exp_brand_logo"
+            />
+
+        <View
+            android:id="@+id/view_line_1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="17dp"
+            android:background="#FFF2F2F2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_exp_brand_logo"
+            />
+
+        <TextView
+            android:id="@+id/tv_course_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:text="编程"
+            android:textColor="#FF5F6270"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_1"
+            />
+
+        <TextView
+            android:id="@+id/tv_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:gravity="center"
+            android:text="·"
+            app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+            app:layout_constraintLeft_toRightOf="@id/tv_course_name"
+            app:layout_constraintTop_toTopOf="@id/tv_course_name"/>
+
+        <TextView
+            android:id="@+id/tv_age_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="3-6"
+            android:textColor="#FF5F6270"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+            app:layout_constraintLeft_toRightOf="@id/tv_point"
+            app:layout_constraintTop_toTopOf="@id/tv_course_name"
+            />
+
+        <TextView
+            android:id="@+id/tv_age_unit"
+            android:layout_width="11dp"
+            android:layout_height="16dp"
+            android:layout_marginLeft="2dp"
+            android:text="岁"
+            android:textColor="#FF5F6270"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+            app:layout_constraintLeft_toRightOf="@id/tv_age_range"
+            app:layout_constraintTop_toTopOf="@id/tv_course_name"
+            />
+
+        <TextView
+            android:id="@+id/tv_course_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="从侧手翻到小超人"
+            android:textColor="#FF34384A"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_course_name"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_course_adv_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/tv_course_adv_shape"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:text="趣味教学"
+            android:textColor="#FF359EAE"
+            android:textSize="13sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/tv_course_adv_2"
+            app:layout_constraintTop_toBottomOf="@id/tv_course_dec"
+            />
+
+        <TextView
+            android:id="@+id/tv_course_adv_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tv_course_adv_shape"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:text="自主研发"
+            android:textColor="#FF359EAE"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_course_adv_1"
+            app:layout_constraintLeft_toRightOf="@id/tv_course_adv_1"
+            app:layout_constraintRight_toLeftOf="@id/tv_course_adv_3"
+            app:layout_constraintTop_toTopOf="@id/tv_course_adv_1"
+            />
+
+        <TextView
+            android:id="@+id/tv_course_adv_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/tv_course_adv_shape"
+            android:paddingBottom="4dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="4dp"
+            android:text="进口教具"
+            android:textColor="#FF359EAE"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_course_adv_1"
+            app:layout_constraintLeft_toRightOf="@id/tv_course_adv_2"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_course_adv_1"
+            />
+
+        <ImageView
+            android:id="@+id/iv_loc"
+            android:layout_width="11dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/icon_location"
+            app:layout_constraintBottom_toBottomOf="@id/tv_course_loc"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_course_loc"/>
+
+        <TextView
+            android:id="@+id/tv_course_loc"
+            android:layout_width="40dp"
+            android:layout_height="18dp"
+            android:layout_marginBottom="17dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="25dp"
+            android:text="朝阳区"
+            android:textColor="#FFB5B6BC"
+            android:textSize="13sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/iv_loc"
+            app:layout_constraintTop_toBottomOf="@id/tv_course_adv_1"
+            />
+
+        <TextView
+            android:id="@+id/tv_now_order"
+            android:layout_width="56dp"
+            android:layout_height="20dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="4dp"
+            android:text="立即预约"
+            android:textColor="#FFF47059"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/iv_order_icon"
+            />
+
+        <ImageView
+            android:id="@+id/iv_order_icon"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/icon_enter_gray"
+            app:layout_constraintBottom_toBottomOf="@id/tv_now_order"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_now_order"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v7.widget.CardView>

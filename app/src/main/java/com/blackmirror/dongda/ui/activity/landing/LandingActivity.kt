@@ -3,8 +3,8 @@ package com.blackmirror.dongda.ui.activity.landing
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
+import android.support.constraint.ConstraintLayout
 import android.text.TextUtils
-import android.widget.TextView
 import cn.sharesdk.framework.Platform
 import cn.sharesdk.framework.PlatformActionListener
 import cn.sharesdk.framework.ShareSDK
@@ -29,8 +29,8 @@ import java.util.*
 class LandingActivity : BaseActivity(), WeChatLoginContract.View {
 
 
-    private lateinit var tv_phone_login: TextView
-    private lateinit var tv_wechat_login: TextView
+    private lateinit var cl_phone_login: ConstraintLayout
+    private lateinit var cl_wechat_login: ConstraintLayout
     private var errorDb: Disposable? = null
     private var cancelDb: Disposable? = null
     private var presenter: WeChatLoginPresenter? = null
@@ -53,20 +53,20 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
     }
 
     override fun initView() {
-        tv_phone_login = findViewById(R.id.tv_phone_login)
-        tv_wechat_login = findViewById(R.id.tv_wechat_login)
+        cl_phone_login = findViewById(R.id.tv_phone_login)
+        cl_wechat_login = findViewById(R.id.tv_wechat_login)
     }
 
     override fun initData() {}
 
     override fun initListener() {
 
-        tv_phone_login.setOnClickListener {
+        cl_phone_login.setOnClickListener {
             val intent = Intent(this@LandingActivity, PhoneInputActivity::class.java)
             startActivity(intent)
         }
 
-        tv_wechat_login.setOnClickListener { weChatLogin() }
+        cl_wechat_login.setOnClickListener { weChatLogin() }
 
     }
 
@@ -178,7 +178,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
         closeProcessDialog()
         LogUtils.d("LandingActivity wechat failed ")
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(tv_phone_login, bean.message)
+            SnackbarUtils.show(cl_phone_login, bean.message)
             return
         }
         if (bean.code == AppConstant.UPLOAD_WECHAT_ERROR) {

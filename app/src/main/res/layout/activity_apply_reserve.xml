@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bar_white"
+    tools:context=".ui.activity.apply.ApplyReserveActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/sys_bar_white"
+        app:contentInsetStart="0dp"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+
+            <ImageView
+                android:id="@+id/iv_home_head_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="9dp"
+                android:background="@drawable/icon_back_dark"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_home_head_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="申请预约"
+                android:textColor="#FF0D0D0D"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tv_apply_loc_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center"
+        android:text="预约场地"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tb_toolbar"
+        />
+
+    <TextView
+        android:id="@+id/tv_choice_loc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35.4dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="请选择"
+        android:textColor="#FFDFE0E3"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@id/tv_apply_loc_dec"
+        app:layout_constraintRight_toLeftOf="@id/iv_choice_loc"
+        app:layout_constraintTop_toTopOf="@id/tv_apply_loc_dec"
+        />
+
+    <ImageView
+        android:id="@+id/iv_choice_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/icon_enter_gray"
+        app:layout_constraintBottom_toBottomOf="@id/tv_apply_loc_dec"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_apply_loc_dec"
+        />
+
+    <TextView
+        android:id="@+id/tv_apply_date_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginLeft="20dp"
+        android:gravity="center_vertical"
+        android:text="预约日期"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_apply_loc_dec"
+        />
+
+    <TextView
+        android:id="@+id/tv_apply_date"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="35.4dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:ellipsize="end"
+        android:gravity="right"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="请选择"
+        android:textColor="#FFDFE0E3"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@id/tv_apply_date_dec"
+        app:layout_constraintRight_toLeftOf="@id/iv_exp_date"
+        app:layout_constraintTop_toTopOf="@id/tv_apply_date_dec"
+        />
+
+    <ImageView
+        android:id="@+id/iv_exp_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/icon_enter_gray"
+        app:layout_constraintBottom_toBottomOf="@id/tv_apply_date_dec"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_apply_date_dec"
+        />
+
+    <View
+        android:id="@+id/view_line_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="7dp"
+        android:background="#FFF2F2F2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_apply_date_dec"
+        />
+
+    <TextView
+        android:id="@+id/tv_child_info_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:gravity="center_vertical"
+        android:text="孩子信息"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@id/view_line_1"
+        app:layout_constraintTop_toBottomOf="@id/view_line_1"
+        />
+
+
+    <ImageView
+        android:id="@+id/iv_add_child_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/icon_add_child_info"
+        app:layout_constraintBottom_toBottomOf="@id/tv_child_info_dec"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_child_info_dec"/>
+
+    <TextView
+        android:id="@+id/tv_add_child_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:text="添加孩子"
+        android:textColor="#FF5464AC"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_child_info_dec"
+        app:layout_constraintRight_toLeftOf="@id/iv_add_child_info"
+        app:layout_constraintTop_toTopOf="@id/tv_child_info_dec"
+        />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_child_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_child_info_dec"/>
+
+
+    <View
+        android:id="@+id/view_line_2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="7dp"
+        android:background="#FFF2F2F2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_child_info"
+        />
+
+    <TextView
+        android:id="@+id/tv_cellphone_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="52dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:text="联系方式"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toLeftOf="@id/view_line_2"
+        app:layout_constraintTop_toBottomOf="@id/view_line_2"
+        />
+
+    <TextView
+        android:id="@+id/tv_cellphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:text="188 4345 6576"
+        android:textColor="#FF5F6270"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_cellphone_dec"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_cellphone_dec"
+        />
+
+    <Button
+         android:id="@+id/btn_commit"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/bt_apply_selector"
+        android:text="提交"
+        android:textColor="@color/font_white"
+        android:textSize="17sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+
+</android.support.constraint.ConstraintLayout>

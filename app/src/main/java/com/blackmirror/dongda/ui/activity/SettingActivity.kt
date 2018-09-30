@@ -1,13 +1,9 @@
 package com.blackmirror.dongda.ui.activity
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
-import android.support.constraint.ConstraintLayout
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import cn.sharesdk.framework.ShareSDK
 import cn.sharesdk.wechat.friends.Wechat
 import com.blackmirror.dongda.R
@@ -27,13 +23,7 @@ import java.util.concurrent.TimeUnit
 
 class SettingActivity : BaseActivity(), View.OnClickListener {
 
-    private lateinit var iv_back: ImageView
-    private lateinit var tv_change_order_mode: TextView
-    private lateinit var tv_clear_cache: TextView
-    private lateinit var tv_cache_size: TextView
-    private lateinit var tv_logout: TextView
-    private lateinit var iv_anim: ImageView
-    private lateinit var cl_content: ConstraintLayout
+
 
     private var flag: Int = 0
     private var disposable: Disposable? = null
@@ -49,44 +39,22 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
     }
 
     override fun initView() {
-        iv_back = findViewById(R.id.iv_back)
-        tv_change_order_mode = findViewById(R.id.tv_change_order_mode)
-        tv_clear_cache = findViewById(R.id.tv_clear_cache)
-        tv_cache_size = findViewById(R.id.tv_cache_size)
-        tv_logout = findViewById(R.id.tv_logout)
-        iv_anim = findViewById(R.id.iv_anim)
-        cl_content = findViewById(R.id.cl_content)
+
     }
 
     override fun initData() {
-        val path = AYApplication.getAppContext().externalCacheDir!!.absolutePath
-        val size = FileUtils.getFileOrFilesSize(path)
-        flag = intent.getIntExtra("flag", 0)
-        if (flag == 0 || flag == 3) {//不是服务提供者 或者服务者已切换到预定模式
-            tv_change_order_mode.visibility = View.GONE
-        } else if (flag == 1) {
-            tv_change_order_mode.visibility = View.VISIBLE
-        }
-        tv_cache_size.text = "${size}MB"
+
     }
 
     override fun initListener() {
-        iv_back.setOnClickListener(this)
-        tv_change_order_mode.setOnClickListener(this)
-        tv_clear_cache.setOnClickListener(this)
-        tv_logout.setOnClickListener(this)
+
     }
 
     override fun onClick(v: View) {
-        when (v.id) {
-            R.id.iv_back -> finish()
-            R.id.tv_change_order_mode -> orderMode()
-            R.id.tv_clear_cache -> clearAllCache()
-            R.id.tv_logout -> showLogOutDialog()
-        }
+
     }
 
-    private fun orderMode() {
+    /*private fun orderMode() {
 
         // 通过逐帧动画的资源文件获得AnimationDrawable示例
         animationDrawable = resources.getDrawable(
@@ -115,7 +83,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                     }
                 }
 
-    }
+    }*/
 
     private fun clearAllCache() {
         showProcessDialog()
@@ -133,7 +101,6 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                     ToastUtils.showShortToast("清除成功!")
                     val path = AYApplication.getAppContext().externalCacheDir!!.path
                     val size = FileUtils.getFileOrFilesSize(path)
-                    tv_cache_size.text = "${size}MB"
                 })
 
     }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_featured_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        app:roundedCornerRadius="4dp"
+        android:id="@+id/sv_recommend_photo"
+        android:layout_width="191dp"
+        android:layout_height="118dp"
+        app:actualImageScaleType="focusCrop"
+        app:placeholderImage="@mipmap/hot_00"
+        app:placeholderImageScaleType="focusCrop"
+        />
+
+    <ImageView
+        android:id="@+id/iv_recommend_love"
+        android:layout_width="22dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="13dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/icon_loves_s_normal"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/tv_brand_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="乐高"
+        android:textColor="#FF5F6270"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/sv_recommend_photo"
+        />
+
+    <TextView
+        android:id="@+id/tv_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:gravity="center"
+        android:text="·"
+        app:layout_constraintBottom_toBottomOf="@id/tv_brand_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_brand_name"
+        app:layout_constraintTop_toTopOf="@id/tv_brand_name"/>
+
+    <TextView
+        android:id="@+id/tv_age_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:text="3-6"
+        android:textColor="#FF5F6270"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_brand_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_point"
+        app:layout_constraintTop_toTopOf="@id/tv_brand_name"
+        />
+
+    <TextView
+        android:id="@+id/tv_age_unit"
+        android:layout_width="11dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="2dp"
+        android:text="岁"
+        android:textColor="#FF5F6270"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_brand_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_age_range"
+        app:layout_constraintTop_toTopOf="@id/tv_brand_name"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:text="凯基乐高创意探索课"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintTop_toBottomOf="@id/tv_brand_name"
+        />
+
+
+</android.support.constraint.ConstraintLayout>
+
+

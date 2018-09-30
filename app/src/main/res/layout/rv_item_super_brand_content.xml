@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_super_photo"
+        android:layout_width="163dp"
+        android:layout_height="101dp"
+        app:actualImageScaleType="focusCrop"
+        app:placeholderImage="@drawable/super_00"
+        app:placeholderImageScaleType="focusCrop"
+        app:roundedCornerRadius="4dp"/>
+
+    <ImageView
+        android:id="@+id/iv_super_love"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="9dp"
+        android:layout_marginTop="11dp"
+        android:background="@drawable/icon_love_m_normal"
+        app:layout_constraintRight_toRightOf="@id/sv_super_photo"
+        app:layout_constraintTop_toTopOf="@id/sv_super_photo"/>
+
+    <TextView
+        android:id="@+id/tv_course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="编程"
+        android:textColor="#FF5F6270"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sv_super_photo"
+        />
+
+    <TextView
+        android:id="@+id/tv_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:gravity="center"
+        android:text="·"
+        app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_course_name"
+        app:layout_constraintTop_toTopOf="@id/tv_course_name"/>
+
+    <TextView
+        android:id="@+id/tv_age_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:text="3-6"
+        android:textColor="#FF5F6270"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_point"
+        app:layout_constraintTop_toTopOf="@id/tv_course_name"
+        />
+
+    <TextView
+        android:id="@+id/tv_age_unit"
+        android:layout_width="11dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="2dp"
+        android:text="岁"
+        android:textColor="#FF5F6270"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_age_range"
+        app:layout_constraintTop_toTopOf="@id/tv_course_name"
+        />
+
+    <TextView
+         android:id="@+id/tv_brand_course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:text="UTC 击投球进阶训练"
+        android:textColor="#FF34384A"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_course_name"
+        />
+
+</android.support.constraint.ConstraintLayout>

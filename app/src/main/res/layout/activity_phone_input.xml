@@ -1,101 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_phone_input"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:background="@color/landing_activity_background"
-        android:orientation="vertical"
-        tools:context=".ui.activity.landing.PhoneInputActivity">
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tool"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activity.landing.PhoneInputActivity">
+
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="9dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="9dp"
+        android:layout_marginTop="14dp"
+        android:src="@drawable/icon_back_black"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
 
     <TextView
-            android:text="@string/str_your_phone_dec"
+        android:id="@+id/tv_phone_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="30dp"
+        android:text="手机号登录"
+        android:textColor="#FF34384A"
+        android:textSize="22sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_back"
+        />
+
+    <TextView
+        android:id="@+id/tv_country_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:text="+86"
+        android:textColor="#FF5F6270"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/fl_phone_num"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/fl_phone_num"
+        />
+
+
+    <FrameLayout
+        android:id="@+id/fl_phone_num"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="42dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintLeft_toRightOf="@id/tv_country_code"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_phone_dec"
+        >
+
+        <android.support.design.widget.TextInputEditText
+
+            android:id="@+id/tet_phone_no"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="24sp"
-            android:textColor="@android:color/white"
-            android:gravity="center"/>
+            android:layout_height="21dp"
+            android:background="@null"
+            android:hint="请输入手机号"
+            android:maxLength="16"
+            />
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/view_line_1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="12dp"
+        android:background="#FFE0E0E0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fl_phone_num"
+        />
+
+    <TextView
+        android:id="@+id/tv_login_next"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="52dp"
+        android:layout_marginRight="52dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/btn_login_bg"
+        android:gravity="center"
+        android:text="下一步"
+        android:textColor="@color/font_white"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_line_1"/>
 
 
-    <LinearLayout
-            android:background="@android:color/white"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_margin="36dip"
-            android:layout_height="36dip">
+    <TextView
+        android:id="@+id/tv_s_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="登录即代表我同意用户"
+        android:textColor="#FFB5B6BC"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/tv_s_content"
+        />
 
-        <TextView
-                android:text="@string/phone_input_country_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-
-        <EditText
-            android:digits="1234567890"
-            android:maxLength="11"
-            android:inputType="phone|number"
-                android:id="@+id/phone_edit_text"
-                android:layout_width="fill_parent"
-                android:background="@android:color/white"
-                android:layout_height="36dip"
-                android:padding="5dip"
-                android:textColorHint="#AAAAAA"
-                android:textSize="15dip"
-                android:maxLines="1"
-                android:hint="@string/phone_input_hint_phone_number" />
-
-    </LinearLayout>
-
-    <LinearLayout
-            android:orientation="horizontal"
-            android:background="@android:color/white"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="36dip"
-            android:layout_marginRight="36dip"
-            android:layout_height="36dip">
-
-        <EditText
-            android:digits="1234567890"
-            android:maxLength="8"
-            android:inputType="phone|number"
-                android:id="@+id/code_edit_text"
-                android:layout_width="wrap_content"
-                android:layout_weight="3"
-                android:background="@android:color/white"
-                android:layout_height="36dip"
-                android:padding="5dip"
-                android:textColorHint="#AAAAAA"
-                android:textSize="15dip"
-                android:maxLines="1"
-                android:hint="@string/phone_input_hint_validate_code" />
-
-        <Button
-                android:id="@+id/request_sms_code"
-                android:background="@android:color/white"
-                android:text="@string/phone_input_btn_action_query_code"
-                android:layout_width="wrap_content"
-                android:textColor="#9b9b9b"
-                android:layout_weight="1"
-                android:layout_height="36dip"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_s_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="服务条款及隐私协议"
+        android:textColor="#00d1c1"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/tv_s_dec"
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
 
-        <Button
-            android:layout_gravity="center"
-            android:background="@drawable/btn_login_selector"
-            android:layout_marginLeft="36dip"
-            android:layout_marginRight="36dip"
-            android:layout_marginTop="30dip"
-            android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:id="@+id/landing_phone_input_next_step"
-                android:text="@string/next_step" />
-
-
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

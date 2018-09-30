@@ -2,9 +2,12 @@ package com.blackmirror.dongda.ui.activity.landing
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
 import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import com.blackmirror.dongda.DongdaApplication
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean
@@ -27,10 +30,16 @@ import java.util.concurrent.TimeUnit
 
 class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
 
+    private lateinit var iv_back: ImageView
+    private lateinit var tet_phone_no: TextInputEditText
+    private lateinit var tv_login_next: TextView
+
+    //delete
     private lateinit var et_phone: EditText
     private lateinit var et_code: EditText
     private lateinit var sms_code: Button
     private lateinit var next_step: Button
+
     private var mSms_disposable: Disposable? = null
     private var bean: SendSmsKdBean? = null
     private var presenter: PhoneLoginPresenter? = null
@@ -53,10 +62,9 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     }
 
     override fun initView() {
-        et_phone = findViewById(R.id.phone_edit_text)
-        et_code = findViewById(R.id.code_edit_text)
-        sms_code = findViewById(R.id.request_sms_code)
-        next_step = findViewById(R.id.landing_phone_input_next_step)
+        iv_back = findViewById(R.id.iv_back)
+        tet_phone_no = findViewById(R.id.tet_phone_no)
+        tv_login_next = findViewById(R.id.tv_login_next)
     }
 
     override fun initData() {
@@ -65,10 +73,10 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
 
     override fun initListener() {
 
-        sms_code.setOnClickListener {
+        tv_login_next.setOnClickListener {
             LogUtils.d("request SMS code from server")
 
-            val input_phone = et_phone.text.toString()
+            val input_phone = tet_phone_no.text.toString()
 
             if (input_phone.isNullOrEmpty()) {
                 ToastUtils.showShortToast(getString(R.string.phone_not_empty))

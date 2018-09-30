@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cl_experience_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="24dp"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardCornerRadius="4dp"
+    app:cardElevation="6dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    >
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="168dp"
+        android:layout_height="263dp">
+
+        <com.facebook.drawee.view.SimpleDraweeView
+            android:id="@+id/sv_experience_photo"
+            android:layout_width="168dp"
+            android:layout_height="263dp"
+            app:actualImageScaleType="focusCrop"
+            app:placeholderImage="@drawable/home_event_00"
+            app:placeholderImageScaleType="focusCrop"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_exp_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:text="26"
+            android:textColor="#FFFFFFFF"
+            android:textSize="26sp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_exp_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="8月"
+            android:textColor="#FFFFFFFF"
+            android:textSize="11sp"
+            app:layout_constraintRight_toRightOf="@id/tv_exp_day"
+            app:layout_constraintTop_toBottomOf="@id/tv_exp_day"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_exp_category"
+            android:layout_width="59dp"
+            android:layout_height="22dp"
+            android:layout_marginTop="161dp"
+            android:background="#FF5464AC"
+            android:gravity="center"
+            android:text="展览"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+
+        <TextView
+            android:id="@+id/tv_exp_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:text="小小摄影家邀请展"
+            android:textColor="#FFFFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_exp_category"
+            />
+
+        <ImageView
+            android:id="@+id/iv_exp_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/home_experience_icon_location"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_exp_title"
+            />
+
+        <TextView
+            android:id="@+id/tv_exp_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="16dp"
+            android:text="朝阳区"
+            android:textColor="#FFFFFFFF"
+            android:textSize="13sp"
+            app:layout_constraintLeft_toRightOf="@id/iv_exp_loc"
+            app:layout_constraintTop_toBottomOf="@id/tv_exp_title"
+            />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v7.widget.CardView>
+

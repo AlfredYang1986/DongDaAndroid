@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <!--直播和播放相关-->
+    <!-- 直播和播放相关 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
@@ -51,12 +51,15 @@
             android:name="com.amap.api.v2.apikey"
             android:value="4485c16a40931a555ff00c0bacdbf6e1"/>
 
-        <activity android:name=".ui.activity.SplashActivity">
+        <activity android:name=".ui.activity.landing.InputCodeActivity">
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+            -->
         </activity>
         <activity android:name=".ui.activity.homeActivity.AYHomeActivity">
         </activity>
@@ -178,6 +181,61 @@
         <activity android:name=".ui.activity.live.LiveListActivity">
         </activity>
         <activity android:name="com.mabeijianxi.smallvideorecord2.MediaRecorderActivity"/>
+        <!--
+        <activity android:name=".ui.activity.landing.InputCodeActivity">
+        </activity>
+        -->
+        <activity android:name=".ui.activity.homeActivity.HomeActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            -->
+        </activity>
+        <activity android:name=".ui.activity.homeActivity.SearchCourseActivity">
+        </activity>
+        <activity android:name=".ui.activity.EventDetailActivity">
+        </activity>
+        <activity android:name=".ui.activity.CourseDetailActivity">
+        </activity>
+        <activity android:name=".ui.activity.BrandDetailActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyRegActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            -->
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyReserveActivity">
+        </activity>
+        <activity android:name=".ui.activity.WillStartActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            -->
+        </activity>
+        <activity android:name=".ui.activity.MyCollectActivity">
+        </activity>
+        <activity android:name=".ui.activity.apply.ApplyInfoActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.activity.KidInfoActivity">
+        </activity>
     </application>
 
 </manifest>

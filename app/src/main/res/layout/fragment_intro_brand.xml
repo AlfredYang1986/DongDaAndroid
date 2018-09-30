@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragment.IntroBrandFragment">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_found_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            android:text="成立时间"
+            android:textColor="#FF34384A"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+        <TextView
+            android:id="@+id/tv_found_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:text="2013年"
+            android:textColor="#FF5F6270"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@id/tv_found_dec"
+            app:layout_constraintLeft_toRightOf="@id/tv_found_dec"
+            app:layout_constraintTop_toTopOf="@id/tv_found_dec"
+            />
+
+        <TextView
+            android:id="@+id/tv_found_story_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="22dp"
+            android:text="初心故事"
+            android:textColor="#FF34384A"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_found_dec"
+            />
+
+        <com.blackmirror.dongda.ui.view.AlignTextView
+            android:id="@+id/tv_found_story"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:text="由经验丰富的欧美专业外教团队及国内少儿教育专家联合负责课程研发和授课；与美国常青藤暑期院校联盟等众多国外大学、研究单位和教育专家合作课程，推出创新素质模块化课程。"
+            android:textColor="#FF5F6270"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_found_story_dec"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_found_story_dec"
+            />
+
+        <View
+            android:id="@+id/view_line_1"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="24dp"
+            android:background="#FFE5E5E5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_found_story"
+            />
+
+        <TextView
+            android:id="@+id/tv_teacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            android:text="师资阵容"
+            android:textColor="#FF34384A"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_1"
+            />
+
+        <com.blackmirror.dongda.ui.view.AlignTextView
+            android:id="@+id/tv_teacher_dec"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="8dp"
+            android:text="教师团队均获硕士及博士学历并在科研领域行业中从业5年以上 "
+            android:textColor="#FF5F6270"
+            android:textSize="14sp"
+            app:layout_constraintLeft_toLeftOf="@id/tv_teacher"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher"
+            />
+
+        <View
+            android:id="@+id/view_line_2"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="24dp"
+            android:background="#FFE5E5E5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_teacher_dec"
+            />
+
+        <TextView
+            android:id="@+id/tv_teach_hornor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="24dp"
+            android:text="教学成就"
+            android:textColor="#FF34384A"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_line_2"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_teach_hornor"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_teach_hornor"/>
+
+        <View
+            android:id="@+id/viewline_3"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="24dp"
+            android:background="#FFE5E5E5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_teach_hornor"
+            />
+
+        <TextView
+            android:id="@+id/tv_zizhi_dec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="资质认证"
+            android:textColor="#FF34384A"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="@id/viewline_3"
+            app:layout_constraintTop_toBottomOf="@id/viewline_3"
+            />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_zizhi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="106dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_zizhi_dec"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v4.widget.NestedScrollView>

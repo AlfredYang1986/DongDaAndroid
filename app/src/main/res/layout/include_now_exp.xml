@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+     android:id="@+id/cl_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/tv_now_exp_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="40dp"
+        android:text="即刻体验"
+        android:textColor="#FF34384A"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="@id/cl_root"
+        app:layout_constraintTop_toBottomOf="@id/rv_home_hot_recommend"
+        />
+
+    <TextView
+        android:id="@+id/tv_now_exp_refresh"
+        android:layout_width="42dp"
+        android:layout_height="20dp"
+        android:layout_marginRight="9dp"
+        android:text="换一换"
+        android:textColor="#FF5464AC"
+        android:textSize="14sp"
+        app:layout_constraintRight_toLeftOf="@id/iv_now_exp_refresh"
+        app:layout_constraintTop_toTopOf="@id/tv_now_exp_dec"
+        />
+
+    <ImageView
+        android:id="@+id/iv_now_exp_refresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="21dp"
+        android:background="@drawable/home_icon_shift"
+        app:layout_constraintRight_toRightOf="@id/cl_root"
+        app:layout_constraintTop_toTopOf="@id/tv_now_exp_dec"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="18dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@id/cl_root"
+        app:layout_constraintRight_toRightOf="@id/cl_root"
+        app:layout_constraintTop_toBottomOf="@id/tv_now_exp_dec"/>
+
+</android.support.constraint.ConstraintLayout>

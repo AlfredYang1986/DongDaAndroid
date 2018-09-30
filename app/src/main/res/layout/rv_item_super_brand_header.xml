@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_brand_logo"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="23dp"
+        app:actualImageScaleType="focusCrop"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderImage="@drawable/logo_super"
+        app:placeholderImageScaleType="focusCrop"
+        app:roundedCornerRadius="4dp"/>
+
+    <TextView
+        android:id="@+id/tv_course_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="5dp"
+        android:text="青少年棒球场"
+        android:textColor="#FF242800"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toRightOf="@id/sv_brand_logo"
+        app:layout_constraintTop_toTopOf="@id/sv_brand_logo"
+        />
+
+    <TextView
+        android:id="@+id/tv_course_dec"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="15dp"
+        android:text="「自由驰骋这片属于你的草地」"
+        android:textColor="#FF5F6270"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@id/sv_brand_logo"
+        app:layout_constraintLeft_toRightOf="@id/sv_brand_logo"/>
+
+</android.support.constraint.ConstraintLayout>

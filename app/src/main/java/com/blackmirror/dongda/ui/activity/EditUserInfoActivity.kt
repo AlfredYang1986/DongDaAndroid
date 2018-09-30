@@ -13,23 +13,16 @@ import android.net.Uri
 import android.os.Build
 import android.provider.DocumentsContract
 import android.provider.MediaStore
-import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.TextInputEditText
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
-import android.text.TextUtils
 import android.view.View
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.base.AYApplication
 import com.blackmirror.dongda.di.component.DaggerEditUserInfoComponent
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.kdomain.model.UpdateUserInfoBean
-import com.blackmirror.dongda.kdomain.model.UpdateUserInfoDomainBean
 import com.blackmirror.dongda.presenter.UserInfoPresenter
 import com.blackmirror.dongda.ui.Contract
 import com.blackmirror.dongda.ui.base.BaseActivity
@@ -43,16 +36,6 @@ import java.io.IOException
 
 class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.NameInputView {
 
-    private lateinit var ctl_edit_root: CoordinatorLayout
-    private lateinit var iv_edit_user_back: ImageView
-    private lateinit var tv_save_user_info: TextView
-    private lateinit var iv_take_photo: ImageView
-    private lateinit var sv_user_photo: SimpleDraweeView
-    private lateinit var tv_user_about_me: TextView
-    private lateinit var tl_service_name: FrameLayout
-    private lateinit var tl_service_dec: FrameLayout
-    private lateinit var tet_user_name: TextInputEditText
-    private lateinit var tet_user_dec: TextInputEditText
 
     private var input_name: String? = null
     private var input_dec: String? = null
@@ -89,43 +72,30 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
     }
 
     override fun initView() {
-        ctl_edit_root = findViewById(R.id.ctl_edit_root)
-        iv_edit_user_back = findViewById(R.id.iv_edit_user_back)
-        tv_save_user_info = findViewById(R.id.tv_save_user_info)
-        iv_take_photo = findViewById(R.id.iv_take_photo)
-        sv_user_photo = findViewById(R.id.sv_user_photo)
-        tv_user_about_me = findViewById(R.id.tv_user_about_me)
-        tl_service_name = findViewById(R.id.tl_service_name)
-        tl_service_dec = findViewById(R.id.tl_service_dec)
-        tet_user_name = findViewById(R.id.tet_user_name)
-        tet_user_dec = findViewById(R.id.tet_user_dec)
+
     }
 
     override fun initData() {
-        sv_user_photo.setImageURI(OSSUtils.getSignedUrl(screen_photo))
-        tet_user_name.setText(screen_name)
-        tet_user_dec.setText(description)
+
     }
 
     override fun initListener() {
-        iv_edit_user_back.setOnClickListener(this)
-        tv_save_user_info.setOnClickListener(this)
-        iv_take_photo.setOnClickListener(this)
+
     }
 
 
     override fun onClick(view: View) {
         when (view.id) {
-            R.id.iv_edit_user_back -> {
+           /* R.id.iv_edit_user_back -> {
                 setResult(if (needsRefresh) Activity.RESULT_OK else Activity.RESULT_CANCELED, intent.putExtra("img_url", img_url))
                 AYApplication.finishActivity(this)
             }
             R.id.tv_save_user_info -> updateUserInfo()
-            R.id.iv_take_photo -> checkCameraPermission()
+            R.id.iv_take_photo -> checkCameraPermission()*/
         }
     }
 
-    private fun updateUserInfo() {
+    /*private fun updateUserInfo() {
         input_name = tet_user_name.text.toString().trim { it <= ' ' }
         input_dec = tet_user_dec.text.toString().trim { it <= ' ' }
         if (TextUtils.isEmpty(input_name)) {
@@ -152,7 +122,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
             bean.json = json
             presenter?.updateUserInfo(bean)
         }
-    }
+    }*/
 
     override fun onUpdateUserInfoSuccess(bean: UpdateUserInfoBean) {
         closeProcessDialog()
@@ -165,12 +135,12 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
     }
 
     override fun onError(bean: BaseDataBean) {
-        closeProcessDialog()
+        /*closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
             SnackbarUtils.show(ctl_edit_root, bean.message)
         } else {
             ToastUtils.showShortToast("${bean.message}(${bean.code})")
-        }
+        }*/
     }
 
     private fun checkCameraPermission() {
@@ -280,7 +250,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
                     }
                 AppConstant.PICTURE_CUT -> {
                     //                    sv_user_photo.setImageURI(outputUri);
-                    displayImage(outputUri, sv_user_photo)
+//                    displayImage(outputUri, sv_user_photo)
                     try {
                         bitmap = BitmapFactory.decodeFile(externalCacheDir!!.toString() + "/crop_image.jpg")
                         /*bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream
