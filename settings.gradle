@@ -1,1 +1,1 @@
-include ':app', ':data', ':device', ':base', ':kdomain', ':device', ':live', ':SmallVideoLib2', ':player_demo'
+include ':app', ':data', ':device', ':base', ':kdomain', ':device'

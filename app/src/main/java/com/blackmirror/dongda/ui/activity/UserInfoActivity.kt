@@ -20,9 +20,6 @@ import com.blackmirror.dongda.kdomain.model.UserInfoDomainBean
 import com.blackmirror.dongda.presenter.UserInfoPresenter
 import com.blackmirror.dongda.ui.activity.apply.ApplyActivity
 import com.blackmirror.dongda.ui.activity.enrol.ChooseEnrolLocActivity
-import com.blackmirror.dongda.ui.activity.live.LiveActivity
-import com.blackmirror.dongda.ui.activity.live.LiveListActivity
-import com.blackmirror.dongda.ui.activity.live.VideoListActivity
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.*
 import com.facebook.drawee.view.SimpleDraweeView
@@ -175,10 +172,10 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 checkRecordPermissions()
             }
             R.id.tv_video->{
-                startActivity(Intent(this,VideoListActivity::class.java))
+//                startActivity(Intent(this,VideoListActivity::class.java))
             }
             R.id.tv_live->{
-                startActivity(Intent(this,LiveListActivity::class.java))
+//                startActivity(Intent(this,LiveListActivity::class.java))
             }
         }
     }
@@ -214,7 +211,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
         // .RuntimeException: Unknown exception code: 1 msg null)，
         // 你可以使用try{}catch(){},处理异常，也可以判断系统版本，低于23就不申请权限，直接做你想做的。
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            startActivity(Intent(this, LiveActivity::class.java))
+//            startActivity(Intent(this, LiveActivity::class.java))
             finish()
             return
         }
@@ -230,7 +227,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
         if (needsGrand.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, needsGrand, AppConstant.PERMISSION_LIVE)
         } else {
-            startActivity(Intent(this,LiveActivity::class.java))
+//            startActivity(Intent(this,LiveActivity::class.java))
             finish()
         }
     }
@@ -270,7 +267,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                     }
                 }
                 if (b) {
-                    startActivity(Intent(this, LiveActivity::class.java))
+//                    startActivity(Intent(this, LiveActivity::class.java))
                     finish()
                 } else {
                     showGoSettingDialog()
