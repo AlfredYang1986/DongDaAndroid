@@ -111,11 +111,16 @@ class HomeFragment : HomeBaseFragment(), View.OnClickListener {
     }
 
     private fun choice() {
-        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("Super Brand"))
-        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("STEM"))
-        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("艺术"))
-        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("运动"))
-        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("科学"))
+
+
+        val v1=layoutInflater.inflate(R.layout.mtl_fix_first_item,null,false)
+
+//        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("Super Brand"))
+        mtl_home_choice.addTab(mtl_home_choice.newTab().setCustomView(R.layout.mtl_fix_first_item).setText("Super Brand"))
+        mtl_home_choice.addTab(mtl_home_choice.newTab().setCustomView(R.layout.mtl_fix_first_item).setText("STEM"))
+        mtl_home_choice.addTab(mtl_home_choice.newTab().setCustomView(R.layout.mtl_fix_first_item).setText("艺术"))
+        mtl_home_choice.addTab(mtl_home_choice.newTab().setCustomView(R.layout.mtl_fix_first_item).setText("运动"))
+        mtl_home_choice.addTab(mtl_home_choice.newTab().setCustomView(R.layout.mtl_fix_first_item).setText("科学"))
 
 
         val list = mutableListOf<HomeSuperBrandDomainBean>()

@@ -9,4 +9,16 @@
         <attr name="metaButtonBarButtonStyle" format="reference"/>
     </declare-styleable>
 
+    <declare-styleable name="MyTabLayout">
+
+        <attr name="fixTabIndex" format="integer"/>
+        <attr name="tabIndicatorWidth" format="dimension"/>
+        <attr name="isIndicatorRoundRect" format="boolean"/>
+        <attr name="indicatorRoundRadius" format="dimension"/>
+        <attr name="TabLeftMarin" format="dimension"/>
+        <attr name="firstTabTextLeftMargin" format="dimension"/>
+
+
+    </declare-styleable>
+
 </resources>

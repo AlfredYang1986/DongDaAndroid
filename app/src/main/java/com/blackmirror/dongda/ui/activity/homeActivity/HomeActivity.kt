@@ -6,7 +6,9 @@ import android.support.constraint.ConstraintLayout
 import android.widget.ImageView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
+import com.blackmirror.dongda.ui.fragment.GrowthFragment
 import com.blackmirror.dongda.ui.fragment.HomeFragment
+import com.blackmirror.dongda.ui.fragment.UserFragment
 import com.blackmirror.dongda.ui.view.MyFragmentTabHost
 import com.blackmirror.dongda.utils.DensityUtils
 
@@ -97,9 +99,12 @@ class HomeActivity : BaseActivity() {
         val b2=Bundle()
         val b3=Bundle()
 
-        fth_content.addTab(ts1,HomeFragment::class.java,b1)
+        fth_content.addTab(ts1,GrowthFragment::class.java,b1)
         fth_content.addTab(ts2,HomeFragment::class.java,b2)
-        fth_content.addTab(ts3,HomeFragment::class.java,b3)
+        fth_content.addTab(ts3,UserFragment::class.java,b3)
+
+        fth_content.currentTab = 1
+
     }
 
 }

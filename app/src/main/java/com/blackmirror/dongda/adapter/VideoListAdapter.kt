@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.VideoListDomainBean
+import com.blackmirror.dongda.utils.LogUtils
 import com.blackmirror.dongda.utils.ToastUtils
 import com.facebook.drawee.view.SimpleDraweeView
-import com.mabeijianxi.smallvideorecord2.Log
 
 class VideoListAdapter(protected var context: Context, private val bean: VideoListDomainBean) : RecyclerView.Adapter<VideoListAdapter.VideoListViewHolder>() {
 
@@ -52,7 +52,7 @@ class VideoListAdapter(protected var context: Context, private val bean: VideoLi
 
     private fun initListener(holder: VideoListViewHolder, position: Int, url: String) {
         holder.itemView.setOnClickListener {
-            Log.d("xcx","video click")
+            LogUtils.d("video click")
             ToastUtils.showShortToast("zzzzz")
             item?.invoke(holder.itemView,holder.adapterPosition,url)
         }

@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.facebook.drawee.view.SimpleDraweeView
+    <!--<com.facebook.drawee.view.SimpleDraweeView
         android:layout_width="256dp"
-        android:layout_height="106dp"/>
+        android:layout_height="106dp"/>-->
 
     <TextView
         android:id="@+id/tv_day"

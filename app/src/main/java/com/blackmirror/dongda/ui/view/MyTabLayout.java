@@ -37,6 +37,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
 import android.support.annotation.StringRes;
+import android.support.design.R;
 import android.support.design.widget.TabItem;
 import android.support.v4.util.Pools;
 import android.support.v4.view.GravityCompat;
@@ -272,6 +273,7 @@ public class MyTabLayout extends HorizontalScrollView {
 
     int mTabGravity;
     int mMode;
+    boolean isEqualWidth;
 
     private OnTabSelectedListener mSelectedListener;
     private final ArrayList<OnTabSelectedListener> mSelectedListeners = new ArrayList<>();
@@ -285,6 +287,10 @@ public class MyTabLayout extends HorizontalScrollView {
     private TabLayoutOnPageChangeListener mPageChangeListener;
     private AdapterChangeListener mAdapterChangeListener;
     private boolean mSetupViewPagerImplicitly;
+
+    //自定义属性
+    private int fixTabIndex;//需要填充剩余大小的Tab
+    private int firstTabTextLeftMargin;//第一个Tab字居左的大小
 
     // Pool we use as a simple RecyclerBin
     private final Pools.Pool<TabView> mTabViewPool = new Pools.SimplePool<>(12);
@@ -310,26 +316,28 @@ public class MyTabLayout extends HorizontalScrollView {
         super.addView(mTabStrip, 0, new LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
-        TypedArray a = context.obtainStyledAttributes(attrs, android.support.design.R.styleable.TabLayout,
-                defStyleAttr, android.support.design.R.style.Widget_Design_TabLayout);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.TabLayout,
+                defStyleAttr, R.style.Widget_Design_TabLayout);
 
         mTabStrip.setSelectedIndicatorHeight(
-                a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabIndicatorHeight, 0));
-        mTabStrip.setSelectedIndicatorColor(a.getColor(android.support.design.R.styleable.TabLayout_tabIndicatorColor, 0));
+                a.getDimensionPixelSize(R.styleable.TabLayout_tabIndicatorHeight, 0));
+        mTabStrip.setSelectedIndicatorColor(a.getColor(R.styleable.TabLayout_tabIndicatorColor, 0));
+
 
         mTabPaddingStart = mTabPaddingTop = mTabPaddingEnd = mTabPaddingBottom = a
-                .getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabPadding, 0);
-        mTabPaddingStart = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabPaddingStart,
+                .getDimensionPixelSize(R.styleable.TabLayout_tabPadding, 0);
+        mTabPaddingStart = a.getDimensionPixelSize(R.styleable.TabLayout_tabPaddingStart,
                 mTabPaddingStart);
-        mTabPaddingTop = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabPaddingTop,
+        mTabPaddingTop = a.getDimensionPixelSize(R.styleable.TabLayout_tabPaddingTop,
                 mTabPaddingTop);
-        mTabPaddingEnd = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabPaddingEnd,
+        mTabPaddingEnd = a.getDimensionPixelSize(R.styleable.TabLayout_tabPaddingEnd,
                 mTabPaddingEnd);
-        mTabPaddingBottom = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabPaddingBottom,
+        mTabPaddingBottom = a.getDimensionPixelSize(R.styleable.TabLayout_tabPaddingBottom,
                 mTabPaddingBottom);
 
-        mTabTextAppearance = a.getResourceId(android.support.design.R.styleable.TabLayout_tabTextAppearance,
-                android.support.design.R.style.TextAppearance_Design_Tab);
+        mTabTextAppearance = a.getResourceId(R.styleable.TabLayout_tabTextAppearance,
+                R.style.TextAppearance_Design_Tab);
+
 
         // Text colors/sizes come from the text appearance first
         final TypedArray ta = context.obtainStyledAttributes(mTabTextAppearance,
@@ -343,33 +351,59 @@ public class MyTabLayout extends HorizontalScrollView {
             ta.recycle();
         }
 
-        if (a.hasValue(android.support.design.R.styleable.TabLayout_tabTextColor)) {
+        if (a.hasValue(R.styleable.TabLayout_tabTextColor)) {
             // If we have an explicit text color set, use it instead
-            mTabTextColors = a.getColorStateList(android.support.design.R.styleable.TabLayout_tabTextColor);
+            mTabTextColors = a.getColorStateList(R.styleable.TabLayout_tabTextColor);
         }
 
-        if (a.hasValue(android.support.design.R.styleable.TabLayout_tabSelectedTextColor)) {
+        if (a.hasValue(R.styleable.TabLayout_tabSelectedTextColor)) {
             // We have an explicit selected text color set, so we need to make merge it with the
             // current colors. This is exposed so that developers can use theme attributes to set
             // this (theme attrs in ColorStateLists are Lollipop+)
-            final int selected = a.getColor(android.support.design.R.styleable.TabLayout_tabSelectedTextColor, 0);
+            final int selected = a.getColor(R.styleable.TabLayout_tabSelectedTextColor, 0);
             mTabTextColors = createColorStateList(mTabTextColors.getDefaultColor(), selected);
         }
 
-        mRequestedTabMinWidth = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabMinWidth,
+        mRequestedTabMinWidth = a.getDimensionPixelSize(R.styleable.TabLayout_tabMinWidth,
                 INVALID_WIDTH);
-        mRequestedTabMaxWidth = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabMaxWidth,
+        mRequestedTabMaxWidth = a.getDimensionPixelSize(R.styleable.TabLayout_tabMaxWidth,
                 INVALID_WIDTH);
-        mTabBackgroundResId = a.getResourceId(android.support.design.R.styleable.TabLayout_tabBackground, 0);
-        mContentInsetStart = a.getDimensionPixelSize(android.support.design.R.styleable.TabLayout_tabContentStart, 0);
-        mMode = a.getInt(android.support.design.R.styleable.TabLayout_tabMode, MODE_FIXED);
-        mTabGravity = a.getInt(android.support.design.R.styleable.TabLayout_tabGravity, GRAVITY_FILL);
+        mTabBackgroundResId = a.getResourceId(R.styleable.TabLayout_tabBackground, 0);
+        mContentInsetStart = a.getDimensionPixelSize(R.styleable.TabLayout_tabContentStart, 0);
+        mMode = a.getInt(R.styleable.TabLayout_tabMode, MODE_FIXED);
+        mTabGravity = a.getInt(R.styleable.TabLayout_tabGravity, GRAVITY_FILL);
         a.recycle();
 
         // TODO add attr for these
         final Resources res = getResources();
-        mTabTextMultiLineSize = res.getDimensionPixelSize(android.support.design.R.dimen.design_tab_text_size_2line);
-        mScrollableTabMinWidth = res.getDimensionPixelSize(android.support.design.R.dimen.design_tab_scrollable_min_width);
+        mTabTextMultiLineSize = res.getDimensionPixelSize(R.dimen.design_tab_text_size_2line);
+        mScrollableTabMinWidth = res.getDimensionPixelSize(R.dimen.design_tab_scrollable_min_width);
+
+
+        /**
+         * 自定义属性 start----
+         */
+        TypedArray ca = context.obtainStyledAttributes(attrs, com.blackmirror.dongda.R.styleable.MyTabLayout);
+
+        mTabStrip.setSelectedIndicatorWidth(ca.getDimensionPixelOffset(
+                com.blackmirror.dongda.R.styleable.MyTabLayout_tabIndicatorWidth, dpToPx(24)));
+        mTabStrip.setSelectedIndicatorRadius(ca.getDimensionPixelOffset(
+                com.blackmirror.dongda.R.styleable.MyTabLayout_indicatorRoundRadius, 0));
+        mTabStrip.setIndicatorRoundRect(ca.getBoolean(
+                com.blackmirror.dongda.R.styleable.MyTabLayout_isIndicatorRoundRect, false));
+
+        fixTabIndex = ca.getInteger(com.blackmirror.dongda.R.styleable.MyTabLayout_fixTabIndex, -1);
+        /*firstTabTextLeftMargin = ca.getDimensionPixelOffset(
+                com.xcx.mycustomview.R.styleable.MyTabLayout_fixTabIndex, -1);*/
+
+        firstTabTextLeftMargin = ca.getDimensionPixelOffset(
+                com.blackmirror.dongda.R.styleable.MyTabLayout_firstTabTextLeftMargin, mTabPaddingStart);
+
+        /**
+         * 自定义属性 end---
+         */
+
+        ca.recycle();
 
         // Now apply the tab mode and gravity
         applyModeAndGravity();
@@ -942,6 +976,32 @@ public class MyTabLayout extends HorizontalScrollView {
         tab.setPosition(position);
         mTabs.add(position, tab);
 
+
+        /*if (position == 0 && fixTabIndex == 0) {
+            TabView view = tab.mView;
+            ViewCompat.setPaddingRelative(view, firstTabTextLeftMargin, mTabPaddingTop,
+                    mTabPaddingEnd, mTabPaddingBottom);
+        }
+
+        if (position!=0 && position == fixTabIndex){
+            TabView view = tab.mView;
+            ViewCompat.setPaddingRelative(view, mTabPaddingStart, mTabPaddingTop,
+                    mTabPaddingEnd, mTabPaddingBottom);
+        }*/
+
+        if (position == 0 && firstTabTextLeftMargin == 0) {
+            TabView view = tab.mView;
+            view.setGravity(Gravity.CENTER_VERTICAL);
+            ViewCompat.setPaddingRelative(view, firstTabTextLeftMargin, mTabPaddingTop,
+                    mTabPaddingEnd, mTabPaddingBottom);
+        } else {
+            TabView view = tab.mView;
+            view.setGravity(Gravity.CENTER);
+            ViewCompat.setPaddingRelative(view, firstTabTextLeftMargin, mTabPaddingTop,
+                    mTabPaddingEnd, mTabPaddingBottom);
+        }
+
+
         final int count = mTabs.size();
         for (int i = position + 1; i < count; i++) {
             mTabs.get(i).setPosition(i);
@@ -950,7 +1010,17 @@ public class MyTabLayout extends HorizontalScrollView {
 
     private void addTabView(Tab tab) {
         final TabView tabView = tab.mView;
-        if (tab.getPosition() == 0) {
+
+        if (fixTabIndex >= 0 && tab.getPosition() == fixTabIndex) {
+            final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
+
+            mTabStrip.addView(tabView, tab.getPosition(), lp);
+        } else {
+            mTabStrip.addView(tabView, tab.getPosition(), createLayoutParamsForTabs());
+        }
+
+        /*if (tab.getPosition() == 0) {
             final LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
 
@@ -958,7 +1028,9 @@ public class MyTabLayout extends HorizontalScrollView {
         } else {
             mTabStrip.addView(tabView, tab.getPosition(), createLayoutParamsForTabs());
 
-        }
+        }*/
+        //        mTabStrip.addView(tabView, tab.getPosition(), createLayoutParamsForTabs());
+
     }
 
     @Override
@@ -1526,6 +1598,9 @@ public class MyTabLayout extends HorizontalScrollView {
                 ViewCompat.setBackground(
                         this, AppCompatResources.getDrawable(context, mTabBackgroundResId));
             }
+            /*ViewCompat.setPaddingRelative(this, mTabPaddingStart, mTabPaddingTop,
+                    mTabPaddingEnd, mTabPaddingBottom);*/
+
             ViewCompat.setPaddingRelative(this, mTabPaddingStart, mTabPaddingTop,
                     mTabPaddingEnd, mTabPaddingBottom);
             setGravity(Gravity.CENTER);
@@ -1709,13 +1784,13 @@ public class MyTabLayout extends HorizontalScrollView {
                 // If there isn't a custom view, we'll us our own in-built layouts
                 if (mIconView == null) {
                     ImageView iconView = (ImageView) LayoutInflater.from(getContext())
-                            .inflate(android.support.design.R.layout.design_layout_tab_icon, this, false);
+                            .inflate(R.layout.design_layout_tab_icon, this, false);
                     addView(iconView, 0);
                     mIconView = iconView;
                 }
                 if (mTextView == null) {
                     TextView textView = (TextView) LayoutInflater.from(getContext())
-                            .inflate(android.support.design.R.layout.design_layout_tab_text, this, false);
+                            .inflate(R.layout.design_layout_tab_text, this, false);
                     addView(textView);
                     mTextView = textView;
                     mDefaultMaxLines = TextViewCompat.getMaxLines(mTextView);
@@ -1801,14 +1876,22 @@ public class MyTabLayout extends HorizontalScrollView {
     private class SlidingTabStrip extends LinearLayout {
         private int mSelectedIndicatorHeight;
         private final Paint mSelectedIndicatorPaint;
+        private int mSelectedIndicatorWidth;
+        private int mSelectedIndicatorRadius;
+        private boolean isIndicatorRoundRect;
 
         int mSelectedPosition = -1;
         float mSelectionOffset;
+
+        private boolean isFirstIndex;
 
         private int mLayoutDirection = -1;
 
         private int mIndicatorLeft = -1;
         private int mIndicatorRight = -1;
+
+        //自定义属性
+        private int newPosition;
 
         private ValueAnimator mIndicatorAnimator;
 
@@ -1830,6 +1913,25 @@ public class MyTabLayout extends HorizontalScrollView {
                 mSelectedIndicatorHeight = height;
                 ViewCompat.postInvalidateOnAnimation(this);
             }
+        }
+
+        void setSelectedIndicatorWidth(int width) {
+            if (mSelectedIndicatorWidth != width) {
+                mSelectedIndicatorWidth = width;
+                ViewCompat.postInvalidateOnAnimation(this);
+            }
+        }
+
+        void setSelectedIndicatorRadius(int radius) {
+            if (mSelectedIndicatorRadius != radius) {
+                mSelectedIndicatorRadius = radius;
+                ViewCompat.postInvalidateOnAnimation(this);
+            }
+        }
+
+        void setIndicatorRoundRect(boolean isRoundRect) {
+            isIndicatorRoundRect = isRoundRect;
+            ViewCompat.postInvalidateOnAnimation(this);
         }
 
         boolean childrenNeedLayout() {
@@ -1964,7 +2066,6 @@ public class MyTabLayout extends HorizontalScrollView {
             } else {
                 left = right = -1;
             }
-
             setIndicatorPosition(left, right);
         }
 
@@ -1992,10 +2093,40 @@ public class MyTabLayout extends HorizontalScrollView {
                 return;
             }
 
-            final int targetLeft = targetView.getLeft();
-            final int targetRight = targetView.getRight();
+            //            final int targetLeft = targetView.getLeft();
+            final int targetLeft;
+            //            final int targetRight = targetView.getRight();
+            final int targetRight;
             final int startLeft;
             final int startRight;
+
+            newPosition = position;
+
+            if (fixTabIndex < 0) {
+                targetLeft = targetView.getLeft();
+                targetRight = targetView.getRight();
+            } else {
+
+                TabView v = (TabView) getChildAt(position);
+                if (v != null && v.mCustomTextView != null) {
+                    targetLeft = v.getLeft() + v.mCustomTextView.getLeft();
+                    targetRight = v.getLeft() + v.mCustomTextView.getRight();
+                } else {
+                    targetLeft = targetView.getLeft();
+                    targetRight = targetView.getRight();
+                }
+            }
+
+            /*if (position == 0 && firstTabTextLeftMargin == 0) {
+                TabView v = (TabView) getChildAt(position);
+                if (v.mCustomTextView != null) {
+                    targetRight = v.mCustomTextView.getRight();
+                } else {
+                    targetRight = targetView.getRight();
+                }
+            } else {
+                targetRight = targetView.getRight();
+            }*/
 
             if (Math.abs(position - mSelectedPosition) <= 1) {
                 // If the views are adjacent, we'll animate from edge-to-edge
@@ -2051,9 +2182,15 @@ public class MyTabLayout extends HorizontalScrollView {
             super.draw(canvas);
 
 
-            int padding = 0;
-            if (mIndicatorRight - mIndicatorLeft > dpToPx(24)) {
-                padding = (mIndicatorRight - mIndicatorLeft - dpToPx(24)) / 2;
+            if (newPosition == 0 && firstTabTextLeftMargin == 0) {
+                TabView at = (TabView) SlidingTabStrip.this.getChildAt(0);
+                int r = at.mCustomTextView.getRight();
+                mIndicatorRight = r;
+            }
+
+            int padding;
+            if (mIndicatorRight - mIndicatorLeft > mSelectedIndicatorWidth) {
+                padding = (mIndicatorRight - mIndicatorLeft - mSelectedIndicatorWidth) / 2;
                 if (mIndicatorRight - padding < mIndicatorLeft + padding) {
                     padding = 0;
                 }
@@ -2067,7 +2204,7 @@ public class MyTabLayout extends HorizontalScrollView {
                 RectF rect = new RectF(mIndicatorLeft + padding, getHeight() - mSelectedIndicatorHeight,
                         mIndicatorRight - padding, getHeight());
 
-                canvas.drawRoundRect(rect,dpToPx(2),dpToPx(2), mSelectedIndicatorPaint);
+                canvas.drawRoundRect(rect, mSelectedIndicatorRadius, mSelectedIndicatorRadius, mSelectedIndicatorPaint);
             }
         }
     }

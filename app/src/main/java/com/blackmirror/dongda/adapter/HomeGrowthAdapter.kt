@@ -81,13 +81,13 @@ class HomeGrowthAdapter(protected var context: Context, protected var bean: Home
         var sv_photo: SimpleDraweeView
 
         init {
-            sv_photo = itemView.findViewById(R.id.sv_exp_brand_logo)
             tv_day = itemView.findViewById(R.id.tv_day)
             tv_month = itemView.findViewById(R.id.tv_month)
             tlv_pl = itemView.findViewById(R.id.tlv_pl)
             tv_time = itemView.findViewById(R.id.tv_time)
             tv_dec = itemView.findViewById(R.id.tv_dec)
             tv_title = itemView.findViewById(R.id.tv_title)
+            sv_photo = itemView.findViewById(R.id.sv_photo)
 
 
         }

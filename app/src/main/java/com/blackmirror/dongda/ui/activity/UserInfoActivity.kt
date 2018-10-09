@@ -22,15 +22,10 @@ import com.blackmirror.dongda.ui.activity.apply.ApplyActivity
 import com.blackmirror.dongda.ui.activity.enrol.ChooseEnrolLocActivity
 import com.blackmirror.dongda.ui.activity.live.LiveActivity
 import com.blackmirror.dongda.ui.activity.live.LiveListActivity
-import com.blackmirror.dongda.ui.activity.live.RecordActivity
 import com.blackmirror.dongda.ui.activity.live.VideoListActivity
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.*
 import com.facebook.drawee.view.SimpleDraweeView
-import com.mabeijianxi.smallvideorecord2.JianXiCamera
-import com.mabeijianxi.smallvideorecord2.Log
-import com.mabeijianxi.smallvideorecord2.MediaRecorderActivity
-import com.mabeijianxi.smallvideorecord2.model.MediaRecorderConfig.Buidler
 import java.io.File
 
 class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.View {
@@ -289,7 +284,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
 
     private fun initRecord() {
 //        ToastUtils.showShortToast(externalCacheDir.absolutePath)
-        Log.d("xcx","externalCacheDir: ${externalCacheDir.absolutePath}")
+        LogUtils.d("xcx","externalCacheDir: ${externalCacheDir.absolutePath}")
 
         val path="${externalCacheDir.absolutePath}/video"
 
@@ -297,7 +292,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
         if (!f.exists()){
             f.mkdirs()
         }
-        // 设置拍摄视频缓存路径
+        /*// 设置拍摄视频缓存路径
         JianXiCamera.setVideoCachePath("$path/")
 
         // 初始化拍摄
@@ -315,7 +310,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 .captureThumbnailsTime(1)
                 .build()
 
-        MediaRecorderActivity.goSmallVideoRecorder(this, RecordActivity::class.java.name,config)
+        MediaRecorderActivity.goSmallVideoRecorder(this, RecordActivity::class.java.name,config)*/
 
     }
 
