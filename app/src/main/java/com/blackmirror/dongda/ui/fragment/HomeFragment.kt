@@ -1,6 +1,7 @@
 package com.blackmirror.dongda.ui.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import com.blackmirror.dongda.R
 import com.blackmirror.dongda.adapter.*
 import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration
 import com.blackmirror.dongda.kdomain.model.*
+import com.blackmirror.dongda.ui.activity.homeActivity.SearchCourseActivity
 import com.blackmirror.dongda.ui.view.MyTabLayout
 import com.blackmirror.dongda.utils.ToastUtils
 import io.reactivex.Observable
@@ -37,6 +39,7 @@ class HomeFragment : HomeBaseFragment(), View.OnClickListener {
     }
 
     override fun initListener() {
+        iv_home_search.setOnClickListener(this)
         iv_home_icon_science.setOnClickListener(this)
         iv_home_icon_sports.setOnClickListener(this)
         iv_home_icon_art.setOnClickListener(this)
@@ -73,6 +76,9 @@ class HomeFragment : HomeBaseFragment(), View.OnClickListener {
             }
             R.id.iv_now_exp_refresh -> {
 
+            }
+            R.id.iv_home_search -> {
+                startActivity(Intent(activity, SearchCourseActivity::class.java))
             }
         }
     }
@@ -113,7 +119,7 @@ class HomeFragment : HomeBaseFragment(), View.OnClickListener {
     private fun choice() {
 
 
-        val v1=layoutInflater.inflate(R.layout.mtl_fix_first_item,null,false)
+        val v1 = layoutInflater.inflate(R.layout.mtl_fix_first_item, null, false)
 
 //        mtl_home_choice.addTab(mtl_home_choice.newTab().setText("Super Brand"))
         mtl_home_choice.addTab(mtl_home_choice.newTab().setCustomView(R.layout.mtl_fix_first_item).setText("Super Brand"))

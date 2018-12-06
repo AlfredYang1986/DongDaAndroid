@@ -10,7 +10,7 @@
         app:layout_constraintLeft_toLeftOf="@id/tv_item_addr_dec"
         app:layout_constraintRight_toRightOf="@id/tv_item_addr_dec"
          android:id="@+id/iv_item_addr_photo"
-        android:background="@drawable/safe_power"
+        android:background="@drawable/icon_socket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

@@ -10,7 +10,7 @@
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="23dp"
         android:id="@+id/sv_super_photo"
-        android:layout_width="163dp"
+        android:layout_width="143dp"
         android:layout_height="101dp"
         app:actualImageScaleType="focusCrop"
         app:placeholderImage="@drawable/super_00"

@@ -128,8 +128,6 @@
         </activity>
         <activity android:name=".ui.activity.enrol.EnrolServiceActivity">
         </activity>
-        <activity android:name=".ui.activity.enrol.EnrolLocationActivity">
-        </activity>
         <activity android:name=".ui.activity.enrol.EnrolAgeActivity">
         </activity>
         <activity android:name=".ui.activity.enrol.EnrolClassNumActivity">
@@ -162,40 +160,28 @@
             android:name=".ui.activity.enrol.LocAllServiceActivity"
             android:launchMode="singleTop">
         </activity>
-        <activity android:name=".TestActivity">
-        </activity>
-        <activity
-            android:name=".ui.activity.live.LiveActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".ui.activity.live.VideoDetailActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".ui.activity.live.RecordActivity">
-        </activity>
-        <activity android:name=".ui.activity.live.VideoListActivity">
-        </activity>
-        <activity android:name=".ui.activity.live.LiveListActivity">
-        </activity>
-        <activity android:name="com.mabeijianxi.smallvideorecord2.MediaRecorderActivity"/>
         <!--
         <activity android:name=".ui.activity.landing.InputCodeActivity">
         </activity>
         -->
         <activity android:name=".ui.activity.homeActivity.HomeActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+                 <category android:name="android.intent.category.LAUNCHER"/>
+             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.homeActivity.SearchCourseActivity">
         </activity>
-        <activity android:name=".ui.activity.EventDetailActivity">
+        <activity
+            android:name=".ui.activity.EventDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+           <!-- <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>-->
         </activity>
         <activity android:name=".ui.activity.CourseDetailActivity">
         </activity>
@@ -226,13 +212,34 @@
         <activity android:name=".ui.activity.MyCollectActivity">
         </activity>
         <activity android:name=".ui.activity.apply.ApplyInfoActivity">
-            <!--<intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>-->
+            </intent-filter>
+            -->
         </activity>
         <activity android:name=".ui.activity.KidInfoActivity">
+        </activity>
+        <activity android:name=".ui.activity.ModuleListActivity">
+
+            <!--
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            -->
+        </activity>
+        <activity android:name=".ui.activity.LocationDetailActivity">
+        </activity>
+        <activity android:name=".ui.activity.FacilityMoreActivity">
+        </activity>
+        <activity android:name=".ui.activity.setting.MyCollectionActivity">
+        </activity>
+        <activity android:name=".ui.activity.setting.MyServiceActivity">
         </activity>
     </application>
 

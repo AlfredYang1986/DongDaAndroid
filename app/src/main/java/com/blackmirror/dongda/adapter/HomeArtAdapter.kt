@@ -8,17 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.alibaba.sdk.android.oss.OSSClient
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.HomepageDomainBean
 import com.blackmirror.dongda.utils.OSSUtils
 import com.facebook.drawee.view.SimpleDraweeView
 
-class HomeArtAdapter(protected var context: Context, internal var bean: HomepageDomainBean.HomepageServicesBean) : RecyclerView.Adapter<HomeArtAdapter.HomeArtViewHolder>() {
+class HomeArtAdapter(protected var context: Context, internal var bean: HomepageDomainBean.HomepageServicesBean) :
+        RecyclerView.Adapter<HomeArtAdapter.HomeArtViewHolder>() {
 
     private var item: ((View, Int, String?) -> Unit)? = null
     private var like: ((View, Int, HomepageDomainBean.HomepageServicesBean.ServicesBean) -> Unit)? = null
 
-    fun setOnItemClickListener(it: ((View, Int, String?) -> Unit)? = null, li: ((View, Int, HomepageDomainBean.HomepageServicesBean.ServicesBean) -> Unit)? = null) {
+    fun setOnItemClickListener(it: ((View, Int, String?) -> Unit)? = null,
+                               li: ((View, Int, HomepageDomainBean.HomepageServicesBean.ServicesBean) -> Unit)? = null) {
         item = it
         like = li
     }
@@ -46,6 +49,9 @@ class HomeArtAdapter(protected var context: Context, internal var bean: Homepage
             holder.tv_item_art_name.visibility = View.VISIBLE
             holder.tv_item_art_name.text = this.bean.services!![position].operation!![0]
         }
+        var ossClient:OSSClient?=null
+
+        ossClient.presignConstrainedObjectURL()
 
         val sb = StringBuilder()
         sb.append(servicesBean.brand_name)

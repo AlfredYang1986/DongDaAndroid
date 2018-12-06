@@ -405,25 +405,25 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
             val b = SafeUiBean()
             b.dec = s
             if (s == getString(R.string.new_wind_sys)) {
-                b.res_id = R.drawable.new_wind_sys
+                b.res_id = R.drawable.icon_air_system
             } else if (s == getString(R.string.air_clear_sys)) {
-                b.res_id = R.drawable.air_clear_sys
+                b.res_id = R.drawable.icon_air_cleaner
             } else if (s == getString(R.string.safe_power)) {
-                b.res_id = R.drawable.safe_power
+                b.res_id = R.drawable.icon_socket
             } else if (s == getString(R.string.real_time_protect)) {
-                b.res_id = R.drawable.real_time_protect
+                b.res_id = R.drawable.icon_camera
             } else if (s == getString(R.string.has_wifi)) {
-                b.res_id = R.drawable.wifi
+                b.res_id = R.drawable.icon_wifi
             } else if (s == getString(R.string.protect_floor)) {
-                b.res_id = R.drawable.floor
+                b.res_id = R.drawable.icon_floor
             } else if (s == getString(R.string.air_humid)) {
-                b.res_id = R.drawable.air_humid
+                b.res_id = R.drawable.icon_humidifier
             } else if (s == getString(R.string.safe_guard)) {
-                b.res_id = R.drawable.guard
+                b.res_id = R.drawable.icon_bar
             } else if (s == getString(R.string.kit_package)) {
-                b.res_id = R.drawable.kit
+                b.res_id = R.drawable.icon_emergency
             } else if (s == getString(R.string.safe_table)) {
-                b.res_id = R.drawable.safe_table
+                b.res_id = R.drawable.icon_table
             }
             if (s != "") {
                 list.add(b)

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+         android:id="@android:id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="课程"
+        android:textColor="#FF34384A"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:layout_marginLeft="8dp"
+        android:id="@+id/tv_course_num"
+        app:layout_constraintBaseline_toBaselineOf="@android:id/text1"
+        app:layout_constraintLeft_toRightOf="@android:id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4"
+        android:textColor="#FFB5B6BC"
+        android:textSize="13sp"
+        />
+
+</android.support.constraint.ConstraintLayout>

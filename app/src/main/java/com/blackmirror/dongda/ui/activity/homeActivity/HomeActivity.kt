@@ -28,7 +28,7 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun initView() {
-        iv_home_like = findViewById(R.id.iv_home_like)
+//        iv_home_like = findViewById(R.id.iv_home_like)
         fth_content = findViewById(R.id.fth_content)
     }
 
@@ -38,9 +38,9 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun initListener() {
-        iv_home_like.setOnClickListener {
+        /*iv_home_like.setOnClickListener {
             finish()
-        }
+        }*/
     }
 
     private fun initFragmentTabHost() {

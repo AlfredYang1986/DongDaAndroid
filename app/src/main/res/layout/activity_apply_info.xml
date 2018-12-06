@@ -207,12 +207,9 @@
 
             <com.blackmirror.dongda.ui.view.MyCircleView
                 android:id="@+id/mv_dash_line"
-                android:layout_width="0dp"
+                android:layout_width="344dp"
                 android:layout_height="14dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_exp_loc"/>
+                tools:layout_editor_absoluteY="262dp"/>
 
             <TextView
                 android:id="@+id/tv_joiner_dec"

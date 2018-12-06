@@ -98,7 +98,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:' + rootProject.ext.okhttpVersion
     //    implementation 'com.facebook.stetho:stetho:1.5.0'
     //implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-    //    implementation 'com.aliyun.dpa:oss-android-sdk:+'
+        implementation 'com.aliyun.dpa:oss-android-sdk:+'
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonVersion
     implementation 'com.alibaba:fastjson:' + rootProject.ext.fastjsonAndroidVersion
     //1.0.5 当1.1.0出现问题可以回退到1.0.5.1

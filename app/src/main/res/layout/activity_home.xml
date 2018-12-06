@@ -11,68 +11,6 @@
     tools:context=".ui.activity.homeActivity.HomeActivity"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        style="@style/AppTheme.AppBarOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tb_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/sys_bar_white"
-            app:contentInsetStart="0dp"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cl_tb_root"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-
-                <ImageView
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:id="@+id/iv_home_logo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/logo_dongda"
-                    app:layout_constraintHorizontal_bias="0.451"
-                    app:layout_constraintLeft_toLeftOf="@id/cl_tb_root"
-                    app:layout_constraintRight_toLeftOf="@id/tv_location"
-                    />
-
-                <TextView
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
-                    app:layout_constraintLeft_toRightOf="@id/iv_home_logo"
-                    android:id="@+id/tv_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="@string/str_beijing"
-                    android:textColor="#FFB5B6BC"
-                    android:textSize="11sp"
-                    />
-
-                <ImageView
-                    android:id="@+id/iv_home_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="19dp"
-                    android:background="@drawable/icon_search"
-                    app:layout_constraintBottom_toBottomOf="@id/iv_home_logo"
-                    app:layout_constraintRight_toRightOf="@id/cl_tb_root"
-                    app:layout_constraintTop_toTopOf="@id/iv_home_logo"/>
-
-
-            </android.support.constraint.ConstraintLayout>
-
-        </android.support.v7.widget.Toolbar>
-
-    </android.support.design.widget.AppBarLayout>
-
 
     <com.blackmirror.dongda.ui.view.MyFragmentTabHost
         app:layout_behavior="@string/appbar_scrolling_view_behavior"

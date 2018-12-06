@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/sv_photo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:actualImageScaleType="focusCrop"
+        app:placeholderImage="@drawable/science_00"
+        app:placeholderImageScaleType="focusCrop"
+        app:roundedCornerRadius="4dp"
+        app:viewAspectRatio="1.62"/>
+
+    <ImageView
+         android:id="@+id/iv_love"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="13dp"
+        android:background="@drawable/icon_love_m_normal"
+        app:layout_constraintRight_toRightOf="@id/sv_photo"
+        app:layout_constraintTop_toTopOf="@id/sv_photo"/>
+
+
+    <TextView
+        android:id="@+id/tv_course_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="编程"
+        android:textColor="#FF5F6270"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sv_photo"
+        app:layout_goneMarginTop="16dp"
+        />
+
+    <TextView
+        android:id="@+id/tv_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:gravity="center"
+        android:text="·"
+        app:layout_constraintBottom_toBottomOf="@id/tv_course_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_course_name"
+        app:layout_constraintTop_toTopOf="@id/tv_course_name"/>
+
+    <TextView
+        android:id="@+id/tv_age_range"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:text="3-6"
+        android:textColor="#FF5F6270"
+        android:textSize="13sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_course_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_point"
+        />
+
+    <TextView
+        android:id="@+id/tv_age_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:text="岁"
+        android:textColor="#FF5F6270"
+        android:textSize="11sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tv_course_name"
+        app:layout_constraintLeft_toRightOf="@id/tv_age_range"
+        />
+
+    <TextView
+         android:id="@+id/tv_course_title"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:ellipsize="end"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="39dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_course_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="认识神奇的生命“小菌菌”"
+        android:textColor="#FF34384A"
+        android:textSize="16sp"
+        />
+
+</android.support.constraint.ConstraintLayout>

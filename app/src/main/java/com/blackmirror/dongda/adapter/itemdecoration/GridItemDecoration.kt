@@ -4,6 +4,7 @@ import android.graphics.Rect
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.alibaba.sdk.android.oss.OSSClient
 
 import com.blackmirror.dongda.utils.DensityUtils
 
@@ -22,6 +23,7 @@ class GridItemDecoration(top: Int, space: Int, inner_space: Int, lastTop: Int, l
 
 
     init {
+        var ossClient:OSSClient?=null
         this.lastTop = DensityUtils.dp2px(lastTop)
         this.lastBottom = DensityUtils.dp2px(lastBottom)
         this.top = DensityUtils.dp2px(top)
