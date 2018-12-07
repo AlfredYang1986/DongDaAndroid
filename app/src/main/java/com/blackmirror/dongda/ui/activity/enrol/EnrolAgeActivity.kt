@@ -11,9 +11,9 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener
 import com.bigkoo.pickerview.view.OptionsPickerView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.ToastUtils
 import com.blackmirror.dongda.utils.getDoubleValue
+import com.blackmirror.dongda.utils.logD
+import com.blackmirror.dongda.utils.showToast
 
 class EnrolAgeActivity : BaseActivity(), View.OnClickListener {
 
@@ -92,7 +92,7 @@ class EnrolAgeActivity : BaseActivity(), View.OnClickListener {
             val min = ageMin[options1]
             val max = ageMax[options2]
 
-            LogUtils.d("ageMin: $min  ageMax: $max options3=$options3")
+            logD("ageMin: $min  ageMax: $max options3=$options3")
             tv_choose_low_age.text = min
             tv_choose_low_age.setTextColor(Color.parseColor("#FF404040"))
             tv_choose_low_age.textSize = 22f
@@ -133,12 +133,12 @@ class EnrolAgeActivity : BaseActivity(), View.OnClickListener {
                 val max = tv_choose_large_age.text.toString().getDoubleValue()
 
                 if (min < 0 || max < 0) {
-                    ToastUtils.showShortToast("请选择年龄!")
+                    showToast("请选择年龄!")
                     return
                 }
 
                 if (min > max) {
-                    ToastUtils.showShortToast("最大年龄选择错误!")
+                    showToast("最大年龄选择错误!")
                     return
                 }
 

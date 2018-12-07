@@ -19,7 +19,8 @@ import com.blackmirror.dongda.data.repository.getServiceMoreData
 import com.blackmirror.dongda.kdomain.model.CareMoreDomainBean
 import com.blackmirror.dongda.kdomain.model.DetailInfoDomainBean
 import com.blackmirror.dongda.kdomain.model.NearServiceDomainBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.getUserId
 import io.reactivex.Observable
 
 /**
@@ -61,7 +62,7 @@ fun getNearServiceImpl(latitude: Double, longitude: Double): Observable<NearServ
 val ns = fun(latitude: Double, longitude: Double): Observable<NearServiceResponseBean> {
     val bean = NearServiceRequestBean()
 
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\",\"pin\":{\"latitude\":$latitude,\"longitude\":$longitude}}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\",\"pin\":{\"latitude\":$latitude,\"longitude\":$longitude}}}"
 
 
     bean.url = NEAR_SERVICE_URL
@@ -83,7 +84,7 @@ val ns = fun(latitude: Double, longitude: Double): Observable<NearServiceRespons
 
 val md = fun(skipCount: Int, takeCount: Int, serviceType: String): Observable<CareMoreResponseBean> {
     val bean = SearchServiceRequestBean()
-    bean.json = "{\"skip\" : $skipCount ,\"take\" : $takeCount ,\"token\": \"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_type\": \"$serviceType\"}}"
+    bean.json = "{\"skip\" : $skipCount ,\"take\" : $takeCount ,\"token\": \"${getAuthToken()}\",\"condition\": {\"user_id\":\"${getUserId()}\",\"service_type\": \"$serviceType\"}}"
 
     bean.url = SERVICE_MORE_URL
 
@@ -103,7 +104,7 @@ val md = fun(skipCount: Int, takeCount: Int, serviceType: String): Observable<Ca
 val di = fun(service_id: String): Observable<DetailInfoResponseBean> {
     val bean = DetailInfoRequestBean()
 
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"service_id\":\"$service_id\"}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"service_id\":\"$service_id\"}}"
 
     bean.url = SERVICE_DETAIL_URL
 

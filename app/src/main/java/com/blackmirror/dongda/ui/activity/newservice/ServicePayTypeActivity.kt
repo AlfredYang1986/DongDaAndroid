@@ -11,10 +11,10 @@ import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.activity.enrol.EnrolConfirmActivity
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.AYPrefUtils
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.logD
+import com.blackmirror.dongda.utils.showToast
 
 class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
 
@@ -54,7 +54,7 @@ class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
             R.id.iv_back -> finish()
             R.id.tv_next -> {
                 if (!rb_flexible_pay.isChecked && !rb_fixed_pay.isChecked) {
-                    ToastUtils.showShortToast("请选择支付方式!")
+                    showToast("请选择支付方式!")
                     return
                 }
                 val intent = Intent(this, EnrolConfirmActivity::class.java)
@@ -85,7 +85,7 @@ class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
                     intent.putExtra("min_buy_hour", min_buy_hour)
 
 
-                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_tech\":{\"stud\":$child_num,\"tech\":$teacher_num},\"payment_daily\":{\"price\":$hour_price,\"length\":$min_buy_hour}}}"
+                    val json = "{\"token\":\"${getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_tech\":{\"stud\":$child_num,\"tech\":$teacher_num},\"payment_daily\":{\"price\":$hour_price,\"length\":$min_buy_hour}}}"
                     intent.putExtra("json", json)
 
 
@@ -96,7 +96,7 @@ class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
                     intent.putExtra("all_month_price", all_month_price)
                     intent.putExtra("mid_month_price", mid_month_price)
 
-                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_tech\":{\"stud\":$child_num,\"tech\":$teacher_num},\"payment_monthly\":{\"full_time\":$all_month_price,\"half_time\":$mid_month_price}}}"
+                    val json = "{\"token\":\"${getAuthToken()}\",\"recruit\":{\"service_id\":\"$service_id\",\"age_boundary\":{\"lbl\":$min_age,\"ubl\":$max_age},\"stud_tech\":{\"stud\":$child_num,\"tech\":$teacher_num},\"payment_monthly\":{\"full_time\":$all_month_price,\"half_time\":$mid_month_price}}}"
 
                     intent.putExtra("json", json)
 
@@ -111,7 +111,7 @@ class ServicePayTypeActivity : BaseActivity(), View.OnClickListener {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         super.onActivityResult(requestCode, resultCode, data)
-        LogUtils.d("requestCode $requestCode ;resultCode $resultCode")
+        logD("requestCode $requestCode ;resultCode $resultCode")
         handleResult(requestCode, resultCode, data)
     }
 

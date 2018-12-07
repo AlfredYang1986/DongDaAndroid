@@ -106,7 +106,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
             sb.append("错误信息:" + location.errorInfo + "\n")
             sb.append("错误描述:" + location.locationDetail + "\n")
 
-            LogUtils.d(sb.toString())
+            logD(sb.toString())
 
             showLocationDialog(location.errorCode)
 
@@ -206,7 +206,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
         aMap!!.setOnMarkerClickListener { marker ->
             // marker 对象被点击时回调的接口
             // 返回 true 则表示接口已响应事件，否则返回false
-            LogUtils.d("onclick " + marker.id)
+            logD("onclick " + marker.id)
             if (marker.id != locMarkerId) {
                 refreshPopUpWindow(marker)
             }
@@ -223,7 +223,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
     private fun refreshPopUpWindow(marker: Marker) {
 
 
-        //        LogUtils.d("is_select"+markers.get(marker.getId()).is_select);
+        //        logD("is_select"+markers.get(marker.getId()).is_select);
 
         //重复点击
         if (marker.id == lastClickMarker) {
@@ -232,8 +232,8 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
 
         val b1 = marker === markers!![marker.id]
 
-        LogUtils.d("marker equals " + (marker == markers!![marker.id]))
-        LogUtils.d("marker == $b1")
+        logD("marker equals " + (marker == markers!![marker.id]))
+        logD("marker == $b1")
 
         view!!.clearAnimation()
         closePopUpWindow()
@@ -242,7 +242,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
         val b = marker.`object` as NearServiceDomainBean.ServicesBean
 
         marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(b.service_type!!, true)))
-        sv_near_photo.setImageURI(OSSUtils.getSignedUrl(b.service_image))
+        sv_near_photo.setImageURI(getSignedUrl(b.service_image))
         tv_near_title.text = b.service_leaf
         val s = StringBuilder()
         if (b.service_leaf!!.contains(getString(R.string.str_care))) {
@@ -287,9 +287,9 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
     override fun onGetDataError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_current_location, bean.message)
+            showSnackbar(iv_current_location, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -304,12 +304,12 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
 
             val marker = aMap!!.addMarker(markerOption)
             marker.`object` = bean.services!![i]
-            //            LogUtils.d("xcx","markerId== "+marker.getId());
+            //            logD("xcx","markerId== "+marker.getId());
             if (i == 0) {//展示第一个
                 lastClickMarker = marker.id
                 val sb = bean.services!![0]
                 marker.setIcon(BitmapDescriptorFactory.fromResource(getImageResId(sb.service_type!!, true)))
-                sv_near_photo.setImageURI(OSSUtils.getSignedUrl(sb.service_image))
+                sv_near_photo.setImageURI(getSignedUrl(sb.service_image))
                 tv_near_title.text = sb.service_leaf
                 val s = StringBuilder()
                 if (sb.service_leaf!!.contains("看顾")) {
@@ -456,22 +456,22 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
             AMapLocationQualityReport.GPS_STATUS_OK -> str = "GPS状态正常"
             AMapLocationQualityReport.GPS_STATUS_NOGPSPROVIDER -> {
                 str = getString(R.string.gps_status_nogpsprovider)
-                ToastUtils.showShortToast(str)
+                showToast(str)
             }
             AMapLocationQualityReport.GPS_STATUS_OFF -> {
                 str = getString(R.string.gps_status_off)
-                ToastUtils.showShortToast(str)
+                showToast(str)
             }
             AMapLocationQualityReport.GPS_STATUS_MODE_SAVING -> {
                 str = getString(R.string.gps_status_mode_saving)
-                ToastUtils.showShortToast(str)
+                showToast(str)
             }
             AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION, AppConstant.NO_GPS_PERMISSION -> {
                 str = getString(R.string.gps_status_nogpspermission)
                 showGoSettingDialog()
             }
         }
-        LogUtils.d(str)
+        logD(str)
     }
 
     private fun showGoSettingDialog() {
@@ -482,7 +482,7 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
                 .setMessage(R.string.go_location_permission_setting)
                 .setPositiveButton(getString(R.string.go_permission_setting)) { dialog, which ->
                     dialog.dismiss()
-                    DeviceUtils.gotoPermissionSetting(this@NearServiceActivity)
+                    gotoPermissionSetting(this@NearServiceActivity)
                 }
                 .setNegativeButton(getString(R.string.dlg_cancel)) { dialog, which -> dialog.dismiss() }.create()
         dialog?.show()
@@ -490,6 +490,6 @@ class NearServiceActivity : BaseActivity(), Contract.NearServiceView {
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 }

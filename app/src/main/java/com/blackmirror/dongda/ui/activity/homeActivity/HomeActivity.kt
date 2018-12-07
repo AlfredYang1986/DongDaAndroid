@@ -10,7 +10,7 @@ import com.blackmirror.dongda.ui.fragment.GrowthFragment
 import com.blackmirror.dongda.ui.fragment.HomeFragment
 import com.blackmirror.dongda.ui.fragment.UserFragment
 import com.blackmirror.dongda.ui.view.MyFragmentTabHost
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
 
 /**
  * Create by Ruge at 2018-09-20
@@ -65,7 +65,7 @@ class HomeActivity : BaseActivity() {
 
         val i1 = v1.findViewById<ImageView>(R.id.iv_photo)
         i1.setBackgroundResource(R.drawable.icon_tabbar_growth_normal)
-        val l1 = ConstraintLayout.LayoutParams(DensityUtils.dp2px(27), DensityUtils.dp2px(27))
+        val l1 = ConstraintLayout.LayoutParams(dp2px(27), dp2px(27))
         l1.topToTop = R.id.item_root
         l1.bottomToBottom = R.id.item_root
         l1.leftToLeft = R.id.item_root
@@ -73,7 +73,7 @@ class HomeActivity : BaseActivity() {
 
         val i2 = v2.findViewById<ImageView>(R.id.iv_photo)
         i2.setBackgroundResource(R.drawable.icon_tabbar_home_normal)
-        val l2 = ConstraintLayout.LayoutParams(DensityUtils.dp2px(27), DensityUtils.dp2px(27))
+        val l2 = ConstraintLayout.LayoutParams(dp2px(27), dp2px(27))
         l2.topToTop = R.id.item_root
         l2.bottomToBottom = R.id.item_root
         l2.leftToLeft = R.id.item_root
@@ -82,7 +82,7 @@ class HomeActivity : BaseActivity() {
 
         val i3 = v3.findViewById<ImageView>(R.id.iv_photo)
         i3.setBackgroundResource(R.drawable.icon_tabbar_user_normal)
-        val l3 = ConstraintLayout.LayoutParams(DensityUtils.dp2px(27), DensityUtils.dp2px(27))
+        val l3 = ConstraintLayout.LayoutParams(dp2px(27), dp2px(27))
         l3.topToTop = R.id.item_root
         l3.bottomToBottom = R.id.item_root
         l3.rightToRight = R.id.item_root

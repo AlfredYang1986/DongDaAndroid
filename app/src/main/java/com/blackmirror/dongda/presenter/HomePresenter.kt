@@ -7,7 +7,7 @@ import com.blackmirror.dongda.kdomain.interactor.searchServiceImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.activity.homeActivity.HomeContract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -41,7 +41,7 @@ class HomePresenter @Inject constructor(val view: HomeContract.HomeView?) : Home
                 } else {
                     view?.onGetHomeDataError(it)
                 }},{
-                    LogUtils.e(HomePresenter::class.java, it)
+                    logE(message = HomePresenter::class.java.simpleName, exception = it)
                     view?.onGetHomeDataError(getErrorData(it))
                 })
     }
@@ -57,7 +57,7 @@ class HomePresenter @Inject constructor(val view: HomeContract.HomeView?) : Home
                         view?.onGetHomeDataError(it)
                     }
                 },{e->
-                    LogUtils.e(HomePresenter::class.java, e)
+                    logE(message = HomePresenter::class.java.simpleName, exception = e)
                     view?.onGetHomeDataError(getErrorData(e))
                 })
     }

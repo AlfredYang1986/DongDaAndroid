@@ -10,7 +10,8 @@ import com.blackmirror.dongda.data.net.execute
 import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.searchHomeData
 import com.blackmirror.dongda.kdomain.model.HomepageDomainBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.getUserId
 import io.reactivex.Observable
 
 /**
@@ -29,7 +30,7 @@ fun searchServiceImpl(): Observable<HomepageDomainBean>{
 
 var sh = fun(): Observable<SearchServiceResponseBean> {
     val bean = SearchServiceRequestBean()
-    bean.json = "{ \"token\": \"${AYPrefUtils.getAuthToken()}\", \"condition\": { \"user_id\": \"${AYPrefUtils.getUserId()}\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}"
+    bean.json = "{ \"token\": \"${getAuthToken()}\", \"condition\": { \"user_id\": \"${getUserId()}\", \"service_type_list\": [{ \"service_type\": \"看顾\", \"count\": 6 }, { \"service_type\": \"艺术\", \"count\": 4 }, { \"service_type\": \"运动\", \"count\": 4 }, { \"service_type\": \"科学\", \"count\": 4 }]}}"
     bean.url = HOME_PAGE_URL
 
     return getOssInfo().flatMap {

@@ -102,15 +102,15 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
                 val json: String
                 val img_uuid = getUUID32()
                 if (isFromNameInput) {
-                    json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_name\":\"$name\",\"screen_photo\":\"$img_uuid\"}}"
+                    json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"},\"profile\":{\"screen_name\":\"$name\",\"screen_photo\":\"$img_uuid\"}}"
                 } else {
-                    json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_photo\":\"$img_uuid\"}}"
+                    json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"},\"profile\":{\"screen_photo\":\"$img_uuid\"}}"
                 }
                 bean.json = json
                 bean.imgUUID = img_uuid
                 presenter?.updateUserInfo(bean)
             } else {
-                ToastUtils.showShortToast(getString(R.string.choose_head_photo))
+                showToast(getString(R.string.choose_head_photo))
             }
             R.id.btn_enter_cancel -> {
                 AYApplication.removeActivity(this)
@@ -121,11 +121,11 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
 
     override fun onUpdateUserInfoSuccess(bean: UpdateUserInfoBean) {
         closeProcessDialog()
-        ToastUtils.showShortToast(R.string.update_user_info_success)
+        showToast(getString(R.string.update_user_info_success))
         val intent = Intent(this@PhotoChangeActivity, AYHomeActivity::class.java)
         intent.putExtra("img_uuid", bean.screen_photo)
-        AYPrefUtils.setImgUuid(bean.screen_photo)
-        AYPrefUtils.setIsPhoneLogin("phone")
+        setImgUuid(bean.screen_photo)
+        setIsPhoneLogin("phone")
         startActivity(intent)
         AYApplication.finishAllActivity()
     }
@@ -133,9 +133,9 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_head_photo, bean.message)
+            showSnackbar(iv_head_photo, bean.message ?: "Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -180,7 +180,7 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
                 .setMessage(R.string.open_camera_permission_setting)
                 .setPositiveButton(getString(R.string.go_permission_setting)) { dialog, which ->
                     dialog.dismiss()
-                    DeviceUtils.gotoPermissionSetting(this@PhotoChangeActivity)
+                    gotoPermissionSetting(this@PhotoChangeActivity)
                 }
                 .setNegativeButton(getString(R.string.dlg_cancel)) { dialog, which -> dialog.dismiss() }.create()
         dialog.show()
@@ -194,9 +194,9 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
             AppConstant.PERMISSION_REQUEST -> for (i in grantResults.indices) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     getPicFromCamera()
-                    LogUtils.d("xcx", permissions[i] + " granted")
+                    logD(TAG = "xcx", message = permissions[i] + " granted")
                 } else {
-                    LogUtils.d("xcx", permissions[i] + " denied")
+                    logD(TAG = "xcx", message = permissions[i] + " denied")
 
                 }
             }
@@ -259,7 +259,7 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
                                 (outputUri));*/
                     if (bitmap != null) {
                         isChangeScreenPhoto = true
-                        LogUtils.d("xcx", "压缩前图片的大小" + bitmap!!.byteCount / 1024
+                        logD(TAG = "xcx", message = "压缩前图片的大小" + bitmap!!.byteCount / 1024
                                 + "k宽度为" + bitmap!!.width + "高度为" + bitmap!!.height)
                         //                        scaleBitmap(bitmap,outputUri);
                         iv_head_photo!!.setImageBitmap(bitmap)
@@ -288,14 +288,14 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
         bm2 = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width,
                 bitmap.height, matrix, true)
 
-        LogUtils.d("xcx", "Matrix 压缩后图片的大小" + bm2!!.byteCount / 1024
+        logD("Matrix 压缩后图片的大小" + bm2!!.byteCount / 1024
                 + "k 宽度为 " + bm2.width + ",高度为 " + bm2.height)
 
 
         bm1 = Bitmap.createBitmap(bm2.width, bm2.height, Bitmap.Config.RGB_565)
 
 
-        LogUtils.d("xcx", "rgb 565 压缩后图片的大小" + bm1!!.byteCount / 1024
+        logD("rgb 565 压缩后图片的大小" + bm1!!.byteCount / 1024
                 + "k 宽度为 " + bm1.width + ",高度为 " + bm1.height)
 
 
@@ -313,10 +313,10 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
 
         bm3 = BitmapFactory.decodeStream(contentResolver.openInputStream(outputUri), null, options)
 
-        LogUtils.d("xcx", "inSampleSize 压缩后图片的大小" + bm3!!.byteCount / 1024
+        logD("inSampleSize 压缩后图片的大小" + bm3!!.byteCount / 1024
                 + "k 宽度为 " + bm3.width + ",高度为 " + bm3.height)
 
-        iv_head_photo!!.setImageBitmap(bm3)
+        iv_head_photo.setImageBitmap(bm3)
 
 
     }
@@ -338,7 +338,7 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
                 inSampleSize *= 2
             }
         }
-        LogUtils.d("inSampleSize $inSampleSize")
+        logD("inSampleSize $inSampleSize")
         return inSampleSize
     }
 
@@ -347,7 +347,7 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
     private fun handleImageOnKitKat(data: Intent) {
         imagePath = null
         val uri = data.data
-        LogUtils.d("xcx", "handleImageOnKitKat: uri is " + uri!!)
+        logD("handleImageOnKitKat: uri is " + uri!!)
         if (DocumentsContract.isDocumentUri(this, uri)) {
             // 如果是document类型的Uri，则通过document id处理
             val docId = DocumentsContract.getDocumentId(uri)
@@ -425,7 +425,7 @@ class PhotoChangeActivity : BaseActivity(), View.OnClickListener, Contract.NameI
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
+        setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
     }
 
     override fun onBackPressed() {

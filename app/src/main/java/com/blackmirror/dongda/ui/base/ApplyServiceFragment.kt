@@ -14,8 +14,8 @@ import com.blackmirror.dongda.ui.activity.SettingActivity
 import com.blackmirror.dongda.ui.activity.UserAboutMeActivity
 import com.blackmirror.dongda.ui.activity.apply.ApplyActivity
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
+import com.blackmirror.dongda.utils.logD
 import com.facebook.drawee.view.SimpleDraweeView
 
 
@@ -105,8 +105,8 @@ class ApplyServiceFragment : BaseFragment(), View.OnClickListener {
                 needsRefresh = true
 
                 img_url = data.getStringExtra("img_url")
-                LogUtils.d("img_url userinfo " + data.getStringExtra("img_url"))
-                sv_user_photo.setImageURI(OSSUtils.getSignedUrl(img_url))
+                logD("img_url userinfo " + data.getStringExtra("img_url"))
+                sv_user_photo.setImageURI(getSignedUrl(img_url))
             } else {
                 needsRefresh = false
             }

@@ -49,10 +49,10 @@ class NameInputActivity : BaseActivity(), Contract.NameInputView {
     }
 
     override fun initListener() {
-        btn_next.setOnClickListener{
+        btn_next.setOnClickListener {
             name = et_input_name.text.toString().trim { it <= ' ' }
             if (TextUtils.isEmpty(name)) {
-                ToastUtils.showShortToast(getString(R.string.input_name_error))
+                showToast(getString(R.string.input_name_error))
                 return@setOnClickListener
             }
             if (has_photo) {
@@ -67,7 +67,7 @@ class NameInputActivity : BaseActivity(), Contract.NameInputView {
     private fun changeName() {
         showProcessDialog()
         val bean = UpdateUserInfoDomainBean()
-        bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_name\":\"$name\"}}"
+        bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"},\"profile\":{\"screen_name\":\"$name\"}}"
         presenter?.updateUserInfo(bean)
     }
 
@@ -86,7 +86,7 @@ class NameInputActivity : BaseActivity(), Contract.NameInputView {
 
     override fun onUpdateUserInfoSuccess(bean: UpdateUserInfoBean) {
         closeProcessDialog()
-        ToastUtils.showShortToast(getString(R.string.update_user_info_success))
+        showToast(getString(R.string.update_user_info_success))
         val intent = Intent(this@NameInputActivity, AYHomeActivity::class.java)
         intent.putExtra("img_uuid", bean.screen_photo)
         startActivity(intent)
@@ -96,13 +96,13 @@ class NameInputActivity : BaseActivity(), Contract.NameInputView {
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(btn_next, bean.message)
+            showSnackbar(btn_next, bean.message ?: "Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
+        setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
     }
 }

@@ -4,8 +4,7 @@ import android.graphics.Rect
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14
@@ -14,11 +13,11 @@ class GridInnerItemDecoration(private val space: Int,var column:Int=2) : Recycle
 
 
 
-    val defalutSpace=DensityUtils.dp2px(9)
+    val defalutSpace=dp2px(9)
     var inner_space:Int=-1
 
     init {
-        inner_space = if (space == -1) this.defalutSpace / 2 else DensityUtils.dp2px(space / 2)
+        inner_space = if (space == -1) this.defalutSpace / 2 else dp2px(space / 2)
     }
 
 

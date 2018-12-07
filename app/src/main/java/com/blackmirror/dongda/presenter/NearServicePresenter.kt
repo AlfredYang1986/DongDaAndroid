@@ -4,7 +4,7 @@ import com.blackmirror.dongda.kdomain.interactor.getNearServiceImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.Contract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class NearServicePresenter @Inject constructor(val nearServiceView: Contract.Nea
                         nearServiceView?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(NearServicePresenter::class.java, it)
+                    logE(message = NearServicePresenter::class.java.simpleName, exception = it)
 
                     nearServiceView?.onGetDataError(getErrorData(it))
                 })

@@ -31,7 +31,7 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
 
     private var disposable: Disposable? = null
     private var presenter: WeChatLoginPresenter? = null
-    private var iv_icon: ImageView? = null
+    lateinit var iv_icon: ImageView
 
     override val layoutResId: Int
         get() = R.layout.activity_splash
@@ -75,11 +75,11 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
                 Manifest.permission.READ_PHONE_STATE
         )
 
-        val list = PermissionUtils.checkPermissionWithNoGranted(this@SplashActivity,
+        val list = checkPermissionWithNoGranted(this@SplashActivity,
                 permissions)
 
         if (list.size != 0) {
-            PermissionUtils.requestMulitPermissions(this@SplashActivity, list)
+            requestMulitPermissions(this@SplashActivity, list)
         } else {
             init2Landing()
         }
@@ -89,7 +89,7 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
         val weChat = ShareSDK.getPlatform(Wechat.NAME)
 
 
-        if (TextUtils.isEmpty(AYPrefUtils.getAuthToken())) {
+        if (TextUtils.isEmpty(getAuthToken())) {
             disposable = Observable.timer(1500, TimeUnit.MILLISECONDS, Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
@@ -99,9 +99,9 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
                         finish()
                     }
         } else {
-            if (!TextUtils.isEmpty(AYPrefUtils.getIsPhoneLogin()) && AYPrefUtils.getIsPhoneLogin() == "phone") {
+            if (!TextUtils.isEmpty(getIsPhoneLogin()) && getIsPhoneLogin() == "phone") {
                 val intent = Intent(this@SplashActivity, AYHomeActivity::class.java)
-                intent.putExtra("img_uuid", AYPrefUtils.getImgUuid())
+                intent.putExtra("img_uuid", getImgUuid())
                 startActivity(intent)
                 finish()
             }else {
@@ -129,9 +129,9 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
             AppConstant.PERMISSION_REQUEST -> {
                 for (i in grantResults.indices) {
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        LogUtils.d("xcx", permissions[i] + " granted")
+                        logD(permissions[i] + " granted")
                     } else {
-                        LogUtils.d("xcx", permissions[i] + " denied")
+                        logD(permissions[i] + " denied")
 
                     }
                 }
@@ -170,9 +170,9 @@ class SplashActivity : BaseActivity(), WeChatLoginContract.View {
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_icon, bean.message)
+            showSnackbar(iv_icon, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 }

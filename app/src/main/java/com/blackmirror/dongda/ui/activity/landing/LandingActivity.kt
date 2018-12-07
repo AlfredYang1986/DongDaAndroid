@@ -9,8 +9,8 @@ import cn.sharesdk.framework.Platform
 import cn.sharesdk.framework.PlatformActionListener
 import cn.sharesdk.framework.ShareSDK
 import cn.sharesdk.wechat.friends.Wechat
-import com.blackmirror.dongda.DongdaApplication
 import com.blackmirror.dongda.R
+import com.blackmirror.dongda.base.AYApplication
 import com.blackmirror.dongda.di.component.DaggerLandingComponent
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.kdomain.model.UpLoadWeChatIconDomainBean
@@ -41,7 +41,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
         get() = R.layout.activity_landing
 
     override fun init() {
-        DongdaApplication.addActivity(this)
+        AYApplication.addActivity(this)
     }
 
     override fun initInject() {
@@ -53,8 +53,8 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
     }
 
     override fun initView() {
-        cl_phone_login = findViewById(R.id.tv_phone_login)
-        cl_wechat_login = findViewById(R.id.tv_wechat_login)
+        cl_phone_login = findViewById(R.id.cl_phone_login)
+        cl_wechat_login = findViewById(R.id.cl_wechat_login)
     }
 
     override fun initData() {}
@@ -104,7 +104,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
                         }
                         closeProcessDialog()
                         if (s.isNotEmpty()) {
-                            ToastUtils.showShortToast(s)
+                            showToast(s)
                         }
                     })
         }
@@ -118,7 +118,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
                             return@Consumer
                         }
                         closeProcessDialog()
-                        ToastUtils.showShortToast(getString(R.string.wechat_auth_cancel))
+                        showToast(getString(R.string.wechat_auth_cancel))
                     })
         }
     }
@@ -127,7 +127,8 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
     //授权
     private fun authorize(plat: Platform, type: Int) {
         if (!plat.isClientValid) {
-            ToastUtils.showShortToast("您还未安装微信!")
+            showToast("您还未安装微信!")
+            closeProcessDialog()
             return
         }
         plat.showUser(null)//授权并获取用户信息
@@ -145,9 +146,9 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
             closeProcessDialog()
             intent.putExtra("img_uuid", bean.screen_photo)
             startActivity(intent)
-            AYPrefUtils.setImgUuid(bean.screen_photo)
-            AYPrefUtils.setIsPhoneLogin("weChat")
-            DongdaApplication.finishAllActivity()
+            setImgUuid(bean.screen_photo)
+            setIsPhoneLogin("weChat")
+            AYApplication.finishAllActivity()
         } else {
             val img_uuid = getUUID32()
             if (userIcon.contains("132")) {
@@ -164,9 +165,9 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
         val intent = Intent(this@LandingActivity, AYHomeActivity::class.java)
         intent.putExtra("img_uuid", bean.imgUUID)
         startActivity(intent)
-        AYPrefUtils.setImgUuid(bean.imgUUID)
-        AYPrefUtils.setIsPhoneLogin("weChat")
-        DongdaApplication.finishAllActivity()
+        setImgUuid(bean.imgUUID)
+        setIsPhoneLogin("weChat")
+        AYApplication.finishAllActivity()
     }
 
     /**
@@ -176,25 +177,25 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
      */
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
-        LogUtils.d("LandingActivity wechat failed ")
+        logD("LandingActivity wechat failed ")
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(cl_phone_login, bean.message)
+            showSnackbar(cl_phone_login, bean.message ?: "Server Error")
             return
         }
         if (bean.code == AppConstant.UPLOAD_WECHAT_ERROR) {
             val intent = Intent(this@LandingActivity, AYHomeActivity::class.java)
             intent.putExtra("img_uuid", "")
             startActivity(intent)
-            DongdaApplication.finishAllActivity()
+            AYApplication.finishAllActivity()
             return
         }
 
-        ToastUtils.showShortToast("${bean.message}(${bean.code})")
+        showToast("${bean.message}(${bean.code})")
 
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 
     private fun unSubscribe() {
@@ -212,7 +213,7 @@ class LandingActivity : BaseActivity(), WeChatLoginContract.View {
 
     override fun onDestroy() {
         super.onDestroy()
-        LogUtils.d("landing onDestroy")
+        logD("landing onDestroy")
         unSubscribe()
     }
 

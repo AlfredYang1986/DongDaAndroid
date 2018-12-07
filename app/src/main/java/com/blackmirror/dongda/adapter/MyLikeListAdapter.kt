@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.LikeDomainBean
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
 import com.facebook.drawee.view.SimpleDraweeView
 
 class MyLikeListAdapter(protected var context: Context, private val bean: LikeDomainBean?) : RecyclerView.Adapter<MyLikeListAdapter.MyLikeListViewHolder>() {
@@ -45,7 +45,7 @@ class MyLikeListAdapter(protected var context: Context, private val bean: LikeDo
 
         val servicesBean = list!![position]
 
-        val url = OSSUtils.getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
+        val url = getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
         holder.sv_care_list_photo.setImageURI(url)
 
         if (servicesBean.is_collected) {

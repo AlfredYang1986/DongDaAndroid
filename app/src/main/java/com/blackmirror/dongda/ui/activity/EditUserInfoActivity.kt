@@ -127,7 +127,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
     override fun onUpdateUserInfoSuccess(bean: UpdateUserInfoBean) {
         closeProcessDialog()
         needsRefresh = true
-        ToastUtils.showShortToast(R.string.update_user_info_success)
+        showToast(msg = "",resId = R.string.update_user_info_success)
         img_url = bean.screen_photo
         setResult(if (needsRefresh) Activity.RESULT_OK else Activity.RESULT_CANCELED, intent.putExtra("img_url", img_url))
         AYApplication.finishActivity(this)
@@ -184,7 +184,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
                 .setMessage(R.string.open_camera_permission_setting)
                 .setPositiveButton(getString(R.string.go_permission_setting)) { dialog, which ->
                     dialog.dismiss()
-                    DeviceUtils.gotoPermissionSetting(this@EditUserInfoActivity)
+                    gotoPermissionSetting(this@EditUserInfoActivity)
                 }
                 .setNegativeButton(getString(R.string.dlg_cancel)) { dialog, which -> dialog.dismiss() }.create()
         dialog.show()
@@ -198,9 +198,9 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
             AppConstant.PERMISSION_REQUEST -> for (i in grantResults.indices) {
                 if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                     getPicFromCamera()
-                    LogUtils.d("xcx", permissions[i] + " granted")
+                    logD(permissions[i] + " granted")
                 } else {
-                    LogUtils.d("xcx", permissions[i] + " denied")
+                    logD(permissions[i] + " denied")
 
                 }
             }
@@ -257,7 +257,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
                                 (outputUri));*/
                         if (bitmap != null) {
                             isChangeScreenPhoto = true
-                            LogUtils.d("xcx", "压缩前图片的大小" + bitmap!!.byteCount / 1024
+                            logD("压缩前图片的大小" + bitmap!!.byteCount / 1024
                                     + "k宽度为" + bitmap!!.width + "高度为" + bitmap!!.height)
                             //                        scaleBitmap(bitmap,outputUri);
 
@@ -278,24 +278,23 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
     private fun handleImageOnKitKat(data: Intent?) {
         imagePath = null
         val uri = data?.data
-        LogUtils.d("xcx", "handleImageOnKitKat: uri is " + uri!!)
         if (DocumentsContract.isDocumentUri(this, uri)) {
             // 如果是document类型的Uri，则通过document id处理
             val docId = DocumentsContract.getDocumentId(uri)
-            if ("com.android.providers.media.documents" == uri.authority) {
+            if ("com.android.providers.media.documents" == uri?.authority) {
                 val id = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1] // 解析出数字格式的id
                 val selection = MediaStore.Images.Media._ID + "=" + id
                 imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection)
-            } else if ("com.android.providers.downloads.documents" == uri.authority) {
+            } else if ("com.android.providers.downloads.documents" == uri?.authority) {
                 val contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(docId))
                 imagePath = getImagePath(contentUri, null)
             }
-        } else if ("content".equals(uri.scheme, ignoreCase = true)) {
+        } else if ("content".equals(uri?.scheme, ignoreCase = true)) {
             // 如果是content类型的Uri，则使用普通方式处理
             imagePath = getImagePath(uri, null)
-        } else if ("file".equals(uri.scheme, ignoreCase = true)) {
+        } else if ("file".equals(uri?.scheme, ignoreCase = true)) {
             // 如果是file类型的Uri，直接获取图片路径即可
-            imagePath = uri.path
+            imagePath = uri?.path
         }
         cropPhoto(uri)
     }
@@ -360,7 +359,7 @@ class EditUserInfoActivity : BaseActivity(), View.OnClickListener, Contract.Name
         Fresco.getImagePipeline().evictFromCache(uri)
 
         val request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(ResizeOptions(DensityUtils.getScreenWidthPx(), DensityUtils.dp2px(250)))
+                .setResizeOptions(ResizeOptions(getScreenWidthPx(), dp2px(250)))
                 .build()
 
         val controller = Fresco.newDraweeControllerBuilder()

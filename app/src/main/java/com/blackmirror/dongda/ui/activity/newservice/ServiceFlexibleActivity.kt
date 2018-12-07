@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
 import com.blackmirror.dongda.utils.getDoubleValue
+import com.blackmirror.dongda.utils.showToast
 
 class ServiceFlexibleActivity : BaseActivity() {
 
@@ -59,11 +59,11 @@ class ServiceFlexibleActivity : BaseActivity() {
             val min_buy_hour = tet_min_buy_hour.text.toString()
 
             if (hour_price.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入每小时服务价格!")
+                showToast("请输入每小时服务价格!")
                 return@OnClickListener
             }
             if (min_buy_hour.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入单次最少购买时长!")
+                showToast("请输入单次最少购买时长!")
                 return@OnClickListener
             }
 

@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
 import com.blackmirror.dongda.utils.getDoubleValue
+import com.blackmirror.dongda.utils.showToast
 
 class ServiceFixedActivity : BaseActivity() {
 
@@ -60,11 +60,11 @@ class ServiceFixedActivity : BaseActivity() {
             val mid_month_price = tet_mid_month_price.text.toString()
 
             if (all_month_price.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入全日托单月价格!")
+                showToast("请输入全日托单月价格!")
                 return@OnClickListener
             }
             if (mid_month_price.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入半日托单月价格!")
+                showToast("请输入半日托单月价格!")
                 return@OnClickListener
             }
 

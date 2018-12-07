@@ -6,7 +6,7 @@ import com.blackmirror.dongda.kdomain.interactor.likePushImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.Contract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class MyLikePresenter @Inject constructor(val likeView: Contract.MyLikeView?) : 
                         likeView?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(MyLikePresenter::class.java, it)
+                    logE(message = MyLikePresenter::class.java.simpleName, exception = it)
                     likeView?.onGetDataError(getErrorData(it))
                 })
     }
@@ -43,7 +43,7 @@ class MyLikePresenter @Inject constructor(val likeView: Contract.MyLikeView?) : 
                         likeView?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(MyLikePresenter::class.java, it)
+                    logE(message = MyLikePresenter::class.java.simpleName, exception = it)
                     likeView?.onGetDataError(getErrorData(it))
                 })
     }
@@ -59,7 +59,7 @@ class MyLikePresenter @Inject constructor(val likeView: Contract.MyLikeView?) : 
                         likeView?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(MyLikePresenter::class.java, it)
+                    logE(message = MyLikePresenter::class.java.simpleName, exception = it)
                     likeView?.onGetDataError(getErrorData(it))
                 })
     }

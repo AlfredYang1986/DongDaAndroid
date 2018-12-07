@@ -18,9 +18,9 @@ import com.blackmirror.dongda.kdomain.model.LikePushDomainBean
 import com.blackmirror.dongda.presenter.GetMoreDataPresenter
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.SnackbarUtils
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.logD
+import com.blackmirror.dongda.utils.showSnackbar
+import com.blackmirror.dongda.utils.showToast
 import com.scwang.smartrefresh.header.MaterialHeader
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter
@@ -97,9 +97,9 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
 
 
         sl_art_list.setOnLoadMoreListener(OnLoadMoreListener { refreshLayout ->
-            LogUtils.d("skip==$skip")
+            logD("skip==$skip")
             if (refreshLayout.state.dragging) {
-                LogUtils.d("dragging")
+                logD("dragging")
             }
             if (totalCount <= adapter!!.itemCount - 1) {
                 sl_art_list.finishLoadMore()
@@ -148,9 +148,9 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
             sl_art_list.finishRefresh(false)
         }
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, bean.message)
+            showSnackbar(ctl_root, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -202,7 +202,7 @@ class ArtListActivity : BaseActivity(), ListMoreContract.View {
 
 
         } else {
-            ToastUtils.showShortToast(bean.message + "(" + bean.code + ")")
+            showToast(bean.message + "(" + bean.code + ")")
         }
     }
 

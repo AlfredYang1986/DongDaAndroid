@@ -5,8 +5,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.alibaba.sdk.android.oss.OSSClient
-
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14
@@ -24,11 +23,11 @@ class GridItemDecoration(top: Int, space: Int, inner_space: Int, lastTop: Int, l
 
     init {
         var ossClient:OSSClient?=null
-        this.lastTop = DensityUtils.dp2px(lastTop)
-        this.lastBottom = DensityUtils.dp2px(lastBottom)
-        this.top = DensityUtils.dp2px(top)
-        this.space = DensityUtils.dp2px(space)
-        this.inner_space = if (inner_space == -1) this.space / 2 else DensityUtils.dp2px(inner_space / 2)
+        this.lastTop = dp2px(lastTop)
+        this.lastBottom = dp2px(lastBottom)
+        this.top = dp2px(top)
+        this.space = dp2px(space)
+        this.inner_space = if (inner_space == -1) this.space / 2 else dp2px(inner_space / 2)
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
@@ -47,7 +46,7 @@ class GridItemDecoration(top: Int, space: Int, inner_space: Int, lastTop: Int, l
         if (pos >= 0 && pos < column) {
             outRect.top = top
         } else {
-            outRect.top = DensityUtils.dp2px(55)
+            outRect.top = dp2px(55)
         }
 
         if (pos % column == 0) {//最左列元素

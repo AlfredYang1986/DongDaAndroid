@@ -11,7 +11,7 @@ import android.widget.TextView
 
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.HomepageDomainBean
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
 import com.facebook.drawee.view.SimpleDraweeView
 
 class HomeSportAdapter(protected var context: Context, internal var bean: HomepageDomainBean.HomepageServicesBean) : RecyclerView.Adapter<HomeSportAdapter.HomeSportViewHolder>() {
@@ -34,7 +34,7 @@ class HomeSportAdapter(protected var context: Context, internal var bean: Homepa
         val servicesBean = this.bean.services!![position]
 
 
-        val url = OSSUtils.getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
+        val url = getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
         holder.sv_item_sport_photo.setImageURI(url)
 
 

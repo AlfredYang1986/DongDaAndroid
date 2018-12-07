@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showToast
 
 class ApplyNameActivity : BaseActivity() {
 
@@ -56,7 +56,7 @@ class ApplyNameActivity : BaseActivity() {
             val user_name = tet_user_name.editableText.toString()
             val brand_name = tet_service_name.editableText.toString()
             if (user_name.isNullOrEmpty()) {
-                ToastUtils.showShortToast("用户名不能为空!")
+                showToast("用户名不能为空!")
                 return@OnClickListener
             }
             val intent = Intent(this@ApplyNameActivity, ApplyCityActivity::class.java)

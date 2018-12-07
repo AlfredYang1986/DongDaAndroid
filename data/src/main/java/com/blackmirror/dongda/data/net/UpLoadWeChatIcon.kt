@@ -6,8 +6,7 @@ import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.DownloadWeChatIconResponseBean
 import com.blackmirror.dongda.data.model.response.OssInfoResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
-import com.blackmirror.dongda.utils.AYPrefUtils
-import com.blackmirror.dongda.utils.DateUtils
+import com.blackmirror.dongda.utils.*
 import io.reactivex.Observable
 import okhttp3.MediaType
 import okhttp3.Request
@@ -24,18 +23,18 @@ fun upload(requestBean: UploadImageRequestBean, myClass: Class<UpLoadImgResponse
 
     return Observable.just(requestBean)
             .map {
-                if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
-                    val json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\"}"
+                if (isNeedRefreshToken(getExpiration())) {
+                    val json = "{\"token\":\"${getAuthToken()}\"}"
                     val request = Request.Builder()
                             .url(OSS_INFO_URL).post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json)).build()
                     val bean = executeRequest(request, OssInfoResponseBean::class.java)
 
                     if (bean.status=="ok"){
                         bean.result?.OssConnectInfo?.apply {
-                            AYPrefUtils.setAccesskeyId(accessKeyId)
-                            AYPrefUtils.setSecurityToken(SecurityToken)
-                            AYPrefUtils.setAccesskeySecret(accessKeySecret)
-                            AYPrefUtils.setExpiration(Expiration)
+                            setAccesskeyId(accessKeyId)
+                            setSecurityToken(SecurityToken)
+                            setAccesskeySecret(accessKeySecret)
+                            setExpiration(Expiration)
                         }
                     }
                     return@map bean

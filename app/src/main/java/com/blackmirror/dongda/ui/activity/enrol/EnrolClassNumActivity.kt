@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showToast
 
 class EnrolClassNumActivity : BaseActivity() {
 
@@ -47,11 +47,11 @@ class EnrolClassNumActivity : BaseActivity() {
         tv_next.setOnClickListener(View.OnClickListener {
             val max_num = tet_max_num.text.toString()
             if (TextUtils.isEmpty(max_num)) {
-                ToastUtils.showShortToast("最大满班人数不能为空!")
+                showToast("最大满班人数不能为空!")
                 return@OnClickListener
             }
             if (Integer.parseInt(max_num) < 10) {
-                ToastUtils.showShortToast("最大满班人数不能小于最少开班人数!")
+                showToast("最大满班人数不能小于最少开班人数!")
                 return@OnClickListener
             }
             val intent = Intent(this@EnrolClassNumActivity, EnrolPayTypeActivity::class.java)

@@ -5,14 +5,15 @@ import android.util.Log
 import com.blackmirror.dongda.base.AYApplication
 
 /**
- * Create By Ruge at 2018-07-02
+ * Create By Ruge at 2018-12-07
  */
-var DEBUG = AYApplication.getApplication().applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+
+var DEBUG = AYApplication.me.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
 const val DEFAULT_TAG = "xcx"
 const val DEFAULT_ERROR_MSG = "dongda Exception: "
 
-
-fun logD(TAG: String = DEFAULT_TAG, message: String = DEFAULT_ERROR_MSG, t: Throwable? = null) {
+@JvmOverloads
+fun logD(message: String, TAG: String = DEFAULT_TAG, t: Throwable? = null) {
     if (!DEBUG) {
         return
     }
@@ -23,12 +24,12 @@ fun logD(TAG: String = DEFAULT_TAG, message: String = DEFAULT_ERROR_MSG, t: Thro
     }
 }
 
-fun logE(TAG: String = DEFAULT_TAG, message: String = DEFAULT_ERROR_MSG, t: Throwable? = null) {
+fun logE(TAG: String = DEFAULT_TAG, message: String, exception: Throwable? = null) {
     if (!DEBUG)
         return
-    if (t == null) {
+    if (exception == null) {
         Log.e(TAG, message)
     } else {
-        Log.e(TAG, message, t)
+        Log.e(TAG, message, exception)
     }
 }

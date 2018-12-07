@@ -20,8 +20,8 @@ import com.blackmirror.dongda.presenter.MyLikePresenter
 import com.blackmirror.dongda.ui.Contract
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.SnackbarUtils
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showSnackbar
+import com.blackmirror.dongda.utils.showToast
 
 class MyLikeActivity : BaseActivity(), Contract.MyLikeView {
 
@@ -104,9 +104,9 @@ class MyLikeActivity : BaseActivity(), Contract.MyLikeView {
     override fun onGetDataError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, bean.message)
+            showSnackbar(ctl_root, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 

@@ -7,8 +7,8 @@ import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.model.ServiceProfileBean
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.DeviceUtils
-import com.blackmirror.dongda.utils.OtherUtils
+import com.blackmirror.dongda.utils.initSystemBarColor
+import com.blackmirror.dongda.utils.resourceIdToUri
 import com.facebook.drawee.view.SimpleDraweeView
 
 class ServiceProfileActivity : BaseActivity() {
@@ -43,7 +43,7 @@ class ServiceProfileActivity : BaseActivity() {
     override fun initData() {
         bean = intent.getParcelableExtra("bean")
         if (bean != null) {
-            sv_service_photo.setImageURI(OtherUtils.resourceIdToUri(this, bean!!.res_id))
+            sv_service_photo.setImageURI(resourceIdToUri(this, bean!!.res_id))
             tv_service_tag.text = bean!!.brand_tag
             tv_service_name.text = bean!!.brand_name
             tv_service_teacher_name.text = String.format(getString(R.string.str_teacher), bean!!.brand_name)
@@ -56,7 +56,7 @@ class ServiceProfileActivity : BaseActivity() {
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 
     companion object {

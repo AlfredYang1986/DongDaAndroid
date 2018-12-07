@@ -10,9 +10,7 @@ import com.blackmirror.dongda.R
 import com.blackmirror.dongda.base.AYApplication
 import com.blackmirror.dongda.ui.activity.landing.LandingActivity
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.AYPrefUtils
-import com.blackmirror.dongda.utils.FileUtils
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.*
 import com.mob.MobSDK
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -89,7 +87,7 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
         showProcessDialog()
         disposable = Observable.timer(500, TimeUnit.MILLISECONDS, Schedulers.io())
                 .map{
-                        FileUtils.deleteDir(AYApplication.getAppContext().externalCacheDir)
+                        deleteDir(AYApplication.appContext.externalCacheDir)
                          it
                     }
                 .observeOn(AndroidSchedulers.mainThread())
@@ -98,9 +96,9 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                         return@Consumer
                     }
                     closeProcessDialog()
-                    ToastUtils.showShortToast("清除成功!")
-                    val path = AYApplication.getAppContext().externalCacheDir!!.path
-                    val size = FileUtils.getFileOrFilesSize(path)
+                    showToast("清除成功!")
+                    val path = AYApplication.appContext.externalCacheDir!!.path
+                    val size = getFileOrFilesSize(path)
                 })
 
     }
@@ -130,8 +128,8 @@ class SettingActivity : BaseActivity(), View.OnClickListener {
                     weChat.removeAccount(true)
                     ShareSDK.deleteCache()
                     MobSDK.clearUser()
-                    AYPrefUtils.setUserId("")
-                    AYPrefUtils.setAuthToken("")
+                    setUserId("")
+                    setAuthToken("")
                     val intent = Intent(this@SettingActivity, LandingActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)

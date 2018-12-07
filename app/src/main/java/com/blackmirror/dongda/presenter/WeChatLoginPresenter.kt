@@ -5,8 +5,9 @@ import com.blackmirror.dongda.kdomain.interactor.uploadWeChatImageImpl
 import com.blackmirror.dongda.kdomain.interactor.weChatLoginImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.WeChatLoginContract
-import com.blackmirror.dongda.utils.AYPrefUtils
 import com.blackmirror.dongda.utils.AppConstant
+import com.blackmirror.dongda.utils.setAuthToken
+import com.blackmirror.dongda.utils.setUserId
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -20,8 +21,8 @@ class WeChatLoginPresenter @Inject constructor(val view: WeChatLoginContract.Vie
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
                     if (it.isSuccess) {
-                        AYPrefUtils.setUserId(it.user_id)
-                        AYPrefUtils.setAuthToken(it.auth_token)
+                        setUserId(it.user_id)
+                        setAuthToken(it.auth_token)
                         view.weChatLoginSuccess(it)
                     } else {
                         view.onError(it)

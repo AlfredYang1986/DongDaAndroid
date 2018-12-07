@@ -1,5 +1,6 @@
 package com.blackmirror.dongda.data.net
 
+import com.alibaba.sdk.android.oss.common.utils.OSSUtils
 import com.blackmirror.dongda.base.AYApplication
 import com.blackmirror.dongda.data.CONNECT_EXCEPTION
 import com.blackmirror.dongda.data.CONNECT_TIMEOUT_EXCEPTION
@@ -8,10 +9,7 @@ import com.blackmirror.dongda.data.SOCKET_TIMEOUT_EXCEPTION
 import com.blackmirror.dongda.data.model.request.UploadImageRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadImgResponseBean
-import com.blackmirror.dongda.utils.AYPrefUtils
-import com.blackmirror.dongda.utils.DateUtils
-import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.*
 import okhttp3.MediaType
 import okhttp3.Request
 import okhttp3.RequestBody
@@ -29,9 +27,9 @@ fun executeUpload(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
     val error_code: Int
     val error_message: String?
 
-    val path = AYApplication.getAppContext().externalCacheDir!!.toString() + "/crop_image.jpg"
+    val path = AYApplication.appContext.externalCacheDir.toString() + "/crop_image.jpg"
 
-    val time = DateUtils.currentFixedSkewedTimeInRFC822Format()
+    val time = currentFixedSkewedTimeInRFC822Format()
 
     //        String imgUUID = CalUtils.getUUID32();
 
@@ -42,14 +40,14 @@ fun executeUpload(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
             .append("\n")
             .append("image/jpeg\n")
             .append(time + "\n")
-            .append("x-oss-security-token:" + AYPrefUtils.getSecurityToken() + "\n")
+            .append("x-oss-security-token:" + getSecurityToken() + "\n")
             .append("/bm-dongda/")
             .append(imageName)
 
-    val signature = OSSUtils.sign(AYPrefUtils.getAccesskeyId(), AYPrefUtils.getAccesskeySecret(), sb.toString())
+    val signature = OSSUtils.sign(getAccesskeyId(), getAccesskeySecret(), sb.toString())
 
-    LogUtils.d("xcx", "onClick: ziji \n$signature")
-    LogUtils.d("xcx", "onClick: ziji content \n" + sb.toString())
+    logD(TAG = "xcx", message = "onClick: ziji \n$signature")
+    logD(TAG = "xcx", message = "onClick: ziji content \n" + sb.toString())
 
     var requestBuilder = Request.Builder()
 
@@ -58,7 +56,7 @@ fun executeUpload(requestBean: UploadImageRequestBean): UpLoadImgResponseBean {
     requestBuilder.addHeader("Date", time)
     requestBuilder.addHeader("Content-Type", "image/jpeg")
     requestBuilder.addHeader("User-Agent", "okhttp/3.10.0")
-    requestBuilder.addHeader("x-oss-security-token", AYPrefUtils.getSecurityToken())
+    requestBuilder.addHeader("x-oss-security-token", getSecurityToken())
     requestBuilder.addHeader("Authorization", signature)
 
     if (requestBean.userIconData != null && requestBean.userIconData!!.isNotEmpty()) {

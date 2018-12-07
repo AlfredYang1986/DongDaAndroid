@@ -6,7 +6,7 @@ import com.blackmirror.dongda.kdomain.interactor.likePushImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.activity.ListMoreContract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -27,7 +27,7 @@ class GetMoreDataPresenter @Inject constructor(val view: ListMoreContract.View?)
                         view?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(GetMoreDataPresenter::class.java, it)
+                    logE(message = GetMoreDataPresenter::class.java.simpleName, exception = it)
 
                     view?.onGetDataError(getErrorData(it))
                 })
@@ -44,7 +44,7 @@ class GetMoreDataPresenter @Inject constructor(val view: ListMoreContract.View?)
                         view?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(GetMoreDataPresenter::class.java, it)
+                    logE(message = GetMoreDataPresenter::class.java.simpleName, exception = it)
                     view?.onGetDataError(getErrorData(it))
                 })
     }
@@ -60,7 +60,7 @@ class GetMoreDataPresenter @Inject constructor(val view: ListMoreContract.View?)
                         view?.onGetDataError(it)
                     }
                 }, {
-                    LogUtils.e(GetMoreDataPresenter::class.java, it)
+                    logE(message = GetMoreDataPresenter::class.java.simpleName, exception = it)
                     view?.onGetDataError(getErrorData(it))
                 })
     }

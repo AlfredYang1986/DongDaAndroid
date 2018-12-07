@@ -7,7 +7,7 @@ import com.blackmirror.dongda.kdomain.model.UpdateUserInfoDomainBean
 import com.blackmirror.dongda.ui.Contract
 import com.blackmirror.dongda.ui.activity.UserInfoContract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class UserInfoPresenter @Inject constructor() : UserInfoContract.Presenter {
                         userView?.onGetDataError(it)
                     }
                 },{
-                    LogUtils.e(UserInfoPresenter::class.java, it)
+                    logE(message = UserInfoPresenter::class.java.simpleName, exception = it)
                     val bean = BaseDataBean()
                     bean.code = AppConstant.NET_UNKNOWN_ERROR
                     bean.message = it.message
@@ -54,7 +54,7 @@ class UserInfoPresenter @Inject constructor() : UserInfoContract.Presenter {
                         nameInputView?.onError(it)
                     }
                 },{
-                    LogUtils.e(UserInfoPresenter::class.java, it)
+                    logE(message = UserInfoPresenter::class.java.simpleName, exception = it)
 
                     val b = BaseDataBean()
                     b.code = AppConstant.NET_UNKNOWN_ERROR

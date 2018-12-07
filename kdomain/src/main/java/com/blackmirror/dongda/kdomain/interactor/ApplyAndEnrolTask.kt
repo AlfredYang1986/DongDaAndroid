@@ -16,7 +16,8 @@ import com.blackmirror.dongda.kdomain.model.ApplyServiceDomainBean
 import com.blackmirror.dongda.kdomain.model.BrandAllLocDomainBean
 import com.blackmirror.dongda.kdomain.model.EnrolDomainBean
 import com.blackmirror.dongda.kdomain.model.LocAllServiceDomainBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.getUserId
 import io.reactivex.Observable
 import java.util.*
 
@@ -125,7 +126,7 @@ val el = fun(json: String): Observable<EnrolResponseBean> {
  */
 val bl = fun(json: String, locations: String): Observable<LocAllServiceResponseBean> {
     val bean = LocAllServiceRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"locations\":[\"$locations\"]}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"locations\":[\"$locations\"]}"
 
     bean.url = LOC_ALL_SERVICE_URL
 
@@ -144,7 +145,7 @@ val bl = fun(json: String, locations: String): Observable<LocAllServiceResponseB
 
 val addr = fun(brand_id: String): Observable<BrandAllLocResponseBean> {
     val bean = BrandAllLocRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"brand_id\":\"$brand_id\"}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"brand_id\":\"$brand_id\"}"
 
     bean.url = BRAND_ALL_LOC_URL
 
@@ -163,7 +164,7 @@ val addr = fun(brand_id: String): Observable<BrandAllLocResponseBean> {
 
 val apply = fun(brand_name: String, name: String, category: String, phone: String, city: String): Observable<ApplyServiceResponseBean> {
     val bean = ApplyServiceRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"apply\":{\"brand_name\":\"$brand_name\",\"name\":\"$name\",\"category\":\"$category\",\"phone\":\"$phone\",\"city\":\"$city\"}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"},\"apply\":{\"brand_name\":\"$brand_name\",\"name\":\"$name\",\"category\":\"$category\",\"phone\":\"$phone\",\"city\":\"$city\"}}"
 
     bean.url = APPLY_SERVICE_URL
 

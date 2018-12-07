@@ -9,7 +9,8 @@ import com.blackmirror.dongda.data.net.execute
 import com.blackmirror.dongda.data.net.getOssInfo
 import com.blackmirror.dongda.data.repository.queryUserInfo
 import com.blackmirror.dongda.kdomain.model.UserInfoDomainBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.getUserId
 import io.reactivex.Observable
 
 /**
@@ -47,7 +48,7 @@ fun queryUserInfoImpl(): Observable<UserInfoDomainBean> {
 
 val qu = fun(): Observable<UserInfoResponseBean> {
     val bean = UserInfoRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"}}"
 
     bean.url = QUERY_USER_INFO_URL
 

@@ -4,7 +4,8 @@ import com.blackmirror.dongda.kdomain.interactor.applyServiceImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.activity.apply.ApplyContract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logD
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -19,14 +20,14 @@ class ApplyPresenter @Inject constructor(val view: ApplyContract.View?) : ApplyC
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    LogUtils.d("apply onNext")
+                    logD("apply onNext")
                     if (it.isSuccess) {
                         view?.onApplySuccess(it)
                     } else {
                         view?.onError(it)
                     }
                 }, {
-                    LogUtils.e(ApplyPresenter::class.java, it)
+                    logE(message = ApplyPresenter::class.java.simpleName, exception = it)
                     view?.onError(getErrorData(it))
                 })
 

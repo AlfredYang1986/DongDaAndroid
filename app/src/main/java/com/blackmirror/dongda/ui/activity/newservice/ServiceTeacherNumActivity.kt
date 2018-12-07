@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showToast
 
 class ServiceTeacherNumActivity : BaseActivity() {
 
@@ -63,15 +63,15 @@ class ServiceTeacherNumActivity : BaseActivity() {
             val location_num = tet_location_num.text.toString()
 
             if (teacher_num.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入教师人数!")
+                showToast("请输入教师人数!")
                 return@OnClickListener
             }
             if (child_num.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入学生人数!")
+                showToast("请输入学生人数!")
                 return@OnClickListener
             }
             if (location_num.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入场地容纳人数!")
+                showToast("请输入场地容纳人数!")
                 return@OnClickListener
             }
 

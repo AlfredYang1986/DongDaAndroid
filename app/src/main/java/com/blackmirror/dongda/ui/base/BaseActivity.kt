@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 
 import com.blackmirror.dongda.R
-import com.blackmirror.dongda.utils.DeviceUtils
+import com.blackmirror.dongda.utils.setStatusBarColor
 
 /**
  * Created by Ruge on 2018-05-04 下午6:41
@@ -38,7 +38,7 @@ abstract class BaseActivity : AppCompatActivity() {
     }
 
     protected open fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this)
+        setStatusBarColor(this)
     }
 
     protected abstract fun initInject()

@@ -6,8 +6,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.DeviceUtils
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
+import com.blackmirror.dongda.utils.setStatusBarColor
 import com.facebook.drawee.view.SimpleDraweeView
 
 class EnrolServiceActivity : BaseActivity() {
@@ -44,7 +44,7 @@ class EnrolServiceActivity : BaseActivity() {
         val service_image = intent.getStringExtra("service_image")
         service_id = intent.getStringExtra("service_id")
         iv_service_location.text = address
-        sv_service_photo.setImageURI(OSSUtils.getSignedUrl(service_image))
+        sv_service_photo.setImageURI(getSignedUrl(service_image))
         tv_service_brand.text = service_leaf
     }
 
@@ -64,6 +64,6 @@ class EnrolServiceActivity : BaseActivity() {
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, resources.getColor(R.color.enrol_bg))
+        setStatusBarColor(this, resources.getColor(R.color.enrol_bg))
     }
 }

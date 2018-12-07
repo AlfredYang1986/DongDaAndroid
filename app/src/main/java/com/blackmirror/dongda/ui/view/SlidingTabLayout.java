@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.blackmirror.dongda.R;
-import com.blackmirror.dongda.utils.LogUtils;
+import com.blackmirror.dongda.utils.LogUtilsKt;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
@@ -190,20 +190,20 @@ public class SlidingTabLayout extends TabLayout{
         tabWidth = (int) (screenWidth / (mTabVisibleCount + mLastTabVisibleRatio));
         View firstView = llTab.getChildAt(0);
         int count = llTab.getChildCount();
-        LogUtils.d("count "+count);
+        LogUtilsKt.logD("count "+count);
 
         if (firstView != null) {
-            LogUtils.d("firstView.getLeft() "+firstView.getLeft());
+            LogUtilsKt.logD("firstView.getLeft() "+firstView.getLeft());
 
             this.mInitTranslationX = (firstView.getLeft() + firstView.getRight() / 2 - firstView.getLeft() / 2-this.mSlideIcon.getWidth() / 2);
 
         }else {
-            LogUtils.d("为空了呢 ");
+            LogUtilsKt.logD("为空了呢 ");
 
         }
-        LogUtils.d("getBottom "+getBottom());
-        LogUtils.d("llTab.getLeft() "+llTab.getLeft());
-        LogUtils.d("getBottom "+getBottom());
+        LogUtilsKt.logD("getBottom "+getBottom());
+        LogUtilsKt.logD("llTab.getLeft() "+llTab.getLeft());
+        LogUtilsKt.logD("getBottom "+getBottom());
 //        this.mInitTranslationX = (llTab.getLeft()+(llTab.getRight() - llTab.getLeft())/2);
 
         this.mInitTranslationY = (getBottom() -getTop()- this.mSlideIcon.getHeight());
@@ -231,9 +231,9 @@ public class SlidingTabLayout extends TabLayout{
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
             super.onPageScrolled(position, positionOffset, positionOffsetPixels);
             final TabLayout tabLayout = mTabLayoutRef.get();
-            LogUtils.d("position "+position);
-            LogUtils.d("positionOffset "+positionOffset);
-            LogUtils.d("positionOffsetPixels "+positionOffsetPixels);
+            LogUtilsKt.logD("position "+position);
+            LogUtilsKt.logD("positionOffset "+positionOffset);
+            LogUtilsKt.logD("positionOffsetPixels "+positionOffsetPixels);
 
             if (tabStrip == null){
                 return;

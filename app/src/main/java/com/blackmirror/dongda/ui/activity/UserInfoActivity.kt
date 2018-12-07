@@ -155,7 +155,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
             }
         //切换为服务模式
             R.id.tv_change_to_service -> {
-                AYPrefUtils.setSettingFlag("3")//3招生 2 预定模式
+                setSettingFlag("3")//3招生 2 预定模式
                 cl_apply_service.visibility = View.GONE
                 cl_enrol_class.visibility = View.VISIBLE
                 cl_change_service.visibility = View.GONE
@@ -196,7 +196,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
         )
-        val needsGrand = PermissionUtils.checkPermissionWithNoGrantedForArray(this, p)
+        val needsGrand = checkPermissionWithNoGrantedForArray(this, p)
 
         if (needsGrand.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, needsGrand, AppConstant.PERMISSION_LIVE)
@@ -222,7 +222,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 Manifest.permission.CAMERA,
                 Manifest.permission.RECORD_AUDIO
         )
-        val needsGrand = PermissionUtils.checkPermissionWithNoGrantedForArray(this, p)
+        val needsGrand = checkPermissionWithNoGrantedForArray(this, p)
 
         if (needsGrand.isNotEmpty()) {
             ActivityCompat.requestPermissions(this, needsGrand, AppConstant.PERMISSION_LIVE)
@@ -240,7 +240,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 .setMessage(R.string.permisson_denied)
                 .setPositiveButton(getString(R.string.go_permission_setting)) { dialog, which ->
                     dialog.dismiss()
-                    DeviceUtils.gotoPermissionSetting(this@UserInfoActivity)
+                    gotoPermissionSetting(this@UserInfoActivity)
                 }
                 .setNegativeButton(getString(R.string.dlg_cancel)) { dialog, which ->
                     dialog.dismiss()
@@ -258,10 +258,10 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 for (i in grantResults.indices) {
 
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                        LogUtils.d("xcx", permissions[i] + " granted")
+                        logD(permissions[i] + " granted")
                         b = true
                     } else {
-                        LogUtils.d("xcx", permissions[i] + " denied")
+                        logD(permissions[i] + " denied")
                         b = false
                         break
                     }
@@ -281,7 +281,7 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
 
     private fun initRecord() {
 //        ToastUtils.showShortToast(externalCacheDir.absolutePath)
-        LogUtils.d("xcx","externalCacheDir: ${externalCacheDir.absolutePath}")
+        logD("externalCacheDir: ${externalCacheDir.absolutePath}")
 
         val path="${externalCacheDir.absolutePath}/video"
 
@@ -315,17 +315,17 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
     override fun onQueryUserInfoSuccess(bean: UserInfoDomainBean) {
         closeProcessDialog()
         tv_user_name.text = bean.screen_name
-        sv_user_photo.setImageURI(OSSUtils.getSignedUrl(bean.screen_photo))
+        sv_user_photo.setImageURI(getSignedUrl(bean.screen_photo))
         if (bean.is_service_provider == 0) {
             cl_apply_service.visibility = View.VISIBLE
             cl_enrol_class.visibility = View.GONE
             cl_change_service.visibility = View.GONE
         } else if (bean.is_service_provider == 1) {
-            if (AYPrefUtils.getSettingFlag() == "3") {
+            if (getSettingFlag() == "3") {
                 cl_apply_service.visibility = View.GONE
                 cl_enrol_class.visibility = View.VISIBLE
                 cl_change_service.visibility = View.GONE
-            } else if (AYPrefUtils.getSettingFlag() == "2") {
+            } else if (getSettingFlag() == "2") {
                 cl_apply_service.visibility = View.GONE
                 cl_enrol_class.visibility = View.GONE
                 cl_change_service.visibility = View.VISIBLE
@@ -336,9 +336,9 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
     override fun onGetDataError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(sv_user_photo, bean.message)
+            showSnackbar(sv_user_photo, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -357,8 +357,8 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
                 needsRefresh = true
 
                 img_url = data.getStringExtra("img_url")
-                LogUtils.d("img_url userinfo " + data.getStringExtra("img_url"))
-                sv_user_photo.setImageURI(OSSUtils.getSignedUrl(img_url))
+                logD("img_url userinfo " + data.getStringExtra("img_url"))
+                sv_user_photo.setImageURI(getSignedUrl(img_url))
             } else {
                 needsRefresh = false
             }
@@ -372,6 +372,6 @@ class UserInfoActivity : BaseActivity(), View.OnClickListener, UserInfoContract.
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, Color.parseColor("#FFF7F9FA"))
+        setStatusBarColor(this, Color.parseColor("#FFF7F9FA"))
     }
 }

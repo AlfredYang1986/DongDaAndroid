@@ -15,7 +15,9 @@ import com.blackmirror.dongda.data.OTHER_EXCEPTION
 import com.blackmirror.dongda.data.model.request.UploadVideoRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
 import com.blackmirror.dongda.data.model.response.UpLoadVideoResponseBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAccesskeyId
+import com.blackmirror.dongda.utils.getAccesskeySecret
+import com.blackmirror.dongda.utils.getSecurityToken
 
 /**
  * Create By Ruge at 2018-07-31
@@ -61,7 +63,7 @@ inline fun getOSSClient(): OSSClient {
     val accId = "STS.NJfAq1aqrbJARrWmb2hy6zFjB"
     val secId = "Dy5JjYFNcVmhCzstp1P8wQvHE8xQ99uWfgJCmzCougEF"
     val seToken = "CAIShQJ1q6Ft5B2yfSjIr4nTCsuFjK5T1YiqUFTmiWJnZPYalYPBoDz2IHlMfnVhAe0asv03lGtR6PgflqJ5T5ZORknFd9F39MyTK+Izxc6T1fau5Jko1beHewHKeTOZsebWZ+LmNqC/Ht6md1HDkAJq3LL+bk/Mdle5MJqP+/UFB5ZtKWveVzddA8pMLQZPsdITMWCrVcygKRn3mGHdfiEK00he8TohuPrimJDDsEWG0Aahk7Yvyt6vcsT+Xa5FJ4xiVtq55utye5fa3TRYgxowr/4u1vAVoWqb4ojFUwIIvUvbKZnd9tx+MQl+fbMmHK1Jqvfxk/Bis/DUjZ7wzxtduhT90f5oresagAFkknvaHqRw9LkkUF9t9KlgqbBK4F9g89Xd/RbYijvGs6SVjXdWaEzbgMi6bWDzOjP24EgPOJmSNcbUnekBxmhSdqMHzGWPAiC1wSBzvqz9uwbAUA8ce5S1ccwFft8uhmBeRRZvo0LNOmbCuMOIm8iyqfsfxGE/EaWBvmbT7sCZ6g=="
-    val credentialProvider = OSSStsTokenCredentialProvider(AYPrefUtils.getAccesskeyId(), AYPrefUtils.getAccesskeySecret(), AYPrefUtils.getSecurityToken())
+    val credentialProvider = OSSStsTokenCredentialProvider(getAccesskeyId(), getAccesskeySecret(), getSecurityToken())
     //该配置类如果不设置，会有默认配置，具体可看该类
     val conf = ClientConfiguration()
     conf.setConnectionTimeout(15 * 1000) // 连接超时，默认15秒

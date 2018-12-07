@@ -14,7 +14,7 @@ import com.blackmirror.dongda.adapter.itemdecoration.SpacesItemDecoration
 import com.blackmirror.dongda.kdomain.model.*
 import com.blackmirror.dongda.ui.activity.homeActivity.SearchCourseActivity
 import com.blackmirror.dongda.ui.view.MyTabLayout
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showToast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -98,6 +98,10 @@ class HomeFragment : HomeBaseFragment(), View.OnClickListener {
         rv_home_exp.addItemDecoration(SpacesItemDecoration(14))
         rv_home_exp.adapter = homeExperienceAdapter
 
+        homeExperienceAdapter.setOnItemClickListener { _, _ ->
+
+        }
+
     }
 
     private fun hotRecommend() {
@@ -151,7 +155,7 @@ class HomeFragment : HomeBaseFragment(), View.OnClickListener {
 
         mtl_home_choice.addOnTabSelectedListener(object : MyTabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: MyTabLayout.Tab) {
-                ToastUtils.showShortToast("position = ${tab.position}")
+                showToast("position = ${tab.position}")
                 when (tab.position) {
                     0 -> {
                         rv_home_choice.layoutManager = GridLayoutManager(activity, 2)

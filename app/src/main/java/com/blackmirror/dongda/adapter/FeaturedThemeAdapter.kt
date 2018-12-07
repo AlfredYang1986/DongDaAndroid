@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.blackmirror.dongda.R
-import com.blackmirror.dongda.utils.DensityUtils
-import com.blackmirror.dongda.utils.OtherUtils
+import com.blackmirror.dongda.utils.dp2px
+import com.blackmirror.dongda.utils.resourceIdToUri
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ImageDecodeOptions
@@ -31,7 +31,7 @@ class FeaturedThemeAdapter(protected var context: Context, internal var list: Li
 
     override fun onBindViewHolder(holder: FeaturedViewHolder, position: Int) {
 
-        displayImage(OtherUtils.resourceIdToUri(context, list!![position]), holder.sv_featured)
+        displayImage(resourceIdToUri(context, list!![position]), holder.sv_featured)
 
         //        holder.sv_featured.setImageURI();
         //添加点击事件
@@ -48,7 +48,7 @@ class FeaturedThemeAdapter(protected var context: Context, internal var list: Li
     private fun displayImage(uri: Uri, draweeView: SimpleDraweeView) {
         val options = ImageDecodeOptions.newBuilder().setBitmapConfig(Bitmap.Config.RGB_565).build()
         val request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(ResizeOptions(DensityUtils.dp2px(235), DensityUtils.dp2px(311)))
+                .setResizeOptions(ResizeOptions(dp2px(235), dp2px(311)))
                 .setImageDecodeOptions(options)
                 .build()
 

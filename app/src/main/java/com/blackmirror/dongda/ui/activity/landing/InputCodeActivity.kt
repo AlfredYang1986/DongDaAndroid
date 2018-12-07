@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logD
 
 class InputCodeActivity : BaseActivity(), View.OnClickListener {
 
@@ -59,7 +59,7 @@ class InputCodeActivity : BaseActivity(), View.OnClickListener {
 
         et_support_num.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                LogUtils.d("afterTextChanged = ${s}")
+                logD("afterTextChanged = $s")
                 if (s.isEmpty()) {
                     clearText()
                     return

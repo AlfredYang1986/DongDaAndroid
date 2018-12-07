@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logD
 
 /**
  * Create By Ruge at 2018/9/27
@@ -30,11 +30,11 @@ abstract class BaseFragment : Fragment() {
         super.setUserVisibleHint(isVisibleToUser)
         if (userVisibleHint){
             //界面可见
-            LogUtils.d("setUserVisibleHint showToUser")
+            logD("setUserVisibleHint showToUser")
             isShowToUser = true
 //            showToUser()
         }else{
-            LogUtils.d("setUserVisibleHint hideToUser")
+            logD("setUserVisibleHint hideToUser")
             isShowToUser = false
             hideToUser()
         }
@@ -43,16 +43,16 @@ abstract class BaseFragment : Fragment() {
     private fun showToUser() {
 
         if (isPrepared && isShowToUser){
-            LogUtils.d("setUserVisibleHint isPrepared and isShowToUser ")
+            logD("setUserVisibleHint isPrepared and isShowToUser ")
 
             if (isFirstLoad){
                 isFirstLoad = false
-                LogUtils.d("setUserVisibleHint isFirstLoad will call getData")
+                logD("setUserVisibleHint isFirstLoad will call getData")
 
                 getData()
             }
         }else{
-            LogUtils.d("setUserVisibleHint not isPrepared or isShowToUser ")
+            logD("setUserVisibleHint not isPrepared or isShowToUser ")
 
         }
 

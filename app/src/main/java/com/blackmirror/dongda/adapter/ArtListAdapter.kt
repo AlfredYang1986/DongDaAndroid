@@ -12,7 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.CareMoreDomainBean
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
 import com.facebook.drawee.view.SimpleDraweeView
 
 class ArtListAdapter(protected var context: Context, private val bean: CareMoreDomainBean) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -47,7 +47,7 @@ class ArtListAdapter(protected var context: Context, private val bean: CareMoreD
         if (holder is ArtListViewHolder) {
             val servicesBean = this.bean.services!![position]
 
-            val url = OSSUtils.getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
+            val url = getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
 
             holder.sv_art_list_photo.setImageURI(url)
             if (servicesBean.is_collected) {

@@ -61,7 +61,8 @@
         >
 
         <android.support.design.widget.TextInputEditText
-
+            android:inputType="phone"
+            android:digits="1234567890"
             android:id="@+id/tet_phone_no"
             android:layout_width="match_parent"
             android:layout_height="21dp"

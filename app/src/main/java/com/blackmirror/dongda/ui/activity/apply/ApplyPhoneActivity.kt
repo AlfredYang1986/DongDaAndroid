@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showToast
 import java.util.regex.Pattern
 
 class ApplyPhoneActivity : BaseActivity() {
@@ -64,12 +64,12 @@ class ApplyPhoneActivity : BaseActivity() {
         tv_next.setOnClickListener(View.OnClickListener {
             val phone_no = replaceBlank(tet_phone_no.text.toString().trim { it <= ' ' })
             if (phone_no.isNullOrEmpty()) {
-                ToastUtils.showShortToast("手机号不能为空!")
+                showToast("手机号不能为空!")
                 return@OnClickListener
             }
 
             if (phone_no.length != 11) {
-                ToastUtils.showShortToast("请输入正确的手机号!")
+                showToast("请输入正确的手机号!")
                 return@OnClickListener
             }
             val intent = Intent(this@ApplyPhoneActivity, ApplyServiceActivity::class.java)

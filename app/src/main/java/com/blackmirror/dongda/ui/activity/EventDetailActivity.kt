@@ -5,7 +5,8 @@ import android.view.View
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.DeviceUtils
+import com.blackmirror.dongda.utils.initSystemBarColor
+import com.blackmirror.dongda.utils.setStatusBarColor
 import kotlinx.android.synthetic.main.activity_event_detail.*
 
 class EventDetailActivity : BaseActivity() {
@@ -49,21 +50,21 @@ class EventDetailActivity : BaseActivity() {
     }
 
     private fun showTb() {
-        DeviceUtils.setStatusBarColor(this)
+        setStatusBarColor(this)
         tb_toolbar.visibility = View.VISIBLE
         tb_toolbar.setBackgroundColor(resources.getColor(R.color.sys_bar_white))
         cl_tb_content.visibility = View.VISIBLE
     }
 
     private fun hideTb() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
         tb_toolbar.visibility = View.GONE
         tb_toolbar.setBackgroundColor(Color.TRANSPARENT)
         cl_tb_content.visibility = View.GONE
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 
 }

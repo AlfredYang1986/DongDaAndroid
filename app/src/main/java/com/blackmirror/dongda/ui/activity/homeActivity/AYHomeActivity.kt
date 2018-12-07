@@ -93,7 +93,7 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
 
     override fun initData() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            iv_home_location.elevation = DensityUtils.dp2px(6).toFloat()
+            iv_home_location.elevation = dp2px(6).toFloat()
         }
         showProcessDialog()
         //精选主题
@@ -316,12 +316,12 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
 
     private fun refreshHeadPhoto(resultCode: Int, data: Intent?) {
         if (data != null) {
-            LogUtils.d("img_url ayhome " + data.getStringExtra("img_url"))
+            logD("img_url ayhome " + data.getStringExtra("img_url"))
         }
         if (resultCode == Activity.RESULT_OK) {
             val img_url = data!!.getStringExtra("img_url")
             img_uuid = img_url
-            sv_head_pic.setImageURI(OSSUtils.getSignedUrl(img_url))
+            sv_head_pic.setImageURI(getSignedUrl(img_url))
         }
     }
 
@@ -329,8 +329,8 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
     override fun onGetHomePageData(bean: HomepageDomainBean) {
         this.bean = bean
         closeProcessDialog()
-        val url = OSSUtils.getSignedUrl(img_uuid)
-        LogUtils.d("pic url $url")
+        val url = getSignedUrl(img_uuid)
+        logD("pic url $url")
         sv_head_pic.setImageURI(url)
         sl_home_refresh.isRefreshing = false
         initCare(bean.homepage_services!![0])
@@ -381,9 +381,9 @@ class AYHomeActivity : BaseActivity(), View.OnClickListener, HomeContract.HomeVi
         closeProcessDialog()
         sl_home_refresh.isRefreshing = false
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, bean.message)
+            showSnackbar(ctl_root, bean.message?:"server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 

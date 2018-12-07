@@ -56,7 +56,7 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
 
     override fun initData() {
         val service_image = intent.getStringExtra("service_image")
-        sv_service_photo.setImageURI(OSSUtils.getSignedUrl(service_image))
+        sv_service_photo.setImageURI(getSignedUrl(service_image))
         tv_confirm_brand.text = intent.getStringExtra("service_leaf")
         val min_age = java.lang.Double.parseDouble(intent.getStringExtra("min_age"))
         val max_age = java.lang.Double.parseDouble(intent.getStringExtra("max_age"))
@@ -105,13 +105,13 @@ class EnrolConfirmActivity : BaseActivity(), View.OnClickListener, EnrolContract
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(tv_child_age, bean.message)
+            showSnackbar(tv_child_age, bean.message ?: "Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, Color.parseColor("#33ADBADE"))
+        setStatusBarColor(this, Color.parseColor("#33ADBADE"))
     }
 }

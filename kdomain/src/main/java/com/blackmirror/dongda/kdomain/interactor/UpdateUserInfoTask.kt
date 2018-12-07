@@ -7,11 +7,11 @@ import com.blackmirror.dongda.data.model.request.UpDateBean
 import com.blackmirror.dongda.data.model.response.UpdateUserInfoResponseBean
 import com.blackmirror.dongda.data.net.updateUserInfoWithOutPhoto
 import com.blackmirror.dongda.data.net.updateUserInfoWithPhoto
-import com.blackmirror.dongda.data.repository.DbRepository
+import com.blackmirror.dongda.data.repository.updateProfile
 import com.blackmirror.dongda.data.repository.updateUserInfo
 import com.blackmirror.dongda.kdomain.model.UpdateUserInfoBean
 import com.blackmirror.dongda.kdomain.model.UpdateUserInfoDomainBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
 import io.reactivex.Observable
 
 /**
@@ -30,8 +30,8 @@ fun updateUserInfoImpl(bean: UpdateUserInfoDomainBean): Observable<UpdateUserInf
         dbBean.screen_name = infoBean.screen_name
         dbBean.screen_photo = infoBean.screen_photo
         dbBean.user_id = infoBean.user_id
-        dbBean.auth_token = AYPrefUtils.getAuthToken()
-        DbRepository.updateProfile(dbBean)
+        dbBean.auth_token = getAuthToken()
+        updateProfile(dbBean)
          infoBean
     }
 }

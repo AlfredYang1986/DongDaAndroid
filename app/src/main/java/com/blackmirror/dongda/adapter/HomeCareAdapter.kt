@@ -9,7 +9,7 @@ import android.widget.TextView
 
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.HomepageDomainBean
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
 import com.facebook.drawee.view.SimpleDraweeView
 
 class HomeCareAdapter(protected var context: Context, private val bean: HomepageDomainBean.HomepageServicesBean) : RecyclerView.Adapter<HomeCareAdapter.HomeCareViewHolder>() {
@@ -29,7 +29,7 @@ class HomeCareAdapter(protected var context: Context, private val bean: Homepage
 
         val servicesBean = this.bean.services!![position]
 
-        val url = OSSUtils.getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
+        val url = getSignedUrl(servicesBean.service_image, (30 * 60).toLong())
         holder.sv_care_photo.setImageURI(url)
 
         holder.tv_care_name.text = this.bean.services!![position].service_tags!![0]

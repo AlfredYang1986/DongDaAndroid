@@ -10,8 +10,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
 import com.blackmirror.dongda.utils.getDoubleValue
+import com.blackmirror.dongda.utils.showToast
 
 class EnrolTimePayActivity : BaseActivity() {
 
@@ -69,15 +69,15 @@ class EnrolTimePayActivity : BaseActivity() {
             val time = tet_class_time_minute.text.toString()
 
             if (TextUtils.isEmpty(price)) {
-                ToastUtils.showShortToast("请输入单次课程价格!")
+                showToast("请输入单次课程价格!")
                 return@OnClickListener
             }
             if (TextUtils.isEmpty(order)) {
-                ToastUtils.showShortToast("请输入单次最少预定次数!")
+                showToast("请输入单次最少预定次数!")
                 return@OnClickListener
             }
             if (TextUtils.isEmpty(time)) {
-                ToastUtils.showShortToast("请输入单次授课时长!")
+                showToast("请输入单次授课时长!")
                 return@OnClickListener
             }
 

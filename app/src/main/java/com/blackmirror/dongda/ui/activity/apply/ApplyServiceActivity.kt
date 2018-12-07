@@ -13,8 +13,8 @@ import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.presenter.ApplyPresenter
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.SnackbarUtils
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showSnackbar
+import com.blackmirror.dongda.utils.showToast
 
 class ApplyServiceActivity : BaseActivity(), View.OnClickListener, ApplyContract.View {
 
@@ -116,9 +116,9 @@ class ApplyServiceActivity : BaseActivity(), View.OnClickListener, ApplyContract
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(tv_next, bean.message)
+            showSnackbar(tv_next, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 

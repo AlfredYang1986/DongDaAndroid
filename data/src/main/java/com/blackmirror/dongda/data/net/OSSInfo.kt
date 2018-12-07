@@ -3,8 +3,7 @@ package com.blackmirror.dongda.data.net
 import com.blackmirror.dongda.data.OSS_INFO_URL
 import com.blackmirror.dongda.data.model.request.OssInfoRequestBean
 import com.blackmirror.dongda.data.model.response.OssInfoResponseBean
-import com.blackmirror.dongda.utils.AYPrefUtils
-import com.blackmirror.dongda.utils.DateUtils
+import com.blackmirror.dongda.utils.*
 import io.reactivex.Observable
 
 /**
@@ -12,17 +11,17 @@ import io.reactivex.Observable
  */
 fun getOssInfo(): Observable<OssInfoResponseBean> {
 
-    if (DateUtils.isNeedRefreshToken(AYPrefUtils.getExpiration())) {
+    if (isNeedRefreshToken(getExpiration())) {
         val bean = OssInfoRequestBean()
-        bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\"}"
+        bean.json = "{\"token\":\"${getAuthToken()}\"}"
         bean.url = OSS_INFO_URL
         return execute(bean, OssInfoResponseBean::class.java).doOnNext { bean ->
             if ("ok" == bean.status) {
                 bean?.result?.OssConnectInfo?.apply {
-                    AYPrefUtils.setAccesskeyId(accessKeyId)
-                    AYPrefUtils.setSecurityToken(SecurityToken)
-                    AYPrefUtils.setAccesskeySecret(accessKeySecret)
-                    AYPrefUtils.setExpiration(Expiration)
+                    setAccesskeyId(accessKeyId)
+                    setSecurityToken(SecurityToken)
+                    setAccesskeySecret(accessKeySecret)
+                    setExpiration(Expiration)
                 }
 
             }

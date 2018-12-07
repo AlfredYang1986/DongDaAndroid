@@ -20,7 +20,8 @@ import com.blackmirror.dongda.data.repository.likePush2Server
 import com.blackmirror.dongda.kdomain.model.LikeDomainBean
 import com.blackmirror.dongda.kdomain.model.LikePopDomainBean
 import com.blackmirror.dongda.kdomain.model.LikePushDomainBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.getUserId
 import io.reactivex.Observable
 import java.util.*
 
@@ -67,7 +68,7 @@ fun getMyLikeDataImpl(): Observable<LikeDomainBean> {
 
 val like = fun(): Observable<LikeResponseBean> {
     val bean = LikeRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"}}"
 
     bean.url = LIKE_QUERY_LIST_URL
 
@@ -85,7 +86,7 @@ val like = fun(): Observable<LikeResponseBean> {
 
 val pop = fun(service_id: String): Observable<LikePopResponseBean> {
     val bean = LikePopRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\": {\"user_id\":\"${getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${getUserId()}\",\"service_id\":\"$service_id\"}}"
     bean.url = LIKE_POP_URL
 
     return getOssInfo().flatMap {
@@ -102,7 +103,7 @@ val pop = fun(service_id: String): Observable<LikePopResponseBean> {
 
 val lp = fun(service_id: String): Observable<LikePushResponseBean> {
     val bean = LikePushRequestBean()
-    bean.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\": {\"user_id\":\"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${AYPrefUtils.getUserId()}\",\"service_id\":\"$service_id \"}}"
+    bean.json = "{\"token\":\"${getAuthToken()}\",\"condition\": {\"user_id\":\"${getUserId()}\",\"service_id\":\"$service_id\"},\"collections\":{\"user_id\": \"${getUserId()}\",\"service_id\":\"$service_id \"}}"
     bean.url = LIKE_PUSH_URL
 
     return getOssInfo().flatMap {

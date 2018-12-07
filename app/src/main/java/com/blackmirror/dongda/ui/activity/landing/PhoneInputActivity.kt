@@ -8,8 +8,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
-import com.blackmirror.dongda.DongdaApplication
 import com.blackmirror.dongda.R
+import com.blackmirror.dongda.base.AYApplication
 import com.blackmirror.dongda.data.model.request.PhoneLoginRequestBean
 import com.blackmirror.dongda.data.model.request.SendSmsRequestBean
 import com.blackmirror.dongda.di.component.DaggerPhoneInputComponent
@@ -49,8 +49,8 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        DongdaApplication.addActivity(this)
-        DeviceUtils.setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
+        AYApplication.addActivity(this)
+        setStatusBarColor(this, resources.getColor(R.color.colorPrimary))
     }
 
     override fun initInject() {
@@ -74,17 +74,17 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     override fun initListener() {
 
         tv_login_next.setOnClickListener {
-            LogUtils.d("request SMS code from server")
+            logD("request SMS code from server")
 
             val input_phone = tet_phone_no.text.toString()
 
             if (input_phone.isNullOrEmpty()) {
-                ToastUtils.showShortToast(getString(R.string.phone_not_empty))
+                showToast(getString(R.string.phone_not_empty))
                 return@setOnClickListener
             }
 
             if (input_phone.trim { it <= ' ' }.length != 11) {
-                ToastUtils.showShortToast(getString(R.string.input_phone_error))
+                showToast(getString(R.string.input_phone_error))
                 return@setOnClickListener
             }
 
@@ -94,7 +94,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
             countDownSmsTime()
         }
 
-        next_step.setOnClickListener { loginWithPhoneAndCode() }
+//        next_step.setOnClickListener { loginWithPhoneAndCode() }
     }
 
     private fun countDownSmsTime() {
@@ -123,15 +123,15 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     }
 
     private fun loginWithPhoneAndCode() {
-        LogUtils.d("login with phone code")
+        logD("login with phone code")
         val phone = et_phone.text.toString().trim { it <= ' ' }
         val code = et_code.text.toString().trim { it <= ' ' }
         if (phone.isNullOrEmpty() || phone.length != 11) {
-            ToastUtils.showShortToast(R.string.input_phone_error)
+            showToast(getString(R.string.input_phone_error))
             return
         }
         if (code.isNullOrEmpty()) {
-            ToastUtils.showShortToast(getString(R.string.input_code_error))
+            showToast(getString(R.string.input_code_error))
             return
         }
 
@@ -145,17 +145,17 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
             presenter?.login(requestBean)
 
         } else {
-            ToastUtils.showShortToast(R.string.phone_input_next_step_error)
+            showToast(getString(R.string.phone_input_next_step_error))
         }
     }
 
     private fun gotoActivity(bean: PhoneLoginBean) {
         if (!bean.isSuccess) {
-            ToastUtils.showShortToast(getString(R.string.login_failare))
+            showToast(getString(R.string.login_failare))
             return
         }
 
-        ToastUtils.showShortToast(R.string.login_success)
+        showToast(getString(R.string.login_success))
 
         if (bean.screen_name.isNullOrEmpty()) {
 
@@ -172,10 +172,10 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
         } else {
             val intent = Intent(this@PhoneInputActivity, AYHomeActivity::class.java)
             intent.putExtra("img_uuid", bean.screen_photo)
-            AYPrefUtils.setImgUuid(bean.screen_photo)
-            AYPrefUtils.setIsPhoneLogin("phone")
+            setImgUuid(bean.screen_photo)
+            setIsPhoneLogin("phone")
             startActivity(intent)
-            DongdaApplication.finishAllActivity()
+            AYApplication.finishAllActivity()
         }
     }
 
@@ -185,7 +185,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     }
 
     override fun sendSmsSuccess(bean: SendSmsKdBean) {
-        ToastUtils.showShortToast(getString(R.string.send_sms_code_success))
+        showToast(getString(R.string.send_sms_code_success))
         closeProcessDialog()
         this.bean = bean ?: SendSmsKdBean()
     }
@@ -193,9 +193,9 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(sms_code, bean.message)
+            showSnackbar(sms_code, bean.message ?: "Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -208,7 +208,7 @@ class PhoneInputActivity : BaseActivity(), PhoneLoginContract.View {
     }
 
     override fun onBackPressed() {
-        DongdaApplication.removeActivity(this)
+        AYApplication.removeActivity(this)
         super.onBackPressed()
     }
 }

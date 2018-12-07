@@ -51,15 +51,13 @@
             android:name="com.amap.api.v2.apikey"
             android:value="4485c16a40931a555ff00c0bacdbf6e1"/>
 
-        <activity android:name=".ui.activity.landing.InputCodeActivity">
+        <activity android:name=".ui.activity.SplashActivity">
 
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-            -->
         </activity>
         <activity android:name=".ui.activity.homeActivity.AYHomeActivity">
         </activity>
@@ -160,17 +158,15 @@
             android:name=".ui.activity.enrol.LocAllServiceActivity"
             android:launchMode="singleTop">
         </activity>
-        <!--
         <activity android:name=".ui.activity.landing.InputCodeActivity">
         </activity>
-        -->
         <activity android:name=".ui.activity.homeActivity.HomeActivity">
 
-             <intent-filter>
+             <!--<intent-filter>
                  <action android:name="android.intent.action.MAIN"/>
 
                  <category android:name="android.intent.category.LAUNCHER"/>
-             </intent-filter>
+             </intent-filter>-->
         </activity>
         <activity android:name=".ui.activity.homeActivity.SearchCourseActivity">
         </activity>

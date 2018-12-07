@@ -8,6 +8,7 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 
 /**
+ * MyTabLayout用到 暂时不用修改
  * Create By Ruge at 2018-09-27
  */
 public class MyAnimationUtils {

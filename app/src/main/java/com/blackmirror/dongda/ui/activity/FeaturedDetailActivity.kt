@@ -18,8 +18,8 @@ import com.blackmirror.dongda.kdomain.model.LikePushDomainBean
 import com.blackmirror.dongda.presenter.GetMoreDataPresenter
 import com.blackmirror.dongda.ui.base.BaseActivity
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.SnackbarUtils
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showSnackbar
+import com.blackmirror.dongda.utils.showToast
 
 /**
  * 精选主题详情页
@@ -155,9 +155,9 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
     override fun onGetDataError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, bean.message)
+            showSnackbar(ctl_root, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -187,7 +187,7 @@ class FeaturedDetailActivity : BaseActivity(), ListMoreContract.View {
 
 
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 

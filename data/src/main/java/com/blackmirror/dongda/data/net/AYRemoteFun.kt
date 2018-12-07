@@ -7,7 +7,7 @@ import com.blackmirror.dongda.data.OTHER_EXCEPTION
 import com.blackmirror.dongda.data.SOCKET_TIMEOUT_EXCEPTION
 import com.blackmirror.dongda.data.model.request.BaseRequestBean
 import com.blackmirror.dongda.data.model.response.BaseResponseBean
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logD
 import io.reactivex.Observable
 import okhttp3.*
 import org.apache.http.conn.ConnectTimeoutException
@@ -35,7 +35,7 @@ inline fun <P : BaseResponseBean, Q : BaseRequestBean> execute(q: Q, myClass: Cl
                 .url(q.url)
                 .post(RequestBody.create(MediaType.parse("application/json; charset=utf-8"), q.json.toString()))
                 .build()
-        LogUtils.d("flag","做网络请求前的json数据: ${q.json.toString()}")
+        logD(TAG = "flag",message = "做网络请求前的json数据: ${q.json.toString()}")
         executeRequest(request, myClass)
     }
 }
@@ -57,7 +57,7 @@ fun <P : BaseResponseBean> executeRequest(request: Request, myClass: Class<P>): 
         bReader.close()
         iReader.close()
         input.close()
-        LogUtils.d("flag", "返回的数据：" + json.toString())
+        logD(TAG = "flag", message = "返回的数据：" + json.toString())
 
 
         var obj: P = JSON.parseObject(json.toString(), myClass)

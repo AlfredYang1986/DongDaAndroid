@@ -10,8 +10,8 @@ import android.widget.TextView
 
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.LocAllServiceDomainBean
-import com.blackmirror.dongda.utils.LogUtils
-import com.blackmirror.dongda.utils.OSSUtils
+import com.blackmirror.dongda.utils.getSignedUrl
+import com.blackmirror.dongda.utils.logD
 import com.facebook.drawee.view.SimpleDraweeView
 
 class LocAllServiceAdapter(protected var context: Context, private val bean: LocAllServiceDomainBean?) : RecyclerView.Adapter<LocAllServiceAdapter.LocAllServiceHolder>() {
@@ -37,8 +37,8 @@ class LocAllServiceAdapter(protected var context: Context, private val bean: Loc
         }
         sb.append(servicesBean.service_leaf)
         holder.tv_service_loc.text = sb.toString()
-        val url = OSSUtils.getSignedUrl(this.bean.services!![position].service_image)
-        LogUtils.d(url)
+        val url = getSignedUrl(this.bean.services!![position].service_image)
+        logD(url)
         holder.sv_service_photo.setImageURI(url)
         initListener(holder, position, this.bean.services!![position])
 

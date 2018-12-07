@@ -82,8 +82,8 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
                 address = address.substring(0, address.indexOf("靠近"))
             }
 
-            LogUtils.d(sb.toString())
-            LogUtils.d("address $address")
+            logD(sb.toString())
+            logD("address $address")
             tv_cur_loc.text = address
 
         } else {
@@ -94,7 +94,7 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
             sb.append("错误信息:" + location.errorInfo + "\n")
             sb.append("错误描述:" + location.locationDetail + "\n")
 
-            LogUtils.d(sb.toString())
+            logD(sb.toString())
 
             showLocationDialog(location.errorCode)
 
@@ -163,22 +163,22 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
             AMapLocationQualityReport.GPS_STATUS_OK -> str = "GPS状态正常"
             AMapLocationQualityReport.GPS_STATUS_NOGPSPROVIDER -> {
                 str = getString(R.string.gps_status_nogpsprovider)
-                ToastUtils.showShortToast(str)
+                showToast(str)
             }
             AMapLocationQualityReport.GPS_STATUS_OFF -> {
                 str = getString(R.string.gps_status_off)
-                ToastUtils.showShortToast(str)
+                showToast(str)
             }
             AMapLocationQualityReport.GPS_STATUS_MODE_SAVING -> {
                 str = getString(R.string.gps_status_mode_saving)
-                ToastUtils.showShortToast(str)
+                showToast(str)
             }
             AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION, AppConstant.NO_GPS_PERMISSION -> {
                 str = getString(R.string.gps_status_nogpspermission)
                 showGoSettingDialog()
             }
         }
-        LogUtils.d(str)
+        logD(str)
     }
 
     private fun showGoSettingDialog() {
@@ -189,7 +189,7 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
                 .setMessage(R.string.go_location_permission_setting)
                 .setPositiveButton(getString(R.string.go_permission_setting)) { dialog, which ->
                     dialog.dismiss()
-                    DeviceUtils.gotoPermissionSetting(this@ChooseEnrolLocActivity)
+                    gotoPermissionSetting(this@ChooseEnrolLocActivity)
                 }
                 .setNegativeButton(getString(R.string.dlg_cancel)) { dialog, which -> dialog.dismiss() }.create()
         dialog!!.show()
@@ -225,7 +225,7 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, Color.parseColor("#FFF7F9FA"))
+        setStatusBarColor(this, Color.parseColor("#FFF7F9FA"))
     }
 
     override fun onGetBrandAllLocationSuccess(bean: BrandAllLocDomainBean) {
@@ -241,25 +241,25 @@ class ChooseEnrolLocActivity : BaseActivity(), EnrolContract.View {
     }
 
     private fun initBrandAllLoc(bean: BrandAllLocDomainBean) {
-        LogUtils.d("initBrandAllLoc")
+        logD("initBrandAllLoc")
         val adapter = BrandAllLocAdapter(this, bean)
         rv_brand_loc_list.layoutManager = LinearLayoutManager(this)
         rv_brand_loc_list.adapter = adapter
 
-        adapter.setOnItemClickListener({view,position,lb->
+        adapter.setOnItemClickListener{ view, position, lb ->
             val intent = Intent(this@ChooseEnrolLocActivity, LocAllServiceActivity::class.java)
             intent.putExtra("locations", lb.location_id)
             intent.putExtra("address", lb.address)
             startActivity(intent)
-        })
+        }
     }
 
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(tv_cur_loc, bean.message)
+            showSnackbar(tv_cur_loc, bean.message ?: "Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 }

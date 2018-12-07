@@ -11,7 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.HomeHotRecommendDomainBean
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ImageDecodeOptions
@@ -51,7 +51,7 @@ class HomeHotRecommendAdapter(protected var context: Context, internal var bean:
     private fun displayImage(uri: Uri, draweeView: SimpleDraweeView) {
         val options = ImageDecodeOptions.newBuilder().setBitmapConfig(Bitmap.Config.RGB_565).build()
         val request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(ResizeOptions(DensityUtils.dp2px(191), DensityUtils.dp2px(118)))
+                .setResizeOptions(ResizeOptions(dp2px(191), dp2px(118)))
                 .setImageDecodeOptions(options)
                 .build()
 

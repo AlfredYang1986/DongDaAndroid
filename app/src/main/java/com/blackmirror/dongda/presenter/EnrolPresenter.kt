@@ -6,7 +6,8 @@ import com.blackmirror.dongda.kdomain.interactor.getLocAllServiceImpl
 import com.blackmirror.dongda.kdomain.model.BaseDataBean
 import com.blackmirror.dongda.ui.activity.enrol.EnrolContract
 import com.blackmirror.dongda.utils.AppConstant
-import com.blackmirror.dongda.utils.LogUtils
+import com.blackmirror.dongda.utils.logD
+import com.blackmirror.dongda.utils.logE
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -23,13 +24,13 @@ class EnrolPresenter @Inject constructor(val view: EnrolContract.View?) : EnrolC
                 .subscribe({
                     if (it.isSuccess) {
                         view?.onGetBrandAllLocationSuccess(it)
-                        LogUtils.d("apply onNext isSuccess")
+                        logD("apply onNext isSuccess")
                     } else {
-                        LogUtils.d("apply onNext onError")
+                        logD("apply onNext onError")
                         view?.onError(it)
                     }
                 }, {
-                    LogUtils.e(EnrolPresenter::class.java, it)
+                    logE(message = EnrolPresenter::class.java.simpleName, exception = it)
 
                     view?.onError(getErrorData(it))
                 })
@@ -42,13 +43,13 @@ class EnrolPresenter @Inject constructor(val view: EnrolContract.View?) : EnrolC
                 .subscribe({
                     if (it.isSuccess) {
                         view?.onGetLocAllServiceSuccess(it)
-                        LogUtils.d("apply onNext isSuccess")
+                        logD("apply onNext isSuccess")
                     } else {
-                        LogUtils.d("apply onNext onError")
+                        logD("apply onNext onError")
                         view?.onError(it)
                     }
                 }, {
-                    LogUtils.e(EnrolPresenter::class.java, it)
+                    logE(message = EnrolPresenter::class.java.simpleName, exception = it)
 
                     view?.onError(getErrorData(it))
                 })
@@ -61,13 +62,13 @@ class EnrolPresenter @Inject constructor(val view: EnrolContract.View?) : EnrolC
                 .subscribe({
                     if (it.isSuccess) {
                         view?.onEnrolSuccess(it)
-                        LogUtils.d("apply onNext isSuccess")
+                        logD("apply onNext isSuccess")
                     } else {
-                        LogUtils.d("apply onNext onError")
+                        logD("apply onNext onError")
                         view?.onError(it)
                     }
                 }, {
-                    LogUtils.e(EnrolPresenter::class.java, it)
+                    logE(message = EnrolPresenter::class.java.simpleName, exception = it)
 
                     view?.onError(getErrorData(it))
                 })

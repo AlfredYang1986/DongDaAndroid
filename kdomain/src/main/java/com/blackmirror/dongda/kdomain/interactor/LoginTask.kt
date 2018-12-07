@@ -15,7 +15,10 @@ import com.blackmirror.dongda.kdomain.model.PhoneLoginBean
 import com.blackmirror.dongda.kdomain.model.SendSmsKdBean
 import com.blackmirror.dongda.kdomain.model.UpLoadWeChatIconDomainBean
 import com.blackmirror.dongda.kdomain.model.WeChatLoginBean
-import com.blackmirror.dongda.utils.AYPrefUtils
+import com.blackmirror.dongda.utils.getAuthToken
+import com.blackmirror.dongda.utils.getUserId
+import com.blackmirror.dongda.utils.setAuthToken
+import com.blackmirror.dongda.utils.setUserId
 import io.reactivex.Observable
 
 /**
@@ -67,8 +70,8 @@ fun phoneLoginImpl(phone: String, code: String, reg_token: String): Observable<P
         }
         //插入数据库
         if (bean.isSuccess) {
-            AYPrefUtils.setUserId(bean.user_id)
-            AYPrefUtils.setAuthToken(bean.auth_token)
+            setUserId(bean.user_id)
+            setAuthToken(bean.auth_token)
 
             val dbBean = UserInfoDbBean()
             dbBean.is_current = 1//目前没什么卵用
@@ -76,7 +79,7 @@ fun phoneLoginImpl(phone: String, code: String, reg_token: String): Observable<P
             dbBean.screen_photo = bean.screen_photo
             dbBean.user_id = bean.user_id
             dbBean.auth_token = bean.auth_token
-            DbRepository.insertProfile(dbBean)
+            insertProfile(dbBean)
         }
         bean
     }
@@ -107,8 +110,8 @@ fun weChatLoginImpl(provide_uid: String, provide_token: String, provide_screen_n
                 //插入数据库
                 if (bean.isSuccess) {
 
-                    AYPrefUtils.setUserId(bean.user_id)
-                    AYPrefUtils.setAuthToken(bean.auth_token)
+                    setUserId(bean.user_id)
+                    setAuthToken(bean.auth_token)
 
                     val dbBean = UserInfoDbBean()
                     dbBean.is_current = 1//目前没什么卵用
@@ -116,7 +119,7 @@ fun weChatLoginImpl(provide_uid: String, provide_token: String, provide_screen_n
                     dbBean.screen_photo = bean.screen_photo
                     dbBean.user_id = bean.user_id
                     dbBean.auth_token = bean.auth_token
-                    DbRepository.insertProfile(dbBean)
+                    insertProfile(dbBean)
                 }
 
                 bean
@@ -128,7 +131,7 @@ fun uploadWeChatImageImpl(userIcon: String, imgUUID: String): Observable<UpLoadW
             .flatMap {
                 if ("ok" == it.status) {
                     val ub = UpDateBean()
-                    ub.json = "{\"token\":\"${AYPrefUtils.getAuthToken()}\",\"condition\":{\"user_id\":\"${AYPrefUtils.getUserId()}\"},\"profile\":{\"screen_photo\":\"$imgUUID\"}}"
+                    ub.json = "{\"token\":\"${getAuthToken()}\",\"condition\":{\"user_id\":\"${getUserId()}\"},\"profile\":{\"screen_photo\":\"$imgUUID\"}}"
 
                      updateUserInfo(ub).map { bean ->
                         val db = UpLoadWeChatIconDomainBean()

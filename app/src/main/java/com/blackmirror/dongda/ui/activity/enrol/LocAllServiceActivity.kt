@@ -62,7 +62,7 @@ class LocAllServiceActivity : BaseActivity(), EnrolContract.View {
     }
 
     override fun onGetLocAllServiceSuccess(bean: LocAllServiceDomainBean) {
-        LogUtils.d(bean.toString())
+        logD(bean.toString())
         closeProcessDialog()
         val adapter = LocAllServiceAdapter(this, bean)
         rv_service.layoutManager = LinearLayoutManager(this)
@@ -98,13 +98,13 @@ class LocAllServiceActivity : BaseActivity(), EnrolContract.View {
     override fun onError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_back, bean.message)
+            showSnackbar(iv_back, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.setStatusBarColor(this, Color.parseColor("#FFF7F9FA"))
+        setStatusBarColor(this, Color.parseColor("#FFF7F9FA"))
     }
 }

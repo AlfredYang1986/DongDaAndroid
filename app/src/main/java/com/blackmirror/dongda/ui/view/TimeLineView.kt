@@ -7,7 +7,7 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
 
 /**
  * Create By Ruge at 2018-09-28
@@ -18,8 +18,8 @@ class TimeLineView @JvmOverloads constructor(
 
     var total_width = 0
     var total_height = 0
-    var point_raduis = DensityUtils.dp2px(3)
-    var line_width = DensityUtils.dp2px(1)
+    var point_raduis = dp2px(3)
+    var line_width = dp2px(1)
     var point_color = Color.parseColor("#FF5464AC")
     var line_color = Color.parseColor("#FFDFE0E3")
 
@@ -64,17 +64,17 @@ class TimeLineView @JvmOverloads constructor(
         when (pos) {
             0 -> {
                 val startX = point_raduis.toFloat()
-                val startY = DensityUtils.dp2px(18).toFloat()
+                val startY = dp2px(18).toFloat()
 //        canvas.translate(startX,startY)
 
-                canvas.drawLine(startX, 0f, startX, DensityUtils.dp2px(15).toFloat(), line_paint)
+                canvas.drawLine(startX, 0f, startX, dp2px(15).toFloat(), line_paint)
                 canvas.drawCircle(startX, startY, point_raduis.toFloat(), point_paint)
-                canvas.drawLine(startX, DensityUtils.dp2px(21).toFloat(), startX, total_height.toFloat(), line_paint)
+                canvas.drawLine(startX, dp2px(21).toFloat(), startX, total_height.toFloat(), line_paint)
             }
             1 -> {
                 pos = 0
                 val startX = point_raduis.toFloat()
-                val startY = DensityUtils.dp2px(18).toFloat()
+                val startY = dp2px(18).toFloat()
 
                 val f = RectF(0f, 0f, total_width.toFloat(), total_height.toFloat())
 
@@ -85,15 +85,15 @@ class TimeLineView @JvmOverloads constructor(
 
                 canvas.drawCircle(startX, startY, point_raduis.toFloat(), point_paint)
 
-                canvas.drawLine(startX, DensityUtils.dp2px(21).toFloat(), startX, total_height.toFloat(), line_paint)
+                canvas.drawLine(startX, dp2px(21).toFloat(), startX, total_height.toFloat(), line_paint)
             }
             2 -> {
                 pos = 0
                 val startX = point_raduis.toFloat()
-                val startY = DensityUtils.dp2px(18).toFloat()
+                val startY = dp2px(18).toFloat()
 //        canvas.translate(startX,startY)
 
-                canvas.drawLine(startX, 0f, startX, DensityUtils.dp2px(15).toFloat(), line_paint)
+                canvas.drawLine(startX, 0f, startX, dp2px(15).toFloat(), line_paint)
                 canvas.drawCircle(startX, startY, point_raduis.toFloat(), point_paint)
             }
         }

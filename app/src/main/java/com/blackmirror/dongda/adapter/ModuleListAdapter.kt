@@ -11,7 +11,8 @@ import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.kdomain.model.CareMoreDomainBean
 import com.blackmirror.dongda.kdomain.model.ModuleListDomainBean
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
+import com.blackmirror.dongda.utils.getScreenWidthDp
 import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.drawee.view.SimpleDraweeView
 import com.facebook.imagepipeline.common.ResizeOptions
@@ -117,7 +118,7 @@ class ModuleListAdapter(protected var context: Context, private val bean: Module
     private fun displayImage(uri: Uri, draweeView: SimpleDraweeView) {
 
         val request = ImageRequestBuilder.newBuilderWithSource(uri)
-                .setResizeOptions(ResizeOptions(DensityUtils.dp2px(DensityUtils.getScreenWidthDp() - 32), DensityUtils.dp2px(212)))
+                .setResizeOptions(ResizeOptions(dp2px(getScreenWidthDp() - 32), dp2px(212)))
                 .build()
 
         val controller = Fresco.newDraweeControllerBuilder()

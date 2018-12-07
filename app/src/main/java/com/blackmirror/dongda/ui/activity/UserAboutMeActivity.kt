@@ -90,7 +90,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
     override fun onQueryUserInfoSuccess(dbean: UserInfoDomainBean) {
         bean = dbean
         closeProcessDialog()
-        val url = OSSUtils.getSignedUrl(bean!!.screen_photo)
+        val url = getSignedUrl(bean!!.screen_photo)
         sv_user_about_photo.setImageURI(url)
         tv_user_about_name.text = bean!!.screen_name
         if (TextUtils.isEmpty(bean!!.description)) {
@@ -103,9 +103,9 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
     override fun onGetDataError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(iv_about_edit, bean.message)
+            showSnackbar(iv_about_edit, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
@@ -121,8 +121,8 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
                     weChat.removeAccount(true)
                     ShareSDK.deleteCache()
                     MobSDK.clearUser()
-                    AYPrefUtils.setUserId("")
-                    AYPrefUtils.setAuthToken("")
+                    setUserId("")
+                    setAuthToken("")
                     val intent = Intent(this@UserAboutMeActivity, LandingActivity::class.java)
                     intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                     startActivity(intent)
@@ -138,7 +138,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
             needsRefresh = true
             getUserInfo()
             img_url = data.getStringExtra("img_url")
-            LogUtils.d("UserAboutMeActivity img_url $img_url")
+            logD("UserAboutMeActivity img_url $img_url")
         }
     }
 
@@ -163,7 +163,7 @@ class UserAboutMeActivity : BaseActivity(), View.OnClickListener, UserInfoContra
 
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 
 }

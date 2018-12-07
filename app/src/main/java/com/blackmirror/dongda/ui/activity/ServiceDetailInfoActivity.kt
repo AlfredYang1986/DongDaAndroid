@@ -257,21 +257,21 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
     override fun onGetDataError(bean: BaseDataBean) {
         closeProcessDialog()
         if (bean.code == AppConstant.NET_WORK_UNAVAILABLE) {
-            SnackbarUtils.show(ctl_root, bean.message)
+            showSnackbar(ctl_root, bean.message?:"Server Error")
         } else {
-            ToastUtils.showShortToast("${bean.message}(${bean.code})")
+            showToast("${bean.message}(${bean.code})")
         }
     }
 
     private fun showTb() {
-        DeviceUtils.setStatusBarColor(this)
+        setStatusBarColor(this)
         tb_toolbar.visibility = View.VISIBLE
         tb_toolbar.setBackgroundColor(resources.getColor(R.color.sys_bar_white))
         cl_tb_content.visibility = View.VISIBLE
     }
 
     private fun hideTb() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
         tb_toolbar.visibility = View.GONE
         tb_toolbar.setBackgroundColor(Color.TRANSPARENT)
         cl_tb_content.visibility = View.GONE
@@ -383,7 +383,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
         val random = Random()
         randomInt = random.nextInt(10)
         randomInt = if (randomInt > 9 || randomInt < 0) 0 else randomInt
-        sv_teacher_bg.setImageURI(OtherUtils.resourceIdToUri(this@ServiceDetailInfoActivity, AppConstant.teacher_bg_res_id[randomInt]))
+        sv_teacher_bg.setImageURI(resourceIdToUri(this@ServiceDetailInfoActivity, AppConstant.teacher_bg_res_id[randomInt]))
 
         tv_brand_tag.text = bean.brand_tag//
 
@@ -514,7 +514,7 @@ class ServiceDetailInfoActivity : BaseActivity(), View.OnClickListener, Contract
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 
 }

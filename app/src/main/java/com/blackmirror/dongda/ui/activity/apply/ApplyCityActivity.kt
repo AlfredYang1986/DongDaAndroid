@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.ToastUtils
+import com.blackmirror.dongda.utils.showToast
 
 class ApplyCityActivity : BaseActivity() {
 
@@ -53,7 +53,7 @@ class ApplyCityActivity : BaseActivity() {
         tv_next.setOnClickListener(View.OnClickListener {
             val city_name = tet_city_name.editableText.toString()
             if (city_name.isNullOrEmpty()) {
-                ToastUtils.showShortToast("请输入城市!")
+                showToast(msg = "请输入城市!")
                 return@OnClickListener
             }
             val intent = Intent(this@ApplyCityActivity, ApplyPhoneActivity::class.java)

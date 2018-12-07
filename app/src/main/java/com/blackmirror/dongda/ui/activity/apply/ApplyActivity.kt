@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.ImageView
 import com.blackmirror.dongda.R
 import com.blackmirror.dongda.ui.base.BaseActivity
-import com.blackmirror.dongda.utils.DeviceUtils
+import com.blackmirror.dongda.utils.initSystemBarColor
 
 class ApplyActivity : BaseActivity() {
 
@@ -36,6 +36,6 @@ class ApplyActivity : BaseActivity() {
     }
 
     override fun setStatusBarColor() {
-        DeviceUtils.initSystemBarColor(this)
+        initSystemBarColor(this)
     }
 }

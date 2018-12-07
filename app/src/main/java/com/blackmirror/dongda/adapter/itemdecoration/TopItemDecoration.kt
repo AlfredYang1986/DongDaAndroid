@@ -4,8 +4,7 @@ import android.graphics.Rect
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
-
-import com.blackmirror.dongda.utils.DensityUtils
+import com.blackmirror.dongda.utils.dp2px
 
 /**
  * Created by Ruge on 2018-04-04 下午12:14
@@ -18,8 +17,8 @@ class TopItemDecoration(top: Int, bottom: Int) : RecyclerView.ItemDecoration() {
 
 
     init {
-        this.top = DensityUtils.dp2px(top)
-        this.bottom = DensityUtils.dp2px(bottom)
+        this.top = dp2px(top)
+        this.bottom = dp2px(bottom)
     }
 
     override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State?) {
